@@ -1,0 +1,79 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.3" />
+    </filter>
+    <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#94a3b8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#cbd5e1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#64748b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Base Platform -->
+  <rect x="10" y="70" width="80" height="10" rx="2" fill="#1e293b" filter="url(#shadow)" />
+  <rect x="12" y="70" width="76" height="8" rx="1" fill="#334155" />
+  
+  <!-- Megaphone Base -->
+  <path d="M20 45C20 40 25 35 30 35H40L65 20V70L40 55H30C25 55 20 50 20 45Z" fill="url(#grad1)" filter="url(#shadow)" />
+  <path d="M22 45C22 41 26 37 30 37H39L63 23V67L39 53H30C26 53 22 49 22 45Z" fill="#0c4a6e" />
+  <path d="M25 45C25 42.5 27.5 40 30 40H38L60 28V62L38 50H30C27.5 50 25 47.5 25 45Z" fill="#0369a1" />
+  
+  <!-- Megaphone Handle -->
+  <rect x="25" y="42" width="8" height="6" rx="2" fill="url(#metal)" />
+  
+  <!-- Sound Waves -->
+  <path d="M70 30C75 35 78 40 78 45C78 50 75 55 70 60" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" />
+  <path d="M75 25C82 32 85 38 85 45C85 52 82 58 75 65" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" />
+  <path d="M80 20C89 29 93 37 93 45C93 53 89 61 80 70" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" />
+  
+  <!-- Analytics Dashboard -->
+  <rect x="55" y="30" width="30" height="25" rx="2" fill="#f8fafc" filter="url(#shadow)" />
+  <rect x="57" y="32" width="26" height="21" rx="1" fill="#f1f5f9" />
+  
+  <!-- Graph -->
+  <rect x="60" y="35" width="20" height="15" rx="1" fill="#e0f2fe" />
+  <path d="M60 50L65 45L70 48L75 40L80 42" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" />
+  <circle cx="65" cy="45" r="1" fill="#3b82f6" />
+  <circle cx="70" cy="48" r="1" fill="#3b82f6" />
+  <circle cx="75" cy="40" r="1" fill="#3b82f6" />
+  <circle cx="80" cy="42" r="1" fill="#3b82f6" />
+  
+  <!-- Social Media Icons -->
+  <circle cx="75" cy="15" r="5" fill="#1d4ed8" />
+  <text x="73" y="17" font-family="Arial" font-size="6" fill="#ffffff">f</text>
+  
+  <circle cx="85" cy="15" r="5" fill="#0ea5e9" />
+  <text x="83" y="17" font-family="Arial" font-size="6" fill="#ffffff">t</text>
+  
+  <circle cx="80" cy="25" r="5" fill="#ef4444" />
+  <text x="78" y="27" font-family="Arial" font-size="6" fill="#ffffff">y</text>
+  
+  <!-- Target Audience -->
+  <circle cx="35" cy="20" r="10" fill="#ffffff" opacity="0.8" filter="url(#shadow)" />
+  <circle cx="35" cy="20" r="8" stroke="#3b82f6" stroke-width="1" fill="none" />
+  <circle cx="35" cy="20" r="5" stroke="#3b82f6" stroke-width="1" fill="none" />
+  <circle cx="35" cy="20" r="2" fill="#3b82f6" />
+  
+  <!-- Money/ROI -->
+  <circle cx="50" cy="80" r="8" fill="#10b981" opacity="0.8" filter="url(#shadow)" />
+  <text x="47" y="83" font-family="Arial" font-size="10" fill="#064e3b">$</text>
+  
+  <circle cx="65" cy="80" r="8" fill="#10b981" opacity="0.8" filter="url(#shadow)" />
+  <text x="62" y="83" font-family="Arial" font-size="10" fill="#064e3b">$</text>
+  
+  <circle cx="80" cy="80" r="8" fill="#10b981" opacity="0.8" filter="url(#shadow)" />
+  <text x="77" y="83" font-family="Arial" font-size="10" fill="#064e3b">$</text>
+  
+  <!-- 3D Effects -->
+  <path d="M20 45C20 40 25 35 30 35H40L65 20V25L42 38H30C27 38 23 41 23 45C23 49 27 52 30 52H42L65 65V70L40 55H30C25 55 20 50 20 45Z" fill="#3b82f6" opacity="0.1" />
+  <path d="M93 45L98 40V70L93 75H80V70H90V45H93Z" fill="#60a5fa" opacity="0.1" />
+</svg> 

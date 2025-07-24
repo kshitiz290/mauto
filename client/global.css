@@ -1,0 +1,976 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Pleasant Light Theme for Codifye - Day Mode
+   * HSL color variables for beautiful 3D website design
+  */
+  :root {
+    --background: 220 25% 97%;
+    --foreground: 220 10% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 10% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 10% 15%;
+
+    --primary: 280 85% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 94%;
+    --secondary-foreground: 220 8% 20%;
+
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 8% 46%;
+
+    --accent: 200 85% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 280 85% 65%;
+
+    --radius: 1rem;
+
+    /* Pleasant 3D colors - Light Theme */
+    --glass-bg: 255 255 255 / 0.85;
+    --glass-border: 220 15% 20% / 0.12;
+    --gradient-start: 280 85% 65%;
+    --gradient-end: 200 85% 60%;
+    --pleasant-blue: 200 85% 60%;
+    --pleasant-purple: 280 85% 65%;
+    --pleasant-pink: 320 75% 70%;
+    --pleasant-green: 160 75% 55%;
+    --pleasant-orange: 25 85% 65%;
+    --card-glow: 280 85% 65% / 0.3;
+    --light-ray: 200 85% 60% / 0.4;
+  }
+
+  /**
+   * Pleasant Dark Theme for Codifye - Night Mode
+   * HSL color variables for beautiful dark 3D website design
+  */
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 220 15% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 15% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 280 85% 70%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 16%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 220 15% 14%;
+    --muted-foreground: 220 15% 65%;
+
+    --accent: 200 85% 65%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 15% 18%;
+    --input: 220 15% 18%;
+    --ring: 280 85% 70%;
+
+    /* Pleasant 3D colors - Dark Theme */
+    --glass-bg: 220 15% 12% / 0.8;
+    --glass-border: 0 0% 100% / 0.12;
+    --gradient-start: 280 85% 70%;
+    --gradient-end: 200 85% 65%;
+    --pleasant-blue: 200 85% 65%;
+    --pleasant-purple: 280 85% 70%;
+    --pleasant-pink: 320 75% 75%;
+    --pleasant-green: 160 75% 60%;
+    --pleasant-orange: 25 85% 70%;
+    --card-glow: 280 85% 70% / 0.4;
+    --light-ray: 200 85% 65% / 0.5;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-500;
+    min-height: 100vh;
+  }
+
+  /* Light theme background */
+  body:not(.dark) {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--background)) 0%,
+      hsl(220 20% 95%) 50%,
+      hsl(200 30% 98%) 100%
+    );
+  }
+
+  /* Dark theme background */
+  .dark body {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--background)) 0%,
+      hsl(220 20% 10%) 50%,
+      hsl(240 15% 6%) 100%
+    );
+  }
+}
+
+@layer components {
+  .glass-effect {
+    background: hsla(var(--card) / 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsla(var(--glass-border));
+    box-shadow: 0 8px 32px hsla(var(--background) / 0.3);
+  }
+
+  .neon-glow {
+    box-shadow:
+      0 0 20px hsla(var(--primary), 0.3),
+      0 0 40px hsla(var(--primary), 0.2),
+      0 0 80px hsla(var(--primary), 0.1);
+  }
+
+  /* Enhanced 3D Card with Pleasant Colors and Lighting */
+  .card-3d-enhanced {
+    position: relative;
+    background: linear-gradient(
+      145deg,
+      hsla(var(--card), 0.95) 0%,
+      hsla(var(--card), 0.8) 100%
+    );
+    backdrop-filter: blur(20px);
+    border: 1px solid hsla(var(--glass-border));
+    border-radius: var(--radius);
+    box-shadow:
+      0 8px 32px hsla(var(--card-glow)),
+      0 2px 8px hsla(var(--background), 0.1),
+      inset 0 1px 0 hsla(var(--foreground), 0.1);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+  }
+
+  .card-3d-enhanced::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsla(var(--pleasant-purple), 0.6),
+      transparent
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .card-3d-enhanced::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      hsla(var(--light-ray)) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: all 0.6s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .card-3d-enhanced:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+      0 20px 60px hsla(var(--card-glow)),
+      0 8px 20px hsla(var(--pleasant-blue), 0.2),
+      inset 0 1px 0 hsla(var(--foreground), 0.2);
+  }
+
+  .card-3d-enhanced:hover::before {
+    opacity: 1;
+  }
+
+  .card-3d-enhanced:hover::after {
+    opacity: 1;
+    animation: light-pulse 2s ease-in-out infinite;
+  }
+
+  /* Magnetic Hover Effect */
+  .card-magnetic {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    cursor: pointer;
+  }
+
+  .card-magnetic:hover {
+    transform: scale(1.02) translateZ(20px);
+  }
+
+  .card-magnetic::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      45deg,
+      hsla(var(--pleasant-purple), 0.1),
+      hsla(var(--pleasant-blue), 0.1)
+    );
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .card-magnetic:hover::before {
+    opacity: 1;
+  }
+
+  /* Liquid Wave Effect */
+  .card-liquid {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .card-liquid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsla(var(--pleasant-blue), 0.4),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  .card-liquid:hover::before {
+    left: 100%;
+  }
+
+  .card-liquid:hover {
+    transform: translateY(-10px);
+    box-shadow:
+      0 20px 40px hsla(var(--pleasant-purple), 0.2),
+      0 0 20px hsla(var(--pleasant-blue), 0.1);
+  }
+
+  /* Shadow Morph Effect */
+  .card-shadow-morph {
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 4px 15px hsla(var(--card), 0.1);
+  }
+
+  .card-shadow-morph:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+      0 25px 50px hsla(var(--pleasant-purple), 0.25),
+      0 0 0 1px hsla(var(--pleasant-blue), 0.1),
+      inset 0 1px 0 hsla(var(--foreground), 0.1);
+  }
+
+  /* Floating 3D Effect */
+  .card-float-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .card-float-3d:hover {
+    transform: perspective(1000px) rotateX(15deg) rotateY(-15deg)
+      translateZ(40px) translateY(-20px);
+  }
+
+  .card-float-3d::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 20px;
+    right: 20px;
+    height: 20px;
+    background: radial-gradient(
+      ellipse,
+      hsla(var(--card), 0.3) 0%,
+      transparent 70%
+    );
+    transform: translateZ(-40px);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    opacity: 0;
+  }
+
+  .card-float-3d:hover::after {
+    opacity: 1;
+  }
+
+  /* Glitch Effect */
+  .card-glitch {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .card-glitch:hover {
+    animation: glitch 0.3s ease-in-out;
+  }
+
+  .card-glitch::before,
+  .card-glitch::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .card-glitch:hover::before {
+    animation: glitch-before 0.3s ease-in-out;
+    background-color: hsla(var(--pleasant-purple), 0.1);
+  }
+
+  .card-glitch:hover::after {
+    animation: glitch-after 0.3s ease-in-out;
+    background-color: hsla(var(--pleasant-blue), 0.1);
+  }
+
+  /* Morphing Scale Effect */
+  .card-morph {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    border-radius: 20px;
+  }
+
+  .card-morph:hover {
+    transform: scale(1.05) rotate(2deg);
+    border-radius: 30px;
+  }
+
+  .card-morph::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      hsla(var(--pleasant-purple), 0.3),
+      hsla(var(--pleasant-blue), 0.3),
+      hsla(var(--pleasant-pink), 0.3),
+      hsla(var(--pleasant-purple), 0.3)
+    );
+    animation: rotate-gradient 4s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .card-morph:hover::after {
+    opacity: 1;
+  }
+
+  .perspective-container {
+    perspective: 1500px;
+    perspective-origin: center center;
+  }
+
+  .floating-animation {
+    animation: floating 6s ease-in-out infinite;
+  }
+
+  @keyframes floating {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+    50% {
+      transform: translateY(-5px) rotate(-1deg);
+    }
+    75% {
+      transform: translateY(-15px) rotate(0.5deg);
+    }
+  }
+
+  @keyframes light-pulse {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.2);
+      opacity: 0.6;
+    }
+  }
+
+  @keyframes gentle-glow {
+    0%,
+    100% {
+      box-shadow:
+        0 8px 32px hsla(var(--card-glow)),
+        0 2px 8px hsla(var(--background), 0.1);
+    }
+    50% {
+      box-shadow:
+        0 12px 48px hsla(var(--card-glow)),
+        0 4px 16px hsla(var(--pleasant-blue), 0.15);
+    }
+  }
+
+  @keyframes rotate-gradient {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes glitch {
+    0%,
+    100% {
+      transform: translate(0);
+    }
+    20% {
+      transform: translate(-2px, 2px);
+    }
+    40% {
+      transform: translate(-2px, -2px);
+    }
+    60% {
+      transform: translate(2px, 2px);
+    }
+    80% {
+      transform: translate(2px, -2px);
+    }
+  }
+
+  @keyframes glitch-before {
+    0%,
+    100% {
+      clip-path: inset(0 0 0 0);
+      transform: translate(0);
+    }
+    20% {
+      clip-path: inset(20% 0 60% 0);
+      transform: translate(-2px, 0);
+    }
+    40% {
+      clip-path: inset(60% 0 20% 0);
+      transform: translate(-2px, 0);
+    }
+    60% {
+      clip-path: inset(40% 0 40% 0);
+      transform: translate(2px, 0);
+    }
+    80% {
+      clip-path: inset(80% 0 10% 0);
+      transform: translate(2px, 0);
+    }
+  }
+
+  @keyframes glitch-after {
+    0%,
+    100% {
+      clip-path: inset(0 0 0 0);
+      transform: translate(0);
+    }
+    20% {
+      clip-path: inset(40% 0 40% 0);
+      transform: translate(2px, 0);
+    }
+    40% {
+      clip-path: inset(80% 0 10% 0);
+      transform: translate(2px, 0);
+    }
+    60% {
+      clip-path: inset(20% 0 60% 0);
+      transform: translate(-2px, 0);
+    }
+    80% {
+      clip-path: inset(60% 0 20% 0);
+      transform: translate(-2px, 0);
+    }
+  }
+
+  .gradient-text {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--pleasant-purple)),
+      hsl(var(--pleasant-blue))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Portfolio cards with enhanced effects */
+  .portfolio-card {
+    transform-style: preserve-3d;
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: linear-gradient(
+      135deg,
+      hsla(var(--card), 0.9) 0%,
+      hsla(var(--secondary), 0.7) 100%
+    );
+    backdrop-filter: blur(20px);
+    border: 1px solid hsla(var(--glass-border));
+  }
+
+  .portfolio-card:hover {
+    transform: rotateX(10deg) rotateY(15deg) translateZ(50px) scale(1.05);
+    box-shadow:
+      0 25px 80px hsla(var(--card-glow)),
+      0 8px 20px hsla(var(--pleasant-blue), 0.3);
+  }
+}
+
+/* Link Swipe Animation for Cards */
+@keyframes bodytext_module_linkSwipe__cc74e5ca {
+  0% {
+    background-position: 0 100%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Card Container */
+[data-eb-f5d5a09e] {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: var(--radius);
+  transition: transform 0.3s ease;
+}
+
+/* Card Hover Effect */
+[data-eb-f5d5a09e] .bodytext_module_body__cc74e5ca.bodytext_module_link__cc74e5ca {
+  background-image: linear-gradient(transparent 0%, transparent calc(100% - 2px), var(--rg-color-link-hover, #003B8F) calc(100% - 2px), var(--rg-color-link-hover, #003B8F) 100%);
+  background-size: 100% 200%;
+  background-position: 0 0;
+  transition: background-position 0.3s cubic-bezier(0, 0, 0.2, 1), color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  padding-bottom: 2px;
+  display: inline-block;
+  box-shadow: 0 0 0 rgba(0, 59, 143, 0);
+}
+
+[data-eb-f5d5a09e] .bodytext_module_body__cc74e5ca.bodytext_module_link__cc74e5ca:hover {
+  color: var(--rg-color-link-hover, #003B8F);
+  background-position: 0 100%;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 59, 143, 0.2);
+  animation: bodytext_module_linkSwipe__cc74e5ca .3s cubic-bezier(0,0,.2,1);
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  animation-fill-mode: none;
+  animation-play-state: running;
+  animation-name: bodytext_module_linkSwipe__cc74e5ca;
+  animation-timeline: auto;
+  animation-range-start: normal;
+  animation-range-end: normal;
+}
+
+/* Tech Stack Card Styles */
+.tech-icon-card {
+  display: inline-block;
+  background-color: hsl(var(--card));
+  border-radius: var(--radius);
+  overflow: visible; /* Allow glow to extend outside */
+  transition: transform 0.25s ease;
+  position: relative;
+  border: none;
+  isolation: isolate;
+}
+
+.tech-icon-card:hover,
+.tech-icon-card:focus-within {
+  transform: translateY(-4px) scale(1.03);
+}
+
+/* Multi-color glow effect for tech cards - no rotation */
+.tech-icon-card::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--pleasant-purple)),
+    hsl(var(--pleasant-blue)),
+    hsl(var(--pleasant-pink))
+  );
+  border-radius: calc(var(--radius) + 5px);
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  filter: blur(12px);
+}
+
+.tech-icon-card:hover::before {
+  opacity: 0.85;
+}
+
+/* Card background (sits between content and glow) */
+.tech-icon-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: hsl(var(--card));
+  border-radius: var(--radius);
+  z-index: -1;
+}
+
+.tech-icon-card img {
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.tech-icon-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Pop-out animation for tech icons */
+@keyframes pop-out {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.tech-icon-container {
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.tech-icon-card:hover .tech-icon-container {
+  animation: pop-out 0.4s ease forwards;
+}
+
+/* 3D Levitating Button Effect */
+.levitating-button {
+  position: relative;
+  display: inline-block;
+  padding: 7px 13px;
+  background: hsl(var(--card));
+  text-align: center;
+  transform: translateY(0);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  border-radius: 11px;
+  min-width: 111px;
+  font-size: 0.93rem;
+}
+
+/* Floating animation for buttons */
+@keyframes floatButton {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.levitating-button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 11px;
+}
+
+.levitating-button:after {
+  content: '';
+  position: absolute;
+  height: 9px;
+  width: 90%;
+  left: 5%;
+  bottom: -9px;
+  background: rgba(0, 0, 0, 0.2);
+  filter: blur(9px);
+  border-radius: 50%;
+  opacity: 0.5;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: scaleX(0.8);
+}
+
+.levitating-button:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
+  animation: none; /* Stop the floating animation on hover */
+}
+
+.levitating-button:hover:before {
+  opacity: 1;
+}
+
+.levitating-button:hover:after {
+  opacity: 0.7;
+  transform: scaleX(1);
+  filter: blur(15px);
+}
+
+/* Color variations for the levitating buttons */
+.levitating-button-emerald {
+  background: hsl(160 84% 39%);
+  color: white;
+}
+
+.levitating-button-blue {
+  background: hsl(217 91% 60%);
+  color: white;
+}
+
+.levitating-button-purple {
+  background: hsl(271 91% 65%);
+  color: white;
+}
+
+.levitating-button-pink {
+  background: hsl(336 80% 58%);
+  color: white;
+}
+
+/* Neon text effect for the Codifye logo */
+.neon-text {
+  font-size: 2.5rem;
+  color: #fff;
+  text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
+  }
+  100% {
+    text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 80px #00d4ff, 0 0 160px #00d4ff;
+  }
+}
+
+/* ========================================
+   STICKY HOVER EFFECTS FOR CONTACT PAGE
+   ======================================== */
+
+/* Contact Card Sticky - Replaces floating portfolio-card effects */
+.contact-card-sticky {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    hsla(var(--card), 0.95) 0%,
+    hsla(var(--secondary), 0.85) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid hsla(var(--glass-border));
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: pointer;
+}
+
+.contact-card-sticky::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    135deg,
+    hsla(var(--primary), 0.6),
+    hsla(var(--accent), 0.6),
+    hsla(var(--primary), 0.6)
+  );
+  border-radius: inherit;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+  filter: blur(8px);
+}
+
+.contact-card-sticky:hover {
+  /* Sticky effect - subtle movement without floating */
+  transform: translateY(-2px) scale(1.01);
+  border-color: hsla(var(--primary), 0.5);
+  box-shadow:
+    0 8px 25px hsla(var(--primary), 0.15),
+    0 4px 12px hsla(var(--accent), 0.1),
+    inset 0 1px 0 hsla(var(--foreground), 0.1);
+}
+
+.contact-card-sticky:hover::before {
+  opacity: 1;
+}
+
+/* Contact Item Sticky - Individual contact method items */
+.contact-item-sticky {
+  position: relative;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: pointer;
+}
+
+.contact-item-sticky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsla(var(--primary), 0.08),
+    transparent
+  );
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.contact-item-sticky:hover {
+  /* Stick and grow slightly */
+  transform: scale(1.02);
+  background-color: hsla(var(--primary), 0.08);
+  border: 1px solid hsla(var(--primary), 0.2);
+  box-shadow: 
+    0 4px 12px hsla(var(--primary), 0.1),
+    inset 0 1px 0 hsla(var(--primary), 0.1);
+}
+
+.contact-item-sticky:hover::after {
+  opacity: 1;
+}
+
+/* Support Link Sticky - Quick support links */
+.support-link-sticky {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: pointer;
+}
+
+.support-link-sticky::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    hsla(var(--primary), 0.8),
+    hsla(var(--accent), 0.8)
+  );
+  transform: translateY(-50%);
+  transition: width 0.3s ease;
+  border-radius: 1px;
+}
+
+.support-link-sticky:hover {
+  /* Sticky with left border animation */
+  transform: translateX(4px);
+  background-color: hsla(var(--primary), 0.05);
+}
+
+.support-link-sticky:hover::before {
+  width: 4px;
+}
+
+/* Social Link Sticky - Social media icons */
+.social-link-sticky {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: pointer;
+}
+
+.social-link-sticky::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  background: inherit;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+  filter: blur(8px);
+}
+
+.social-link-sticky:hover {
+  /* Sticky with glow effect */
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 8px 20px hsla(var(--primary), 0.3),
+    0 4px 12px hsla(var(--accent), 0.2);
+}
+
+.social-link-sticky:hover::before {
+  opacity: 0.7;
+}
+
+/* Neon Colors for Contact Page */
+:root {
+  --neon-blue: 200 100% 70%;
+  --neon-purple: 280 100% 75%;
+  --neon-pink: 320 100% 75%;
+  --neon-green: 160 100% 60%;
+}
+
+.dark {
+  --neon-blue: 200 100% 65%;
+  --neon-purple: 280 100% 70%;
+  --neon-pink: 320 100% 70%;
+  --neon-green: 160 100% 55%;
+}
+
+/* Enhanced Button Hover for Contact Form */
+.contact-card-sticky .btn-contact:hover {
+  transform: scale(1.02);
+  box-shadow: 
+    0 6px 20px hsla(var(--primary), 0.4),
+    0 0 0 1px hsla(var(--primary), 0.2);
+}
