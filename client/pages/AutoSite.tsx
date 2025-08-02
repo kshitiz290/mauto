@@ -36,6 +36,7 @@ interface FormData {
   theme: string;
   companyName: string;
   email: string;
+  phone: string;
   location: string;
   homeContent: string;
   aboutContent: string;
@@ -53,7 +54,7 @@ interface FormData {
   vision_desc?: string;
   mission_desc?: string;
   what_we_do?: string;
-  // Product/Service fields
+  our_story?: string;  // Product/Service fields
   isProductBased?: boolean;
   name?: string;
   short_description?: string;
@@ -63,6 +64,10 @@ interface FormData {
   sequence?: string;
   display_in_menu?: number;
   status?: string;
+  facebookLink?: string;
+  youtubeLink?: string;
+  linkedinLink?: string;
+  iframe?: string;
   created_at?: string;
   updated_at?: string;
   created_by?: string;
@@ -70,22 +75,8 @@ interface FormData {
 }
 
 const businessSectors = [
-  "School",
-  "Hotel",
-  "Salon",
-  "Coaching",
-  "Restaurant",
-  "Gym",
-  "Clinic",
-  "Shop",
-  "Consulting",
-  "Technology",
-  "Real Estate",
-  "Travel",
-  "Education",
-  "Healthcare",
-  "Finance",
-  "Other"
+  "FMCG",
+  "NGO"
 ];
 
 const themes = [
@@ -124,6 +115,134 @@ function isStrongPassword(password: string) {
 }
 
 export default function AutoSite() {
+  // Clear localStorage on logout or new user session
+  React.useEffect(() => {
+    // Listen for logout or user change event (customize as needed)
+    const handleUserChange = () => {
+      localStorage.removeItem("autoSiteCurrentStep");
+      localStorage.removeItem("autoSiteFormData");
+    };
+    window.addEventListener("user-logout", handleUserChange);
+    window.addEventListener("user-login", handleUserChange);
+    return () => {
+      window.removeEventListener("user-logout", handleUserChange);
+      window.removeEventListener("user-login", handleUserChange);
+    };
+  }, []);
+  // Product/Service array state for step 3
+  const [products, setProducts] = useState([
+    {
+      name: "",
+      short_description: "",
+      full_description: "",
+      product_image: "",
+      price: "",
+      sequence: 1,
+      status: "active",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      created_by: "admin",
+      updated_by: "admin",
+      display_in_menu: 0
+    }
+  ]);
+  const [productPreviews, setProductPreviews] = useState([""]);
+
+  // Handle image upload for each product
+  const handleProductImageUploadMulti = async (e: React.ChangeEvent<HTMLInputElement>, idx: number) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const formDataUpload = new FormData();
+    formDataUpload.append('image', file);
+    try {
+      const res = await fetch(`${apiBase}/api/upload-logo?folder=product-images`, {
+        method: 'POST',
+        body: formDataUpload,
+      });
+      const data = await res.json();
+      if (res.ok && data.path) {
+        const newProducts = [...products];
+        newProducts[idx].product_image = data.path;
+        setProducts(newProducts);
+        const newPreviews = [...productPreviews];
+        newPreviews[idx] = data.path;
+        setProductPreviews(newPreviews);
+      }
+    } catch { }
+  };
+
+  // Add More button handler
+  const handleAddMore = () => {
+    const last = products[products.length - 1];
+    if (!last.name || !last.full_description || !last.product_image) {
+      toast({ title: "Fill all required fields for previous item", variant: "destructive" });
+      return;
+    }
+    setProducts([
+      ...products,
+      {
+        name: "",
+        short_description: "",
+        full_description: "",
+        product_image: "",
+        price: "",
+        sequence: products.length + 1,
+        status: "active",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        created_by: "admin",
+        updated_by: "admin",
+        display_in_menu: isProductBased ? 1 : 0
+      }
+    ]);
+    setProductPreviews([...productPreviews, ""]);
+  };
+
+  // Generate Site handler: send products array
+  const handleGenerateSite = async () => {
+    setIsLoading(true);
+    setErrorMessage("");
+    try {
+      const payload = {
+        ...formData,
+        products,
+        company_id: companyId
+      };
+      const response = await fetch(`${apiBase}/api/generate-site`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error(data.error || "Failed to save site data");
+      await saveStep(currentStep + 1, formData);
+      setCurrentStep(currentStep + 1);
+    } catch (error: any) {
+      setErrorMessage(error.message || "Error saving data. Please try again.");
+      setIsLoading(false);
+      toast({
+        title: "Error",
+        description: error.message || "Error saving your data. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setIsLoading(false);
+  };
+  // Phone validation error state
+  const [phoneError, setPhoneError] = useState<string>("");
+
+  // Phone validation handler
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    updateFormData("phone", value);
+    // Only allow digits, length 10
+    if (!/^\d{10}$/.test(value)) {
+      setPhoneError("Phone number must be exactly 10 digits.");
+    } else {
+      setPhoneError("");
+    }
+  };
   const location = useLocation();
   // Product/Service form state
   const [isProductBased, setIsProductBased] = useState<boolean>(false);
@@ -159,7 +278,7 @@ export default function AutoSite() {
       });
     }
   };
-  const [currentStep, setCurrentStep] = useState(0);
+  // const [currentStep, setCurrentStep] = useState(0);
   const defaultFormData: FormData = {
     hasDomain: false,
     domain: "",
@@ -167,6 +286,7 @@ export default function AutoSite() {
     theme: "",
     companyName: "",
     email: "",
+    phone: "",
     location: "",
     homeContent: "",
     aboutContent: "",
@@ -177,6 +297,10 @@ export default function AutoSite() {
     heading_desc: "",
     banner_path: "",
     photo_1: "",
+    facebookLink: "",
+    linkedinLink: "",
+    youtubeLink: "",
+    iframe: "",
     photo_2: "",
     photo_3: "",
     photo_4: "",
@@ -184,6 +308,7 @@ export default function AutoSite() {
     vision_desc: "",
     mission_desc: "",
     what_we_do: "",
+    our_story: "",
     isProductBased: false,
     name: "",
     short_description: "",
@@ -198,8 +323,40 @@ export default function AutoSite() {
     created_by: "",
     updated_by: ""
   };
-  // const formDataFromLogin = location.state?.formData as FormData || defaultFormData;
-  const [formData, setFormData] = useState<FormData>(defaultFormData);
+  // Helper to clear formData and step on new user registration/login
+  useEffect(() => {
+    // Listen for user change (e.g., after login/register)
+    const userID = localStorage.getItem('userID');
+    const lastUserID = localStorage.getItem('autoSiteLastUserID');
+    if (userID && userID !== lastUserID) {
+      // New user detected, clear formData and step
+      localStorage.setItem('autoSiteFormData', JSON.stringify(defaultFormData));
+      localStorage.setItem('autoSiteCurrentStep', '0');
+      localStorage.setItem('autoSiteLastUserID', userID);
+      setFormData(defaultFormData);
+      setCurrentStep(0);
+    }
+  }, [localStorage.getItem('userID')]);
+
+  const getInitialFormData = () => {
+    const saved = localStorage.getItem("autoSiteFormData");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return defaultFormData;
+      }
+    }
+    return defaultFormData;
+  };
+  const getInitialStep = () => {
+    const saved = localStorage.getItem("autoSiteCurrentStep");
+    if (saved && !isNaN(Number(saved))) {
+      return Number(saved);
+    }
+    return 0;
+  };
+  const [formData, setFormData] = useState<FormData>(getInitialFormData());
 
   const [isLoading, setIsLoading] = useState(false);
   const [buildStatus, setBuildStatus] = useState<string>("");
@@ -214,6 +371,7 @@ export default function AutoSite() {
     const saved = localStorage.getItem("autoSiteIsSuccess");
     return saved === "true";
   });
+  const [currentStep, setCurrentStep] = useState(getInitialStep());
   // Move these out of renderStep/case 4
   const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
@@ -226,7 +384,7 @@ export default function AutoSite() {
   const [companyId, setCompanyId] = useState(0);
 
   // const stepFromLogin = location.state?.stepNumber || 0;
-  
+
 
   // Home page image upload handler (banner and photos)
   const handleImageUpload = async (
@@ -316,7 +474,18 @@ export default function AutoSite() {
       .then(res => res.json())
       .then(data => {
         setCurrentStep(data.step_number || 0);
-        setFormData(data.form_data || {});
+        // Robustly parse form_data if string
+        let parsedFormData = {};
+        if (typeof data.form_data === "string") {
+          try {
+            parsedFormData = JSON.parse(data.form_data);
+          } catch {
+            parsedFormData = {};
+          }
+        } else {
+          parsedFormData = data.form_data || {};
+        }
+        setFormData(parsedFormData);
       })
       .catch(() => {
         setCurrentStep(0);
@@ -325,7 +494,11 @@ export default function AutoSite() {
   }, []);
 
   const updateFormData = (field: keyof FormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => {
+      const updated = { ...prev, [field]: value };
+      localStorage.setItem("autoSiteFormData", JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const saveStep = async (stepNumber, data) => {
@@ -342,21 +515,71 @@ export default function AutoSite() {
       const newStep = currentStep + 1;
       await saveStep(newStep, formData);
       setCurrentStep(newStep);
+      localStorage.setItem("autoSiteCurrentStep", String(newStep));
     }
   };
 
+  const handleDomain = async () => {
+    setIsLoading(true);
+    if (currentStep < 9) {
+      const newStep = currentStep + 1;
+      await saveStep(newStep, formData);
+      try {
+        // Always use latest formData including phone
+        const apiUrl = `${apiBase}/api/domain-check`;
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ domain: formData.domain }),
+        });
+        const data = await response.json();
+        if (data.exists) {
+          toast({
+            title: "Sub-Domain Already Exists",
+            description: "Please choose a different sub-domain.",
+            variant: "destructive",
+          });
+          setIsLoading(false);
+          return;
+        }
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to check domain. Please try again.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+      setCurrentStep(newStep);
+      localStorage.setItem("autoSiteCurrentStep", String(newStep));
+    }
+    setIsLoading(false);
+  }
+
+
   const prevStep = () => {
     if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
+      setCurrentStep(prev => {
+        const newStep = prev - 1;
+        localStorage.setItem("autoSiteCurrentStep", String(newStep));
+        return newStep;
+      });
     }
+
+
   };
 
   const saveCompanyDetails = async () => {
     setIsLoading(true);
     setErrorMessage("");
+    const newStep = currentStep + 1;
     const userID = localStorage.getItem('userID');
     try {
-      const payload = { ...formData, user_id: userID };
+      // Always use latest formData including phone
+      const payload = { ...formData, user_id: userID, phone: formData.phone };
       const apiUrl = `${apiBase}/api/company-details`;
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -368,7 +591,8 @@ export default function AutoSite() {
       const data = await response.json();
       if (response.ok && data.success) {
         setCompanyId(data.companyId);
-        setCurrentStep(3);
+        await saveStep(newStep, { ...formData, phone: formData.phone });
+        setCurrentStep(newStep);
       } else {
         setErrorMessage(data.error || "Failed to save data");
         setIsLoading(false);
@@ -402,6 +626,7 @@ export default function AutoSite() {
 
   // New generateSite: save each section to its own table
   const generateSite = async () => {
+    const newStep = currentStep + 1;
     setIsLoading(true);
     setErrorMessage("");
     try {
@@ -415,7 +640,8 @@ export default function AutoSite() {
       });
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data.error || "Failed to save site data");
-      setCurrentStep(4); // Show success page
+      await saveStep(newStep, formData);
+      setCurrentStep(newStep); // Show success page
     } catch (error: any) {
       setErrorMessage(error.message || "Error saving data. Please try again.");
       setIsLoading(false);
@@ -603,7 +829,7 @@ export default function AutoSite() {
 
             <div className="space-y-4">
               <div>
-                <Label htmlFor="domain">Sub-Domain Name</Label>
+                <Label htmlFor="domain">Sub-Domain Name <span className="text-red-500">*</span></Label>
                 <Input
                   id="domain"
                   type="text"
@@ -611,12 +837,13 @@ export default function AutoSite() {
                   value={formData.domain}
                   onChange={(e) => updateFormData("domain", e.target.value)}
                   className="mt-2"
+                  required
                 />
               </div>
 
               <div className="flex gap-4 pt-4">
                 <Button
-                  onClick={nextStep}
+                  onClick={handleDomain}
                   disabled={!formData.domain}
                   className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary"
                 >
@@ -645,7 +872,7 @@ export default function AutoSite() {
             </div>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="sector">Business Sector</Label>
+                <Label htmlFor="sector">Business Sector <span className="text-red-500">*</span></Label>
                 <Select value={formData.businessSector} onValueChange={(value) => updateFormData("businessSector", value)}>
                   <SelectTrigger className="mt-2">
                     <SelectValue placeholder="Select your business sector" />
@@ -746,7 +973,7 @@ export default function AutoSite() {
             </div>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="companyName">Company Name</Label>
+                <Label htmlFor="companyName">Company Name <span className="text-red-500">*</span></Label>
                 <Input
                   id="companyName"
                   type="text"
@@ -754,10 +981,11 @@ export default function AutoSite() {
                   value={formData.companyName}
                   onChange={(e) => updateFormData("companyName", e.target.value)}
                   className="mt-2"
+                  required
                 />
               </div>
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
                 <Input
                   id="email"
                   type="email"
@@ -765,8 +993,56 @@ export default function AutoSite() {
                   value={formData.email}
                   onChange={handleEmailChange}
                   className="mt-2"
+                  required
                 />
                 {emailError && <div className="text-red-500 text-xs mt-1">{emailError}</div>}
+              </div>
+              <div>
+                <Label htmlFor="phone">Business Phone <span className="text-red-500">*</span></Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="9999999999"
+                  value={formData.phone}
+                  onChange={handlePhoneChange}
+                  className="mt-2"
+                  required
+                />
+                {phoneError && <div className="text-red-500 text-xs mt-1">{phoneError}</div>}
+              </div>
+              {/* Social Links */}
+              <div>
+                <Label htmlFor="facebookLink">Facebook Link</Label>
+                <Input
+                  id="facebookLink"
+                  type="url"
+                  placeholder="https://facebook.com/yourpage"
+                  value={formData.facebookLink || ""}
+                  onChange={e => updateFormData("facebookLink", e.target.value)}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="youtubeLink">YouTube Link</Label>
+                <Input
+                  id="youtubeLink"
+                  type="url"
+                  placeholder="https://youtube.com/yourchannel"
+                  value={formData.youtubeLink || ""}
+                  onChange={e => updateFormData("youtubeLink", e.target.value)}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="linkedinLink">LinkedIn Link</Label>
+                <Input
+                  id="linkedinLink"
+                  type="url"
+                  placeholder="https://linkedin.com/in/yourprofile"
+                  value={formData.linkedinLink || ""}
+                  onChange={e => updateFormData("linkedinLink", e.target.value)}
+                  className="mt-2"
+                />
               </div>
               {/* <div>
                 <Label htmlFor="userPassword">Admin Password</Label>
@@ -781,20 +1057,21 @@ export default function AutoSite() {
               {/* {passwordError && <div className="text-red-500 text-xs mt-1">{passwordError}</div>} */}
               {/* </div> */}
               <div>
-                <Label htmlFor="logoUpload">Upload Your Logo</Label>
+                <Label htmlFor="logoUpload">Upload Your Logo <span className="text-red-500">*</span></Label>
                 <Input
                   id="logoUpload"
                   type="file"
                   accept="image/*"
                   onChange={handleLogoUpload}
                   className="mt-2"
+                  required
                 />
                 {formData.logoPath && (
                   <div className="mt-2 text-xs text-green-600">Logo uploaded: {formData.logoPath}</div>
                 )}
               </div>
               <div>
-                <Label htmlFor="location">Location (Optional)</Label>
+                <Label htmlFor="location">Address <span className="text-red-500">*</span></Label>
                 <Input
                   id="location"
                   type="text"
@@ -802,7 +1079,28 @@ export default function AutoSite() {
                   value={formData.location}
                   onChange={(e) => updateFormData("location", e.target.value)}
                   className="mt-2"
+                  required
                 />
+              </div>
+              <div>
+                <Label htmlFor="iframe">Map Iframe</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="iframe"
+                    type="text"
+                    placeholder="Paste your Google Maps iframe code here"
+                    value={formData.iframe || ""}
+                    onChange={e => updateFormData("iframe", e.target.value)}
+                    className="mt-2 flex-1"
+                  />
+                  <Button
+                    type="button"
+                    className="mt-2"
+                    onClick={() => window.open('https://www.google.com/maps', '_blank')}
+                  >
+                    Get Your Iframe
+                  </Button>
+                </div>
               </div>
               <div className="flex gap-4 pt-4">
                 <Button
@@ -816,10 +1114,12 @@ export default function AutoSite() {
                 <Button
                   onClick={saveCompanyDetails}
                   disabled={
-                    !formData.companyName ||
-                    !formData.email ||
-                    !!emailError ||
-                    !isValidEmail(formData.email)
+                    !formData.companyName?.trim() ||
+                    !formData.email?.trim() ||
+                    !isValidEmail(formData.email) ||
+                    !formData.phone?.trim() ||
+                    !formData.logoPath?.trim() ||
+                    !formData.location?.trim()
                   }
                   className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary"
                 >
@@ -849,7 +1149,7 @@ export default function AutoSite() {
                 <h3 className="text-xl font-semibold mb-2">Home Page Contents</h3>
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="heroTitle">Hero Section Title</Label>
+                    <Label htmlFor="heroTitle">Hero Section (Landing Page) Title <span className="text-red-500">*</span></Label>
                     <Input
                       id="heroTitle"
                       type="text"
@@ -860,27 +1160,30 @@ export default function AutoSite() {
                         setHeroTitleError(e.target.value ? "" : "Title is required.");
                       }}
                       className="mt-2"
+                      required
                     />
                     {heroTitleError && <div className="text-red-500 text-xs mt-1">{heroTitleError}</div>}
                   </div>
                   <div>
-                    <Label htmlFor="heroSubtitle">Hero Section Subtitle</Label>
+                    <Label htmlFor="heroSubtitle">Hero Section Subtitle <span className="text-red-500">*</span></Label>
                     <Textarea
                       id="heroSubtitle"
                       placeholder="Sub-heading below the title"
                       value={formData.heading_desc || ""}
                       onChange={e => updateFormData("heading_desc", e.target.value)}
                       className="mt-2 min-h-[60px]"
+                      required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="bannerImage">Hero Banner Image</Label>
+                    <Label htmlFor="bannerImage">Hero Banner Image <span className="text-red-500">*</span></Label>
                     <Input
                       id="bannerImage"
                       type="file"
                       accept="image/*"
                       onChange={e => handleImageUpload(e, "banner_path")}
                       className="mt-2"
+                      required
                     />
                     {bannerError && <div className="text-red-500 text-xs mt-1">{bannerError}</div>}
                     {bannerPreview && bannerPreview !== "" && (
@@ -888,7 +1191,7 @@ export default function AutoSite() {
                     )}
                   </div>
                   <div>
-                    <Label>Homepage Photo 1</Label>
+                    <Label>Homepage Photo 1 (Optional)</Label>
                     <Input
                       type="file"
                       accept="image/*"
@@ -937,39 +1240,51 @@ export default function AutoSite() {
                   </div>
                 </div>
               </div>
-              {/* ...existing About, Contact, Services fields... */}
               <div className="mb-8">
                 <h3 className="text-xl font-semibold mb-2">About-us Page Contents</h3>
                 <div className="space-y-4">
-
                   <div>
-                    <Label htmlFor="vision_desc">Our Vision</Label>
+                    <Label htmlFor="vision_desc">Our Vision <span className="text-red-500">*</span></Label>
                     <Textarea
                       id="vision_desc"
                       placeholder="Describe your company's long-term vision..."
                       value={formData.vision_desc || ""}
                       onChange={e => updateFormData("vision_desc", e.target.value)}
                       className="mt-2 min-h-[60px]"
+                      required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="mission_desc">Our Mission</Label>
+                    <Label htmlFor="mission_desc">Our Mission <span className="text-red-500">*</span></Label>
                     <Textarea
                       id="mission_desc"
                       placeholder="Describe your company's mission statement..."
                       value={formData.mission_desc || ""}
                       onChange={e => updateFormData("mission_desc", e.target.value)}
                       className="mt-2 min-h-[60px]"
+                      required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="what_we_do">What We Do</Label>
+                    <Label htmlFor="our_story">Our Story <span className="text-red-500">*</span></Label>
+                    <Textarea
+                      id="our_story"
+                      placeholder="Describe your company's core activities or services..."
+                      value={formData.our_story || ""}
+                      onChange={e => updateFormData("our_story", e.target.value)}
+                      className="mt-2 min-h-[60px]"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="what_we_do">What We Do <span className="text-red-500">*</span></Label>
                     <Textarea
                       id="what_we_do"
                       placeholder="Describe your company's core activities or services..."
                       value={formData.what_we_do || ""}
                       onChange={e => updateFormData("what_we_do", e.target.value)}
                       className="mt-2 min-h-[60px]"
+                      required
                     />
                   </div>
                 </div>
@@ -981,95 +1296,127 @@ export default function AutoSite() {
                     id="isProductBased"
                     checked={isProductBased}
                     onChange={e => {
-                      setIsProductBased(e.target.checked);
-                      updateFormData('isProductBased', e.target.checked);
-                      // Always set display_in_menu to 1 if checked, 0 if unchecked
-                      updateFormData('display_in_menu', e.target.checked ? 1 : 0);
+                      const checked = e.target.checked;
+                      setIsProductBased(checked);
+                      updateFormData('isProductBased', checked);
+                      updateFormData('display_in_menu', checked ? 1 : 0);
+                      // Update all products' display_in_menu as well
+                      setProducts(prev => prev.map(prod => ({
+                        ...prod,
+                        display_in_menu: checked ? 1 : 0
+                      })));
                     }}
                     className="mr-2"
                   />
                   <Label htmlFor="isProductBased">Is your company product-based?</Label>
                 </div>
                 <h3 className="text-xl font-semibold mb-2">
-                  {isProductBased ? 'Add Product' : 'Add Service'}
+                  {isProductBased ? 'Products' : 'Services'}
                 </h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="name">Product/Service Name</Label>
-                    <Input
-                      id="name"
-                      type="text"
-                      placeholder="Enter name"
-                      value={formData.name || ""}
-                      onChange={e => updateFormData("name", e.target.value)}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="short_description">Short Description</Label>
-                    <Input
-                      id="short_description"
-                      type="text"
-                      placeholder="Short description"
-                      value={formData.short_description || ""}
-                      onChange={e => updateFormData("short_description", e.target.value)}
-                      className="mt-2"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="full_description">Full Description</Label>
-                    <Textarea
-                      id="full_description"
-                      placeholder="Full description"
-                      value={formData.full_description || ""}
-                      onChange={e => updateFormData("full_description", e.target.value)}
-                      className="mt-2 min-h-[80px]"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="product_image">Image</Label>
-                    <Input
-                      id="product_image"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleProductImageUpload}
-                      className="mt-2"
-                    />
-                    {productImagePreview && productImagePreview !== "" && (
-                      <img src={productImagePreview} alt="Product Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
-                    )}
-                  </div>
-                  {isProductBased && (
+                {products.map((item, idx) => (
+                  <div key={idx} className="space-y-4 border rounded p-4 mb-4 relative">
+                    <h4 className="text-lg font-semibold mb-2 flex items-center justify-between">
+                      <span>{isProductBased ? `Product ${idx + 1}` : `Service ${idx + 1}`}</span>
+                      {products.length > 1 && (
+                        <button
+                          type="button"
+                          aria-label="Remove"
+                          className="ml-2 text-red-500 hover:text-red-700 text-xl font-bold absolute top-2 right-2"
+                          onClick={() => {
+                            setProducts(prev => prev.filter((_, i) => i !== idx));
+                            setProductPreviews(prev => prev.filter((_, i) => i !== idx));
+                          }}
+                        >
+                          &times;
+                        </button>
+                      )}
+                    </h4>
                     <div>
-                      <Label htmlFor="price">Price</Label>
+                      <Label htmlFor={`name_${idx}`}>Name <span className="text-red-500">*</span></Label>
                       <Input
-                        id="price"
+                        id={`name_${idx}`}
                         type="text"
-                        placeholder="Price"
-                        value={formData.price || ""}
-                        onChange={e => updateFormData("price", e.target.value)}
+                        placeholder="Enter name"
+                        value={item.name}
+                        onChange={e => {
+                          const newProducts = [...products];
+                          newProducts[idx].name = e.target.value;
+                          setProducts(newProducts);
+                        }}
+                        className="mt-2"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`short_description_${idx}`}>Short Description (Optional)</Label>
+                      <Input
+                        id={`short_description_${idx}`}
+                        type="text"
+                        placeholder="Short description"
+                        value={item.short_description}
+                        onChange={e => {
+                          const newProducts = [...products];
+                          newProducts[idx].short_description = e.target.value;
+                          setProducts(newProducts);
+                        }}
                         className="mt-2"
                       />
                     </div>
-                  )}
-                  <div>
-                    <Label htmlFor="sequence">Display Order</Label>
-                    <Input
-                      id="sequence"
-                      type="number"
-                      placeholder="Display order"
-                      value={formData.sequence || ""}
-                      onChange={e => updateFormData("sequence", e.target.value)}
-                      className="mt-2"
-                    />
+                    <div>
+                      <Label htmlFor={`full_description_${idx}`}>Full Description <span className="text-red-500">*</span></Label>
+                      <Textarea
+                        id={`full_description_${idx}`}
+                        placeholder="Full description"
+                        value={item.full_description}
+                        onChange={e => {
+                          const newProducts = [...products];
+                          newProducts[idx].full_description = e.target.value;
+                          setProducts(newProducts);
+                        }}
+                        className="mt-2 min-h-[80px]"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`product_image_${idx}`}>Image <span className="text-red-500">*</span></Label>
+                      <Input
+                        id={`product_image_${idx}`}
+                        type="file"
+                        accept="image/*"
+                        onChange={e => handleProductImageUploadMulti(e, idx)}
+                        className="mt-2"
+                        required
+                      />
+                      {productPreviews[idx] && productPreviews[idx] !== "" && (
+                        <img src={productPreviews[idx]} alt="Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
+                      )}
+                    </div>
+                    {isProductBased && (
+                      <div>
+                        <Label htmlFor={`price_${idx}`}>Price (Optional)</Label>
+                        <Input
+                          id={`price_${idx}`}
+                          type="number"
+                          placeholder="Price"
+                          value={item.price}
+                          onChange={e => {
+                            const newProducts = [...products];
+                            newProducts[idx].price = e.target.value;
+                            setProducts(newProducts);
+                          }}
+                          className="mt-2"
+                        />
+                      </div>
+                    )}
                   </div>
-                  {/* Hidden fields for status, created_at, updated_at, created_by, updated_by */}
-                  <input type="hidden" value={formData.status || "active"} />
-                  <input type="hidden" value={formData.created_at || new Date().toISOString()} />
-                  <input type="hidden" value={formData.updated_at || new Date().toISOString()} />
-                  <input type="hidden" value={formData.created_by || "admin"} />
-                  <input type="hidden" value={formData.updated_by || "admin"} />
-                </div>
+                ))}
+                <Button
+                  type="button"
+                  onClick={handleAddMore}
+                  className="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-700 hover:to-blue-500 text-white mb-4"
+                >
+                  Add More {isProductBased ? "Product" : "Service"}
+                </Button>
               </div>
               <div className="flex gap-4 pt-4">
                 <Button
@@ -1082,21 +1429,18 @@ export default function AutoSite() {
                   Back
                 </Button>
                 <Button
-                  onClick={generateSite}
+                  onClick={handleGenerateSite}
                   disabled={
                     isLoading ||
-                    // Home section required fields
                     !formData.heading ||
                     !formData.heading_desc ||
                     !formData.banner_path ||
-                    // About section required fields
                     !formData.vision_desc ||
                     !formData.mission_desc ||
                     !formData.what_we_do ||
-                    // Product/Service section required fields
-                    !formData.name ||
-                    !formData.full_description ||
-                    !formData.product_image
+                    !formData.our_story ||
+                    products.length === 0 ||
+                    products.some(item => !item.name || !item.full_description || !item.product_image)
                   }
                   className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary flex items-center justify-center"
                 >
@@ -1121,19 +1465,9 @@ export default function AutoSite() {
       case 4:
         const handleMakeAnotherWebsite = () => {
           setCurrentStep(0);
-          setFormData({
-            hasDomain: false,
-            domain: "",
-            businessSector: "",
-            theme: "",
-            companyName: "",
-            email: "",
-            location: "",
-            homeContent: "",
-            aboutContent: "",
-            contactContent: "",
-            userPassword: ""
-          });
+          setFormData(defaultFormData);
+          localStorage.setItem("autoSiteCurrentStep", "0");
+          localStorage.setItem("autoSiteFormData", JSON.stringify(defaultFormData));
           setBuildId("");
           setBuildStatus("");
           setPreviewUrl("");
@@ -1142,8 +1476,12 @@ export default function AutoSite() {
           setDeployedUrl("");
           setErrorMessage("");
           setIsSuccess(false);
-          // No localStorage clearing for step/formData
         };
+
+        const handleVisitWebsite = () => {
+          window.open(`http://localhost:3000/${companyId}`, '_blank');
+        };
+
         return (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -1155,15 +1493,23 @@ export default function AutoSite() {
               <Rocket className="w-16 h-16 mx-auto mb-4 text-green-500" />
               <h2 className="text-3xl font-bold mb-4">Success!</h2>
               <p className="text-lg text-foreground/70 mb-8">
-                Your data has been saved successfully.
+                Your site has been created.
               </p>
             </div>
-            <Button
-              onClick={handleMakeAnotherWebsite}
-              className="w-full mt-3 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white"
-            >
-              Make Another Website
-            </Button>
+            <div className="flex flex-col gap-3 w-full max-w-sm mx-auto">
+              {/* <Button
+                onClick={handleMakeAnotherWebsite}
+                className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white"
+              >
+                Make Another Website
+              </Button> */}
+              <Button
+                onClick={handleVisitWebsite}
+                className="w-full bg-gradient-to-r from-green-500 to-green-700 hover:from-green-700 hover:to-green-500 text-white"
+              >
+                Visit Your Website
+              </Button>
+            </div>
           </motion.div>
         );
 

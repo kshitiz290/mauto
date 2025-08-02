@@ -5,6 +5,7 @@ import {
   handleSaveCompanyDetails,
   handleGenerateSite,
   handleSiteStatus,
+  handleDomainCheck,
   uploadLogo,
   sessionMiddleware
 } from "./routes/auto-site";
@@ -136,6 +137,7 @@ export function createServer() {
   // Auto Site Builder API routes
   app.post("/api/generate-site", handleGenerateSite);
   app.post("/api/company-details", handleSaveCompanyDetails);
+  app.post("/api/domain-check", handleDomainCheck);
   app.get("/api/site-status/:buildId", handleSiteStatus);
   app.post("/api/upload-logo", uploadLogo);
 

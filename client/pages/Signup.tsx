@@ -7,6 +7,8 @@ import { useToast } from '../components/ui/use-toast';
 import { ThemeProvider } from '../components/ui/theme-provider';
 import { Header } from '../components/ui/header';
 import { apiFetch } from '../lib/apiFetch';
+import { motion } from 'framer-motion';
+import { Eye, EyeOff, Mail, Lock, User, Phone, UserPlus } from 'lucide-react';
 
 const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:8080' : '';
@@ -17,6 +19,7 @@ export default function Signup() {
     const [password, setPassword] = useState('');
     const [loginId, setLoginId] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const { toast } = useToast();
 
     // Error states
@@ -66,9 +69,15 @@ export default function Signup() {
             });
             const data = await res.json();
             if (res.ok && data.success) {
-                toast({ title: 'Signup Successful', description: 'You can now login.', variant: 'success' });
+                toast({
+                    title: 'Thank you for registering with us!',
+                    description: 'You can now login and start building your site.',
+                    variant: 'default',
+                });
                 localStorage.setItem('userID', data.user.id);
-                window.location.href = '/login';
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1200);
             } else {
                 toast({ title: 'Signup Failed', description: data.error || 'Could not signup', variant: 'destructive' });
             }
@@ -81,86 +90,380 @@ export default function Signup() {
     return (
         <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
             <Header />
-            <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
-                <Card className="max-w-md w-full glass-effect">
-                    <CardHeader>
-                        <CardTitle className="text-2xl font-bold text-center">Signup</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleSignup} className="space-y-6">
-                            <div>
-                                <Label htmlFor="loginId">Username</Label>
-                                <Input
-                                    id="loginId"
-                                    type="text"
-                                    value={loginId}
-                                    onChange={e => {
-                                        setLoginId(e.target.value);
-                                        setUsernameError(e.target.value.length < 6 ? 'Username must be at least 6 characters.' : '');
-                                    }}
-                                    required
-                                    className="mt-2"
-                                />
-                                {usernameError && <div className="text-red-500 text-xs mt-1">{usernameError}</div>}
+            <div className="min-h-screen relative overflow-hidden">
+                {/* Animated Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.3),transparent_50%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(120,119,198,0.2),transparent_50%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(120,119,198,0.2),transparent_50%)]" />
+                </div>
+
+                {/* Floating particles */}
+                <div className="absolute inset-0">
+                    {[...Array(20)].map((_, i) => (
+                        <motion.div
+                            key={i}
+                            className="absolute w-1 h-1 bg-white/20 rounded-full"
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                            }}
+                            animate={{
+                                y: [-20, -100],
+                                opacity: [0, 1, 0],
+                            }}
+                            transition={{
+                                duration: Math.random() * 3 + 2,
+                                repeat: Infinity,
+                                delay: Math.random() * 2,
+                            }}
+                        />
+                    ))}
+                </div>
+
+                <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+                    <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-20">
+                        {/* Left Column - Signup Form */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="w-full max-w-md mx-auto lg:mx-0"
+                        >
+                            <Card className="backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl">
+                                <CardHeader className="text-center pb-2">
+                                    <motion.div
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                        transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                                        className="mx-auto w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-4"
+                                    >
+                                        <UserPlus className="w-8 h-8 text-white" />
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.3 }}
+                                    >
+                                        <CardTitle className="text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                                            Create Account
+                                        </CardTitle>
+                                        <p className="text-gray-300 mt-2">Join us today</p>
+                                    </motion.div>
+                                </CardHeader>
+                                <CardContent className="pt-6">
+                                    <motion.form
+                                        onSubmit={handleSignup}
+                                        className="space-y-5"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.4 }}
+                                    >
+                                        <motion.div
+                                            initial={{ x: -20, opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
+                                            transition={{ delay: 0.5 }}
+                                            className="space-y-2"
+                                        >
+                                            <Label htmlFor="loginId" className="text-gray-200 font-medium flex items-center gap-2">
+                                                <User className="w-4 h-4" />
+                                                Username
+                                            </Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="loginId"
+                                                    type="text"
+                                                    value={loginId}
+                                                    onChange={e => {
+                                                        setLoginId(e.target.value);
+                                                        setUsernameError(e.target.value.length < 6 ? 'Username must be at least 6 characters.' : '');
+                                                    }}
+                                                    required
+                                                    className="bg-white/5 border-white/20 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400/20 pl-4 h-12"
+                                                    placeholder="Choose a username"
+                                                />
+                                            </div>
+                                            {usernameError && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="text-red-400 text-xs mt-1 flex items-center gap-1"
+                                                >
+                                                    <span>⚠</span> {usernameError}
+                                                </motion.div>
+                                            )}
+                                        </motion.div>
+
+                                        <motion.div
+                                            initial={{ x: -20, opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
+                                            transition={{ delay: 0.6 }}
+                                            className="space-y-2"
+                                        >
+                                            <Label htmlFor="email" className="text-gray-200 font-medium flex items-center gap-2">
+                                                <Mail className="w-4 h-4" />
+                                                Email Address
+                                            </Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="email"
+                                                    type="email"
+                                                    value={email}
+                                                    onChange={e => {
+                                                        setEmail(e.target.value);
+                                                        setEmailError(isValidEmail(e.target.value) ? '' : 'Please enter a valid email address.');
+                                                    }}
+                                                    required
+                                                    className="bg-white/5 border-white/20 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400/20 pl-4 h-12"
+                                                    placeholder="Enter your email"
+                                                />
+                                            </div>
+                                            {emailError && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="text-red-400 text-xs mt-1 flex items-center gap-1"
+                                                >
+                                                    <span>⚠</span> {emailError}
+                                                </motion.div>
+                                            )}
+                                        </motion.div>
+
+                                        <motion.div
+                                            initial={{ x: -20, opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
+                                            transition={{ delay: 0.7 }}
+                                            className="space-y-2"
+                                        >
+                                            <Label htmlFor="contactNo" className="text-gray-200 font-medium flex items-center gap-2">
+                                                <Phone className="w-4 h-4" />
+                                                Contact Number
+                                            </Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="contactNo"
+                                                    type="text"
+                                                    value={contactNo}
+                                                    onChange={e => {
+                                                        setContactNo(e.target.value);
+                                                        setContactError(isValidContact(e.target.value) ? '' : 'Contact number must be exactly 10 digits.');
+                                                    }}
+                                                    required
+                                                    className="bg-white/5 border-white/20 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400/20 pl-4 h-12"
+                                                    placeholder="Enter your phone number"
+                                                />
+                                            </div>
+                                            {contactError && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="text-red-400 text-xs mt-1 flex items-center gap-1"
+                                                >
+                                                    <span>⚠</span> {contactError}
+                                                </motion.div>
+                                            )}
+                                        </motion.div>
+
+                                        <motion.div
+                                            initial={{ x: -20, opacity: 0 }}
+                                            animate={{ x: 0, opacity: 1 }}
+                                            transition={{ delay: 0.8 }}
+                                            className="space-y-2"
+                                        >
+                                            <Label htmlFor="password" className="text-gray-200 font-medium flex items-center gap-2">
+                                                <Lock className="w-4 h-4" />
+                                                Password
+                                            </Label>
+                                            <div className="relative">
+                                                <Input
+                                                    id="password"
+                                                    type={showPassword ? "text" : "password"}
+                                                    value={password}
+                                                    onChange={e => {
+                                                        setPassword(e.target.value);
+                                                        setPasswordError(isStrongPassword(e.target.value) ? '' : 'Password must be at least 8 characters and contain a letter and a number.');
+                                                    }}
+                                                    required
+                                                    className="bg-white/5 border-white/20 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400/20 pl-4 pr-12 h-12"
+                                                    placeholder="Create a strong password"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                                                >
+                                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                            {passwordError && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="text-red-400 text-xs mt-1 flex items-center gap-1"
+                                                >
+                                                    <span>⚠</span> {passwordError}
+                                                </motion.div>
+                                            )}
+                                        </motion.div>
+
+                                        <motion.div
+                                            initial={{ y: 20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            transition={{ delay: 0.9 }}
+                                        >
+                                            <Button
+                                                type="submit"
+                                                className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                                                disabled={isLoading || !!usernameError || !!emailError || !!passwordError || !!contactError}
+                                            >
+                                                {isLoading ? (
+                                                    <motion.div
+                                                        className="flex items-center gap-2"
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                    >
+                                                        <motion.div
+                                                            className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                                                            animate={{ rotate: 360 }}
+                                                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                                        />
+                                                        Creating account...
+                                                    </motion.div>
+                                                ) : (
+                                                    'Create Account'
+                                                )}
+                                            </Button>
+                                        </motion.div>
+                                    </motion.form>
+
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 1.0 }}
+                                        className="mt-6 text-center"
+                                    >
+                                        <div className="relative">
+                                            <div className="absolute inset-0 flex items-center">
+                                                <div className="w-full border-t border-white/20" />
+                                            </div>
+                                            <div className="relative flex justify-center text-sm">
+                                                <span className="px-2 bg-transparent text-gray-400">or</span>
+                                            </div>
+                                        </div>
+                                        <motion.div
+                                            className="mt-4"
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                        >
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => window.location.href = '/login'}
+                                                className="w-full bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-white/30 h-12"
+                                            >
+                                                Already have an account? Sign In
+                                            </Button>
+                                        </motion.div>
+                                    </motion.div>
+                                </CardContent>
+                            </Card>
+                        </motion.div>
+
+                        {/* Right Column - Company Information */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="hidden lg:block space-y-8"
+                        >
+                            <div className="text-center lg:text-left">
+                                <motion.h1
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 }}
+                                    className="text-4xl xl:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent"
+                                >
+                                    Welcome to MANACLE
+                                </motion.h1>
+                                <motion.p
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="text-xl text-gray-300 mb-8 leading-relaxed"
+                                >
+                                    Transforming Retail Industry with Integrated Technology Solutions
+                                </motion.p>
                             </div>
-                            <div>
-                                <Label htmlFor="email">Email</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    value={email}
-                                    onChange={e => {
-                                        setEmail(e.target.value);
-                                        setEmailError(isValidEmail(e.target.value) ? '' : 'Please enter a valid email address.');
-                                    }}
-                                    required
-                                    className="mt-2"
-                                />
-                                {emailError && <div className="text-red-500 text-xs mt-1">{emailError}</div>}
-                            </div>
-                            <div>
-                                <Label htmlFor="contactNo">Contact No</Label>
-                                <Input
-                                    id="contactNo"
-                                    type="text"
-                                    value={contactNo}
-                                    onChange={e => {
-                                        setContactNo(e.target.value);
-                                        setContactError(isValidContact(e.target.value) ? '' : 'Contact number must be exactly 10 digits.');
-                                    }}
-                                    required
-                                    className="mt-2"
-                                />
-                                {contactError && <div className="text-red-500 text-xs mt-1">{contactError}</div>}
-                            </div>
-                            <div>
-                                <Label htmlFor="password">Password</Label>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    value={password}
-                                    onChange={e => {
-                                        setPassword(e.target.value);
-                                        setPasswordError(isStrongPassword(e.target.value) ? '' : 'Password must be at least 8 characters and contain a letter and a number.');
-                                    }}
-                                    required
-                                    className="mt-2"
-                                />
-                                {passwordError && <div className="text-red-500 text-xs mt-1">{passwordError}</div>}
-                            </div>
-                            <Button
-                                type="submit"
-                                className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary"
-                                disabled={isLoading || !!usernameError || !!emailError || !!passwordError || !!contactError}
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.6 }}
+                                className="space-y-6"
                             >
-                                {isLoading ? 'Signing up...' : 'Signup'}
-                            </Button>
-                        </form>
-                        <div className="mt-4 text-center">
-                            <Button variant="outline" onClick={() => window.location.href = '/login'}>Go to Login</Button>
-                        </div>
-                    </CardContent>
-                </Card>
+                                <div className="backdrop-blur-sm bg-white/5 rounded-xl p-6 border border-white/10">
+                                    <h3 className="text-lg font-semibold text-orange-400 mb-3 flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-orange-400 rounded-full"></span>
+                                        Sales Force Automation
+                                    </h3>
+                                    <p className="text-gray-300 text-sm leading-relaxed">
+                                        Automate field sales, order management, and activity tracking for your sales team with real-time insights.
+                                    </p>
+                                </div>
+
+                                <div className="backdrop-blur-sm bg-white/5 rounded-xl p-6 border border-white/10">
+                                    <h3 className="text-lg font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                                        Distributor Management
+                                    </h3>
+                                    <p className="text-gray-300 text-sm leading-relaxed">
+                                        Optimize your distribution network and supply chain for maximum efficiency and growth.
+                                    </p>
+                                </div>
+
+                                <div className="backdrop-blur-sm bg-white/5 rounded-xl p-6 border border-white/10">
+                                    <h3 className="text-lg font-semibold text-pink-400 mb-3 flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-pink-400 rounded-full"></span>
+                                        Visual Merchandising
+                                    </h3>
+                                    <p className="text-gray-300 text-sm leading-relaxed">
+                                        Enhance product presentation and customer experience with smart merchandising solutions.
+                                    </p>
+                                </div>
+
+                                <div className="backdrop-blur-sm bg-white/5 rounded-xl p-6 border border-white/10">
+                                    <h3 className="text-lg font-semibold text-green-400 mb-3 flex items-center gap-2">
+                                        <span className="w-2 h-2 bg-green-400 rounded-full"></span>
+                                        Attendance & Leave Management
+                                    </h3>
+                                    <p className="text-gray-300 text-sm leading-relaxed">
+                                        Streamline workforce management with automated attendance tracking and leave processing.
+                                    </p>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.8 }}
+                                className="text-center lg:text-left pt-6"
+                            >
+                                <p className="text-gray-400 text-sm mb-4">
+                                    Join thousands of businesses already transforming their operations
+                                </p>
+                                <div className="flex items-center justify-center lg:justify-start gap-4 text-xs text-gray-500">
+                                    <span className="flex items-center gap-1">
+                                        <span className="w-1 h-1 bg-green-400 rounded-full"></span>
+                                        Trusted by 500+ companies
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                        <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
+                                        99.9% uptime guarantee
+                                    </span>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    </div>
+                </div>
             </div>
         </ThemeProvider>
     );

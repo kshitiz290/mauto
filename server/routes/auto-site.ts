@@ -314,6 +314,26 @@ export const uploadLogo = [
   }
 ];
 
+
+export const handleDomainCheck = async (req: Request, res: Response) => {
+  try {
+    const { domain } = req.body;
+    if (!domain) {
+      return res.status(400).json({ error: 'Domain is required' });
+    }
+    const query = 'SELECT id FROM company_mast WHERE host = ? LIMIT 1';
+    const [rows] = await db.promise().query(query, [domain]);
+    if (Array.isArray(rows) && rows.length > 0) {
+      return res.json({ exists: true, message: 'Domain already exists' });
+    } else {
+      return res.json({ exists: false, message: 'Domain is available' });
+    }
+  } catch (err) {
+    console.error('Domain check error:', err);
+    return res.status(500).json({ error: 'Failed to check domain' });
+  }
+}
+
 // Commented out steps for now: Domain Check, Theme Selection, AI Generation, Preview, Payment, Deploy
 // Remove validation for hasDomain and theme, and comment out AI/payment/deploy logic
 
@@ -327,8 +347,12 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
   try {
     if (!db) throw new Error("Database not configured");
     const user_id = data.user_id;
+    // Validate required fields
+    if (!data.companyName || !data.email || !data.phone || !data.domain || !data.businessSector || !data.location) {
+      return res.status(400).json({ error: "Missing required fields: companyName, email, phone, domain, businessSector, address" });
+    }
     // Save to company_mast table
-    // Columns: name, business_email, host, sector, logo, created_at
+    // Columns: name, business_email, host, sector, logo, address, facebook_link, youtube_link, linkedin_link, created_at
 
     const emailCheckQuery = `SELECT id FROM company_mast WHERE business_email = ? LIMIT 1`;
     const [existing] = await db.promise().query(emailCheckQuery, [data.email]);
@@ -337,26 +361,41 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Company with this email already exists" });
     }
 
+    // Convert logoPath to absolute path if present
+    let logoPathAbs = data.logoPath || '';
+    if (logoPathAbs && !logoPathAbs.startsWith('http')) {
+      logoPathAbs = `${process.env.BASE_URL || 'http://localhost:8080'}${logoPathAbs}`;
+    }
     const query = `INSERT INTO company_mast (
       name,
       business_email,
+      business_phone,
       host,
       sector,
       logo,
       address,
+      facebook,
+      youtube,
+      linkedin,
+      iframe,
       user_id,
       created_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`;
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
     const values = [
       data.companyName,
       data.email,
+      data.phone,
       data.domain,
       data.businessSector,
-      data.logoPath || '',
-      data.location || '',
+      logoPathAbs,
+      data.location,
+      data.facebookLink || '',
+      data.youtubeLink || '',
+      data.linkedinLink || '',
+      data.iframe || '',  // Optional iframe field
       user_id  // Ensure user_id is optional
     ];
-    const [result] = await db.promise().query<ResultSetHeader>(query, values);
+    const [result] = await db.promise().query(query, values);
 
     if (user_id) {
       // If user_id exists, associate it with the company
@@ -376,11 +415,35 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
     const data = req.body;
     // Validate required fields for each section
     if (!data.domain || !data.companyName || !data.email) {
-      return res.status(400).json({ error: "Missing required fields" });
+      return res.status(400).json({ error: "Missing required fields: domain, companyName, email" });
     }
+    if (!data.heading || !data.heading_desc || !data.banner_path) {
+      return res.status(400).json({ error: "Missing required home page fields: title, subtitle, banner" });
+    }
+    if (!data.vision_desc || !data.mission_desc || !data.what_we_do || !data.our_story) {
+      return res.status(400).json({ error: "Missing required about page fields: vision, mission, what we do, our story" });
+    }
+    if (!Array.isArray(data.products) || data.products.length === 0) {
+      return res.status(400).json({ error: "At least one product/service is required" });
+    }
+    // Product-based checkbox is now optional; do not enforce required check
     if (!db) throw new Error("Database not configured");
 
-    const company_id = data.company_id;
+    // company_mast table uses id as primary key, referenced as company_id in other tables
+    const companyId = data.company_id;
+    // Validate companyId exists in company_mast
+    if (!companyId || isNaN(Number(companyId))) {
+      return res.status(400).json({ error: "Invalid or missing company_id. Please save company details first." });
+    }
+    const [companyRows] = await db.promise().query('SELECT id FROM company_mast WHERE id = ?', [companyId]);
+    if (!Array.isArray(companyRows) || companyRows.length === 0) {
+      return res.status(400).json({ error: "Company not found. Please save company details first." });
+    }
+    function absPath(p) {
+      if (!p) return '';
+      if (p.startsWith('http')) return p;
+      return `${process.env.BASE_URL || 'http://localhost:8080'}${p}`;
+    }
     // 1. Save Home Page Content
     const homeQuery = `INSERT INTO home (
       heading,
@@ -396,12 +459,12 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
     const homeValues = [
       data.heading,
       data.heading_desc,
-      data.banner_path,
-      data.photo_1,
-      data.photo_2,
-      data.photo_3,
-      data.photo_4,
-      company_id
+      absPath(data.banner_path),
+      absPath(data.photo_1),
+      absPath(data.photo_2),
+      absPath(data.photo_3),
+      absPath(data.photo_4),
+      companyId
     ];
     await new Promise((resolve, reject) => {
       db.query(homeQuery, homeValues, (err, result) => {
@@ -415,14 +478,16 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
       vision_desc,
       mission_desc,
       what_we_do,
+      our_story,
       company_id,
       created_at
-    ) VALUES (?, ?, ?, ?, NOW())`;
+    ) VALUES (?, ?, ?, ?, ?, NOW())`;
     const aboutValues = [
       data.vision_desc,
       data.mission_desc,
       data.what_we_do,
-      company_id
+      data.our_story,
+      companyId
     ];
     await new Promise((resolve, reject) => {
       db.query(aboutQuery, aboutValues, (err, result) => {
@@ -431,48 +496,54 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
       });
     });
 
-    // 3. Save Product/Service Content
-    const productQuery = `INSERT INTO product_services (
-      name,
-      short_description,
-      full_description,
-      image,
-      price,
-      sequence,
-      display_in_menu,
-      status,
-      created_at,
-      updated_at,
-      created_by,
-      updated_by,
-      company_id
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    const productValues = [
-      data.name,
-      data.short_description,
-      data.full_description,
-      data.product_image, // Store image path from product-images subfolder
-      data.price,
-      data.sequence,
-      (typeof data.display_in_menu === 'number' ? data.display_in_menu : 0),
-      data.status || "active",
-      data.created_at || new Date().toISOString(),
-      data.updated_at || new Date().toISOString(),
-      data.created_by || "admin",
-      data.updated_by || "admin",
-      company_id
-    ];
-    await new Promise((resolve, reject) => {
-      db.query(productQuery, productValues, (err, result) => {
-        if (err) return reject(err);
-        resolve(result);
-      });
-    });
+    // 3. Save Product/Service Content (multiple)
+    if (Array.isArray(data.products) && data.products.length > 0) {
+      const productQuery = `INSERT INTO product_services (
+        name,
+        short_description,
+        full_description,
+        image,
+        price,
+        display_in_menu,
+        status,
+        created_at,
+        updated_at,
+        created_by,
+        updated_by,
+        company_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      for (const prod of data.products) {
+        const productValues = [
+          prod.name,
+          prod.short_description,
+          prod.full_description,
+          absPath(prod.product_image),
+          prod.price || null,
+          (prod.display_in_menu === 1 ? 1 : 0),
+          prod.status || "active",
+          prod.created_at || new Date().toISOString(),
+          prod.updated_at || new Date().toISOString(),
+          prod.created_by || "admin",
+          prod.updated_by || "admin",
+          companyId
+        ];
+        await new Promise((resolve, reject) => {
+          db.query(productQuery, productValues, (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+          });
+        });
+      }
+    }
 
-    return res.json({
-      success: true,
-      message: "Site sections saved to database"
-    });
+    // Fire-and-forget: send company_id to second codebase, but do not wait for response
+    // fetch('http://localhost:5000/api/set-company', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ companyId: company_id })
+    // }).catch(() => { });
+    // // Respond to frontend immediately
+    return res.json({ success: true, companyId: companyId });
   } catch (error) {
     console.error("Error saving site sections:", error);
     res.status(500).json({ error: "Failed to save site sections" });

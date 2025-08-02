@@ -128,7 +128,7 @@ export default function Index() {
                     <h3 className="text-3xl font-bold bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent">
                       Manacle
                     </h3>
-                    <span className="text-sm text-foreground/60 font-medium -mt-1">Web Solutions</span>
+                    <span className="text-sm text-foreground/60 font-medium -mt-1">A bond to deliver Success</span>
                   </div>
                 </div>
                 <p className="text-foreground/70 text-lg font-medium">

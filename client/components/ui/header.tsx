@@ -235,11 +235,23 @@ export function Header() {
       <div className="container mx-auto px-4 md:px-5 lg:px-6 xl:px-4">
         <div className="flex items-center justify-between">
           {/* Logo & Company Name - Responsive sizing */}
+          {/* Logo & Company Name - Responsive sizing */}
           <div className="flex items-center">
             <a href="/" className="flex items-center group">
-              <div className="flex flex-col">
-                <span className="text-2xl md:text-lg lg:text-2xl xl:text-3xl font-black bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent tracking-wider">MANACLE</span>
-                <span className="text-xs md:text-xs lg:text-xs xl:text-sm text-foreground/60 font-medium -mt-0.5 md:-mt-0.5 lg:-mt-1 xl:-mt-1">A bond to deliver Success</span>
+              {/* Logo */}
+              {/* <img
+                src="/manacle_logo.png"
+                alt="Manacle Logo"
+                className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-24 xl:h-12 object-contain mr-2"
+              /> */}
+              {/* Heading and tagline inline */}
+              <div className="flex flex-col justify-center">
+                <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-black bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent tracking-wider leading-tight">
+                  MANACLE
+                </span>
+                <span className="text-xs md:text-sm lg:text-sm xl:text-base text-foreground/60 font-medium leading-tight">
+                  A bond to deliver Success
+                </span>
               </div>
             </a>
           </div>
