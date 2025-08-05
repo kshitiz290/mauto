@@ -475,15 +475,18 @@ export default function AutoSite() {
       .then(data => {
         setCurrentStep(data.step_number || 0);
         // Robustly parse form_data if string
-        let parsedFormData = {};
+        let parsedFormData: FormData = defaultFormData;
         if (typeof data.form_data === "string") {
           try {
-            parsedFormData = JSON.parse(data.form_data);
+            const parsed = JSON.parse(data.form_data);
+            parsedFormData = Object.keys(parsed).length ? parsed : defaultFormData;
           } catch {
-            parsedFormData = {};
+            parsedFormData = defaultFormData;
           }
+        } else if (data.form_data && Object.keys(data.form_data).length) {
+          parsedFormData = data.form_data;
         } else {
-          parsedFormData = data.form_data || {};
+          parsedFormData = defaultFormData;
         }
         setFormData(parsedFormData);
       })
@@ -1479,7 +1482,8 @@ export default function AutoSite() {
         };
 
         const handleVisitWebsite = () => {
-          window.open(`http://localhost:3000/${companyId}`, '_blank');
+          const baseUrl = window.location.origin;
+          window.open(`${baseUrl}/${companyId}`, '_blank');
         };
 
         return (
