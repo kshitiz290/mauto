@@ -1521,11 +1521,11 @@ export default function AutoSite() {
         };
 
         const handleVisitWebsite = () => {
-          // const baseUrl = window.location.origin;
-          // window.open(`${baseUrl}/${companyId}`, '_blank');
+          const baseUrl = window.location.origin;
+          window.open(`${baseUrl}/${companyId}`, '_blank');
 
-          const url = `http://localhost:3000/${companyId}`;
-          window.open(url, '_blank');
+          // const url = `http://localhost:3000/${companyId}`;
+          // window.open(url, '_blank');
         };
 
         return (
