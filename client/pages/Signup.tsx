@@ -10,8 +10,7 @@ import { apiFetch } from '../lib/apiFetch';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, User, Phone, UserPlus } from 'lucide-react';
 
-const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:8080' : '';
+const apiBase = window.location.origin;
 
 export default function Signup() {
     const [email, setEmail] = useState('');

@@ -10,8 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, Sparkles } from 'lucide-react';
 
-const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:8080' : '';
+const apiBase = window.location.origin;
 
 export default function Login() {
     const [email, setEmail] = useState('');

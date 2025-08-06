@@ -90,8 +90,7 @@ const themes = [
   "Dashboard"
 ];
 
-const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const apiBase = isDevelopment ? 'http://localhost:8080' : '';
+const apiBase = window.location.origin;
 
 // Helper to check if a string is a valid URL
 function isValidUrl(url: string) {
@@ -206,7 +205,8 @@ export default function AutoSite() {
       const payload = {
         ...formData,
         products,
-        company_id: companyId
+        company_id: companyId,
+        isEditing: isEditing // Pass edit mode flag to backend
       };
       const response = await fetch(`${apiBase}/api/generate-site`, {
         method: "POST",
@@ -375,6 +375,7 @@ export default function AutoSite() {
   // Move these out of renderStep/case 4
   const [emailError, setEmailError] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   // FIX: Move these hooks to top level to avoid blank screen/hook error
   const [bannerPreview, setBannerPreview] = useState<string>("");
@@ -528,7 +529,6 @@ export default function AutoSite() {
       const newStep = currentStep + 1;
       await saveStep(newStep, formData);
       try {
-        // Always use latest formData including phone
         const apiUrl = `${apiBase}/api/domain-check`;
         const response = await fetch(apiUrl, {
           method: "POST",
@@ -539,14 +539,26 @@ export default function AutoSite() {
         });
         const data = await response.json();
         if (data.exists) {
-          toast({
-            title: "Sub-Domain Already Exists",
-            description: "Please choose a different sub-domain.",
-            variant: "destructive",
-          });
-          setIsLoading(false);
-          return;
+          if (isEditing) {
+            // If editing, allow using existing domain, just save progress and go to next step
+            await saveStep(newStep, formData);
+            setCurrentStep(newStep);
+            setIsLoading(false);
+            return;
+          } else {
+            // If creating new, show error and block
+            toast({
+              title: "Sub-Domain Already Exists",
+              description: "Please choose a different sub-domain.",
+              variant: "destructive",
+            });
+            setIsLoading(false);
+            return;
+          }
         }
+        // If domain does not exist, proceed as normal
+        setCurrentStep(newStep);
+        localStorage.setItem("autoSiteCurrentStep", String(newStep));
       } catch (error) {
         toast({
           title: "Error",
@@ -556,8 +568,6 @@ export default function AutoSite() {
         setIsLoading(false);
         return;
       }
-      setCurrentStep(newStep);
-      localStorage.setItem("autoSiteCurrentStep", String(newStep));
     }
     setIsLoading(false);
   }
@@ -1450,11 +1460,11 @@ export default function AutoSite() {
                   {isLoading ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Generating...
+                      {isEditing ? "Updating..." : "Generating..."}
                     </>
                   ) : (
                     <>
-                      Generate Site
+                      {isEditing ? "Update Site" : "Generate Site"}
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </>
                   )}
@@ -1479,11 +1489,43 @@ export default function AutoSite() {
           setDeployedUrl("");
           setErrorMessage("");
           setIsSuccess(false);
+          setIsEditing(false);
+        };
+
+        // Edit Your Site button handler
+        const handleEditYourSite = async () => {
+          if (!companyId) {
+            toast({ title: "Error", description: "Company ID missing.", variant: "destructive" });
+            return;
+          }
+          try {
+            const response = await fetch(`/api/times-edited`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ company_id: companyId })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+              toast({
+                title: "Edit Limit Reached",
+                description: data.error || "You have reached the maximum number of edits allowed.",
+                variant: "destructive"
+              });
+              return;
+            }
+            setCurrentStep(0);
+            setIsEditing(true);
+          } catch (err) {
+            toast({ title: "Error", description: "Failed to check edit limit.", variant: "destructive" });
+          }
         };
 
         const handleVisitWebsite = () => {
-          const baseUrl = window.location.origin;
-          window.open(`${baseUrl}/${companyId}`, '_blank');
+          // const baseUrl = window.location.origin;
+          // window.open(`${baseUrl}/${companyId}`, '_blank');
+
+          const url = `http://localhost:3000/${companyId}`;
+          window.open(url, '_blank');
         };
 
         return (
@@ -1497,21 +1539,21 @@ export default function AutoSite() {
               <Rocket className="w-16 h-16 mx-auto mb-4 text-green-500" />
               <h2 className="text-3xl font-bold mb-4">Success!</h2>
               <p className="text-lg text-foreground/70 mb-8">
-                Your site has been created.
+                {isEditing ? "Your site has been updated." : "Your site has been created."}
               </p>
             </div>
             <div className="flex flex-col gap-3 w-full max-w-sm mx-auto">
-              {/* <Button
-                onClick={handleMakeAnotherWebsite}
-                className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white"
-              >
-                Make Another Website
-              </Button> */}
               <Button
                 onClick={handleVisitWebsite}
                 className="w-full bg-gradient-to-r from-green-500 to-green-700 hover:from-green-700 hover:to-green-500 text-white"
               >
                 Visit Your Website
+              </Button>
+              <Button
+                onClick={handleEditYourSite}
+                className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white"
+              >
+                Edit Your Site
               </Button>
             </div>
           </motion.div>

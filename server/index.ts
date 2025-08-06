@@ -7,7 +7,8 @@ import {
   handleSiteStatus,
   handleDomainCheck,
   uploadLogo,
-  sessionMiddleware
+  sessionMiddleware,
+  handleTimesEdited
 } from "./routes/auto-site";
 import passport from "passport";
 import bcrypt from "bcrypt";
@@ -140,6 +141,7 @@ export function createServer() {
   app.post("/api/domain-check", handleDomainCheck);
   app.get("/api/site-status/:buildId", handleSiteStatus);
   app.post("/api/upload-logo", uploadLogo);
+  app.post("/api/times-edited", handleTimesEdited);
 
   // Payment routes
   // app.post("/api/create-payment-order", createPaymentOrder);

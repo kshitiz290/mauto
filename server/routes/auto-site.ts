@@ -23,7 +23,7 @@ passport.use(new LocalStrategy({ usernameField: 'email', passwordField: 'passwor
   async (email, password, done) => {
     try {
       const [rows] = await db.promise().query('SELECT * FROM users WHERE email_id = ?', [email]);
-      const user = Array.isArray(rows) && rows.length > 0 ? rows[0] : null;
+      const user = Array.isArray(rows) && rows.length > 0 ? (rows[0] as RowDataPacket) : null;
       if (!user) return done(null, false, { message: 'Incorrect email.' });
       const match = await bcrypt.compare(password, user.password);
       if (!match) return done(null, false, { message: 'Incorrect password.' });
@@ -88,17 +88,38 @@ formProgressRouter.post('/save-step', isAuthenticated, async (req: Request, res:
 formProgressRouter.get('/load-form', isAuthenticated, async (req: Request, res: Response) => {
   const userId = req.userId;
   try {
-    const [rows] = await db.promise().query(
+    // Fetch user_form_progress
+    const [progressRows] = await db.promise().query(
       'SELECT step_number, form_data FROM user_form_progress WHERE user_id = ?',
       [userId]
     );
-    if (Array.isArray(rows) && rows.length > 0) {
-      const row = rows as RowDataPacket[];
-
-      res.json({ step_number: row[0].step_number, form_data: row[0].form_data ? JSON.parse(row[0].form_data) : {} });
-    } else {
-      res.json({ step_number: 0, form_data: {} });
+    let step_number = 0;
+    let form_data = {};
+    if (Array.isArray(progressRows) && progressRows.length > 0) {
+      const row = progressRows as RowDataPacket[];
+      step_number = row[0].step_number;
+      form_data = row[0].form_data ? JSON.parse(row[0].form_data) : {};
     }
+
+    // Fetch company details for pre-fill
+    const [companyRows] = await db.promise().query('SELECT * FROM company_mast WHERE user_id = ? LIMIT 1', [userId]);
+    let company = null;
+    if (Array.isArray(companyRows) && companyRows.length > 0) {
+      company = companyRows[0];
+    }
+
+    res.json({ step_number, form_data, company });
+  } catch (err) {
+    res.status(500).json({ error: 'DB error' });
+  }
+});
+
+// Reset form progress for the logged-in user
+formProgressRouter.post('/reset-form', isAuthenticated, async (req: Request, res: Response) => {
+  const userId = req.userId;
+  try {
+    await db.promise().query('DELETE FROM user_form_progress WHERE user_id = ?', [userId]);
+    res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'DB error' });
   }
@@ -341,8 +362,8 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
   const data = req.body;
   // Data expected from frontend:
   // {
-  //   companyName, email, phoneNumber, domain, businessSector, theme, logoPath,
-  //   homeContent, aboutContent, contactContent
+  //   companyName, email, phone, domain, businessSector, theme, logoPath,
+  //   homeContent, aboutContent, contactContent, location, facebookLink, youtubeLink, linkedinLink, iframe, user_id
   // }
   try {
     if (!db) throw new Error("Database not configured");
@@ -351,59 +372,59 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
     if (!data.companyName || !data.email || !data.phone || !data.domain || !data.businessSector || !data.location) {
       return res.status(400).json({ error: "Missing required fields: companyName, email, phone, domain, businessSector, address" });
     }
-    // Save to company_mast table
-    // Columns: name, business_email, host, sector, logo, address, facebook_link, youtube_link, linkedin_link, created_at
-
-    const emailCheckQuery = `SELECT id FROM company_mast WHERE business_email = ? LIMIT 1`;
-    const [existing] = await db.promise().query(emailCheckQuery, [data.email]);
-
-    if ((existing as any[]).length > 0) {
-      return res.status(400).json({ error: "Company with this email already exists" });
-    }
 
     // Convert logoPath to absolute path if present
     let logoPathAbs = data.logoPath || '';
     if (logoPathAbs && !logoPathAbs.startsWith('http')) {
       logoPathAbs = `${process.env.BASE_URL || 'http://localhost:8080'}${logoPathAbs}`;
     }
-    const query = `INSERT INTO company_mast (
-      name,
-      business_email,
-      business_phone,
-      host,
-      sector,
-      logo,
-      address,
-      facebook,
-      youtube,
-      linkedin,
-      iframe,
-      user_id,
-      created_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
-    const values = [
-      data.companyName,
-      data.email,
-      data.phone,
-      data.domain,
-      data.businessSector,
-      logoPathAbs,
-      data.location,
-      data.facebookLink || '',
-      data.youtubeLink || '',
-      data.linkedinLink || '',
-      data.iframe || '',  // Optional iframe field
-      user_id  // Ensure user_id is optional
-    ];
-    const [result] = await db.promise().query(query, values);
 
-    if (user_id) {
-      // If user_id exists, associate it with the company
-      const userCompanyQuery = `UPDATE users SET company_id = ? WHERE id = ?`;
-      await db.promise().query(userCompanyQuery, [result.insertId, user_id]);
+    // Check if company exists for this user
+    const [companyRows] = await db.promise().query('SELECT id FROM company_mast WHERE user_id = ? LIMIT 1', [user_id]);
+    let companyId;
+    if (Array.isArray(companyRows) && companyRows.length > 0) {
+      // Update existing company
+      companyId = (companyRows as RowDataPacket[])[0].id;
+      const updateQuery = `UPDATE company_mast SET name = ?, business_email = ?, business_phone = ?, host = ?, sector = ?, logo = ?, address = ?, facebook = ?, youtube = ?, linkedin = ?, iframe = ? WHERE id = ?`;
+      const updateValues = [
+        data.companyName,
+        data.email,
+        data.phone,
+        data.domain,
+        data.businessSector,
+        logoPathAbs,
+        data.location,
+        data.facebookLink || '',
+        data.youtubeLink || '',
+        data.linkedinLink || '',
+        data.iframe || '',
+        companyId
+      ];
+      await db.promise().query(updateQuery, updateValues);
+    } else {
+      // Insert new company (should not happen in edit mode)
+      const insertQuery = `INSERT INTO company_mast (name, business_email, business_phone, host, sector, logo, address, facebook, youtube, linkedin, iframe, user_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+      const insertValues = [
+        data.companyName,
+        data.email,
+        data.phone,
+        data.domain,
+        data.businessSector,
+        logoPathAbs,
+        data.location,
+        data.facebookLink || '',
+        data.youtubeLink || '',
+        data.linkedinLink || '',
+        data.iframe || '',
+        user_id
+      ];
+      const [result] = await db.promise().query(insertQuery, insertValues) as [ResultSetHeader, any];
+      companyId = result.insertId;
+      // Associate user with company
+      await db.promise().query('UPDATE users SET company_id = ? WHERE id = ?', [companyId, user_id]);
     }
 
-    return res.json({ success: true, companyId: result.insertId });
+    return res.json({ success: true, companyId });
   } catch (dbErr) {
     console.error("DB Save Error:", dbErr);
     return res.status(500).json({ error: "Failed to save company details" });
@@ -442,63 +463,88 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
     function absPath(p) {
       if (!p) return '';
       if (p.startsWith('http')) return p;
-      return `${process.env.BASE_URL || 'http://localhost:8080'}${p}`;
+      return `${process.env.BASE_URL || 'http://localhost:8080'}${p} `;
     }
-    // 1. Save Home Page Content
-    const homeQuery = `INSERT INTO home (
-      heading,
-      heading_desc,
-      banner_path,
-      photo_1,
-      photo_2,
-      photo_3,
-      photo_4,
-      company_id,
-      created_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
-    const homeValues = [
-      data.heading,
-      data.heading_desc,
-      absPath(data.banner_path),
-      absPath(data.photo_1),
-      absPath(data.photo_2),
-      absPath(data.photo_3),
-      absPath(data.photo_4),
-      companyId
-    ];
-    await new Promise((resolve, reject) => {
-      db.query(homeQuery, homeValues, (err, result) => {
-        if (err) return reject(err);
-        resolve(result);
-      });
-    });
+    // 1. Save or update Home Page Content
+    const [homeRows] = await db.promise().query('SELECT id FROM home WHERE company_id = ? LIMIT 1', [companyId]);
+    if (Array.isArray(homeRows) && homeRows.length > 0) {
+      // Update home
+      const homeUpdate = `UPDATE home SET heading = ?, heading_desc = ?, banner_path = ?, photo_1 = ?, photo_2 = ?, photo_3 = ?, photo_4 = ? WHERE company_id = ?`;
+      const homeUpdateValues = [
+        data.heading,
+        data.heading_desc,
+        absPath(data.banner_path),
+        absPath(data.photo_1),
+        absPath(data.photo_2),
+        absPath(data.photo_3),
+        absPath(data.photo_4),
+        companyId
+      ];
+      await db.promise().query(homeUpdate, homeUpdateValues);
+    } else {
+      // Insert home
+      const homeQuery = `INSERT INTO home(
+        heading,
+        heading_desc,
+        banner_path,
+        photo_1,
+        photo_2,
+        photo_3,
+        photo_4,
+        company_id,
+        created_at
+      ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+      const homeValues = [
+        data.heading,
+        data.heading_desc,
+        absPath(data.banner_path),
+        absPath(data.photo_1),
+        absPath(data.photo_2),
+        absPath(data.photo_3),
+        absPath(data.photo_4),
+        companyId
+      ];
+      await db.promise().query(homeQuery, homeValues);
+    }
 
-    // 2. Save About Us Page Content
-    const aboutQuery = `INSERT INTO about_page (
-      vision_desc,
-      mission_desc,
-      what_we_do,
-      our_story,
-      company_id,
-      created_at
-    ) VALUES (?, ?, ?, ?, ?, NOW())`;
-    const aboutValues = [
-      data.vision_desc,
-      data.mission_desc,
-      data.what_we_do,
-      data.our_story,
-      companyId
-    ];
-    await new Promise((resolve, reject) => {
-      db.query(aboutQuery, aboutValues, (err, result) => {
-        if (err) return reject(err);
-        resolve(result);
-      });
-    });
+    // 2. Save or update About Us Page Content
+    const [aboutRows] = await db.promise().query('SELECT id FROM about_page WHERE company_id = ? LIMIT 1', [companyId]);
+    if (Array.isArray(aboutRows) && aboutRows.length > 0) {
+      // Update about_page
+      const aboutUpdate = `UPDATE about_page SET vision_desc = ?, mission_desc = ?, what_we_do = ?, our_story = ? WHERE company_id = ?`;
+      const aboutUpdateValues = [
+        data.vision_desc,
+        data.mission_desc,
+        data.what_we_do,
+        data.our_story,
+        companyId
+      ];
+      await db.promise().query(aboutUpdate, aboutUpdateValues);
+    } else {
+      // Insert about_page
+      const aboutQuery = `INSERT INTO about_page(
+        vision_desc,
+        mission_desc,
+        what_we_do,
+        our_story,
+        company_id,
+        created_at
+      ) VALUES(?, ?, ?, ?, ?, NOW())`;
+      const aboutValues = [
+        data.vision_desc,
+        data.mission_desc,
+        data.what_we_do,
+        data.our_story,
+        companyId
+      ];
+      await db.promise().query(aboutQuery, aboutValues);
+    }
 
-    // 3. Save Product/Service Content (multiple)
+    // 3. Save or update Product/Service Content (multiple)
     if (Array.isArray(data.products) && data.products.length > 0) {
-      const productQuery = `INSERT INTO product_services (
+      // Delete old products for this company (simple way to sync array)
+      await db.promise().query('DELETE FROM product_services WHERE company_id = ?', [companyId]);
+      const productQuery = `INSERT INTO product_services(
         name,
         short_description,
         full_description,
@@ -511,7 +557,7 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
         created_by,
         updated_by,
         company_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       for (const prod of data.products) {
         const productValues = [
           prod.name,
@@ -527,12 +573,15 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
           prod.updated_by || "admin",
           companyId
         ];
-        await new Promise((resolve, reject) => {
-          db.query(productQuery, productValues, (err, result) => {
-            if (err) return reject(err);
-            resolve(result);
-          });
-        });
+        await db.promise().query(productQuery, productValues);
+      }
+    }
+
+    // Robust increment: always increment if isEditing is true and company exists
+    if (data.isEditing) {
+      const [companyRowsEdit] = await db.promise().query('SELECT id FROM company_mast WHERE id = ?', [companyId]);
+      if (Array.isArray(companyRowsEdit) && companyRowsEdit.length > 0) {
+        await db.promise().query('UPDATE company_mast SET times_edited = COALESCE(times_edited,0) + 1 WHERE id = ?', [companyId]);
       }
     }
 
@@ -547,6 +596,28 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error saving site sections:", error);
     res.status(500).json({ error: "Failed to save site sections" });
+  }
+};
+
+// Check times_edited for a company
+export const handleTimesEdited = async (req: Request, res: Response) => {
+  try {
+    const { company_id } = req.body;
+    if (!company_id || isNaN(Number(company_id))) {
+      return res.status(400).json({ error: "Missing or invalid company_id" });
+    }
+    const [rows] = await db.promise().query('SELECT times_edited FROM company_mast WHERE id = ?', [company_id]);
+    if (!Array.isArray(rows) || rows.length === 0) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+    const timesEdited = (rows[0] as any).times_edited || 0;
+    if (timesEdited > 2) {
+      return res.status(403).json({ error: "You have reached the maximum number of edits allowed." });
+    }
+    return res.json({ success: true, times_edited: timesEdited });
+  } catch (err) {
+    console.error("Error checking times_edited:", err);
+    return res.status(500).json({ error: "Failed to check times_edited" });
   }
 };
 
@@ -684,7 +755,7 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
 
 // Comment out AI prompt and simulation helpers for now
 // function generateAIPrompt(data: SiteGenerationRequest): string {
-//   return `You are an expert web designer and copywriter. Generate a JSON object for a beautiful, modern, multi-page business website for a ${data.businessSector} company named "${data.companyName}" using the "${data.theme}" theme. The domain is "${data.domain}".
+//   return `You are an expert web designer and copywriter.Generate a JSON object for a beautiful, modern, multi - page business website for a ${ data.businessSector } company named "${data.companyName}" using the "${data.theme}" theme.The domain is "${data.domain}".
 
 // The JSON should have this structure:
 // {
@@ -824,8 +895,8 @@ async function testUserCredentials(siteUrl: string, username: string, password: 
     console.log(`User search status: ${userExistsResp.status}`);
     if (userExistsResp.ok) {
       const userExistsData = await userExistsResp.json();
-      console.log(`Users found: ${userExistsData.length}`);
-      if (userExistsData.length === 0) {
+      console.log(`Users found: ${(userExistsData as any[]).length}`);
+      if ((userExistsData as any[]).length === 0) {
         throw new Error(`User ${username} does not exist on the subsite`);
       }
     }
@@ -843,7 +914,7 @@ async function testUserCredentials(siteUrl: string, username: string, password: 
     console.log(`Test response data:`, testData);
 
     if (testResp.ok) {
-      console.log("Credentials verified successfully. User ID:", testData.id);
+      console.log("Credentials verified successfully. User ID:", (testData as { id: number }).id);
       return authHeader; // Return auth header for use in other requests
     } else {
       console.error("Failed to verify credentials. Response:", testData);
@@ -863,7 +934,8 @@ async function testUserCredentials(siteUrl: string, username: string, password: 
       // const usersData = await usersResp.json();
       // console.log("Available users:", usersData);
 
-      throw new Error(`Failed to verify credentials for user ${username}. Response: ${testData.message}`);
+      const errorMessage = typeof testData === 'object' && testData !== null && 'message' in testData ? (testData as any).message : JSON.stringify(testData);
+      throw new Error(`Failed to verify credentials for user ${username}. Response: ${errorMessage}`);
     }
   } catch (error) {
     console.error("Error testing user credentials:", error);
