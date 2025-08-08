@@ -1,32 +1,41 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import emailjs from 'emailjs-com';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
-import { 
-  Instagram, 
-  Youtube, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  ArrowRight, 
+import { motion, useInView } from "framer-motion";
+import {
+  Instagram,
+  Youtube,
+  Mail,
+  Phone,
+  MapPin,
+  ArrowRight,
   MessageCircle,
   Clock,
   Headphones,
   FileText,
   Globe,
   Zap,
-  Facebook
+  Facebook,
+  Linkedin
 } from "lucide-react";
 import { Header } from "../components/ui/header";
 import { ThemeProvider } from "../components/ui/theme-provider";
+import Footer from "@/components/ui/footer";
 
 export function ContactUs() {
+  // Shared ref for synchronizing animations (must be inside component)
+  const contactGridRef = useRef(null);
+  const isContactGridInView = useInView(contactGridRef, { once: true, amount: 0.3 });
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
     company: "",
     message: "",
+    companyName: "",
+    solutionType: "Web Design & Development",
   });
 
   const [meetingFormData, setMeetingFormData] = useState({
@@ -48,7 +57,7 @@ export function ContactUs() {
   const [isMeetingSubmitting, setIsMeetingSubmitting] = useState(false);
   const [isMeetingSubmitted, setIsMeetingSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -61,37 +70,63 @@ export function ContactUs() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    // Prepare email content
+    const templateParams = {
+      to_email: 'kshitizkant290@gmail.com',
+      from_name: formData.fullName,
+      from_email: formData.email,
+      email: formData.email,
+      phone: formData.phone,
+      company_name: formData.companyName,
+      solution_type: formData.solutionType,
+      message: formData.message,
+      subject: 'New Lead from the Site',
+      formatted_message: `New lead from the site:\n\nName: ${formData.fullName}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nCompany Name: ${formData.companyName}\nQuery Solution: ${formData.solutionType}\nMessage: ${formData.message}`
+    };
+
+    try {
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const userId = import.meta.env.VITE_EMAILJS_USER_ID;
+
+      // console.log(serviceId, templateId, userId);
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        userId
+      );
       setIsSubmitted(true);
-      
-      // Reset form after submission
       setFormData({
         fullName: "",
         email: "",
         phone: "",
         company: "",
         message: "",
+        companyName: "",
+        solutionType: "Web Design & Development",
       });
-      
-      // Reset success message after a few seconds
       setTimeout(() => {
         setIsSubmitted(false);
       }, 5000);
-    }, 1500);
+    } catch (error) {
+      alert('Failed to send email. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleMeetingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsMeetingSubmitting(true);
-    
+
     // Simulate meeting form submission
     setTimeout(() => {
       setIsMeetingSubmitting(false);
       setIsMeetingSubmitted(true);
-      
+
       // Reset form after submission
       setMeetingFormData({
         fullName: "",
@@ -105,7 +140,7 @@ export function ContactUs() {
         platform: "",
         agenda: "",
       });
-      
+
       // Close modal and reset success message after a few seconds
       setTimeout(() => {
         setIsMeetingSubmitted(false);
@@ -119,50 +154,101 @@ export function ContactUs() {
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
         <Header />
         <main>
-          <div className="min-h-screen pt-32 pb-16">
-            <div className="container mx-auto px-4">
-              {/* Header */}
-              <div className="text-center mb-20">
-                <h1 className="text-5xl md:text-6xl font-bold mb-8">
-                  Ready to start your <span className="gradient-text">Projects?</span>
-                </h1>
-                <p className="text-2xl text-foreground max-w-4xl mx-auto leading-relaxed">
-                  Get in touch with us and let's create something amazing together.
-                </p>
+          <section className="relative w-screen left-1/2 right-1/2 -mx-[50vw] min-h-[160px] flex items-center justify-center overflow-x-clip pt-32 bg-transparent">
+            {/* Animated floating shapes for light/dark theme */}
+            <div className="absolute left-10 top-1/2 -translate-y-1/2 w-36 h-36 bg-gradient-to-br from-primary/40 to-accent/30 rounded-full blur-3xl animate-float-slow z-0 mix-blend-lighten dark:mix-blend-normal" style={{ animationDelay: '0s' }} />
+            <div className="absolute right-20 top-10 w-20 h-20 bg-gradient-to-tr from-pink-400/40 to-purple-400/30 rounded-full blur-2xl animate-float-fast z-0 mix-blend-lighten dark:mix-blend-normal" style={{ animationDelay: '1.5s' }} />
+            <div className="absolute left-1/2 bottom-0 -translate-x-1/2 w-80 h-16 bg-primary/20 rounded-full blur-2xl animate-float-medium z-0 mix-blend-lighten dark:mix-blend-normal" style={{ animationDelay: '2s' }} />
+            <div className="absolute right-32 bottom-0 w-16 h-16 bg-gradient-to-t from-yellow-400/40 to-orange-400/30 rounded-full blur-xl animate-float-fast z-0 mix-blend-lighten dark:mix-blend-normal" style={{ animationDelay: '2.5s' }} />
+
+            {/* Breadcrumb */}
+            <nav className="relative z-10 w-full max-w-7xl px-2 sm:px-10 flex items-center justify-center">
+              <div className="w-full">
+                <div className="rounded-2xl bg-white/70 dark:bg-black/70 backdrop-blur-2xl shadow-2xl border border-glass-border px-10 py-7 flex flex-wrap items-center justify-center gap-4 transition-colors duration-300">
+                  <div className="flex items-center gap-2 text-xl font-semibold">
+                    <svg className="w-8 h-8 text-primary mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4" /></svg>
+                    <span className="hidden sm:inline text-foreground/70 transition-colors duration-200">Home</span>
+                    <span className="inline sm:hidden">/</span>
+                  </div>
+                  <span className="mx-2 text-foreground/40 text-2xl font-light">/</span>
+                  <span className="text-primary font-bold text-xl tracking-wide transition-colors duration-200">Contact Us</span>
+                </div>
               </div>
+            </nav>
+          </section>
+
+
+          <div className="min-h-screen py-16 ">
+            <div className="container mx-auto px-4">
+              {/* Header with Framer Motion Animation */}
+              <motion.div
+                initial={{ opacity: 0, y: 48 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                className="text-center mb-20"
+              >
+                <motion.h1
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.7 }}
+                  transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-5xl md:text-6xl font-bold mb-8"
+                >
+                  Ready to start with our{' '}
+                  <span
+                    style={{ background: 'linear-gradient(90deg, #FF9800 40%, #B721FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                  >
+                    Solutions?
+                  </span>
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.7 }}
+                  transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-2xl text-foreground max-w-4xl mx-auto leading-relaxed"
+                >
+                  Get in touch with us and let's create something amazing together.
+                </motion.p>
+              </motion.div>
 
               {/* Main Contact Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-                
+              <div ref={contactGridRef} className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+
                 {/* Contact Information & Quick Actions */}
                 <div className="lg:col-span-1 space-y-6">
-                  
-                  {/* Contact Methods */}
-                  <div className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border">
+
+                  {/* Contact Methods - Animated */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={isContactGridInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border"
+                  >
                     <h2 className="text-2xl font-extrabold mb-8 gradient-text">Get In Touch</h2>
-                    
                     <div className="space-y-4">
-                      <a href="mailto:codifyee@gmail.com" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-primary/10 transition-all duration-300">
+                      <a href="mailto:sales@manacleindia.com" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-primary/10 transition-all duration-300">
                         <div className="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center">
                           <Mail className="w-6 h-6 text-white" />
                         </div>
                         <div>
                           <h3 className="font-extrabold text-lg">Email Us</h3>
-                          <p className="text-foreground text-base font-medium">codifyee@gmail.com</p>
+                          <p className="text-foreground text-base font-medium">sales@manacleindia.com</p>
                         </div>
                       </a>
 
-                      <a href="tel:+918540889842" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-accent/10 transition-all duration-300">
+                      <a href="tel:+918645322914" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-accent/10 transition-all duration-300">
                         <div className="w-12 h-12 bg-gradient-to-r from-accent to-neon-purple rounded-full flex items-center justify-center">
                           <Phone className="w-6 h-6 text-white" />
                         </div>
                         <div>
                           <h3 className="font-extrabold text-lg">Call Us</h3>
-                          <p className="text-foreground text-base font-medium">+91 8540889842</p>
+                          <p className="text-foreground text-base font-medium">+91 8645322914</p>
                         </div>
                       </a>
 
-                      <a href="https://wa.me/918540889842" target="_blank" rel="noopener noreferrer" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-green-500/10 transition-all duration-300">
+                      <a href="https://wa.me/918645322914" target="_blank" rel="noopener noreferrer" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-green-500/10 transition-all duration-300">
                         <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
                           <MessageCircle className="w-6 h-6 text-white" />
                         </div>
@@ -172,10 +258,16 @@ export function ContactUs() {
                         </div>
                       </a>
                     </div>
-                  </div>
+                  </motion.div>
 
-                  {/* Office Hours */}
-                  <div className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border">
+                  {/* Office Hours - Animated */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border"
+                  >
                     <div className="flex items-center space-x-3 mb-6">
                       <div className="w-12 h-12 bg-gradient-to-r from-neon-blue to-neon-pink rounded-lg flex items-center justify-center">
                         <Clock className="w-6 h-6 text-white" />
@@ -201,10 +293,10 @@ export function ContactUs() {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Quick Support Links */}
-                  <div className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border">
+                  {/* <div className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border">
                     <div className="flex items-center space-x-3 mb-6">
                       <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
                         <Headphones className="w-6 h-6 text-white" />
@@ -219,7 +311,7 @@ export function ContactUs() {
                         </div>
                         <ArrowRight className="w-4 h-4 text-primary transform group-hover:translate-x-1 transition-transform duration-300" />
                       </a>
-                      
+
                       <a href="#portfolio" className="support-link-sticky flex items-center justify-between p-3 rounded-lg hover:bg-accent/10 transition-all duration-300 group">
                         <div className="flex items-center space-x-3">
                           <Globe className="w-5 h-5 text-accent" />
@@ -227,7 +319,7 @@ export function ContactUs() {
                         </div>
                         <ArrowRight className="w-4 h-4 text-accent transform group-hover:translate-x-1 transition-transform duration-300" />
                       </a>
-                      
+
                       <a href="#pricing" className="support-link-sticky flex items-center justify-between p-3 rounded-lg hover:bg-neon-blue/10 transition-all duration-300 group">
                         <div className="flex items-center space-x-3">
                           <Zap className="w-5 h-5 text-neon-blue" />
@@ -236,14 +328,18 @@ export function ContactUs() {
                         <ArrowRight className="w-4 h-4 text-neon-blue transform group-hover:translate-x-1 transition-transform duration-300" />
                       </a>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Contact Form */}
-                <div className="lg:col-span-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={isContactGridInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                  className="lg:col-span-2"
+                >
                   <div className="contact-card-sticky p-12 rounded-3xl bg-card/90 backdrop-blur-sm border border-glass-border">
                     <h2 className="text-4xl font-extrabold mb-10 gradient-text">Send us a Message</h2>
-                    
                     <form className="space-y-6" onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
@@ -274,7 +370,21 @@ export function ContactUs() {
                           />
                         </div>
                       </div>
-                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                          <label className="block text-lg font-bold mb-3">
+                            Company Name (optional)
+                          </label>
+                          <Input
+                            name="companyName"
+                            value={formData.companyName}
+                            onChange={handleChange}
+                            className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                            placeholder="Your Company Name"
+                          />
+                        </div>
+                      </div>
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                           <label className="block text-lg font-bold mb-3">
@@ -291,23 +401,30 @@ export function ContactUs() {
                         </div>
                         <div>
                           <label className="block text-lg font-bold mb-3">
-                            Project Type
+                            Solution Type
                           </label>
-                          <select className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300">
-                            <option>Web Design & Development</option>
-                            <option>WordPress Hosting & Maintenance</option>
-                            <option>Search Engine Optimization</option>
-                            <option>Digital Marketing</option>
-                            <option>E-commerce Solutions</option>
-                            <option>Mobile App Development</option>
-                            <option>Other</option>
-                          </select>
+                          <div className="w-full">
+                            <select
+                              name="solutionType"
+                              value={formData.solutionType}
+                              onChange={handleChange}
+                              className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                            >
+                              <option>Attendance & Leave Management</option>
+                              <option>CRM Software</option>
+                              <option>Order Management Solution</option>
+                              <option>HRMS</option>
+                              <option>Distributor Management Solution</option>
+                              <option>Purchase Order Management</option>
+                              <option>Other</option>
+                            </select>
+                          </div>
                         </div>
                       </div>
-                      
+
                       <div>
                         <label className="block text-lg font-bold mb-3">
-                          Project Details
+                          Additional Message
                         </label>
                         <Textarea
                           name="message"
@@ -319,8 +436,8 @@ export function ContactUs() {
                           placeholder="Tell us about your project requirements, timeline, and budget..."
                         />
                       </div>
-                      
-                      <Button 
+
+                      <Button
                         type="submit"
                         disabled={isSubmitting}
                         className="w-full py-6 text-xl font-bold bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300 neon-glow transform hover:scale-[1.02] hover:shadow-lg"
@@ -328,7 +445,7 @@ export function ContactUs() {
                         {isSubmitting ? "Sending..." : isSubmitted ? "Sent Successfully!" : "Get A Quote"}
                         <ArrowRight className="ml-3 w-6 h-6" />
                       </Button>
-                      
+
                       {isSubmitted && (
                         <div className="text-center text-emerald-500 font-medium mt-4 p-4 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
                           Thank you! Your request has been submitted. We'll be in touch within 24 hours.
@@ -336,11 +453,17 @@ export function ContactUs() {
                       )}
                     </form>
                   </div>
-                </div>
+                </motion.div>
               </div>
 
-              {/* Location & Map Section */}
-              <div className="mb-16">
+              {/* Location & Map Section with Framer Motion */}
+              <motion.div
+                initial={{ opacity: 0, y: 48 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                className="mb-16"
+              >
                 <div className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div>
@@ -350,17 +473,17 @@ export function ContactUs() {
                         </div>
                         <h2 className="text-2xl font-bold gradient-text">Our Location</h2>
                       </div>
-                      
+
                       <div className="space-y-4">
                         <div>
-                          <h3 className="font-extrabold text-xl mb-4">Codifye Headquarters</h3>
+                          <h3 className="font-extrabold text-xl mb-4">Main Office</h3>
                           <p className="text-foreground text-lg leading-relaxed font-medium">
-                            Maharani Colony, Ranipur, Gulzarbagh<br />
-                            Patna, Bihar 800007, India<br />
+                            E-71, 4th floor, Sector-6, Noida<br />
+                            Uttar-Pradesh 201301<br />
                             <span className="text-primary font-bold">Serving clients worldwide</span>
                           </p>
                         </div>
-                        
+
                         <div className="border-t border-glass-border pt-6">
                           <h4 className="font-bold text-lg mb-4">Service Areas</h4>
                           <div className="flex flex-wrap gap-3">
@@ -370,23 +493,23 @@ export function ContactUs() {
                             <span className="px-4 py-2 bg-neon-purple/10 text-neon-purple rounded-full text-sm font-bold">Europe</span>
                           </div>
                         </div>
-                        
-                        <div className="mt-8">
-                          <Button 
+
+                        {/* <div className="mt-8">
+                          <Button
                             onClick={() => setIsMeetingModalOpen(true)}
                             className="w-full py-4 text-lg font-bold bg-gradient-to-r from-neon-blue to-neon-purple hover:from-neon-purple hover:to-neon-blue transition-all duration-300"
                           >
                             Schedule a Virtual Meeting
                             <ArrowRight className="ml-3 w-5 h-5" />
                           </Button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
-                    
+
                     <div>
                       <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl border border-glass-border overflow-hidden">
                         <iframe
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.4126515715367!2d85.19746987527516!3d25.597307077461098!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed58e6b52c8aab%3A0x5ce8d8e2e9b1b9b0!2sMaharani%20Colony%2C%20Gulzar%20Bagh%2C%20Patna%2C%20Bihar%20800007%2C%20India!5e0!3m2!1sen!2sus!4v1703025600000!5m2!1sen!2sus"
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d224203.07933862173!2d77.01536178588864!3d28.59458299677065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce5d5cd8c0c95%3A0x4717ef18de1436b5!2sManacle%20Technologies%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1754559661411!5m2!1sen!2sin"
                           width="100%"
                           height="100%"
                           style={{ border: 0 }}
@@ -399,51 +522,60 @@ export function ContactUs() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Social Media & Connect */}
               <div className="text-center">
                 <h3 className="text-3xl font-extrabold mb-8 gradient-text">Connect With Us</h3>
                 <div className="flex justify-center space-x-6 mb-8">
                   <a
-                    href="https://instagram.com/codifyee_"
+                    href="https://www.facebook.com/techmanacle/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-pink-500 hover:to-purple-500 hover:border-pink-500/50 transition-all duration-300 group"
+                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#1877F3] hover:to-[#1877F3] hover:border-[#1877F3]/50 transition-all duration-300 group"
+                  >
+                    <Facebook className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
+                  </a>
+                  <a
+                    href="https://x.com/ManacleTech"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#000000] hover:to-[#1DA1F2] hover:border-[#1DA1F2]/50 transition-all duration-300 group"
+                  >
+                    <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
+                  </a>
+                  <a
+                    href="https://www.instagram.com/techmanacle/"
+                    target="_blank"
+                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#515BD4] hover:border-[#DD2A7B]/50 transition-all duration-300 group"
                   >
                     <Instagram className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
                   </a>
                   <a
-                    href="https://youtube.com/codifye"
+                    href="https://www.linkedin.com/company/manacletechnologies/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 hover:border-red-500/50 transition-all duration-300 group"
+                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#0A66C2] hover:to-[#0A66C2] hover:border-[#0A66C2]/50 transition-all duration-300 group"
+                  >
+                    <Linkedin className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
+                  </a>
+                  <a
+                    href="https://youtube.com/@techmanacle?si=lKZw7FngfmlXE49z"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#FF0000] hover:to-[#FF0000] hover:border-[#FF0000]/50 transition-all duration-300 group"
                   >
                     <Youtube className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
                   </a>
-                  <a
-                    href="mailto:codifyee@gmail.com"
-                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 hover:border-blue-500/50 transition-all duration-300 group"
-                  >
-                    <Mail className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
-                  </a>
-                  <a
-                    href="https://wa.me/918540889842"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-green-500 hover:to-green-600 hover:border-green-500/50 transition-all duration-300 group"
-                  >
-                    <MessageCircle className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
-                  </a>
                 </div>
-                
+
                 <p className="text-lg text-foreground max-w-3xl mx-auto leading-relaxed font-medium">
-                  Follow us for the latest updates, web development tips, and behind-the-scenes content. 
+                  Follow us for the latest updates, web development tips, and behind-the-scenes content.
                   We love sharing our knowledge and connecting with the developer community!
                 </p>
               </div>
             </div>
-            
+
             {/* Background Effects */}
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"></div>
             <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-3xl -z-10"></div>
@@ -657,121 +789,12 @@ export function ContactUs() {
         )}
 
         {/* Footer */}
-        <footer className="py-12 border-t border-glass-border/30 glass-effect backdrop-blur-xl bg-gradient-to-r from-card/50 via-card/30 to-card/50">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div>
-                <div className="flex items-center mb-4 group">
-                  <img 
-                    src="/codifye_logo.png" 
-                    alt="Codifye Logo" 
-                    className="w-14 h-14 mr-3 group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="flex flex-col">
-                    <h3 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                      Codifye
-                    </h3>
-                    <span className="text-sm text-foreground/60 font-medium -mt-1">Web Solutions</span>
-                  </div>
-                </div>
-                <p className="text-foreground/70 text-lg font-medium">
-                  Creating digital experiences that drive business growth
-                  through innovative technology solutions.
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold mb-4 text-xl">Services</h4>
-                <ul className="space-y-3 text-lg text-foreground/70 font-medium">
-                  <li className="hover:text-primary hover:translate-x-1 transition-all duration-300 cursor-pointer">Web Design & Development</li>
-                  <li className="hover:text-primary hover:translate-x-1 transition-all duration-300 cursor-pointer">WordPress Hosting</li>
-                  <li className="hover:text-primary hover:translate-x-1 transition-all duration-300 cursor-pointer">Search Engine Optimization</li>
-                  <li className="hover:text-primary hover:translate-x-1 transition-all duration-300 cursor-pointer">Digital Marketing</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-bold mb-4 text-xl">Quick Links</h4>
-                <ul className="space-y-3 text-lg text-foreground/70 font-medium">
-                  <li><a href="/" className="hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block">Home</a></li>
-                  <li><a href="/about-us" className="hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block">About Us</a></li>
-                  <li><a href="#services" className="hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block">Services</a></li>
-                  <li><a href="/contact-us" className="hover:text-primary hover:translate-x-1 transition-all duration-300 inline-block">Contact Us</a></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-bold mb-4 text-xl">Contact</h4>
-                <ul className="space-y-3 text-lg text-foreground/70 font-medium">
-                  <li>
-                    <a href="mailto:codifyee@gmail.com" className="flex items-center hover:text-primary hover:underline transition-all duration-300">
-                      <Mail className="w-5 h-5 mr-2 flex-shrink-0" />
-                      Email: codifyee@gmail.com
-                    </a>
-                  </li>
-                  <li>
-                    <a href="tel:+918540889842" className="flex items-center hover:text-primary hover:underline transition-all duration-300">
-                      <Phone className="w-5 h-5 mr-2 flex-shrink-0" />
-                      Phone: +91 8540889842
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://maps.google.com/?q=India" target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-primary hover:underline transition-all duration-300">
-                      <MapPin className="w-5 h-5 mr-2 flex-shrink-0" />
-                      Location: India
-                    </a>
-                  </li>
-                </ul>
-                
-                {/* Social Media Icons */}
-                <div className="mt-6">
-                  <h5 className="font-bold mb-3 text-base">Follow Us</h5>
-                  <div className="flex space-x-4">
-                    <a 
-                      href="https://x.com/home" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300 group"
-                    >
-                      <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
-                    </a>
-                    <a 
-                      href="https://www.facebook.com/profile.php?id=61574541927345" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-blue-600 hover:scale-110 transition-all duration-300 group"
-                    >
-                      <Facebook className="w-5 h-5 text-foreground/70 group-hover:text-white" />
-                    </a>
-                    <a 
-                      href="https://instagram.com/codifyee_" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:scale-110 transition-all duration-300 group"
-                    >
-                      <Instagram className="w-5 h-5 text-foreground/70 group-hover:text-white" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mt-8 pt-8 border-t border-glass-border/30 text-center">
-              <div className="flex items-center justify-center mb-3">
-                <img 
-                  src="/codifye_logo.png" 
-                  alt="Codifye Logo" 
-                  className="w-7 h-7 mr-2 opacity-70"
-                />
-                <span className="text-base font-medium bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  CODIFYE
-                </span>
-              </div>
-              <p className="text-lg text-foreground/60 font-medium">All rights reserved © 2025 CODIFYE</p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
 
         {/* Floating Action Buttons */}
         {/* WhatsApp for Desktop */}
         <a
-          href="https://wa.me/918540889842"
+          href="https://wa.me/918645322914"
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 z-50 hidden md:flex w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
@@ -783,7 +806,7 @@ export function ContactUs() {
 
         {/* Phone Call for Mobile */}
         <a
-          href="tel:+918540889842"
+          href="tel:+918645322914"
           className="fixed bottom-6 right-6 z-50 flex md:hidden w-14 h-14 bg-blue-500 hover:bg-blue-600 rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
           aria-label="Call us"
         >

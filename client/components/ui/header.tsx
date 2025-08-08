@@ -128,109 +128,110 @@ export function Header() {
     }
   };
 
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "AI Website Builder", href: "/auto-site", highlight: true },
-    {
-      name: "Services",
-      href: "/services",
-      hasDropdown: true,
-      dropdownContent: {
-        categories: [
-          {
-            title: "Web Services",
-            items: [
-              {
-                name: "Web Design & Development",
-                description: "Custom responsive websites",
-                href: "/services/website-development"
-              },
-              {
-                name: "Website Maintenance",
-                description: "Ongoing support & updates",
-                href: "/services/website-maintenance"
-              },
-              {
-                name: "Hosting Services",
-                description: "Reliable hosting solutions",
-                href: "/services/hosting"
-              },
-            ],
-          },
-          {
-            title: "Marketing & Design",
-            items: [
-              {
-                name: "Search Engine Optimization",
-                description: "Boost your online visibility",
-                href: "/services/seo-services"
-              },
-              {
-                name: "Content Creation",
-                description: "Engaging content that converts",
-                href: "/services/content-creation"
-              },
-              {
-                name: "Branding & Design",
-                description: "Creative visual solutions",
-                href: "/services"
-              },
-            ],
-          },
-          {
-            title: "Support",
-            items: [
-              {
-                name: "Technical Support",
-                description: "24/7 assistance",
-                href: "/services"
-              },
-              {
-                name: "Website Updates",
-                description: "Keep your site current",
-                href: "/services/website-maintenance"
-              },
-              {
-                name: "Performance Optimization",
-                description: "Speed improvements",
-                href: "/services"
-              },
-            ],
-          },
-        ],
-      },
+// Define types for nav items and dropdown items
+type DropdownItem = {
+  name: string;
+  href: string;
+  description?: string;
+};
+
+type DropdownCategory = {
+  title: string;
+  items: DropdownItem[];
+};
+
+type NavItem = {
+  name: string;
+  href: string;
+  highlight?: boolean;
+  hasDropdown?: boolean;
+  dropdownContent?: {
+    categories: DropdownCategory[];
+  };
+};
+
+const navItems: NavItem[] = [
+  { name: "Home", href: "/" },
+  { name: "Website Builder", href: "/auto-site", highlight: true },
+  {
+    name: "Our Solutions",
+    href: "#",
+    hasDropdown: true,
+    dropdownContent: {
+      categories: [
+        {
+          title: "SFA Solutions",
+          items: [
+            { name: "Attendance & Leave Management", href: "/attendance-leave-management" },
+            { name: "Order Management Solution", href: "/order-management-solution" },
+            { name: "Field Force Tracking & Activity", href: "/field-force-tracking" },
+            { name: "Distributor Management Solution", href: "/distributor-management-solution" },
+            { name: "Merchandising & Retail Execution", href: "/merchandising-retail-execution" },
+            { name: "Expenses & Claims Management", href: "/expenses-claims-management" },
+            { name: "Retailer Management Solution", href: "/retailer-management-solution" },
+            { name: "Sales Activity Management", href: "/sales-activity-management" },
+          ],
+        },
+        {
+          title: "ERP Solutions",
+          items: [
+            { name: "Purchase Order Management", href: "/purchase-order-management" },
+            { name: "Store Management Software", href: "/store-management-software" },
+            { name: "Production Management", href: "/production-management" },
+            { name: "Packing Management", href: "/packing-management" },
+            { name: "Demand Generation", href: "/demand-generation" },
+            { name: "Invoice Generation Solution", href: "/invoice-generation-solution" },
+            { name: "Dispatch Management", href: "/dispatch-management" },
+            { name: "Plant Management", href: "/plant-management" },
+          ],
+        },
+        {
+          title: "Others Solution",
+          items: [
+            { name: "Human Resource Management (HRMS)", href: "/hrms" },
+            { name: "Website Development Services", href: "/website-development-services" },
+            { name: "CRM Software", href: "/crm-software" },
+            { name: "Digital Marketing Services", href: "/digital-marketing-services" },
+            { name: "Whatsapp Ordering System", href: "/whatsapp-ordering-system" }
+          ],
+        },
+      ],
     },
-    {
-      name: "Portfolio",
-      href: "/gallery",
-      hasDropdown: true,
-      dropdownContent: {
-        categories: [
-          {
-            title: "Our Work",
-            items: [
-              { name: "Portfolio Gallery", description: "View all our projects", href: "/gallery" },
-              { name: "Healthcare Projects", description: "Medical & pharmaceutical sites", href: "/gallery" },
-              { name: "Educational Platforms", description: "Learning & training websites", href: "/gallery" },
-            ],
-          },
-          {
-            title: "By Industry",
-            items: [
-              { name: "E-commerce", description: "Online stores & shops", href: "/gallery" },
-              { name: "Non-Profit Organizations", description: "NGO & community sites", href: "/gallery" },
-              { name: "Business Services", description: "Professional service sites", href: "/gallery" },
-            ],
-          },
-        ],
-      },
+  },
+  /*
+  {
+    name: "Portfolio",
+    href: "/gallery",
+    hasDropdown: true,
+    dropdownContent: {
+      categories: [
+        {
+       },
+   },
+Gallery", description: "View all our projects", href: "/gallery" },
+            { name: "Healthcare Projects", description: "Medical & pharmaceutical sites", href: "/gallery" },
+            { name: "Educational Platforms", description: "Learning & training websites", href: "/gallery" },
+          ],
+        },
+        {
+          title: "By Industry",
+          items: [
+            { name: "E-commerce", description: "Online stores & shops", href: "/gallery" },
+            { name: "Non-Profit Organizations", description: "NGO & community sites", href: "/gallery" },
+            { name: "Business Services", description: "Professional service sites", href: "/gallery" },
+          ],
+        },
+      ],
     },
-    { name: "About", href: "/about-us" },
-    { name: "Contact", href: "/contact-us" },
-  ];
+  },
+  */    { name: "About", href: "/about-us" },
+  { name: "Contact", href: "/contact-us" },
+];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-3 lg:py-4 xl:py-4 transition-transform duration-300 ease-in-out backdrop-blur-md bg-background/80 ${isHeaderVisible ? 'transform translate-y-0' : 'transform -translate-y-full'
+    <header className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-3 lg:py-4 xl:py-4 transition-transform duration-300 ease-in-out backdrop-blur-md    */    
+    { name: "About", href: "/about-us" },
+translate-y-0' : 'transform -translate-y-full'
       }`}>
       <div className="container mx-auto px-4 md:px-5 lg:px-6 xl:px-4">
         <div className="flex items-center justify-between">
@@ -307,18 +308,19 @@ export function Header() {
                           onMouseLeave={handleDropdownMouseLeave}
                         />
                         <div
-                          className="absolute top-full left-1/2 transform -translate-x-1/2 mt-3 w-[480px] md:w-[520px] lg:w-[580px] xl:w-[600px] glass-effect border border-glass-border rounded-2xl p-4 md:p-5 lg:p-6 xl:p-6 shadow-2xl z-50 bg-card/95 backdrop-blur-xl"
+                          className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[95vw] sm:w-[600px] md:w-[700px] lg:w-[900px] max-w-[98vw] glass-effect border border-glass-border rounded-2xl p-4 md:p-5 lg:p-6 xl:p-6 shadow-2xl z-50 bg-card/95 backdrop-blur-xl max-h-[75vh] md:max-h-[420px] overflow-y-auto"
                           onMouseEnter={handleDropdownMouseEnter}
                           onMouseLeave={handleDropdownMouseLeave}
+                          style={{ scrollbarWidth: 'thin' }}
                         >
-                          <div className="grid grid-cols-3 gap-4 md:gap-5 lg:gap-6 xl:gap-6">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {item.dropdownContent?.categories.map(
                               (category, index) => (
-                                <div key={index} className="space-y-3 md:space-y-3 lg:space-y-4 xl:space-y-4">
-                                  <h3 className="font-bold text-base md:text-base lg:text-lg xl:text-lg gradient-text mb-2 md:mb-2 lg:mb-3 xl:mb-3">
+                                <div key={index} className="space-y-3">
+                                  <h3 className="font-bold text-base md:text-lg gradient-text mb-2">
                                     {category.title}
                                   </h3>
-                                  <ul className="space-y-2 md:space-y-2 lg:space-y-3 xl:space-y-3">
+                                  <ul className="space-y-2">
                                     {category.items.map((subItem, subIndex) => (
                                       <li key={subIndex}>
                                         <a
@@ -329,10 +331,10 @@ export function Header() {
                                             setActiveDropdown(null);
                                           }}
                                         >
-                                          <div className="font-medium text-sm md:text-sm lg:text-base xl:text-base text-foreground group-hover/item:text-primary transition-colors duration-200">
+                                          <div className="font-medium text-sm md:text-base text-foreground group-hover/item:text-primary transition-colors duration-200">
                                             {subItem.name}
                                           </div>
-                                          <div className="text-xs md:text-xs lg:text-sm xl:text-sm text-foreground/80 group-hover/item:text-foreground transition-colors duration-200">
+                                          <div className="text-xs md:text-sm text-foreground/80 group-hover/item:text-foreground transition-colors duration-200">
                                             {subItem.description}
                                           </div>
                                         </a>
@@ -343,22 +345,21 @@ export function Header() {
                               ),
                             )}
                           </div>
-
                           {/* Featured Section */}
-                          <div className="mt-4 md:mt-5 lg:mt-6 xl:mt-6 pt-4 md:pt-5 lg:pt-6 xl:pt-6 border-t border-glass-border">
+                          <div className="mt-4 pt-4 border-t border-glass-border">
                             <div className="flex items-center justify-between">
                               <div>
-                                <h4 className="font-bold text-foreground mb-1 text-sm md:text-sm lg:text-base xl:text-base">
+                                <h4 className="font-bold text-foreground mb-1 text-sm md:text-base">
                                   Ready to start your project?
                                 </h4>
-                                <p className="text-xs md:text-xs lg:text-sm xl:text-sm text-foreground/70">
+                                <p className="text-xs md:text-sm text-foreground/70">
                                   Let's discuss your requirements and bring your vision
                                   to life.
                                 </p>
                               </div>
                               <Button
                                 size="sm"
-                                className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300 text-xs md:text-xs lg:text-sm xl:text-sm"
+                                className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300 text-xs md:text-sm"
                                 onClick={() => {
                                   setClickedDropdown(null);
                                   window.location.href = '/contact-us';

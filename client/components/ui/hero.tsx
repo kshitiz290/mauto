@@ -1,4 +1,4 @@
-import { ArrowRight, Code2, Palette, Rocket } from "lucide-react";
+import { ArrowRight, BarChart2, Cpu, Smartphone, Users } from "lucide-react";
 import { Button } from "./button";
 
 export function Hero() {
@@ -33,16 +33,19 @@ export function Hero() {
             Leading provider of SFA, ERP, DMS, HRMS, and digital automation solutions for FMCG and enterprise sectors. Transform your business with scalable, data-driven technology from Manacle.
           </p>
 
-          {/* Feature Icons */}
+          {/* Feature Icons - Software Solutions */}
           <div className="flex justify-center items-center space-x-4 sm:space-x-6 md:space-x-8 mb-8 sm:mb-10 md:mb-12 px-2">
-            <div className="card-magnetic p-3 sm:p-4 glass-effect rounded-full">
-              <Code2 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-primary group-hover:rotate-12 transition-transform duration-300" />
+            <div className="p-3 sm:p-4 glass-effect rounded-full group transition-transform duration-300">
+              <BarChart2 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
             </div>
-            <div className="card-liquid p-3 sm:p-4 glass-effect rounded-full">
-              <Palette className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-accent group-hover:scale-125 transition-transform duration-300" />
+            <div className="p-3 sm:p-4 glass-effect rounded-full group transition-transform duration-300">
+              <Cpu className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-accent transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
             </div>
-            <div className="card-glitch p-3 sm:p-4 glass-effect rounded-full">
-              <Rocket className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-neon-blue group-hover:-rotate-12 transition-transform duration-300" />
+            <div className="p-3 sm:p-4 glass-effect rounded-full group transition-transform duration-300">
+              <Smartphone className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-neon-blue transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
+            </div>
+            <div className="p-3 sm:p-4 glass-effect rounded-full group transition-transform duration-300">
+              <Users className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-green-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
             </div>
           </div>
 
@@ -50,34 +53,12 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-2">
             <Button
               size="lg"
-              className="bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 transition-all duration-300 neon-glow group w-full sm:w-auto py-6 px-10 text-2xl font-bold text-white"
+              className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-1 w-full sm:w-auto"
               onClick={() => window.location.href = '/auto-site'}
             >
               Build your free website
               <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
             </Button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mt-12 sm:mt-14 md:mt-16 max-w-2xl mx-auto px-2">
-            <div className="text-center p-2">
-              <div className="text-2xl sm:text-3xl font-bold gradient-text">100+</div>
-              <div className="text-xs sm:text-sm text-foreground/60 leading-tight">
-                Projects Delivered
-              </div>
-            </div>
-            <div className="text-center p-2">
-              <div className="text-2xl sm:text-3xl font-bold gradient-text">50+</div>
-              <div className="text-xs sm:text-sm text-foreground/60 leading-tight">Happy Clients</div>
-            </div>
-            <div className="text-center p-2">
-              <div className="text-2xl sm:text-3xl font-bold gradient-text">5+</div>
-              <div className="text-xs sm:text-sm text-foreground/60 leading-tight">Years Experience</div>
-            </div>
-            <div className="text-center p-2">
-              <div className="text-2xl sm:text-3xl font-bold gradient-text">24/7</div>
-              <div className="text-xs sm:text-sm text-foreground/60 leading-tight">Support</div>
-            </div>
           </div>
         </div>
       </div>
