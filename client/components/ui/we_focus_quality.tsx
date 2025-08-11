@@ -96,7 +96,7 @@ const WeFocusQuality = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.7, delay: idx * 0.2 }}
-            className="flex flex-col items-center bg-gradient-to-br from-card/90 to-card/70 backdrop-blur-xl border border-glass-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-150 hover:-translate-y-2 group cursor-pointer w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xs"
+            className="flex flex-col items-center bg-gradient-to-br from-card/90 to-card/70 backdrop-blur-xl border border-glass-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-150 hover:-translate-y-2 group  w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-xs"
             whileHover={{ scale: 1.05, boxShadow: '0 8px 32px rgba(255,152,0,0.15)' }}
           >
             {item.icon}

@@ -72,6 +72,14 @@ interface FormData {
   updated_at?: string;
   created_by?: string;
   updated_by?: string;
+  // Campaign fields for NGO
+  campaign_name?: string;
+  campaign_description?: string;
+  volunteers?: string;
+  raised?: string;
+  campaign_status?: string;
+  goal?: string;
+  impact?: string;
 }
 
 const businessSectors = [
@@ -114,6 +122,26 @@ function isStrongPassword(password: string) {
 }
 
 export default function AutoSite() {
+  // Campaigns state for NGO
+  const [campaigns, setCampaigns] = useState([
+    {
+      campaign_name: "",
+      campaign_description: "",
+      volunteers: "",
+      raised: "",
+      campaign_status: "",
+      goal: "",
+      impact: ""
+    }
+  ]);
+
+  // Sync campaigns to formData when campaigns change
+  useEffect(() => {
+    if (formData.businessSector === "NGO") {
+      updateFormData("campaigns", campaigns);
+    }
+    // eslint-disable-next-line
+  }, [campaigns]);
   // Clear localStorage on logout or new user session
   React.useEffect(() => {
     // Listen for logout or user change event (customize as needed)
@@ -202,12 +230,22 @@ export default function AutoSite() {
     setIsLoading(true);
     setErrorMessage("");
     try {
-      const payload = {
-        ...formData,
-        products,
-        company_id: companyId,
-        isEditing: isEditing // Pass edit mode flag to backend
-      };
+      let payload;
+      if (formData.businessSector === "NGO") {
+        payload = {
+          ...formData,
+          campaigns,
+          company_id: companyId,
+          isEditing: isEditing
+        };
+      } else {
+        payload = {
+          ...formData,
+          products,
+          company_id: companyId,
+          isEditing: isEditing
+        };
+      }
       const response = await fetch(`${apiBase}/api/generate-site`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -321,7 +359,15 @@ export default function AutoSite() {
     created_at: "",
     updated_at: "",
     created_by: "",
-    updated_by: ""
+    updated_by: "",
+    // Campaign fields for NGO
+    campaign_name: "",
+    campaign_description: "",
+    volunteers: "",
+    raised: "",
+    campaign_status: "",
+    goal: "",
+    impact: ""
   };
   // Helper to clear formData and step on new user registration/login
   useEffect(() => {
@@ -382,7 +428,10 @@ export default function AutoSite() {
   const [photoPreviews, setPhotoPreviews] = useState<string[]>(["", "", "", ""]);
   const [heroTitleError, setHeroTitleError] = useState<string>("");
   const [bannerError, setBannerError] = useState<string>("");
-  const [companyId, setCompanyId] = useState(0);
+  const [companyId, setCompanyId] = useState(() => {
+    const saved = localStorage.getItem("autoSiteCompanyId");
+    return saved && !isNaN(Number(saved)) ? Number(saved) : 0;
+  });
 
   // const stepFromLogin = location.state?.stepNumber || 0;
 
@@ -471,6 +520,11 @@ export default function AutoSite() {
   }, [currentStep, buildStatus]);
 
   useEffect(() => {
+    // Restore companyId from localStorage if available
+    const savedCompanyId = localStorage.getItem("autoSiteCompanyId");
+    if (savedCompanyId && !isNaN(Number(savedCompanyId))) {
+      setCompanyId(Number(savedCompanyId));
+    }
     fetch("/api/load-form", { credentials: "include" })
       .then(res => res.json())
       .then(data => {
@@ -490,10 +544,17 @@ export default function AutoSite() {
           parsedFormData = defaultFormData;
         }
         setFormData(parsedFormData);
+        // Set companyId from backend if available
+        if (data.company && data.company.id) {
+          setCompanyId(data.company.id);
+          localStorage.setItem("autoSiteCompanyId", String(data.company.id));
+        }
       })
       .catch(() => {
         setCurrentStep(0);
         setFormData(defaultFormData);
+        setCompanyId(0);
+        localStorage.removeItem("autoSiteCompanyId");
       });
   }, []);
 
@@ -604,6 +665,7 @@ export default function AutoSite() {
       const data = await response.json();
       if (response.ok && data.success) {
         setCompanyId(data.companyId);
+        localStorage.setItem("autoSiteCompanyId", String(data.companyId));
         await saveStep(newStep, { ...formData, phone: formData.phone });
         setCurrentStep(newStep);
       } else {
@@ -901,9 +963,8 @@ export default function AutoSite() {
               </div>
               <div className="flex gap-4 pt-4">
                 <Button
-                  variant="outline"
                   onClick={prevStep}
-                  className="flex-1"
+                  className="flex-1 outline"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
@@ -1117,9 +1178,8 @@ export default function AutoSite() {
               </div>
               <div className="flex gap-4 pt-4">
                 <Button
-                  variant="outline"
                   onClick={prevStep}
-                  className="flex-1"
+                  className="flex-1 border border-foreground/30 bg-transparent text-foreground"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
@@ -1302,138 +1362,303 @@ export default function AutoSite() {
                   </div>
                 </div>
               </div>
-              <div className="mb-8">
-                <div className="flex items-center mb-4">
-                  <input
-                    type="checkbox"
-                    id="isProductBased"
-                    checked={isProductBased}
-                    onChange={e => {
-                      const checked = e.target.checked;
-                      setIsProductBased(checked);
-                      updateFormData('isProductBased', checked);
-                      updateFormData('display_in_menu', checked ? 1 : 0);
-                      // Update all products' display_in_menu as well
-                      setProducts(prev => prev.map(prod => ({
-                        ...prod,
-                        display_in_menu: checked ? 1 : 0
-                      })));
-                    }}
-                    className="mr-2"
-                  />
-                  <Label htmlFor="isProductBased">Is your company product-based?</Label>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">
-                  {isProductBased ? 'Products' : 'Services'}
-                </h3>
-                {products.map((item, idx) => (
-                  <div key={idx} className="space-y-4 border rounded p-4 mb-4 relative">
-                    <h4 className="text-lg font-semibold mb-2 flex items-center justify-between">
-                      <span>{isProductBased ? `Product ${idx + 1}` : `Service ${idx + 1}`}</span>
-                      {products.length > 1 && (
-                        <button
-                          type="button"
-                          aria-label="Remove"
-                          className="ml-2 text-red-500 hover:text-red-700 text-xl font-bold absolute top-2 right-2"
-                          onClick={() => {
-                            setProducts(prev => prev.filter((_, i) => i !== idx));
-                            setProductPreviews(prev => prev.filter((_, i) => i !== idx));
+              {/* Conditional NGO Campaigns UI */}
+              {formData.businessSector === "NGO" ? (
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold mb-2">Add Campaigns</h3>
+                  {campaigns.map((campaign, idx) => (
+                    <div key={idx} className="space-y-4 border rounded p-4 mb-4 relative">
+                      <h4 className="text-lg font-semibold mb-2 flex items-center justify-between">
+                        <span>Campaign {idx + 1}</span>
+                        {campaigns.length > 1 && (
+                          <button
+                            type="button"
+                            aria-label="Remove"
+                            className="ml-2 text-red-500 hover:text-red-700 text-xl font-bold absolute top-2 right-2"
+                            onClick={() => {
+                              setCampaigns(prev => prev.filter((_, i) => i !== idx));
+                            }}
+                          >
+                            &times;
+                          </button>
+                        )}
+                      </h4>
+                      <div>
+                        <Label htmlFor={`campaign_name_${idx}`}>Campaign Name <span className="text-red-500">*</span></Label>
+                        <Input
+                          id={`campaign_name_${idx}`}
+                          type="text"
+                          placeholder="Enter campaign name"
+                          value={campaign.campaign_name}
+                          onChange={e => {
+                            const updated = [...campaigns];
+                            updated[idx].campaign_name = e.target.value;
+                            setCampaigns(updated);
+                          }}
+                          className="mt-2"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`campaign_description_${idx}`}>Campaign Description (Optional)</Label>
+                        <Textarea
+                          id={`campaign_description_${idx}`}
+                          placeholder="Describe the campaign"
+                          value={campaign.campaign_description}
+                          onChange={e => {
+                            const updated = [...campaigns];
+                            updated[idx].campaign_description = e.target.value;
+                            setCampaigns(updated);
+                          }}
+                          className="mt-2 min-h-[60px]"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`volunteers_${idx}`}>Volunteers <span className="text-red-500">*</span></Label>
+                        <Input
+                          id={`volunteers_${idx}`}
+                          type="number"
+                          placeholder="Number of volunteers"
+                          value={campaign.volunteers}
+                          onChange={e => {
+                            const updated = [...campaigns];
+                            updated[idx].volunteers = e.target.value;
+                            setCampaigns(updated);
+                          }}
+                          className="mt-2"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`raised_${idx}`}>Raised Amount (Optional)</Label>
+                        <Input
+                          id={`raised_${idx}`}
+                          type="number"
+                          placeholder="Amount raised"
+                          value={campaign.raised}
+                          onChange={e => {
+                            const updated = [...campaigns];
+                            updated[idx].raised = e.target.value;
+                            setCampaigns(updated);
+                          }}
+                          className="mt-2"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`campaign_status_${idx}`}>Status <span className="text-red-500">*</span></Label>
+                        <Select
+                          value={campaign.campaign_status}
+                          onValueChange={value => {
+                            const updated = [...campaigns];
+                            updated[idx].campaign_status = value;
+                            setCampaigns(updated);
                           }}
                         >
-                          &times;
-                        </button>
-                      )}
-                    </h4>
-                    <div>
-                      <Label htmlFor={`name_${idx}`}>Name <span className="text-red-500">*</span></Label>
-                      <Input
-                        id={`name_${idx}`}
-                        type="text"
-                        placeholder="Enter name"
-                        value={item.name}
-                        onChange={e => {
-                          const newProducts = [...products];
-                          newProducts[idx].name = e.target.value;
-                          setProducts(newProducts);
-                        }}
-                        className="mt-2"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`short_description_${idx}`}>Short Description (Optional)</Label>
-                      <Input
-                        id={`short_description_${idx}`}
-                        type="text"
-                        placeholder="Short description"
-                        value={item.short_description}
-                        onChange={e => {
-                          const newProducts = [...products];
-                          newProducts[idx].short_description = e.target.value;
-                          setProducts(newProducts);
-                        }}
-                        className="mt-2"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`full_description_${idx}`}>Full Description <span className="text-red-500">*</span></Label>
-                      <Textarea
-                        id={`full_description_${idx}`}
-                        placeholder="Full description"
-                        value={item.full_description}
-                        onChange={e => {
-                          const newProducts = [...products];
-                          newProducts[idx].full_description = e.target.value;
-                          setProducts(newProducts);
-                        }}
-                        className="mt-2 min-h-[80px]"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`product_image_${idx}`}>Image <span className="text-red-500">*</span></Label>
-                      <Input
-                        id={`product_image_${idx}`}
-                        type="file"
-                        accept="image/*"
-                        onChange={e => handleProductImageUploadMulti(e, idx)}
-                        className="mt-2"
-                        required
-                      />
-                      {productPreviews[idx] && productPreviews[idx] !== "" && (
-                        <img src={productPreviews[idx]} alt="Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
-                      )}
-                    </div>
-                    {isProductBased && (
+                          <SelectTrigger className="mt-2">
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Ongoing">Ongoing</SelectItem>
+                            <SelectItem value="Completed">Completed</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                       <div>
-                        <Label htmlFor={`price_${idx}`}>Price (Optional)</Label>
+                        <Label htmlFor={`goal_${idx}`}>Goal <span className="text-red-500">*</span></Label>
                         <Input
-                          id={`price_${idx}`}
-                          type="number"
-                          placeholder="Price"
-                          value={item.price}
+                          id={`goal_${idx}`}
+                          type="text"
+                          placeholder="Goal of campaign"
+                          value={campaign.goal}
+                          onChange={e => {
+                            const updated = [...campaigns];
+                            updated[idx].goal = e.target.value;
+                            setCampaigns(updated);
+                          }}
+                          className="mt-2"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`impact_${idx}`}>Impact <span className="text-red-500">*</span></Label>
+                        <Input
+                          id={`impact_${idx}`}
+                          type="text"
+                          placeholder="Impact of campaign"
+                          value={campaign.impact}
+                          onChange={e => {
+                            const updated = [...campaigns];
+                            updated[idx].impact = e.target.value;
+                            setCampaigns(updated);
+                          }}
+                          className="mt-2"
+                          required
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      // Validate previous campaigns
+                      const last = campaigns[campaigns.length - 1];
+                      if (!last.campaign_name || !last.volunteers || !last.campaign_status || !last.goal || !last.impact) {
+                        toast({
+                          title: "Fill all required fields for previous campaign",
+                          variant: "destructive"
+                        });
+                        return;
+                      }
+                      setCampaigns(prev => ([
+                        ...prev,
+                        {
+                          campaign_name: "",
+                          campaign_description: "",
+                          volunteers: "",
+                          raised: "",
+                          campaign_status: "",
+                          goal: "",
+                          impact: ""
+                        }
+                      ]));
+                    }}
+                    className="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-700 hover:to-blue-500 text-white mb-4"
+                  >
+                    Add More Campaigns
+                  </Button>
+                </div>
+              ) : (
+                <div className="mb-8">
+                  <div className="flex items-center mb-4">
+                    <input
+                      type="checkbox"
+                      id="isProductBased"
+                      checked={isProductBased}
+                      onChange={e => {
+                        const checked = e.target.checked;
+                        setIsProductBased(checked);
+                        updateFormData('isProductBased', checked);
+                        updateFormData('display_in_menu', checked ? 1 : 0);
+                        setProducts(prev => prev.map(prod => ({
+                          ...prod,
+                          display_in_menu: checked ? 1 : 0
+                        })));
+                      }}
+                      className="mr-2"
+                    />
+                    <Label htmlFor="isProductBased">Is your company product-based?</Label>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    {isProductBased ? 'Products' : 'Services'}
+                  </h3>
+                  {products.map((item, idx) => (
+                    <div key={idx} className="space-y-4 border rounded p-4 mb-4 relative">
+                      <h4 className="text-lg font-semibold mb-2 flex items-center justify-between">
+                        <span>{isProductBased ? `Product ${idx + 1}` : `Service ${idx + 1}`}</span>
+                        {products.length > 1 && (
+                          <button
+                            type="button"
+                            aria-label="Remove"
+                            className="ml-2 text-red-500 hover:text-red-700 text-xl font-bold absolute top-2 right-2"
+                            onClick={() => {
+                              setProducts(prev => prev.filter((_, i) => i !== idx));
+                              setProductPreviews(prev => prev.filter((_, i) => i !== idx));
+                            }}
+                          >
+                            &times;
+                          </button>
+                        )}
+                      </h4>
+                      <div>
+                        <Label htmlFor={`name_${idx}`}>Name <span className="text-red-500">*</span></Label>
+                        <Input
+                          id={`name_${idx}`}
+                          type="text"
+                          placeholder="Enter name"
+                          value={item.name}
                           onChange={e => {
                             const newProducts = [...products];
-                            newProducts[idx].price = e.target.value;
+                            newProducts[idx].name = e.target.value;
+                            setProducts(newProducts);
+                          }}
+                          className="mt-2"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`short_description_${idx}`}>Short Description (Optional)</Label>
+                        <Input
+                          id={`short_description_${idx}`}
+                          type="text"
+                          placeholder="Short description"
+                          value={item.short_description}
+                          onChange={e => {
+                            const newProducts = [...products];
+                            newProducts[idx].short_description = e.target.value;
                             setProducts(newProducts);
                           }}
                           className="mt-2"
                         />
                       </div>
-                    )}
-                  </div>
-                ))}
-                <Button
-                  type="button"
-                  onClick={handleAddMore}
-                  className="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-700 hover:to-blue-500 text-white mb-4"
-                >
-                  Add More {isProductBased ? "Product" : "Service"}
-                </Button>
-              </div>
+                      <div>
+                        <Label htmlFor={`full_description_${idx}`}>Full Description <span className="text-red-500">*</span></Label>
+                        <Textarea
+                          id={`full_description_${idx}`}
+                          placeholder="Full description"
+                          value={item.full_description}
+                          onChange={e => {
+                            const newProducts = [...products];
+                            newProducts[idx].full_description = e.target.value;
+                            setProducts(newProducts);
+                          }}
+                          className="mt-2 min-h-[80px]"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`product_image_${idx}`}>Image <span className="text-red-500">*</span></Label>
+                        <Input
+                          id={`product_image_${idx}`}
+                          type="file"
+                          accept="image/*"
+                          onChange={e => handleProductImageUploadMulti(e, idx)}
+                          className="mt-2"
+                          required
+                        />
+                        {productPreviews[idx] && productPreviews[idx] !== "" && (
+                          <img src={productPreviews[idx]} alt="Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
+                        )}
+                      </div>
+                      {isProductBased && (
+                        <div>
+                          <Label htmlFor={`price_${idx}`}>Price (Optional)</Label>
+                          <Input
+                            id={`price_${idx}`}
+                            type="number"
+                            placeholder="Price"
+                            value={item.price}
+                            onChange={e => {
+                              const newProducts = [...products];
+                              newProducts[idx].price = e.target.value;
+                              setProducts(newProducts);
+                            }}
+                            className="mt-2"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    onClick={handleAddMore}
+                    className="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-700 hover:to-blue-500 text-white mb-4"
+                  >
+                    Add More {isProductBased ? "Product" : "Service"}
+                  </Button>
+                </div>
+              )}
               <div className="flex gap-4 pt-4">
                 <Button
-                  variant="outline"
                   onClick={prevStep}
                   className="flex-1"
                   disabled={isLoading}
@@ -1452,8 +1677,16 @@ export default function AutoSite() {
                     !formData.mission_desc ||
                     !formData.what_we_do ||
                     !formData.our_story ||
-                    products.length === 0 ||
-                    products.some(item => !item.name || !item.full_description || !item.product_image)
+                    (formData.businessSector === "NGO"
+                      ? campaigns.length === 0 || campaigns.some(camp =>
+                        !camp.campaign_name ||
+                        !camp.volunteers ||
+                        !camp.campaign_status ||
+                        !camp.goal ||
+                        !camp.impact
+                      )
+                      : products.length === 0 || products.some(item => !item.name || !item.full_description || !item.product_image)
+                    )
                   }
                   className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary flex items-center justify-center"
                 >
@@ -1504,11 +1737,10 @@ export default function AutoSite() {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ company_id: companyId })
             });
-            const data = await response.json();
             if (!response.ok) {
               toast({
                 title: "Edit Limit Reached",
-                description: data.error || "You have reached the maximum number of edits allowed.",
+                description: "You have reached the maximum number of edits allowed.",
                 variant: "destructive"
               });
               return;
@@ -1521,11 +1753,11 @@ export default function AutoSite() {
         };
 
         const handleVisitWebsite = () => {
-          const baseUrl = window.location.origin;
-          window.open(`${baseUrl}/${companyId}`, '_blank');
+          // const baseUrl = window.location.origin;
+          // window.open(`${baseUrl}/${companyId}`, '_blank');
 
-          // const url = `http://localhost:3000/${companyId}`;
-          // window.open(url, '_blank');
+          const url = `http://localhost:3000/${companyId}`;
+          window.open(url, '_blank');
         };
 
         return (

@@ -13,6 +13,11 @@ export default function Footer() {
                                 </h3>
                                 <span className="text-sm text-foreground/60 font-medium -mt-1">A bond to deliver Success</span>
                             </div>
+                            {/* <img
+                                src="/manacle_logo.png"
+                                alt="Manacle Logo"
+                                className="w-20 h-8 md:w-10 md:h-10 lg:w-44 lg:h-24 xl:w-52 xl:h-10 object-contain mr-2"
+                            /> */}
                         </div>
                         <p className="text-foreground/70 text-lg font-medium">
                             Creating digital experiences that drive business growth

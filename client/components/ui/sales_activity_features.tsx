@@ -69,7 +69,7 @@ const SalesActivityFeatures = () => (
                 {features.map((feature, idx) => (
                     <motion.div
                         key={feature.title}
-                        className="group bg-white/90 dark:bg-black/80 border border-glass-border rounded-2xl shadow-xl hover:shadow-[0_8px_32px_0_rgba(255,152,0,0.18),0_2px_8px_0_rgba(183,33,255,0.10)] hover:bg-primary/10 dark:hover:bg-primary/20 hover:border-orange-400 transition-all duration-300 p-7 flex flex-col items-center text-center hover:-translate-y-2 cursor-pointer"
+                        className="group bg-white/90 dark:bg-black/80 border border-glass-border rounded-2xl shadow-xl hover:shadow-[0_8px_32px_0_rgba(255,152,0,0.18),0_2px_8px_0_rgba(183,33,255,0.10)] hover:bg-primary/10 dark:hover:bg-primary/20 hover:border-orange-400 transition-all duration-300 p-7 flex flex-col items-center text-center hover:-translate-y-2 "
                         custom={idx}
                         initial="hidden"
                         whileInView="visible"

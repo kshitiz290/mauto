@@ -13,7 +13,7 @@ const features = [
     },
     {
         title: 'Task & Activity Management',
-        image: 'https://cdn.pixabay.com/photo/2017/01/10/19/05/calendar-1974699_1280.png',
+        image: 'solutions/time_management.jpg',
         points: [
             'Assign, update, and track tasks or client visits.',
             'Activity logs (check-in, check-out).',
@@ -22,7 +22,7 @@ const features = [
     },
     {
         title: 'Creative ideas on app.',
-        image: 'https://cdn.pixabay.com/photo/2014/04/03/10/32/idea-312658_1280.png',
+        image: 'solutions/app.jpg',
         points: [
             'GPS-based check-in/check-out.',
             'Time-stamped location logging.',
@@ -31,7 +31,7 @@ const features = [
     },
     {
         title: 'Reporting & Analytics',
-        image: 'https://cdn.pixabay.com/photo/2017/01/10/19/05/analytics-1974699_1280.png',
+        image: 'solutions/reporting.jpg',
         points: [
             'Performance dashboards for individuals and teams.',
             'Customizable reports: daily, weekly, monthly.',
@@ -40,7 +40,7 @@ const features = [
     },
     {
         title: 'Data Capture & Forms',
-        image: 'https://cdn.pixabay.com/photo/2017/01/10/19/05/data-1974699_1280.png',
+        image: 'solutions/data.jpg',
         points: [
             'Photo capture of visits, documents, or products.',
             'Custom form fields for data entry (e.g., feedback, orders).',
@@ -49,7 +49,7 @@ const features = [
     },
     {
         title: 'Collaborative Team Workspaces',
-        image: 'https://cdn.pixabay.com/photo/2017/01/10/19/05/teamwork-1974699_1280.png',
+        image: 'solutions/team.jpg',
         points: [
             'Create collaborative work spaces for your individual sales teams.',
             "Optimised company's workflow with shared sales activities, insights, alerts, notification, support calls etc."

@@ -243,7 +243,7 @@ translate-y-0' : 'transform -translate-y-full'
               {/* <img
                 src="/manacle_logo.png"
                 alt="Manacle Logo"
-                className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-24 xl:h-12 object-contain mr-2"
+                className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 xl:w-24 xl:h-124 object-contain mr-2"
               /> */}
               {/* Heading and tagline inline */}
               <div className="flex flex-col justify-center">

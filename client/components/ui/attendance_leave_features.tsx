@@ -103,7 +103,7 @@ const AttendanceLeaveFeatures = () => (
             {features.map((feature, idx) => (
                 <motion.div
                     key={idx}
-                    className="group bg-white/80 dark:bg-black/70 border border-glass-border rounded-2xl shadow-xl hover:shadow-[0_8px_32px_0_rgba(255,152,0,0.18),0_2px_8px_0_rgba(183,33,255,0.10)] transition-all duration-300 p-8 flex flex-col items-start hover:-translate-y-2 backdrop-blur-xl cursor-pointer"
+                    className="group bg-white/80 dark:bg-black/70 border border-glass-border rounded-2xl shadow-xl hover:shadow-[0_8px_32px_0_rgba(255,152,0,0.18),0_2px_8px_0_rgba(183,33,255,0.10)] transition-all duration-300 p-8 flex flex-col items-start hover:-translate-y-2 backdrop-blur-xl "
                     custom={idx}
                     initial="hidden"
                     whileInView="visible"

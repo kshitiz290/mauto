@@ -4,7 +4,7 @@ const steps = [
     {
         title: 'Centralized Distributor Portal',
         desc: 'Manage all distributor interactions and performance in one place.',
-        img: 'https://images.unsplash.com/photo-1515168833906-d2a3b82b1e2e?auto=format&fit=crop&w=400&q=80'
+        img: 'solutions/portal.jpg'
     },
     {
         title: 'Order & Invoice Automation',

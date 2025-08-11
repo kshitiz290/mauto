@@ -68,7 +68,7 @@ const ExpensesClaimsFeatures = () => (
                 {features.map((feature, idx) => (
                     <motion.div
                         key={feature.title}
-                        className="group bg-white/90 dark:bg-black/80 border border-glass-border rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-0 flex flex-col items-stretch text-left hover:-translate-y-2 cursor-pointer"
+                        className="group bg-white/90 dark:bg-black/80 border border-glass-border rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-0 flex flex-col items-stretch text-left hover:-translate-y-2 "
                         custom={idx}
                         initial="hidden"
                         whileInView="visible"

@@ -68,7 +68,7 @@ const PurchaseOrderFeatures = () => (
                 {features.map((feature, idx) => (
                     <motion.div
                         key={feature.title}
-                        className="group flex flex-col sm:flex-row items-center gap-5 bg-white/90 dark:bg-black/80 border border-glass-border rounded-2xl shadow-xl hover:shadow-2xl hover:bg-primary/10 dark:hover:bg-primary/20 hover:border-orange-400 transition-all duration-300 p-5 sm:p-7 cursor-pointer"
+                        className="group flex flex-col sm:flex-row items-center gap-5 bg-white/90 dark:bg-black/80 border border-glass-border rounded-2xl shadow-xl hover:shadow-2xl hover:bg-primary/10 dark:hover:bg-primary/20 hover:border-orange-400 transition-all duration-300 p-5 sm:p-7 "
                         custom={idx}
                         initial="hidden"
                         whileInView="visible"

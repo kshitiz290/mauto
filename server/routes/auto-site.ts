@@ -444,8 +444,15 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
     if (!data.vision_desc || !data.mission_desc || !data.what_we_do || !data.our_story) {
       return res.status(400).json({ error: "Missing required about page fields: vision, mission, what we do, our story" });
     }
-    if (!Array.isArray(data.products) || data.products.length === 0) {
-      return res.status(400).json({ error: "At least one product/service is required" });
+    // Validate campaigns/products based on sector
+    if (data.businessSector === "NGO") {
+      if (!Array.isArray(data.campaigns) || data.campaigns.length === 0) {
+        return res.status(400).json({ error: "At least one campaign is required for NGO" });
+      }
+    } else {
+      if (!Array.isArray(data.products) || data.products.length === 0) {
+        return res.status(400).json({ error: "At least one product/service is required" });
+      }
     }
     // Product-based checkbox is now optional; do not enforce required check
     if (!db) throw new Error("Database not configured");
@@ -540,9 +547,40 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
       await db.promise().query(aboutQuery, aboutValues);
     }
 
-    // 3. Save or update Product/Service Content (multiple)
-    if (Array.isArray(data.products) && data.products.length > 0) {
-      // Delete old products for this company (simple way to sync array)
+    // 3. Save or update Product/Service or Campaigns Content (multiple)
+    if (data.businessSector === "NGO") {
+      // Save or update campaigns for NGO
+      if (!Array.isArray(data.campaigns) || data.campaigns.length === 0) {
+        return res.status(400).json({ error: "At least one campaign is required for NGO" });
+      }
+      // Delete old campaigns for this company (simple way to sync array)
+      await db.promise().query('DELETE FROM campaigns WHERE company_id = ?', [companyId]);
+      const campaignQuery = `INSERT INTO campaigns(
+        name,
+        description,
+        volunteers,
+        raised,
+        campaign_status,
+        goal,
+        impact,
+        company_id,
+        created_at
+      ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+      for (const camp of data.campaigns) {
+        const campaignValues = [
+          camp.name || camp.campaign_name,
+          camp.description || camp.campaign_description,
+          camp.volunteers,
+          camp.raised,
+          camp.campaign_status,
+          camp.goal,
+          camp.impact,
+          companyId
+        ];
+        await db.promise().query(campaignQuery, campaignValues);
+      }
+    } else if (Array.isArray(data.products) && data.products.length > 0) {
+      // Save or update products/services for non-NGO
       await db.promise().query('DELETE FROM product_services WHERE company_id = ?', [companyId]);
       const productQuery = `INSERT INTO product_services(
         name,
