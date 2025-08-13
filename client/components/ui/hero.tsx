@@ -5,7 +5,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 sm:pt-24 md:pt-16 px-4 sm:px-6 lg:px-8"
+      className="flex items-center justify-center relative overflow-hidden pt-20 pb-16 sm:pt-24 md:pt-16 px-4 sm:px-6 lg:px-8 min-h-[60vh] sm:min-h-[80vh] lg:min-h-screen"
     >
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
@@ -24,7 +24,7 @@ export function Hero() {
         <div className="max-w-4xl mx-auto">
           {/* Main Heading */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2">
-            <span className="gradient-text text-orange-500">MANACLE</span>
+            <span className="gradient-text text-orange-500 lg:text-5xl sm:text-4xl">MANACLE</span>
             <span className="block mt-1 sm:mt-2">Empowering FMCG & Enterprises</span>
           </h1>
 
@@ -51,14 +51,22 @@ export function Hero() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-2">
-            <Button
+            <div className="inline-block group relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl blur-sm group-hover:blur-md transition-all duration-500 opacity-70 group-hover:opacity-100"></div>
+              <a href="/auto-site">
+                <button className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-1">
+                  Build your free website
+                </button>
+              </a>
+            </div>
+            {/* <Button
               size="lg"
               className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-1 w-full sm:w-auto"
               onClick={() => window.location.href = '/auto-site'}
             >
               Build your free website
               <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

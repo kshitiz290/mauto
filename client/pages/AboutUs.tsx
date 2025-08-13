@@ -53,7 +53,7 @@ export function AboutUs() {
   // Build About Us page here:
   return (
     <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
-      <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
         <Header />
         <main>
           {/* --- Stylish Animated Breadcrumb Section --- */}

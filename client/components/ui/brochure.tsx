@@ -45,7 +45,7 @@ const Brochure = () => {
                 href=""
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-8 xs:px-10 py-4 rounded-full font-extrabold text-base xs:text-lg shadow-[0_4px_32px_0_rgba(255,152,0,0.18)] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-orange-300 tracking-wider border-2 border-orange-300 bg-gradient-to-r from-orange-400 via-yellow-300 to-orange-300 text-white hover:scale-105 hover:shadow-[0_6px_36px_0_rgba(255,152,0,0.22)] hover:from-yellow-400 hover:to-orange-500" style={{ border: '2px solid #FF9800' }}
+                className="inline-block px-8 xs:px-10 py-4 rounded-full font-extrabold text-base xs:text-lg shadow-[0_4px_32px_0_rgba(255,152,0,0.18)] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-orange-300 tracking-wider border-2 border-orange-300 bg-gradient-to-r from-orange-600  to-orange-300 text-white hover:scale-105 hover:shadow-[0_6px_36px_0_rgba(255,152,0,0.22)] hover:from-yellow-400 hover:to-orange-500" style={{ border: '2px solid #FF9800' }}
               >
                 DOWNLOAD
               </motion.a>

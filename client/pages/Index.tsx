@@ -14,7 +14,7 @@ import CustomerCarousel from "../components/ui/customer-carousel";
 export default function Index() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
-      <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
         <Header />
         <main className="pt-4 sm:pt-6">
           <Hero />

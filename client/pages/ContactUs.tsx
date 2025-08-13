@@ -38,34 +38,34 @@ export function ContactUs() {
     solutionType: "Web Design & Development",
   });
 
-  const [meetingFormData, setMeetingFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    company: "",
-    meetingType: "",
-    preferredDate: "",
-    preferredTime: "",
-    timezone: "",
-    platform: "",
-    agenda: "",
-  });
+  // const [meetingFormData, setMeetingFormData] = useState({
+  //   fullName: "",
+  //   email: "",
+  //   phone: "",
+  //   company: "",
+  //   meetingType: "",
+  //   preferredDate: "",
+  //   preferredTime: "",
+  //   timezone: "",
+  //   platform: "",
+  //   agenda: "",
+  // });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isMeetingModalOpen, setIsMeetingModalOpen] = useState(false);
-  const [isMeetingSubmitting, setIsMeetingSubmitting] = useState(false);
-  const [isMeetingSubmitted, setIsMeetingSubmitted] = useState(false);
+  // const [isMeetingModalOpen, setIsMeetingModalOpen] = useState(false);
+  // const [isMeetingSubmitting, setIsMeetingSubmitting] = useState(false);
+  // const [isMeetingSubmitted, setIsMeetingSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleMeetingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setMeetingFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  // const handleMeetingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  //   const { name, value } = e.target;
+  //   setMeetingFormData((prev) => ({ ...prev, [name]: value }));
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,40 +118,40 @@ export function ContactUs() {
     }
   };
 
-  const handleMeetingSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsMeetingSubmitting(true);
+  // const handleMeetingSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsMeetingSubmitting(true);
 
-    // Simulate meeting form submission
-    setTimeout(() => {
-      setIsMeetingSubmitting(false);
-      setIsMeetingSubmitted(true);
+  //   // Simulate meeting form submission
+  //   setTimeout(() => {
+  //     setIsMeetingSubmitting(false);
+  //     setIsMeetingSubmitted(true);
 
-      // Reset form after submission
-      setMeetingFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        company: "",
-        meetingType: "",
-        preferredDate: "",
-        preferredTime: "",
-        timezone: "",
-        platform: "",
-        agenda: "",
-      });
+  //     // Reset form after submission
+  //     setMeetingFormData({
+  //       fullName: "",
+  //       email: "",
+  //       phone: "",
+  //       company: "",
+  //       meetingType: "",
+  //       preferredDate: "",
+  //       preferredTime: "",
+  //       timezone: "",
+  //       platform: "",
+  //       agenda: "",
+  //     });
 
-      // Close modal and reset success message after a few seconds
-      setTimeout(() => {
-        setIsMeetingSubmitted(false);
-        setIsMeetingModalOpen(false);
-      }, 3000);
-    }, 1500);
-  };
+  //     // Close modal and reset success message after a few seconds
+  //     setTimeout(() => {
+  //       setIsMeetingSubmitted(false);
+  //       setIsMeetingModalOpen(false);
+  //     }, 3000);
+  //   }, 1500);
+  // };
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
-      <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
         <Header />
         <main>
           <section className="relative w-screen left-1/2 right-1/2 -mx-[50vw] min-h-[160px] flex items-center justify-center overflow-x-clip pt-32 bg-transparent">
@@ -527,7 +527,7 @@ export function ContactUs() {
               {/* Social Media & Connect */}
               <div className="text-center">
                 <h3 className="text-3xl font-extrabold mb-8 gradient-text">Connect With Us</h3>
-                <div className="flex justify-center space-x-6 mb-8">
+                <div className="flex flex-wrap justify-center gap-6 mb-8 max-w-xs mx-auto">
                   <a
                     href="https://www.facebook.com/techmanacle/"
                     target="_blank"
@@ -570,8 +570,7 @@ export function ContactUs() {
                 </div>
 
                 <p className="text-lg text-foreground max-w-3xl mx-auto leading-relaxed font-medium">
-                  Follow us for the latest updates, web development tips, and behind-the-scenes content.
-                  We love sharing our knowledge and connecting with the developer community!
+                  Follow Manacle for the latest updates, company news, and to connect with our team. We're here to help you grow and succeed. Reach out anytime!
                 </p>
               </div>
             </div>
@@ -583,9 +582,9 @@ export function ContactUs() {
         </main>
 
         {/* Virtual Meeting Modal */}
-        {isMeetingModalOpen && (
+        {/* {isMeetingModalOpen && (
           <div className="fixed inset-0 bg-background/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="contact-card-sticky max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 rounded-3xl bg-card/95 backdrop-blur-sm border border-glass-border">
+            <div className="contact-card-sticky max-w-2xl w-full max-h-[90vh] p-8 rounded-3xl bg-card/95 backdrop-blur-sm border border-glass-border">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-3xl font-extrabold gradient-text">Schedule Virtual Meeting</h2>
                 <button
@@ -786,33 +785,12 @@ export function ContactUs() {
               </form>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Footer */}
         <Footer />
 
-        {/* Floating Action Buttons */}
-        {/* WhatsApp for Desktop */}
-        <a
-          href="https://wa.me/918645322914"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 hidden md:flex w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
-          aria-label="Chat on WhatsApp"
-        >
-          <MessageCircle className="w-7 h-7 text-white group-hover:scale-110 transition-transform duration-300" />
-          <div className="absolute -top-2 -left-2 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
-        </a>
 
-        {/* Phone Call for Mobile */}
-        <a
-          href="tel:+918645322914"
-          className="fixed bottom-6 right-6 z-50 flex md:hidden w-14 h-14 bg-blue-500 hover:bg-blue-600 rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
-          aria-label="Call us"
-        >
-          <Phone className="w-7 h-7 text-white group-hover:scale-110 transition-transform duration-300" />
-          <div className="absolute -top-2 -left-2 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
-        </a>
       </div>
     </ThemeProvider>
   );

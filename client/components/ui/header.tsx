@@ -128,76 +128,76 @@ export function Header() {
     }
   };
 
-// Define types for nav items and dropdown items
-type DropdownItem = {
-  name: string;
-  href: string;
-  description?: string;
-};
-
-type DropdownCategory = {
-  title: string;
-  items: DropdownItem[];
-};
-
-type NavItem = {
-  name: string;
-  href: string;
-  highlight?: boolean;
-  hasDropdown?: boolean;
-  dropdownContent?: {
-    categories: DropdownCategory[];
+  // Define types for nav items and dropdown items
+  type DropdownItem = {
+    name: string;
+    href: string;
+    description?: string;
   };
-};
 
-const navItems: NavItem[] = [
-  { name: "Home", href: "/" },
-  { name: "Website Builder", href: "/auto-site", highlight: true },
-  {
-    name: "Our Solutions",
-    href: "#",
-    hasDropdown: true,
-    dropdownContent: {
-      categories: [
-        {
-          title: "SFA Solutions",
-          items: [
-            { name: "Attendance & Leave Management", href: "/attendance-leave-management" },
-            { name: "Order Management Solution", href: "/order-management-solution" },
-            { name: "Field Force Tracking & Activity", href: "/field-force-tracking" },
-            { name: "Distributor Management Solution", href: "/distributor-management-solution" },
-            { name: "Merchandising & Retail Execution", href: "/merchandising-retail-execution" },
-            { name: "Expenses & Claims Management", href: "/expenses-claims-management" },
-            { name: "Retailer Management Solution", href: "/retailer-management-solution" },
-            { name: "Sales Activity Management", href: "/sales-activity-management" },
-          ],
-        },
-        {
-          title: "ERP Solutions",
-          items: [
-            { name: "Purchase Order Management", href: "/purchase-order-management" },
-            { name: "Store Management Software", href: "/store-management-software" },
-            { name: "Production Management", href: "/production-management" },
-            { name: "Packing Management", href: "/packing-management" },
-            { name: "Demand Generation", href: "/demand-generation" },
-            { name: "Invoice Generation Solution", href: "/invoice-generation-solution" },
-            { name: "Dispatch Management", href: "/dispatch-management" },
-            { name: "Plant Management", href: "/plant-management" },
-          ],
-        },
-        {
-          title: "Others Solution",
-          items: [
-            { name: "Human Resource Management (HRMS)", href: "/hrms" },
-            { name: "Website Development Services", href: "/website-development-services" },
-            { name: "CRM Software", href: "/crm-software" },
-            { name: "Digital Marketing Services", href: "/digital-marketing-services" },
-            { name: "Whatsapp Ordering System", href: "/whatsapp-ordering-system" }
-          ],
-        },
-      ],
+  type DropdownCategory = {
+    title: string;
+    items: DropdownItem[];
+  };
+
+  type NavItem = {
+    name: string;
+    href: string;
+    highlight?: boolean;
+    hasDropdown?: boolean;
+    dropdownContent?: {
+      categories: DropdownCategory[];
+    };
+  };
+
+  const navItems: NavItem[] = [
+    { name: "Home", href: "/" },
+    { name: "Website Builder", href: "/auto-site", highlight: true },
+    {
+      name: "Our Solutions",
+      href: "#",
+      hasDropdown: true,
+      dropdownContent: {
+        categories: [
+          {
+            title: "SFA Solutions",
+            items: [
+              { name: "Attendance & Leave Management", href: "/attendance-leave-management" },
+              { name: "Order Management Solution", href: "/order-management-solution" },
+              { name: "Field Force Tracking & Activity", href: "/field-force-tracking" },
+              { name: "Distributor Management Solution", href: "/distributor-management-solution" },
+              { name: "Merchandising & Retail Execution", href: "/merchandising-retail-execution" },
+              { name: "Expenses & Claims Management", href: "/expenses-claims-management" },
+              { name: "Retailer Management Solution", href: "/retailer-management-solution" },
+              { name: "Sales Activity Management", href: "/sales-activity-management" },
+            ],
+          },
+          {
+            title: "ERP Solutions",
+            items: [
+              { name: "Purchase Order Management", href: "/purchase-order-management" },
+              { name: "Store Management Software", href: "/store-management-software" },
+              { name: "Production Management", href: "/production-management" },
+              { name: "Packing Management", href: "/packing-management" },
+              { name: "Demand Generation", href: "/demand-generation" },
+              { name: "Invoice Generation Solution", href: "/invoice-generation-solution" },
+              { name: "Dispatch Management", href: "/dispatch-management" },
+              { name: "Plant Management", href: "/plant-management" },
+            ],
+          },
+          {
+            title: "Others Solution",
+            items: [
+              { name: "Human Resource Management (HRMS)", href: "/hrms" },
+              { name: "Website Development Services", href: "/website-development-services" },
+              { name: "CRM Software", href: "/crm-software" },
+              { name: "Digital Marketing Services", href: "/digital-marketing-services" },
+              { name: "Whatsapp Ordering System", href: "/whatsapp-ordering-system" }
+            ],
+          },
+        ],
+      },
     },
-  },
   /*
   {
     name: "Portfolio",
@@ -225,8 +225,8 @@ Gallery", description: "View all our projects", href: "/gallery" },
     },
   },
   */    { name: "About", href: "/about-us" },
-  { name: "Contact", href: "/contact-us" },
-];
+    { name: "Contact", href: "/contact-us" },
+  ];
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-3 lg:py-4 xl:py-4 transition-transform duration-300 ease-in-out backdrop-blur-md    */    
@@ -258,7 +258,7 @@ translate-y-0' : 'transform -translate-y-full'
           </div>
 
           {/* Centered Navigation Menu - Responsive */}
-          <div className="hidden md:flex flex-1 justify-center">
+          <div className="hidden lg:flex flex-1 justify-center">
             <nav className="bg-card/90 backdrop-blur-xl border border-glass-border rounded-full px-4 md:px-5 lg:px-6 xl:px-7 py-2 md:py-2 lg:py-2.5 xl:py-2.5 shadow-lg scale-100 md:scale-105 lg:scale-110 xl:scale-110 transform">
               <div className="flex items-center space-x-4 md:space-x-5 lg:space-x-6 xl:space-x-8">
                 {navItems.map((item) => (
@@ -379,7 +379,7 @@ translate-y-0' : 'transform -translate-y-full'
           </div>
 
           {/* Right Side Elements - Separated and Responsive */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden lg:flex items-center">
             {/* Theme Toggle - Separated with responsive spacing */}
             <div className="mr-3 md:mr-4 lg:mr-5 xl:mr-6">
               <ThemeToggle />
@@ -423,7 +423,7 @@ translate-y-0' : 'transform -translate-y-full'
 
           {/* Mobile Menu Button - Consistent with responsive design */}
           <button
-            className="md:hidden text-foreground"
+            className="lg:hidden text-foreground"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -432,7 +432,7 @@ translate-y-0' : 'transform -translate-y-full'
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className={`md:hidden absolute left-4 right-4 bg-card/95 backdrop-blur-xl border border-glass-border rounded-2xl max-h-[80vh] overflow-y-auto shadow-2xl transition-all duration-300 ${isHeaderVisible ? 'top-20' : 'top-4'
+          <div className={`lg:hidden absolute left-4 right-4 bg-card/95 backdrop-blur-xl border border-glass-border rounded-2xl max-h-[80vh] overflow-y-auto shadow-2xl transition-all duration-300 ${isHeaderVisible ? 'top-20' : 'top-4'
             }`}>
             <nav className="flex flex-col p-4">
               {navItems.map((item) => (
@@ -451,7 +451,7 @@ translate-y-0' : 'transform -translate-y-full'
                       {clickedDropdown === item.name && (
                         <div className="mt-3 ml-4 space-y-3 border-l border-glass-border pl-4">
                           {/* Add View All Services link for Services dropdown */}
-                          {item.name === "Services" && (
+                          {/* {item.name === "Services" && (
                             <div className="mb-3">
                               <a
                                 href={item.href}
@@ -461,7 +461,7 @@ translate-y-0' : 'transform -translate-y-full'
                                 → View All Services
                               </a>
                             </div>
-                          )}
+                          )} */}
                           {item.dropdownContent?.categories.map(
                             (category, index) => (
                               <div key={index}>
@@ -472,9 +472,11 @@ translate-y-0' : 'transform -translate-y-full'
                                   {category.items.map((subItem, subIndex) => (
                                     <li key={subIndex}>
                                       <a
-                                        href={subItem.href || `#${subItem.name.toLowerCase().replace(/\s+/g, "-")}`}
-                                        className="text-sm text-foreground/80 hover:text-foreground transition-colors duration-200"
-                                        onClick={() => setIsMenuOpen(false)}
+                                        href={subItem.href}
+                                        className="text-sm text-foreground/80 hover:text-foreground transition-colors" 
+                                      onClick={() => {
+                                        setIsMenuOpen(false);
+                                      }}
                                       >
                                         {subItem.name}
                                       </a>
@@ -491,7 +493,7 @@ translate-y-0' : 'transform -translate-y-full'
                     <a
                       href={item.href}
                       className="text-foreground hover:text-primary transition-colors duration-300 font-bold flex items-center justify-between"
-                      onClick={() => setIsMenuOpen(false)}
+                    onClick={() => setIsMenuOpen(false)}
                     >
                       {item.name}
                     </a>

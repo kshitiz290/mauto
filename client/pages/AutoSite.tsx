@@ -80,6 +80,15 @@ interface FormData {
   campaign_status?: string;
   goal?: string;
   impact?: string;
+  campaigns?: Array<{
+    campaign_name: string;
+    campaign_description: string;
+    volunteers: string;
+    raised: string;
+    campaign_status: string;
+    goal: string;
+    impact: string;
+  }>; // Add this line
 }
 
 const businessSectors = [
@@ -99,6 +108,7 @@ const themes = [
 ];
 
 const apiBase = window.location.origin;
+console.log(apiBase)
 
 // Helper to check if a string is a valid URL
 function isValidUrl(url: string) {
@@ -1815,7 +1825,7 @@ export default function AutoSite() {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
               <div className="text-center mb-12">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
-                  <span className="gradient-text">AI-Powered</span>
+                  <span className="gradient-text">Automated</span>
                   <span className="block mt-2">Website Builder</span>
                 </h1>
                 <p className="text-xl sm:text-2xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
@@ -1824,12 +1834,13 @@ export default function AutoSite() {
                 </p>
               </div>
 
-              {/* Progress Steps */}
-              <div className="w-full overflow-x-auto mb-14">
-                <div className="flex items-center justify-center gap-2 px-2">
+              {/* Progress Steps - Responsive, no scroll */}
+              <div className="w-full mb-14">
+                {/* On small screens, stack vertically; on md+ screens, show in a row and center */}
+                <div className="flex flex-col gap-4 items-center px-2 sm:flex-row sm:justify-center sm:gap-2">
                   {steps.map((step, index) => (
                     <React.Fragment key={index}>
-                      <div className="flex flex-col items-center min-w-[70px] max-w-[90px] flex-none">
+                      <div className="flex flex-row sm:flex-col items-center sm:items-center min-w-[70px] max-w-[120px] flex-1 sm:flex-none">
                         <div
                           className={`w-9 h-9 flex items-center justify-center rounded-full border-2
                             ${index <= currentStep ? "bg-primary border-primary text-white" : "border-foreground/30 text-foreground/50"}
@@ -1841,17 +1852,25 @@ export default function AutoSite() {
                             <step.icon className="w-4 h-4" />
                           )}
                         </div>
-                        <div className="mt-1 text-center">
+                        <div className="ml-3 sm:ml-0 sm:mt-1 text-left sm:text-center">
                           <p className="text-xs font-bold leading-tight">{step.title}</p>
                           <p className="text-[10px] text-foreground/60 leading-tight">{step.description}</p>
                         </div>
                       </div>
                       {index < steps.length - 1 && (
-                        <div className="flex items-center justify-center flex-none">
-                          <svg width="18" height="18" className="text-foreground/20" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M3 9h12m-3-3 3 3-3 3" />
-                          </svg>
-                        </div>
+                        <>
+                          {/* Down arrow for xs, right arrow for sm+ */}
+                          <div className="flex sm:hidden items-center justify-center flex-none">
+                            <svg width="18" height="18" className="text-foreground/20" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M9 3v12m-3-3 3 3 3-3" />
+                            </svg>
+                          </div>
+                          <div className="hidden sm:flex items-center justify-center flex-none">
+                            <svg width="18" height="18" className="text-foreground/20" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M3 9h12m-3-3 3 3-3 3" />
+                            </svg>
+                          </div>
+                        </>
                       )}
                     </React.Fragment>
                   ))}

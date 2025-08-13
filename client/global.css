@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer base {
+
   /**
    * Pleasant Light Theme for Codifye - Day Mode
    * HSL color variables for beautiful 3D website design
@@ -56,6 +57,8 @@
    * Pleasant Dark Theme for Codifye - Night Mode
    * HSL color variables for beautiful dark 3D website design
   */
+
+ 
   .dark {
     --background: 220 25% 8%;
     --foreground: 0 0% 95%;
@@ -112,22 +115,18 @@
 
   /* Light theme background */
   body:not(.dark) {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--background)) 0%,
-      hsl(220 20% 95%) 50%,
-      hsl(200 30% 98%) 100%
-    );
+    background: linear-gradient(135deg,
+        hsl(var(--background)) 0%,
+        hsl(220 20% 95%) 50%,
+        hsl(200 30% 98%) 100%);
   }
 
   /* Dark theme background */
   .dark body {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--background)) 0%,
-      hsl(220 20% 10%) 50%,
-      hsl(240 15% 6%) 100%
-    );
+    background: linear-gradient(135deg,
+        hsl(var(--background)) 0%,
+        hsl(220 20% 10%) 50%,
+        hsl(240 15% 6%) 100%);
   }
 }
 
@@ -149,11 +148,9 @@
   /* Enhanced 3D Card with Pleasant Colors and Lighting */
   .card-3d-enhanced {
     position: relative;
-    background: linear-gradient(
-      145deg,
-      hsla(var(--card), 0.95) 0%,
-      hsla(var(--card), 0.8) 100%
-    );
+    background: linear-gradient(145deg,
+        hsla(var(--card), 0.95) 0%,
+        hsla(var(--card), 0.8) 100%);
     backdrop-filter: blur(20px);
     border: 1px solid hsla(var(--glass-border));
     border-radius: var(--radius);
@@ -172,12 +169,10 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsla(var(--pleasant-purple), 0.6),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        hsla(var(--pleasant-purple), 0.6),
+        transparent);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
@@ -189,11 +184,9 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(
-      circle,
-      hsla(var(--light-ray)) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(circle,
+        hsla(var(--light-ray)) 0%,
+        transparent 70%);
     opacity: 0;
     transition: all 0.6s ease;
     pointer-events: none;
@@ -236,11 +229,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      45deg,
-      hsla(var(--pleasant-purple), 0.1),
-      hsla(var(--pleasant-blue), 0.1)
-    );
+    background: linear-gradient(45deg,
+        hsla(var(--pleasant-purple), 0.1),
+        hsla(var(--pleasant-blue), 0.1));
     border-radius: inherit;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -265,12 +256,10 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsla(var(--pleasant-blue), 0.4),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        hsla(var(--pleasant-blue), 0.4),
+        transparent);
     transition: left 0.6s ease;
   }
 
@@ -308,8 +297,7 @@
   }
 
   .card-float-3d:hover {
-    transform: perspective(1000px) rotateX(15deg) rotateY(-15deg)
-      translateZ(40px) translateY(-20px);
+    transform: perspective(1000px) rotateX(15deg) rotateY(-15deg) translateZ(40px) translateY(-20px);
   }
 
   .card-float-3d::after {
@@ -319,11 +307,9 @@
     left: 20px;
     right: 20px;
     height: 20px;
-    background: radial-gradient(
-      ellipse,
-      hsla(var(--card), 0.3) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(ellipse,
+        hsla(var(--card), 0.3) 0%,
+        transparent 70%);
     transform: translateZ(-40px);
     transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     opacity: 0;
@@ -386,12 +372,10 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: conic-gradient(
-      hsla(var(--pleasant-purple), 0.3),
-      hsla(var(--pleasant-blue), 0.3),
-      hsla(var(--pleasant-pink), 0.3),
-      hsla(var(--pleasant-purple), 0.3)
-    );
+    background: conic-gradient(hsla(var(--pleasant-purple), 0.3),
+        hsla(var(--pleasant-blue), 0.3),
+        hsla(var(--pleasant-pink), 0.3),
+        hsla(var(--pleasant-purple), 0.3));
     animation: rotate-gradient 4s linear infinite;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -412,27 +396,33 @@
   }
 
   @keyframes floating {
+
     0%,
     100% {
       transform: translateY(0px) rotate(0deg);
     }
+
     25% {
       transform: translateY(-10px) rotate(1deg);
     }
+
     50% {
       transform: translateY(-5px) rotate(-1deg);
     }
+
     75% {
       transform: translateY(-15px) rotate(0.5deg);
     }
   }
 
   @keyframes light-pulse {
+
     0%,
     100% {
       transform: translate(-50%, -50%) scale(1);
       opacity: 0.3;
     }
+
     50% {
       transform: translate(-50%, -50%) scale(1.2);
       opacity: 0.6;
@@ -440,12 +430,14 @@
   }
 
   @keyframes gentle-glow {
+
     0%,
     100% {
       box-shadow:
         0 8px 32px hsla(var(--card-glow)),
         0 2px 8px hsla(var(--background), 0.1);
     }
+
     50% {
       box-shadow:
         0 12px 48px hsla(var(--card-glow)),
@@ -457,48 +449,59 @@
     0% {
       transform: rotate(0deg);
     }
+
     100% {
       transform: rotate(360deg);
     }
   }
 
   @keyframes glitch {
+
     0%,
     100% {
       transform: translate(0);
     }
+
     20% {
       transform: translate(-2px, 2px);
     }
+
     40% {
       transform: translate(-2px, -2px);
     }
+
     60% {
       transform: translate(2px, 2px);
     }
+
     80% {
       transform: translate(2px, -2px);
     }
   }
 
   @keyframes glitch-before {
+
     0%,
     100% {
       clip-path: inset(0 0 0 0);
       transform: translate(0);
     }
+
     20% {
       clip-path: inset(20% 0 60% 0);
       transform: translate(-2px, 0);
     }
+
     40% {
       clip-path: inset(60% 0 20% 0);
       transform: translate(-2px, 0);
     }
+
     60% {
       clip-path: inset(40% 0 40% 0);
       transform: translate(2px, 0);
     }
+
     80% {
       clip-path: inset(80% 0 10% 0);
       transform: translate(2px, 0);
@@ -506,23 +509,28 @@
   }
 
   @keyframes glitch-after {
+
     0%,
     100% {
       clip-path: inset(0 0 0 0);
       transform: translate(0);
     }
+
     20% {
       clip-path: inset(40% 0 40% 0);
       transform: translate(2px, 0);
     }
+
     40% {
       clip-path: inset(80% 0 10% 0);
       transform: translate(2px, 0);
     }
+
     60% {
       clip-path: inset(20% 0 60% 0);
       transform: translate(-2px, 0);
     }
+
     80% {
       clip-path: inset(60% 0 20% 0);
       transform: translate(-2px, 0);
@@ -530,11 +538,9 @@
   }
 
   .gradient-text {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--pleasant-purple)),
-      hsl(var(--pleasant-blue))
-    );
+    background: linear-gradient(135deg,
+        hsl(var(--pleasant-purple)),
+        hsl(var(--pleasant-blue)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -544,11 +550,9 @@
   .portfolio-card {
     transform-style: preserve-3d;
     transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background: linear-gradient(
-      135deg,
-      hsla(var(--card), 0.9) 0%,
-      hsla(var(--secondary), 0.7) 100%
-    );
+    background: linear-gradient(135deg,
+        hsla(var(--card), 0.9) 0%,
+        hsla(var(--secondary), 0.7) 100%);
     backdrop-filter: blur(20px);
     border: 1px solid hsla(var(--glass-border));
   }
@@ -566,6 +570,7 @@
   0% {
     background-position: 0 100%;
   }
+
   100% {
     background-position: 100% 100%;
   }
@@ -596,7 +601,7 @@
   background-position: 0 100%;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 59, 143, 0.2);
-  animation: bodytext_module_linkSwipe__cc74e5ca .3s cubic-bezier(0,0,.2,1);
+  animation: bodytext_module_linkSwipe__cc74e5ca .3s cubic-bezier(0, 0, .2, 1);
   animation-duration: 0.3s;
   animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   animation-delay: 0s;
@@ -615,7 +620,8 @@
   display: inline-block;
   background-color: hsl(var(--card));
   border-radius: var(--radius);
-  overflow: visible; /* Allow glow to extend outside */
+  overflow: visible;
+  /* Allow glow to extend outside */
   transition: transform 0.25s ease;
   position: relative;
   border: none;
@@ -632,12 +638,10 @@
   content: '';
   position: absolute;
   inset: -5px;
-  background: linear-gradient(
-    135deg,
-    hsl(var(--pleasant-purple)),
-    hsl(var(--pleasant-blue)),
-    hsl(var(--pleasant-pink))
-  );
+  background: linear-gradient(135deg,
+      hsl(var(--pleasant-purple)),
+      hsl(var(--pleasant-blue)),
+      hsl(var(--pleasant-pink)));
   border-radius: calc(var(--radius) + 5px);
   z-index: -2;
   opacity: 0;
@@ -673,9 +677,11 @@
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.15);
   }
+
   100% {
     transform: scale(1.05);
   }
@@ -711,9 +717,12 @@
 
 /* Floating animation for buttons */
 @keyframes floatButton {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
@@ -750,7 +759,8 @@
 .levitating-button:hover {
   transform: translateY(-15px);
   box-shadow: 0 15px 20px rgba(0, 0, 0, 0.2);
-  animation: none; /* Stop the floating animation on hover */
+  animation: none;
+  /* Stop the floating animation on hover */
 }
 
 .levitating-button:hover:before {
@@ -796,6 +806,7 @@
   0% {
     text-shadow: 0 0 5px #ff005e, 0 0 10px #ff005e, 0 0 20px #ff005e, 0 0 40px #ff005e, 0 0 80px #ff005e;
   }
+
   100% {
     text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 40px #00d4ff, 0 0 80px #00d4ff, 0 0 160px #00d4ff;
   }
@@ -808,11 +819,9 @@
 /* Contact Card Sticky - Replaces floating portfolio-card effects */
 .contact-card-sticky {
   position: relative;
-  background: linear-gradient(
-    135deg,
-    hsla(var(--card), 0.95) 0%,
-    hsla(var(--secondary), 0.85) 100%
-  );
+  background: linear-gradient(135deg,
+      hsla(var(--card), 0.95) 0%,
+      hsla(var(--secondary), 0.85) 100%);
   backdrop-filter: blur(20px);
   border: 1px solid hsla(var(--glass-border));
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -823,12 +832,10 @@
   content: "";
   position: absolute;
   inset: -2px;
-  background: linear-gradient(
-    135deg,
-    hsla(var(--primary), 0.6),
-    hsla(var(--accent), 0.6),
-    hsla(var(--primary), 0.6)
-  );
+  background: linear-gradient(135deg,
+      hsla(var(--primary), 0.6),
+      hsla(var(--accent), 0.6),
+      hsla(var(--primary), 0.6));
   border-radius: inherit;
   opacity: 0;
   z-index: -1;
@@ -862,12 +869,10 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    hsla(var(--primary), 0.08),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      hsla(var(--primary), 0.08),
+      transparent);
   border-radius: inherit;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -878,7 +883,7 @@
   transform: scale(1.02);
   background-color: hsla(var(--primary), 0.08);
   border: 1px solid hsla(var(--primary), 0.2);
-  box-shadow: 
+  box-shadow:
     0 4px 12px hsla(var(--primary), 0.1),
     inset 0 1px 0 hsla(var(--primary), 0.1);
 }
@@ -901,11 +906,9 @@
   top: 50%;
   width: 0;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    hsla(var(--primary), 0.8),
-    hsla(var(--accent), 0.8)
-  );
+  background: linear-gradient(90deg,
+      hsla(var(--primary), 0.8),
+      hsla(var(--accent), 0.8));
   transform: translateY(-50%);
   transition: width 0.3s ease;
   border-radius: 1px;
@@ -943,7 +946,7 @@
 .social-link-sticky:hover {
   /* Sticky with glow effect */
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 
+  box-shadow:
     0 8px 20px hsla(var(--primary), 0.3),
     0 4px 12px hsla(var(--accent), 0.2);
 }
@@ -970,7 +973,7 @@
 /* Enhanced Button Hover for Contact Form */
 .contact-card-sticky .btn-contact:hover {
   transform: scale(1.02);
-  box-shadow: 
+  box-shadow:
     0 6px 20px hsla(var(--primary), 0.4),
     0 0 0 1px hsla(var(--primary), 0.2);
 }

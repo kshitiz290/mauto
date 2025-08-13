@@ -9,6 +9,9 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    allowedHosts: [
+      '0e7949daa008.ngrok-free.app' // your ngrok host
+    ]
   },
   build: {
     outDir: "build",
