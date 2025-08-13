@@ -29,10 +29,13 @@ import {
 import React from "react";
 import { useToast } from "../components/ui/use-toast";
 
+
+
 interface FormData {
   hasDomain: boolean;
   domain: string;
   businessSector: string;
+  template_type_id: number | null;
   theme: string;
   companyName: string;
   email: string;
@@ -42,37 +45,36 @@ interface FormData {
   aboutContent: string;
   contactContent: string;
   userPassword: string;
-  logoPath?: string; // Optional field for logo path
-  heading?: string;
-  heading_desc?: string;
-  banner_path?: string;
-  photo_1?: string;
-  photo_2?: string;
-  photo_3?: string;
-  photo_4?: string;
-  servicesContent?: string;
-  vision_desc?: string;
-  mission_desc?: string;
-  what_we_do?: string;
-  our_story?: string;  // Product/Service fields
-  isProductBased?: boolean;
-  name?: string;
-  short_description?: string;
-  full_description?: string;
-  product_image?: string;
-  price?: string;
-  sequence?: string;
-  display_in_menu?: number;
-  status?: string;
-  facebookLink?: string;
-  youtubeLink?: string;
-  linkedinLink?: string;
-  iframe?: string;
-  created_at?: string;
-  updated_at?: string;
-  created_by?: string;
-  updated_by?: string;
-  // Campaign fields for NGO
+  logoPath: string;
+  heading: string;
+  heading_desc: string;
+  banner_path: string;
+  photo_1: string;
+  photo_2: string;
+  photo_3: string;
+  photo_4: string;
+  servicesContent: string;
+  vision_desc: string;
+  mission_desc: string;
+  what_we_do: string;
+  our_story: string;
+  isProductBased: boolean;
+  name: string;
+  short_description: string;
+  full_description: string;
+  product_image: string;
+  price: string;
+  sequence: string;
+  display_in_menu: number;
+  status: string;
+  facebookLink: string;
+  youtubeLink: string;
+  linkedinLink: string;
+  iframe: string;
+  created_at: string;
+  updated_at: string;
+  created_by: string;
+  updated_by: string;
   campaign_name?: string;
   campaign_description?: string;
   volunteers?: string;
@@ -88,50 +90,62 @@ interface FormData {
     campaign_status: string;
     goal: string;
     impact: string;
-  }>; // Add this line
+  }>;
 }
 
-const businessSectors = [
-  "FMCG",
-  "NGO"
-];
-
-const themes = [
-  "Modern Minimal",
-  "Corporate Professional",
-  "Creative Agency",
-  "E-commerce",
-  "Portfolio",
-  "Blog",
-  "Landing Page",
-  "Dashboard"
-];
-
-const apiBase = window.location.origin;
-console.log(apiBase)
-
-// Helper to check if a string is a valid URL
-function isValidUrl(url: string) {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-// Add helper functions for validation
-function isValidEmail(email: string) {
-  // Simple regex for email validation
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function isStrongPassword(password: string) {
-  // At least 8 characters, at least one letter and one number
-  return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/.test(password);
-}
+// Business sectors state from API
+// ...existing code...
 
 export default function AutoSite() {
+  // Business sectors state from API (move inside component)
+  type BusinessSector = { name: string; template_type_id: number };
+  const [businessSectors, setBusinessSectors] = useState<BusinessSector[]>([]);
+  const [sectorLoading, setSectorLoading] = useState(false);
+  useEffect(() => {
+    setSectorLoading(true);
+    fetch("/api/business-sectors")
+      .then(res => res.json())
+      .then(data => {
+        setBusinessSectors(data.sectors || []);
+        setSectorLoading(false);
+      })
+      .catch(() => setSectorLoading(false));
+  }, []);
+
+  const themes = [
+    "Modern Minimal",
+    "Corporate Professional",
+    "Creative Agency",
+    "E-commerce",
+    "Portfolio",
+    "Blog",
+    "Landing Page",
+    "Dashboard"
+  ];
+
+  const apiBase = window.location.origin;
+  console.log(apiBase)
+
+  // Helper to check if a string is a valid URL
+  function isValidUrl(url: string) {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // Add helper functions for validation
+  function isValidEmail(email: string) {
+    // Simple regex for email validation
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function isStrongPassword(password: string) {
+    // At least 8 characters, at least one letter and one number
+    return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/.test(password);
+  }
   // Campaigns state for NGO
   const [campaigns, setCampaigns] = useState([
     {
@@ -147,7 +161,7 @@ export default function AutoSite() {
 
   // Sync campaigns to formData when campaigns change
   useEffect(() => {
-    if (formData.businessSector === "NGO") {
+    if (formData.template_type_id === 2) {
       updateFormData("campaigns", campaigns);
     }
     // eslint-disable-next-line
@@ -241,7 +255,7 @@ export default function AutoSite() {
     setErrorMessage("");
     try {
       let payload;
-      if (formData.businessSector === "NGO") {
+      if (formData.template_type_id === 2) {
         payload = {
           ...formData,
           campaigns,
@@ -253,7 +267,8 @@ export default function AutoSite() {
           ...formData,
           products,
           company_id: companyId,
-          isEditing: isEditing
+          isEditing: isEditing,
+          template_type_id: formData.template_type_id
         };
       }
       const response = await fetch(`${apiBase}/api/generate-site`, {
@@ -331,6 +346,7 @@ export default function AutoSite() {
     hasDomain: false,
     domain: "",
     businessSector: "",
+    template_type_id: null,
     theme: "",
     companyName: "",
     email: "",
@@ -381,16 +397,22 @@ export default function AutoSite() {
   };
   // Helper to clear formData and step on new user registration/login
   useEffect(() => {
-    // Listen for user change (e.g., after login/register)
+    // Only clear progress if a new user logs in or registers
     const userID = localStorage.getItem('userID');
     const lastUserID = localStorage.getItem('autoSiteLastUserID');
     if (userID && userID !== lastUserID) {
-      // New user detected, clear formData and step
+      // New user detected, clear formData and step, and request backend to delete user_form_progress
       localStorage.setItem('autoSiteFormData', JSON.stringify(defaultFormData));
       localStorage.setItem('autoSiteCurrentStep', '0');
       localStorage.setItem('autoSiteLastUserID', userID);
       setFormData(defaultFormData);
       setCurrentStep(0);
+      // Call backend to delete progress for this user
+      fetch('/api/reset-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
     }
   }, [localStorage.getItem('userID')]);
 
@@ -662,8 +684,8 @@ export default function AutoSite() {
     const newStep = currentStep + 1;
     const userID = localStorage.getItem('userID');
     try {
-      // Always use latest formData including phone
-      const payload = { ...formData, user_id: userID, phone: formData.phone };
+      // Always use latest formData including phone and template_type_id
+      const payload = { ...formData, user_id: userID, phone: formData.phone, template_type_id: formData.template_type_id };
       const apiUrl = `${apiBase}/api/company-details`;
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -676,7 +698,7 @@ export default function AutoSite() {
       if (response.ok && data.success) {
         setCompanyId(data.companyId);
         localStorage.setItem("autoSiteCompanyId", String(data.companyId));
-        await saveStep(newStep, { ...formData, phone: formData.phone });
+        await saveStep(newStep, { ...formData, phone: formData.phone, template_type_id: formData.template_type_id });
         setCurrentStep(newStep);
       } else {
         setErrorMessage(data.error || "Failed to save data");
@@ -958,14 +980,21 @@ export default function AutoSite() {
             <div className="space-y-4">
               <div>
                 <Label htmlFor="sector">Business Sector <span className="text-red-500">*</span></Label>
-                <Select value={formData.businessSector} onValueChange={(value) => updateFormData("businessSector", value)}>
+                <Select
+                  value={formData.businessSector}
+                  onValueChange={(value) => {
+                    const selected = businessSectors.find(s => s.name === value);
+                    updateFormData("businessSector", selected?.name || "");
+                    updateFormData("template_type_id", selected?.template_type_id ?? null);
+                  }}
+                >
                   <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="Select your business sector" />
+                    <SelectValue placeholder={sectorLoading ? "Loading..." : "Select your business sector"} />
                   </SelectTrigger>
                   <SelectContent>
                     {businessSectors.map((sector) => (
-                      <SelectItem key={sector} value={sector}>
-                        {sector}
+                      <SelectItem key={sector.name} value={sector.name}>
+                        {sector.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -1190,6 +1219,7 @@ export default function AutoSite() {
                 <Button
                   onClick={prevStep}
                   className="flex-1 border border-foreground/30 bg-transparent text-foreground"
+                  disabled={isEditing} // Disable back button in editing mode
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
@@ -1373,7 +1403,7 @@ export default function AutoSite() {
                 </div>
               </div>
               {/* Conditional NGO Campaigns UI */}
-              {formData.businessSector === "NGO" ? (
+              {formData.template_type_id === 2 ? (
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold mb-2">Add Campaigns</h3>
                   {campaigns.map((campaign, idx) => (
@@ -1687,7 +1717,7 @@ export default function AutoSite() {
                     !formData.mission_desc ||
                     !formData.what_we_do ||
                     !formData.our_story ||
-                    (formData.businessSector === "NGO"
+                    (formData.template_type_id === 2
                       ? campaigns.length === 0 || campaigns.some(camp =>
                         !camp.campaign_name ||
                         !camp.volunteers ||
@@ -1755,7 +1785,7 @@ export default function AutoSite() {
               });
               return;
             }
-            setCurrentStep(0);
+            setCurrentStep(2);
             setIsEditing(true);
           } catch (err) {
             toast({ title: "Error", description: "Failed to check edit limit.", variant: "destructive" });
@@ -1763,11 +1793,11 @@ export default function AutoSite() {
         };
 
         const handleVisitWebsite = () => {
-          // const baseUrl = window.location.origin;
-          // window.open(`${baseUrl}/${companyId}`, '_blank');
+          const baseUrl = window.location.origin;
+          window.open(`${baseUrl}/${companyId}`, '_blank');
 
-          const url = `http://localhost:3000/${companyId}`;
-          window.open(url, '_blank');
+          // const url = `http://localhost:3000/${companyId}`;
+          // window.open(url, '_blank');
         };
 
         return (

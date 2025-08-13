@@ -1,10 +1,20 @@
-// --- Passport.js, bcrypt, express-session setup ---
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 import { RowDataPacket } from 'mysql2';
 
+// API to fetch business sectors with template_type_id
+export const getBusinessSectors = async (req, res) => {
+  try {
+    const [rows] = await db.promise().query('SELECT name, template_type_id FROM business_sectors');
+    res.json({ sectors: rows });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch business sectors' });
+  }
+};
+
+// --- Passport.js, bcrypt, express-session setup ---
 // Session middleware (should be used in main app.js/server.js, but for demo, add here)
 export const sessionMiddleware = session({
   secret: 'your_secret_key',
@@ -368,6 +378,11 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
   try {
     if (!db) throw new Error("Database not configured");
     const user_id = data.user_id;
+    // Ensure template_type_id is either a valid number or null
+    let template_type_id = null;
+    if (data.template_type_id !== undefined && data.template_type_id !== null && !isNaN(Number(data.template_type_id))) {
+      template_type_id = Number(data.template_type_id);
+    }
     // Validate required fields
     if (!data.companyName || !data.email || !data.phone || !data.domain || !data.businessSector || !data.location) {
       return res.status(400).json({ error: "Missing required fields: companyName, email, phone, domain, businessSector, address" });
@@ -385,7 +400,7 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
     if (Array.isArray(companyRows) && companyRows.length > 0) {
       // Update existing company
       companyId = (companyRows as RowDataPacket[])[0].id;
-      const updateQuery = `UPDATE company_mast SET name = ?, business_email = ?, business_phone = ?, host = ?, sector = ?, logo = ?, address = ?, facebook = ?, youtube = ?, linkedin = ?, iframe = ? WHERE id = ?`;
+      const updateQuery = `UPDATE company_mast SET name = ?, business_email = ?, business_phone = ?, host = ?, sector = ?, logo = ?, address = ?, facebook = ?, youtube = ?, linkedin = ?, iframe = ?, template_type_id = ? WHERE id = ?`;
       const updateValues = [
         data.companyName,
         data.email,
@@ -398,12 +413,13 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
         data.youtubeLink || '',
         data.linkedinLink || '',
         data.iframe || '',
+        template_type_id,
         companyId
       ];
       await db.promise().query(updateQuery, updateValues);
     } else {
       // Insert new company (should not happen in edit mode)
-      const insertQuery = `INSERT INTO company_mast (name, business_email, business_phone, host, sector, logo, address, facebook, youtube, linkedin, iframe, user_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+      const insertQuery = `INSERT INTO company_mast (name, business_email, business_phone, host, sector, logo, address, facebook, youtube, linkedin, iframe, user_id, created_at, template_type_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)`;
       const insertValues = [
         data.companyName,
         data.email,
@@ -416,7 +432,8 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
         data.youtubeLink || '',
         data.linkedinLink || '',
         data.iframe || '',
-        user_id
+        user_id,
+        template_type_id
       ];
       const [result] = await db.promise().query(insertQuery, insertValues) as [ResultSetHeader, any];
       companyId = result.insertId;
@@ -434,6 +451,7 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
 export const handleGenerateSite = async (req: Request, res: Response) => {
   try {
     const data = req.body;
+    const template_type_id = data.template_type_id || null;
     // Validate required fields for each section
     if (!data.domain || !data.companyName || !data.email) {
       return res.status(400).json({ error: "Missing required fields: domain, companyName, email" });
@@ -445,7 +463,7 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Missing required about page fields: vision, mission, what we do, our story" });
     }
     // Validate campaigns/products based on sector
-    if (data.businessSector === "NGO") {
+    if (data.template_type_id === 2) {
       if (!Array.isArray(data.campaigns) || data.campaigns.length === 0) {
         return res.status(400).json({ error: "At least one campaign is required for NGO" });
       }
@@ -548,7 +566,7 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
     }
 
     // 3. Save or update Product/Service or Campaigns Content (multiple)
-    if (data.businessSector === "NGO") {
+    if (template_type_id === 2) {
       // Save or update campaigns for NGO
       if (!Array.isArray(data.campaigns) || data.campaigns.length === 0) {
         return res.status(400).json({ error: "At least one campaign is required for NGO" });
@@ -619,8 +637,10 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
     if (data.isEditing) {
       const [companyRowsEdit] = await db.promise().query('SELECT id FROM company_mast WHERE id = ?', [companyId]);
       if (Array.isArray(companyRowsEdit) && companyRowsEdit.length > 0) {
-        await db.promise().query('UPDATE company_mast SET times_edited = COALESCE(times_edited,0) + 1 WHERE id = ?', [companyId]);
+        await db.promise().query('UPDATE company_mast SET times_edited = COALESCE(times_edited,0) - 1 WHERE id = ?', [companyId]);
       }
+      // Decrement times_edited using COALESCE after the if block
+
     }
 
     // Fire-and-forget: send company_id to second codebase, but do not wait for response
@@ -649,7 +669,7 @@ export const handleTimesEdited = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Company not found" });
     }
     const timesEdited = (rows[0] as any).times_edited || 0;
-    if (timesEdited > 2) {
+    if (timesEdited <= 0) {
       return res.status(403).json({ error: "You have reached the maximum number of edits allowed." });
     }
     return res.json({ success: true, times_edited: timesEdited });

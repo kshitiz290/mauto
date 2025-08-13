@@ -394,7 +394,7 @@ translate-y-0' : 'transform -translate-y-full'
                     // Remove session flag and call logout API
                     localStorage.removeItem('manacle_session');
                     apiFetch('/api/logout').then(() => {
-                      window.location.reload();
+                      window.location.href = '/login';
                     });
                   }}
                 >
@@ -473,10 +473,10 @@ translate-y-0' : 'transform -translate-y-full'
                                     <li key={subIndex}>
                                       <a
                                         href={subItem.href}
-                                        className="text-sm text-foreground/80 hover:text-foreground transition-colors" 
-                                      onClick={() => {
-                                        setIsMenuOpen(false);
-                                      }}
+                                        className="text-sm text-foreground/80 hover:text-foreground transition-colors"
+                                        onClick={() => {
+                                          setIsMenuOpen(false);
+                                        }}
                                       >
                                         {subItem.name}
                                       </a>
@@ -493,7 +493,7 @@ translate-y-0' : 'transform -translate-y-full'
                     <a
                       href={item.href}
                       className="text-foreground hover:text-primary transition-colors duration-300 font-bold flex items-center justify-between"
-                    onClick={() => setIsMenuOpen(false)}
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       {item.name}
                     </a>
@@ -517,7 +517,7 @@ translate-y-0' : 'transform -translate-y-full'
                     onClick={() => {
                       localStorage.removeItem('manacle_session');
                       apiFetch('/api/logout').then(() => {
-                        window.location.reload();
+                        window.location.href = '/login';
                       });
                     }}
                   >

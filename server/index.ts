@@ -8,7 +8,8 @@ import {
   handleDomainCheck,
   uploadLogo,
   sessionMiddleware,
-  handleTimesEdited
+  handleTimesEdited,
+  getBusinessSectors
 } from "./routes/auto-site";
 import passport from "passport";
 import bcrypt from "bcrypt";
@@ -136,6 +137,7 @@ export function createServer() {
   });
 
   // Auto Site Builder API routes
+  app.get("/api/business-sectors", getBusinessSectors);
   app.post("/api/generate-site", handleGenerateSite);
   app.post("/api/company-details", handleSaveCompanyDetails);
   app.post("/api/domain-check", handleDomainCheck);

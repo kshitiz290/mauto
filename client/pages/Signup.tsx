@@ -75,7 +75,7 @@ export default function Signup() {
                 });
                 localStorage.setItem('userID', data.user.id);
                 setTimeout(() => {
-                    window.location.href = '/';
+                    window.location.href = '/login';
                 }, 1200);
             } else {
                 toast({ title: 'Signup Failed', description: data.error || 'Could not signup', variant: 'destructive' });
