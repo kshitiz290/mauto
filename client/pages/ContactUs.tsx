@@ -151,10 +151,18 @@ export function ContactUs() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
-      <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
+      <style>{`
+        html, body, #root { overflow-x: hidden !important; }
+        body { position: relative; }
+        * { box-sizing: border-box; }
+        .contact-us-page-wrapper, .contact-us-page-wrapper * { max-width: 100%; }
+        .contact-us-page-wrapper img, .contact-us-page-wrapper iframe { max-width: 100%; height: auto; }
+      `}</style>
+      <div className="contact-us-page-wrapper min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden w-full">
         <Header />
-        <main>
-          <section className="relative w-screen left-1/2 right-1/2 -mx-[50vw] min-h-[160px] flex items-center justify-center overflow-x-clip pt-32 bg-transparent">
+        <main className="w-full overflow-x-hidden">
+          {/* Hero / Breadcrumb Section - adjusted to prevent horizontal overflow on mobile */}
+          <section className="relative w-full min-h-[160px] flex items-center justify-center overflow-hidden pt-32 bg-transparent ">
             {/* Animated floating shapes for light/dark theme */}
             <div className="absolute left-10 top-1/2 -translate-y-1/2 w-36 h-36 bg-gradient-to-br from-primary/40 to-accent/30 rounded-full blur-3xl animate-float-slow z-0 mix-blend-lighten dark:mix-blend-normal" style={{ animationDelay: '0s' }} />
             <div className="absolute right-20 top-10 w-20 h-20 bg-gradient-to-tr from-pink-400/40 to-purple-400/30 rounded-full blur-2xl animate-float-fast z-0 mix-blend-lighten dark:mix-blend-normal" style={{ animationDelay: '1.5s' }} />
@@ -178,8 +186,8 @@ export function ContactUs() {
           </section>
 
 
-          <div className="min-h-screen py-16 ">
-            <div className="container mx-auto px-4">
+          <div className="min-h-screen py-16 w-full overflow-x-hidden">
+            <div className="container mx-auto px-4 max-w-full">
               {/* Header with Framer Motion Animation */}
               <motion.div
                 initial={{ opacity: 0, y: 48 }}

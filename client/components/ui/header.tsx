@@ -1,12 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 // Auth0 removed
 import { Menu, X, ChevronDown } from "lucide-react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { MobileNav } from "./mobile-nav";
 import { Button } from "./button";
 import { ThemeToggle } from "./theme-toggle";
 import { apiFetch } from '../../lib/apiFetch';
 
 // Header component
 export function Header() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const lastPathRef = useRef(location.pathname + location.search + location.hash);
   // Simple session detection (cookie/localStorage)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,6 +21,16 @@ export function Header() {
   const [lastScrollY, setLastScrollY] = useState(0);
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Auto-close mobile menu when route actually changes
+  useEffect(() => {
+    const current = location.pathname + location.search + location.hash;
+    if (current !== lastPathRef.current) {
+      lastPathRef.current = current;
+      setIsMenuOpen(false);
+      setClickedDropdown(null);
+    }
+  }, [location]);
 
   useEffect(() => {
     // Check for session flag in localStorage
@@ -228,11 +243,25 @@ Gallery", description: "View all our projects", href: "/gallery" },
     { name: "Contact", href: "/contact-us" },
   ];
 
+  // Robust mobile navigation handler: closes menu, then navigates via SPA; falls back to hard reload if needed
+  const handleMobileNavigate = (to: string) => {
+    setIsMenuOpen(false);
+    setClickedDropdown(null);
+    // Defer to next tick so unmount animations/state updates don't cancel navigation on some mobile browsers
+    requestAnimationFrame(() => {
+      const before = window.location.pathname;
+      navigate(to);
+      // Fallback: if path didn't change shortly, force full navigation
+      setTimeout(() => {
+        if (window.location.pathname === before) {
+          window.location.href = to;
+        }
+      }, 60);
+    });
+  };
+
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-3 lg:py-4 xl:py-4 transition-transform duration-300 ease-in-out backdrop-blur-md    */    
-    { name: "About", href: "/about-us" },
-translate-y-0' : 'transform -translate-y-full'
-      }`}>
+    <header className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-3 lg:py-4 xl:py-4 transition-transform duration-300 ease-in-out backdrop-blur-md ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="container mx-auto px-4 md:px-5 lg:px-6 xl:px-4">
         <div className="flex items-center justify-between">
           {/* Logo & Company Name - Responsive sizing */}
@@ -323,8 +352,8 @@ translate-y-0' : 'transform -translate-y-full'
                                   <ul className="space-y-2">
                                     {category.items.map((subItem, subIndex) => (
                                       <li key={subIndex}>
-                                        <a
-                                          href={subItem.href || `#${subItem.name.toLowerCase().replace(/\s+/g, "-")}`}
+                                        <Link
+                                          to={subItem.href || `#${subItem.name.toLowerCase().replace(/\s+/g, "-")}`}
                                           className="block group/item"
                                           onClick={() => {
                                             setClickedDropdown(null);
@@ -337,7 +366,7 @@ translate-y-0' : 'transform -translate-y-full'
                                           <div className="text-xs md:text-sm text-foreground/80 group-hover/item:text-foreground transition-colors duration-200">
                                             {subItem.description}
                                           </div>
-                                        </a>
+                                        </Link>
                                       </li>
                                     ))}
                                   </ul>
@@ -431,118 +460,15 @@ translate-y-0' : 'transform -translate-y-full'
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className={`lg:hidden absolute left-4 right-4 bg-card/95 backdrop-blur-xl border border-glass-border rounded-2xl max-h-[80vh] overflow-y-auto shadow-2xl transition-all duration-300 ${isHeaderVisible ? 'top-20' : 'top-4'
-            }`}>
-            <nav className="flex flex-col p-4">
-              {navItems.map((item) => (
-                <div key={item.name} className="py-2">
-                  {item.hasDropdown ? (
-                    <>
-                      <button
-                        className="text-foreground hover:text-primary transition-colors duration-300 font-bold flex items-center justify-between w-full"
-                        onClick={() => handleDropdownClick(item.name)}
-                      >
-                        {item.name}
-                        <ChevronDown className={`w-4 h-4 transition-transform ${clickedDropdown === item.name ? "rotate-180" : ""}`} />
-                      </button>
-
-                      {/* Mobile Dropdown Content */}
-                      {clickedDropdown === item.name && (
-                        <div className="mt-3 ml-4 space-y-3 border-l border-glass-border pl-4">
-                          {/* Add View All Services link for Services dropdown */}
-                          {/* {item.name === "Services" && (
-                            <div className="mb-3">
-                              <a
-                                href={item.href}
-                                className="text-sm font-semibold text-primary hover:text-accent transition-colors duration-200 flex items-center"
-                                onClick={() => setIsMenuOpen(false)}
-                              >
-                                → View All Services
-                              </a>
-                            </div>
-                          )} */}
-                          {item.dropdownContent?.categories.map(
-                            (category, index) => (
-                              <div key={index}>
-                                <h4 className="text-sm font-semibold text-primary mb-2">
-                                  {category.title}
-                                </h4>
-                                <ul className="space-y-2">
-                                  {category.items.map((subItem, subIndex) => (
-                                    <li key={subIndex}>
-                                      <a
-                                        href={subItem.href}
-                                        className="text-sm text-foreground/80 hover:text-foreground transition-colors"
-                                        onClick={() => {
-                                          setIsMenuOpen(false);
-                                        }}
-                                      >
-                                        {subItem.name}
-                                      </a>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            ),
-                          )}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <a
-                      href={item.href}
-                      className="text-foreground hover:text-primary transition-colors duration-300 font-bold flex items-center justify-between"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.name}
-                    </a>
-                  )}
-                </div>
-              ))}
-
-              {/* Theme Toggle Section for Mobile */}
-              <div className="mt-4 pt-4 border-t border-glass-border">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-medium text-foreground/80">Theme</span>
-                  <ThemeToggle />
-                </div>
-              </div>
-
-              {/* Auth Buttons for Mobile */}
-              <div className="pt-4 border-t border-glass-border flex flex-col space-y-2">
-                {isAuthenticated ? (
-                  <Button
-                    className="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white transition-all duration-300 neon-glow"
-                    onClick={() => {
-                      localStorage.removeItem('manacle_session');
-                      apiFetch('/api/logout').then(() => {
-                        window.location.href = '/login';
-                      });
-                    }}
-                  >
-                    Logout
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      className="w-full bg-gradient-to-r from-primary to-accent transition-all duration-300 neon-glow"
-                      onClick={() => window.location.href = '/login'}
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      className="w-full bg-gradient-to-r from-[#8A2BE2] to-[#4169E1] text-white transition-all duration-300 neon-glow"
-                      onClick={() => window.location.href = '/signup'}
-                    >
-                      Sign Up
-                    </Button>
-                  </>
-                )}
-              </div>
-            </nav>
-          </div>
-        )}
+        <MobileNav
+          navItems={navItems}
+          isOpen={isMenuOpen}
+          isHeaderVisible={isHeaderVisible}
+          clickedDropdown={clickedDropdown}
+          setClickedDropdown={setClickedDropdown}
+          setIsMenuOpen={setIsMenuOpen}
+          isAuthenticated={isAuthenticated}
+        />
       </div>
     </header>
   );
