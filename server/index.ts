@@ -145,6 +145,28 @@ export function createServer() {
   app.post("/api/upload-logo", uploadLogo);
   app.post("/api/times-edited", handleTimesEdited);
 
+  // New API: Get host by companyId
+  app.get("/api/company-host/:companyId", async (req, res) => {
+    const { companyId } = req.params;
+    if (!companyId) {
+      return res.status(400).json({ error: "Missing companyId" });
+    }
+    try {
+      // Assuming 'host' is a column in company_mast table
+      const [rows] = await db.promise().query(
+        "SELECT host FROM company_mast WHERE id = ? LIMIT 1",
+        [companyId]
+      ) as [import('mysql2').RowDataPacket[], any];
+      if (Array.isArray(rows) && rows.length > 0 && rows[0].host) {
+        return res.json({ host: rows[0].host });
+      } else {
+        return res.status(404).json({ error: "Host not found for companyId" });
+      }
+    } catch (err) {
+      return res.status(500).json({ error: "DB error" });
+    }
+  });
+
   // Payment routes
   // app.post("/api/create-payment-order", createPaymentOrder);
   // app.post("/api/verify-payment-and-deploy", verifyPaymentAndDeploy);

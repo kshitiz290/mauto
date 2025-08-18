@@ -581,9 +581,8 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
         campaign_status,
         goal,
         impact,
-        company_id,
-        created_at
-      ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW())`;
+        company_id
+      ) VALUES(?, ?, ?, ?, ?, ?, ?, ?)`;
       for (const camp of data.campaigns) {
         const campaignValues = [
           camp.name || camp.campaign_name,
@@ -608,13 +607,18 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
         price,
         display_in_menu,
         status,
-        created_at,
-        updated_at,
         created_by,
         updated_by,
         company_id
-      ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      ) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       for (const prod of data.products) {
+        // status should be integer (1=active, 0=inactive)
+        let statusValue = 1;
+        if (typeof prod.status === 'number') {
+          statusValue = prod.status;
+        } else if (typeof prod.status === 'string') {
+          statusValue = prod.status === 'active' ? 1 : 0;
+        }
         const productValues = [
           prod.name,
           prod.short_description,
@@ -622,9 +626,9 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
           absPath(prod.product_image),
           prod.price || null,
           (prod.display_in_menu === 1 ? 1 : 0),
-          prod.status || "active",
-          prod.created_at || new Date().toISOString(),
-          prod.updated_at || new Date().toISOString(),
+          statusValue,
+          // prod.created_at || new Date().toISOString(),
+          // prod.updated_at || new Date().toISOString(),
           prod.created_by || "admin",
           prod.updated_by || "admin",
           companyId

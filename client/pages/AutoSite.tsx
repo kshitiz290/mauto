@@ -1792,11 +1792,23 @@ export default function AutoSite() {
           }
         };
 
-        const handleVisitWebsite = () => {
+        const handleVisitWebsite = async () => {
+          let host = '';
+          if (companyId) {
+            try {
+              const res = await fetch(`/api/company-host/${companyId}`);
+              const data = await res.json();
+              if (res.ok && data.host) {
+                host = data.host;
+              }
+            } catch (err) {
+              // ignore error, fallback to old logic
+            }
+          }
           const baseUrl = window.location.origin;
           window.open(`${baseUrl}/${companyId}`, '_blank');
 
-          // const url = `http://localhost:3000/${companyId}`;
+          // const url = `http://localhost:3000/${host}`;
           // window.open(url, '_blank');
         };
 
