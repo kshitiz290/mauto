@@ -91,6 +91,20 @@ interface FormData {
     goal: string;
     impact: string;
   }>;
+  products?: Array<{
+    name: string;
+    short_description: string;
+    full_description: string;
+    product_image: string;
+    price: string;
+    sequence: number;
+    status: string;
+    created_at: string;
+    updated_at: string;
+    created_by: string;
+    updated_by: string;
+    display_in_menu: number;
+  }>;
 }
 
 // Business sectors state from API
@@ -590,6 +604,13 @@ export default function AutoSite() {
           parsedFormData = defaultFormData;
         }
         setFormData(parsedFormData);
+        // Restore products and campaigns arrays if present in loaded form_data
+        if (parsedFormData.products && Array.isArray(parsedFormData.products)) {
+          setProducts(parsedFormData.products);
+        }
+        if (parsedFormData.campaigns && Array.isArray(parsedFormData.campaigns)) {
+          setCampaigns(parsedFormData.campaigns);
+        }
         // Set companyId from backend if available
         if (data.company && data.company.id) {
           setCompanyId(data.company.id);
@@ -618,12 +639,18 @@ export default function AutoSite() {
       console.warn('[saveStep] missing userID; aborting');
       return;
     }
+    // Always include products and campaigns arrays in form_data
+    const formDataToSave = {
+      ...data,
+      products: products,
+      campaigns: campaigns
+    };
     try {
       const res = await fetch('/api/save-step', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ step_number: stepNumber, form_data: data, user_id: userID })
+        body: JSON.stringify({ step_number: stepNumber, form_data: formDataToSave, user_id: userID })
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
