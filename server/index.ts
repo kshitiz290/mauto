@@ -184,8 +184,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log(`📝 API Documentation:`);
     console.log(`   POST /api/generate-site - Generate a new website`);
     console.log(`   GET  /api/site-status/:buildId - Check build status`);
-    console.log(`   POST /api/deploy-to-hostinger - Deploy site to Hostinger`);
-    console.log(`   POST /api/create-payment-order - Create Razorpay payment order`);
-    console.log(`   POST /api/verify-payment-and-deploy - Verify payment and deploy`);
+    // Disabled: deploy-to-hostinger, payment order, verification (external services removed)
   });
 }

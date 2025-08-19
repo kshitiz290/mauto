@@ -4,10 +4,10 @@ import express from "express";
 import cors from "cors";
 
 // Import the auto-site routes
-import { 
-  handleGenerateSite, 
-  handleSiteStatus, 
-  handleDeployToHostinger 
+import {
+  handleGenerateSite,
+  handleSiteStatus
+  // handleDeployToHostinger (disabled)
 } from "../../server/routes/auto-site";
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // Auto Site Builder API routes
 app.post("/api/generate-site", handleGenerateSite);
 app.get("/api/site-status/:buildId", handleSiteStatus);
-app.post("/api/deploy-to-hostinger", handleDeployToHostinger);
+// app.post("/api/deploy-to-hostinger", handleDeployToHostinger); // Disabled
 
 // Health check
 app.get("/api/health", (_req, res) => {
@@ -28,4 +28,4 @@ app.get("/api/health", (_req, res) => {
 });
 
 // Export the serverless handler
-export const handler: Handler = serverless(app); 
+export const handler = serverless(app); 

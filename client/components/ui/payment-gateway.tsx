@@ -35,158 +35,37 @@ export function PaymentGateway({
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'failed'>('pending');
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Load Razorpay script
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  // Payment script loading disabled for production build without Razorpay
+  useEffect(() => { /* Razorpay disabled */ }, []);
 
   const createPaymentOrder = async () => {
-    try {
-      const response = await fetch('/api/create-payment-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: amount,
-          currency: currency,
-          receipt: `receipt_${Date.now()}`,
-          notes: {
-            domain,
-            companyName,
-            email
-          }
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create payment order');
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Error creating payment order:', error);
-      throw error;
-    }
+    throw new Error('Online payment disabled.');
   };
 
-  const verifyPayment = async (paymentId: string, orderId: string, signature: string) => {
-    try {
-      console.log('Verifying payment:', { paymentId, orderId, signature });
-      
-      const response = await fetch('/api/verify-payment-and-deploy', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          paymentId,
-          orderId,
-          signature,
-          domain,
-          companyName,
-          email,
-          userPassword
-        }),
-      });
-
-      const data = await response.json();
-      
-      console.log('Payment verification response:', data);
-      
-      if (!response.ok) {
-        const errorMessage = data.error || data.details || 'Payment verification failed';
-        console.error('Payment verification failed:', errorMessage);
-        throw new Error(errorMessage);
-      }
-
-      return data;
-    } catch (error) {
-      console.error('Error verifying payment:', error);
-      throw error;
-    }
-  };
+  const verifyPayment = async () => { throw new Error('Payment verification disabled.'); };
 
   const handlePayment = async () => {
     setIsLoading(true);
     setPaymentStatus('pending');
 
     try {
-      // Create payment order
-      const orderData = await createPaymentOrder();
-
-      // Initialize Razorpay
-      const options = {
-        key: orderData.key_id,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: 'Codifye',
-        description: `Website Deployment - ${companyName}`,
-        order_id: orderData.orderId,
-        handler: async function (response: any) {
-          try {
-            setPaymentStatus('pending');
-            
-            // Verify payment
-            const verificationData = await verifyPayment(
-              response.razorpay_payment_id,
-              response.razorpay_order_id,
-              response.razorpay_signature
-            );
-
-            setPaymentStatus('success');
-            onPaymentSuccess(response.razorpay_payment_id);
-            
-            toast({
-              title: "Payment Successful!",
-              description: "Your website is being deployed now.",
-              variant: "default",
-            });
-
-          } catch (error) {
-            setPaymentStatus('failed');
-            onPaymentFailure(error instanceof Error ? error.message : 'Payment verification failed');
-            
-            toast({
-              title: "Payment Failed",
-              description: error instanceof Error ? error.message : 'Payment verification failed',
-              variant: "destructive",
-            });
-          }
-        },
-        prefill: {
-          name: companyName,
-          email: email,
-        },
-        theme: {
-          color: '#6366f1',
-        },
-        modal: {
-          ondismiss: function() {
-            setIsLoading(false);
-            setPaymentStatus('pending');
-          }
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+      // Directly trigger success flow without real payment
+      setTimeout(() => {
+        setPaymentStatus('success');
+        onPaymentSuccess('offline-payment');
+        toast({
+          title: 'Payment Skipped',
+          description: 'Payment gateway disabled in this build. Proceeding...',
+          variant: 'default'
+        });
+      }, 600);
 
     } catch (error) {
       setIsLoading(false);
       setPaymentStatus('failed');
       const errorMessage = error instanceof Error ? error.message : 'Failed to initiate payment';
       onPaymentFailure(errorMessage);
-      
+
       toast({
         title: "Payment Error",
         description: errorMessage,
@@ -260,14 +139,12 @@ export function PaymentGateway({
           ) : (
             <>
               <CreditCard className="w-4 h-4 mr-2" />
-              Pay ₹{amount.toLocaleString()}
+              Continue (No Charge)
             </>
           )}
         </Button>
 
-        <p className="text-xs text-muted-foreground text-center">
-          Secure payment powered by Razorpay
-        </p>
+        <p className="text-xs text-muted-foreground text-center">Payment gateway disabled for production hardening.</p>
       </CardContent>
     </Card>
   );

@@ -808,53 +808,26 @@ export default function AutoSite() {
 
   // In deploySite, ensure all required fields are present
   const deploySite = async () => {
+    // Hostinger deployment route disabled; simulate success using previewUrl
     setIsDeploying(true);
     setErrorMessage("");
     try {
-      const apiUrl = `${apiBase}/api/deploy-to-hostinger`;
-      const deployBody = {
-        ...formData,
-        previewUrl: previewUrl || siteUrl || "",
-        siteUrl: siteUrl || "",
-      };
-      // Check for missing required fields
-      if (!deployBody.domain || !deployBody.companyName || !deployBody.email || !deployBody.userPassword || !deployBody.siteUrl) {
-        setErrorMessage("Missing required fields");
-        setIsDeploying(false);
+      const simulatedUrl = previewUrl || siteUrl || (formData.domain.startsWith('http') ? formData.domain : `https://${formData.domain}`);
+      if (!isValidUrl(simulatedUrl)) {
+        setErrorMessage('Cannot determine site URL for deployment simulation.');
         return;
       }
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(deployBody),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        if (data.deployedUrl && isValidUrl(data.deployedUrl)) {
-          setDeployedUrl(data.deployedUrl);
-          setSiteUrl(data.deployedUrl); // Always use the deployedUrl for preview/visit
-          setPreviewUrl(data.deployedUrl); // Make previewUrl same as deployedUrl
-          localStorage.setItem("autoSiteDeployedUrl", data.deployedUrl);
-          localStorage.setItem("autoSiteSiteUrl", data.deployedUrl);
-          localStorage.setItem("autoSitePreviewUrl", data.deployedUrl);
-          setErrorMessage("");
-          nextStep();
-          localStorage.removeItem("autoSiteCurrentStep");
-          localStorage.removeItem("autoSiteFormData");
-        } else {
-          setDeployedUrl("");
-          setErrorMessage(data.error || "Deployment failed. Please try again.");
-        }
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        setDeployedUrl("");
-        setErrorMessage(errorData.error || "Failed to deploy site");
-      }
-    } catch (error) {
-      setDeployedUrl("");
-      setErrorMessage("Error deploying site. Please try again.");
+      setTimeout(() => {
+        setDeployedUrl(simulatedUrl);
+        setSiteUrl(simulatedUrl);
+        setPreviewUrl(simulatedUrl);
+        localStorage.setItem('autoSiteDeployedUrl', simulatedUrl);
+        localStorage.setItem('autoSiteSiteUrl', simulatedUrl);
+        localStorage.setItem('autoSitePreviewUrl', simulatedUrl);
+        nextStep();
+        localStorage.removeItem('autoSiteCurrentStep');
+        localStorage.removeItem('autoSiteFormData');
+      }, 600);
     } finally {
       setIsDeploying(false);
     }
@@ -1806,7 +1779,7 @@ export default function AutoSite() {
             }
           }
           const baseUrl = window.location.origin;
-          window.open(`${baseUrl}/${companyId}`, '_blank');
+          window.open(`${baseUrl}/${host}`, '_blank');
 
           // const url = `http://localhost:3000/${host}`;
           // window.open(url, '_blank');

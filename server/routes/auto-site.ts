@@ -176,10 +176,11 @@ declare global {
   }
 }
 dotenv.config();
-import Groq from "groq-sdk";
+// Disabled external AI and payment SDK imports for production hardening
+// import Groq from "groq-sdk"; // Groq usage disabled
 import fetch from "node-fetch";
-import Razorpay from "razorpay";
-import crypto from "crypto";
+// import Razorpay from "razorpay"; // Razorpay usage disabled
+import crypto from "crypto"; // Retained for potential internal hashing (payment logic disabled)
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -235,11 +236,11 @@ db.connect((err) => {
   console.log('Connected to MySQL Database: mauto');
 });
 
-// Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_YOUR_KEY_ID",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "YOUR_KEY_SECRET"
-});
+// Razorpay initialization disabled
+// const razorpay = new Razorpay({
+//   key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_YOUR_KEY_ID",
+//   key_secret: process.env.RAZORPAY_KEY_SECRET || "YOUR_KEY_SECRET"
+// });
 
 interface SiteGenerationRequest {
   hasDomain: boolean;
@@ -294,15 +295,13 @@ interface PaymentVerificationRequest {
 
 // In-memory storage for demo purposes
 const siteBuilds = new Map<string, SiteStatus>();
-const paymentOrders = new Map<string, any>();
+// const paymentOrders = new Map<string, any>(); // Payment feature disabled
 
-// Set your multisite base domain here:
-const MULTISITE_BASE_DOMAIN = "master1.lightlysites.com";
-
-function getFullSiteUrl(domain: string) {
-  // Always use subdirectory structure
-  return `${process.env.WP_URL.replace(/\/$/, '')}/${domain.replace(/^\//, '')}`;
-}
+// Multisite / WordPress integration disabled
+// const MULTISITE_BASE_DOMAIN = "master1.lightlysites.com";
+// function getFullSiteUrl(domain: string) {
+//   return `${process.env.WP_URL.replace(/\/$/, '')}/${domain.replace(/^\//, '')}`;
+// }
 
 // Multer setup for logo uploads
 const uploadDir = path.join(process.cwd(), "uploads");
@@ -918,23 +917,15 @@ export const handleTimesEdited = async (req: Request, res: Response) => {
 
 // Helper function to clean AI response
 function cleanAIResponse(content: string): string {
-  // Log the original content for debugging
-  console.log("Original AI content:", content.substring(0, 200) + "...");
-
+  // AI response cleaning retained (AI generation currently disabled)
   return content
-    // Remove any leading/trailing whitespace and non-printable characters
     .trim()
-    // Remove any leading characters that aren't part of JSON
     .replace(/^[^{]*/, '')
-    // Remove any trailing characters that aren't part of JSON
     .replace(/[^}]*$/, '')
-    // Remove or replace control characters that break JSON
-    .replace(/[\x00-\x1F\x7F]/g, '') // Remove control characters
-    .replace(/\r\n/g, '\n') // Normalize line endings
-    .replace(/\r/g, '\n') // Convert carriage returns to newlines
-    // Remove any trailing commas in objects/arrays
+    .replace(/[\x00-\x1F\x7F]/g, '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
     .replace(/,(\s*[}\]])/g, '$1')
-    // Ensure the JSON starts and ends properly
     .replace(/^[^{]*/, '')
     .replace(/[^}]*$/, '')
     .trim();
@@ -942,23 +933,7 @@ function cleanAIResponse(content: string): string {
 
 // More robust JSON extraction function
 function extractJSONFromText(text: string): any {
-  try {
-    console.log("Attempting to extract JSON from text...");
-
-    // Try to find JSON object boundaries
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      const jsonStr = jsonMatch[0];
-      console.log("Found potential JSON:", jsonStr.substring(0, 200) + "...");
-      // Clean and parse
-      const cleaned = cleanAIResponse(jsonStr);
-      console.log("Cleaned JSON:", cleaned.substring(0, 200) + "...");
-      return JSON.parse(cleaned);
-    }
-    console.log("No JSON object found in text");
-  } catch (error) {
-    console.error("Failed to extract JSON:", error);
-  }
+  // AI extraction disabled; return null to indicate no AI parsing
   return null;
 }
 

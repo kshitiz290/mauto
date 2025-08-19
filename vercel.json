@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/:host*",
+      "destination": "https://template-fmcg.vercel.app/:host*"
+    }
+  ]
+}
