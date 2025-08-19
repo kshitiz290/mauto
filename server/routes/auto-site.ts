@@ -200,12 +200,32 @@ function parseMysqlUrl(url) {
     database: m[5]
   };
 }
+// Local development connection (kept for future localhost testing)
+// export const db = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '',
+//   database: 'mauto'
+// });
+
+// Deployment / Railway connection
+const MYSQL_URL = process.env.MYSQL_URL;
+let resolvedConfig: any;
+try {
+  resolvedConfig = parseMysqlUrl(MYSQL_URL);
+} catch (e) {
+  console.error('[DB] Invalid MYSQL_URL format, falling back to localhost. Error:', (e as Error).message);
+  resolvedConfig = { host: 'localhost', user: 'root', password: '', port: 3306, database: 'mauto' };
+}
+
 export const db = mysql.createConnection({
-  host: 'localhost',         // or 127.0.0.1
-  user: 'root',              // your MySQL username
-  password: '',              // your MySQL password
-  database: 'mauto'          // the database name shown in your screenshot
+  host: resolvedConfig.host,
+  user: resolvedConfig.user,
+  password: resolvedConfig.password,
+  port: resolvedConfig.port,
+  database: resolvedConfig.database
 });
+
 
 db.connect((err) => {
   if (err) {
