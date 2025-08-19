@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build:production",
+  "buildCommand": "tsc -p tsconfig.api.json && npm run build:production",
   "outputDirectory": "build",
   "functions": {
     "api/index.ts": {

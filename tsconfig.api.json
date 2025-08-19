@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "outDir": "dist-api",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": false
+    },
+    "include": [
+        "api/**/*",
+        "server/routes/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
