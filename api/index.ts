@@ -178,10 +178,18 @@ app.post('/api/save-step', isAuth, async (req, res) => {
     const userId = (req.user as any)?.id;
     const { step_number, form_data } = req.body || {};
     if (typeof step_number !== 'number' || form_data == null) return res.status(400).json({ error: 'Missing or invalid data' });
+    if (!userId) {
+        console.warn('[save-step] no userId on request sessionId=', (req as any).sessionID);
+        return res.status(401).json({ error: 'Not authenticated' });
+    }
+    console.log('[save-step] userId=%s step=%s', userId, step_number);
     try {
         await db.promise().query(`INSERT INTO user_form_progress (user_id, step_number, form_data) VALUES (?,?,?) ON DUPLICATE KEY UPDATE step_number=VALUES(step_number), form_data=VALUES(form_data)`, [userId, step_number, JSON.stringify(form_data)]);
         res.json({ success: true });
-    } catch { res.status(500).json({ error: 'DB error' }); }
+    } catch (e) {
+        console.error('[save-step] DB error', e);
+        res.status(500).json({ error: 'DB error' });
+    }
 });
 app.get('/api/load-form', isAuth, async (req, res) => {
     const userId = (req.user as any)?.id;

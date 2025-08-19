@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "tsc -p tsconfig.api.json && npm run build:production",
+  "buildCommand": "npm run build:production",
   "outputDirectory": "build",
   "functions": {
     "api/index.ts": {
@@ -10,7 +10,7 @@
   },
   "rewrites": [
     {
-      "source": "/:host([^/]*\\.[^/]*)",
+      "source": "/:host([^/]*\\.[^/]*)(/.*)?",
       "destination": "https://template-fmcg.vercel.app/:host"
     },
     {
