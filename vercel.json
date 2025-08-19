@@ -12,16 +12,14 @@
     {
       "source": "/:host([^/]*\\.[^/]*)",
       "destination": "https://template-fmcg.vercel.app/:host"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/.*",
-      "dest": "/api/index.ts"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/api/(.*)",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/((?!api/|_next/|assets/|uploads/|.*\\..*).*)",
+      "destination": "/index.html"
     }
   ]
 }
