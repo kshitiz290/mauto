@@ -134,8 +134,8 @@
       "destination": "/index.html"
     },
     {
-      "source": "/api/user-site",
-      "destination": "https://template-apis.vercel.app/api/user-site"
+      "source": "/:host([^/]+)/api/(.*)",
+      "destination": "https://template-fmcg.vercel.app/api/$2"
     },
     {
       "source": "/:host([^/]+)",
