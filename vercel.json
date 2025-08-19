@@ -138,6 +138,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/uploads/:path(.*)",
+      "destination": "/uploads/:path"
+    },
+    {
       "source": "/:host([^/]+)",
       "destination": "https://template-fmcg.vercel.app/:host"
     },
