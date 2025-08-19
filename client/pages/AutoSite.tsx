@@ -600,15 +600,9 @@ export default function AutoSite() {
 
   const saveStep = async (stepNumber, data) => {
     const userID = localStorage.getItem('userID');
-    console.log('[saveStep] invoked step=%s userID=%s', stepNumber, userID);
-    try {
-      const me = await fetch('/api/me', { credentials: 'include' }).then(r => r.json()).catch(() => ({ authenticated: false }));
-      if (!me.authenticated) {
-        console.warn('[saveStep] user not authenticated; skipping remote persist');
-        return;
-      }
-    } catch (err) {
-      console.warn('[saveStep] auth probe failed', err);
+    if (!userID) {
+      console.warn('[saveStep] missing userID; aborting');
+      return;
     }
     try {
       const res = await fetch('/api/save-step', {
@@ -620,8 +614,6 @@ export default function AutoSite() {
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
         console.warn('[saveStep] server rejected', res.status, j);
-      } else {
-        console.log('[saveStep] persisted step', stepNumber);
       }
     } catch (e) {
       console.warn('[saveStep] network error', e);
