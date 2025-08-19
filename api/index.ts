@@ -46,6 +46,15 @@ const app = express();
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
+// Serve existing repo-seeded uploads (read-only) and dynamic tmp uploads via unified handler
+app.get('/uploads/*', (req, res) => {
+    const rel = req.path.replace(/^\/uploads\//, '');
+    const repoPath = path.join(process.cwd(), 'uploads', rel);
+    const tmpPath = path.join('/tmp/uploads', rel);
+    if (fs.existsSync(tmpPath)) return res.sendFile(tmpPath);
+    if (fs.existsSync(repoPath)) return res.sendFile(repoPath);
+    res.status(404).json({ error: 'File not found' });
+});
 // Production session store (falls back to MemoryStore if DB unavailable)
 let MySQLStore: any;
 try { MySQLStore = (MySQLStoreImport as any)(session); } catch { /* ignore */ }

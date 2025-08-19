@@ -139,7 +139,7 @@
     },
     {
       "source": "/uploads/:path(.*)",
-      "destination": "/uploads/:path"
+      "destination": "/api/index.ts"
     },
     {
       "source": "/:host([^/]+)",
