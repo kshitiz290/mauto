@@ -12,7 +12,7 @@ import {
   getBusinessSectors
 } from "./routes/auto-site";
 import passport from "passport";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { db } from "./routes/auto-site";
 import { formProgressRouter } from './routes/auto-site';
 
