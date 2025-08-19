@@ -64,6 +64,7 @@ export default function Signup() {
             const res = await apiFetch(`${apiBase}/api/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ email, contact_no: contactNo, password, login_id: loginId })
             });
             const data = await res.json();
@@ -73,7 +74,7 @@ export default function Signup() {
                     description: 'You can now login and start building your site.',
                     variant: 'default',
                 });
-                localStorage.setItem('userID', data.user.id);
+                if (data.user?.id) localStorage.setItem('userID', data.user.id);
                 setTimeout(() => {
                     window.location.href = '/login';
                 }, 1200);

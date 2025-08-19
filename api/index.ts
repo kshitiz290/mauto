@@ -196,17 +196,18 @@ app.get('/api/business-sectors', async (_req, res) => {
 
 // Form progress routes
 app.post('/api/save-step', isAuth, async (req, res) => {
-    const userId = (req.user as any)?.id;
-    const { step_number, form_data } = req.body || {};
+    const sessionUserId = (req.user as any)?.id;
+    const { step_number, form_data, user_id } = req.body || {};
+    console.log('[save-step] body=', req.body, 'sessionUserId=', sessionUserId, 'sessionID=', (req as any).sessionID);
     if (typeof step_number !== 'number' || form_data == null) return res.status(400).json({ error: 'Missing or invalid data' });
-    if (!userId) {
-        console.warn('[save-step] no userId on request sessionId=', (req as any).sessionID);
+    const effectiveUserId = sessionUserId || user_id; // fallback for debugging if session user not attached
+    if (!effectiveUserId) {
+        console.warn('[save-step] no effective user id');
         return res.status(401).json({ error: 'Not authenticated' });
     }
-    console.log('[save-step] userId=%s step=%s', userId, step_number);
     try {
-        await db.promise().query(`INSERT INTO user_form_progress (user_id, step_number, form_data) VALUES (?,?,?) ON DUPLICATE KEY UPDATE step_number=VALUES(step_number), form_data=VALUES(form_data)`, [userId, step_number, JSON.stringify(form_data)]);
-        res.json({ success: true });
+        await db.promise().query(`INSERT INTO user_form_progress (user_id, step_number, form_data) VALUES (?,?,?) ON DUPLICATE KEY UPDATE step_number=VALUES(step_number), form_data=VALUES(form_data)`, [effectiveUserId, step_number, JSON.stringify(form_data)]);
+        res.json({ success: true, user_id: effectiveUserId });
     } catch (e) {
         console.error('[save-step] DB error', e);
         res.status(500).json({ error: 'DB error' });

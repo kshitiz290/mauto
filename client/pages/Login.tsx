@@ -27,13 +27,18 @@ export default function Login() {
             const res = await fetch(`${apiBase}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ email, password })
             });
             const data = await res.json();
             if (res.ok && data.success) {
                 // toast({ title: 'Login Successful', description: 'Welcome!', variant: 'success' });
-                localStorage.setItem('manacle_session', 'true'); // Remove localStorage
-                window.location.href = '/auto-site'; // Redirect to home
+                localStorage.setItem('manacle_session', 'true');
+                try {
+                    const me = await fetch('/api/me', { credentials: 'include' }).then(r => r.json()).catch(() => null);
+                    if (me?.user?.id) localStorage.setItem('userID', me.user.id);
+                } catch { }
+                window.location.href = '/auto-site';
                 // try {
                 //     const progressRes = await fetch("/api/load-form", { credentials: "include" });
                 //     if (!progressRes.ok) throw new Error("Could not load form progress");
