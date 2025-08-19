@@ -2,6 +2,8 @@
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
+// @ts-ignore - type defs may not include default export style
+import MySQLStoreImport from 'express-mysql-session';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcryptjs';
@@ -18,14 +20,56 @@ function parseMysqlUrl(url?: string) {
 }
 let dbConfig;
 try { dbConfig = parseMysqlUrl(process.env.MYSQL_URL); } catch { dbConfig = { host:'localhost', user:'root', password:'', port:3306, database:'mauto' }; }
-const db = mysql.createConnection(dbConfig);
-db.connect(err => { if (err) console.error('[DB] connect error', err.message); else console.log('[DB] connected'); });
+// Create a basic pool for improved resilience & timeouts
+const pool = mysql.createPool({
+	...dbConfig,
+	waitForConnections: true,
+	connectionLimit: 5,
+	queueLimit: 0,
+	connectTimeout: 8000 // ms
+});
+
+// Helper to run queries via pool.promise()
+const db = pool; // keep variable name for minimal downstream changes
+
+pool.getConnection((err, conn) => {
+	if (err) {
+		console.error('[DB] initial pool error', err.code || err.message);
+	} else {
+		console.log('[DB] pool ready');
+		conn.release();
+	}
+});
 
 const app = express();
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret: 'temp_secret', resave: false, saveUninitialized: false, cookie: { maxAge: 86400000, sameSite: 'lax' } }));
+// Production session store (falls back to MemoryStore if DB unavailable)
+let MySQLStore: any;
+try { MySQLStore = (MySQLStoreImport as any)(session); } catch { /* ignore */ }
+let sessionStore: any;
+if (MySQLStore) {
+	try {
+		sessionStore = new MySQLStore({
+			...dbConfig,
+			createDatabaseTable: true,
+			expiration: 86400000,
+			clearExpired: true
+		});
+	} catch (e) { console.warn('[Session] MySQLStore init failed, using MemoryStore', (e as any)?.message); }
+}
+app.use(session({
+	secret: process.env.SESSION_SECRET || 'change_me',
+	resave: false,
+	saveUninitialized: false,
+	store: sessionStore,
+	cookie: {
+		maxAge: 86400000,
+		sameSite: 'lax',
+		secure: process.env.NODE_ENV === 'production'
+	}
+}));
 
 passport.use(new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, async (email, password, done) => {
 	try {
