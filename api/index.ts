@@ -120,6 +120,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Helper: always return an https absolute URL for stored assets
+function toHttpsAbsolute(p: string | undefined | null, req: express.Request): string {
+    if (!p) return '';
+    // If already absolute http/https
+    if (/^https?:\/\//i.test(p)) {
+        return p.startsWith('https://') ? p.replace(/^[Hh][Tt][Tt][Pp]:\/\//, 'https://') : p;
+    }
+    if (!p.startsWith('/')) p = '/' + p;
+    // host header may include port in dev; still fine
+    return `https://${req.headers.host}${p}`;
+}
+
 // ---------------- Consolidated FULL Logic Routes ----------------
 // Ping
 app.get('/api/ping', (_req, res) => res.json({ ok: true }));
@@ -242,11 +254,7 @@ app.post('/api/company-details', async (req, res) => {
         if (!data.companyName || !data.email || !data.phone || !data.domain || !data.businessSector || !data.location) {
             return res.status(400).json({ error: 'Missing required fields: companyName, email, phone, domain, businessSector, address' });
         }
-        let logoPathAbs = data.logoPath || '';
-        if (logoPathAbs && !logoPathAbs.startsWith('http')) {
-            const base = (process.env.BASE_URL || '').replace(/\/$/, '');
-            if (base) { if (!logoPathAbs.startsWith('/')) logoPathAbs = '/' + logoPathAbs; logoPathAbs = base + logoPathAbs; }
-        }
+        let logoPathAbs = toHttpsAbsolute(data.logoPath, req);
         const [companyRows] = await db.promise().query('SELECT id FROM company_mast WHERE user_id = ? LIMIT 1', [user_id]);
         let companyId: any;
         if (Array.isArray(companyRows) && (companyRows as any[]).length > 0) {
@@ -288,14 +296,7 @@ app.post('/api/generate-site', async (req, res) => {
         if (!companyId || isNaN(Number(companyId))) return res.status(400).json({ error: 'Invalid or missing company_id. Please save company details first.' });
         const [companyRows] = await db.promise().query('SELECT id FROM company_mast WHERE id = ? LIMIT 1', [companyId]);
         if (!Array.isArray(companyRows) || (companyRows as any[]).length === 0) return res.status(400).json({ error: 'Company not found. Please save company details first.' });
-        function absPath(p: string) {
-            if (!p) return '';
-            if (p.startsWith('http')) return p;
-            const base = (process.env.BASE_URL || '').replace(/\/$/, '');
-            if (!base) return p;
-            if (!p.startsWith('/')) p = '/' + p;
-            return base + p;
-        }
+        const absPath = (p: string) => toHttpsAbsolute(p, req);
         const [homeRows] = await db.promise().query('SELECT id FROM home WHERE company_id = ? LIMIT 1', [companyId]);
         if (Array.isArray(homeRows) && (homeRows as any[]).length > 0) {
             const homeUpdate = `UPDATE home SET heading=?, heading_desc=?, banner_path=?, photo_1=?, photo_2=?, photo_3=?, photo_4=? WHERE company_id = ?`;
@@ -378,7 +379,8 @@ app.post('/api/upload-logo', (req, res, next) => {
         const fileObj = (files.image?.[0]) || (files.logo?.[0]);
         if (!fileObj) return res.status(400).json({ error: 'No file uploaded' });
         const rel = folder ? `/uploads/${folder}/${fileObj.filename}` : `/uploads/${fileObj.filename}`;
-        res.json({ path: rel });
+        const url = toHttpsAbsolute(rel, req);
+        res.json({ path: rel, url });
     });
 });
 
