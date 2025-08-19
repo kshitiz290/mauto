@@ -407,10 +407,14 @@ export const handleSaveCompanyDetails = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Missing required fields: companyName, email, phone, domain, businessSector, address" });
     }
 
-    // Convert logoPath to absolute path if present
+    // Build logo path: absolute if BASE_URL present, else keep relative
     let logoPathAbs = data.logoPath || '';
     if (logoPathAbs && !logoPathAbs.startsWith('http')) {
-      logoPathAbs = `${process.env.BASE_URL || 'http://localhost:8080'}${logoPathAbs}`;
+      const base = (process.env.BASE_URL || '').replace(/\/$/, '');
+      if (base) {
+        if (!logoPathAbs.startsWith('/')) logoPathAbs = '/' + logoPathAbs;
+        logoPathAbs = base + logoPathAbs;
+      }
     }
 
     // Check if company exists for this user
@@ -507,7 +511,10 @@ export const handleGenerateSite = async (req: Request, res: Response) => {
     function absPath(p) {
       if (!p) return '';
       if (p.startsWith('http')) return p;
-      return `${process.env.BASE_URL || 'http://localhost:8080'}${p} `;
+      const base = (process.env.BASE_URL || '').replace(/\/$/, '');
+      if (!base) return p; // No BASE_URL provided: keep relative
+      if (!p.startsWith('/')) p = '/' + p;
+      return base + p;
     }
     // 1. Save or update Home Page Content
     const [homeRows] = await db.promise().query('SELECT id FROM home WHERE company_id = ? LIMIT 1', [companyId]);

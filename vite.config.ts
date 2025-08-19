@@ -1,7 +1,7 @@
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { createServer } from "./server";
+// Removed eager import of server (caused DB connect at build time). We'll lazy-load in dev plugin.
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -20,13 +20,25 @@ export default defineConfig(({ mode }) => ({
     minify: "esbuild",
     target: "es2015",
     rollupOptions: {
+      onwarn(warning, warn) {
+        if (typeof warning.message === 'string' && warning.message.includes('Error when using sourcemap for reporting an error')) {
+          return; // suppress specific sourcemap location warning
+        }
+        warn(warning);
+      },
       output: {
         manualChunks: {
-          vendor: ["react", "react-dom"],
-          ui: ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu"],
+          react: ["react", "react-dom"],
+          router: ["react-router-dom"],
+          // animation libs
+          motion: ["framer-motion"],
+          radix: ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu"],
+          query: ["@tanstack/react-query"],
         },
       },
     },
+    // Allow a few more chunks before warning once split; still keep default near 500.
+    chunkSizeWarningLimit: 700,
     assetsDir: "assets",
     copyPublicDir: true,
   },
@@ -46,11 +58,10 @@ function expressPlugin(): Plugin {
   return {
     name: "express-plugin",
     apply: "serve", // Only apply during development (serve mode)
-    configureServer(server) {
+    async configureServer(server) {
+      const { createServer } = await import('./server');
       const app = createServer();
-
-      // Add Express app as middleware to Vite dev server
-      server.middlewares.use(app);
+      server.middlewares.use(app); // Attach Express
     },
   };
 }

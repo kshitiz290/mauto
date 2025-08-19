@@ -1,4 +1,4 @@
-"use client";
+// client component (directive removed to avoid sourcemap warning)
 
 import { useEffect, useState, useRef } from "react";
 
@@ -41,7 +41,7 @@ function AnimatedCounter({ end, duration = 2000, suffix = "", color, label }: Co
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-      
+
       // Easing function for smooth animation
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       setCount(Math.floor(easeOutQuart * end));
@@ -217,9 +217,9 @@ export function WhyChooseUs() {
           <div className="inline-block group relative">
             <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl blur-sm group-hover:blur-md transition-all duration-500 opacity-70 group-hover:opacity-100"></div>
             <a href="/contact-us">
-            <button className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-1">
-               START FREE TRIAL
-            </button>
+              <button className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-1">
+                START FREE TRIAL
+              </button>
             </a>
           </div>
         </div>
