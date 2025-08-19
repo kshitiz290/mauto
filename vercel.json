@@ -134,8 +134,8 @@
       "destination": "/index.html"
     },
     {
-      "source": "/:host([^/]+)/api",
-      "destination": "/api/index.js"
+      "source": "/:host([^/]+)/api(.*)",
+      "destination": "server/index.js"
     },
     {
       "source": "/:host([^/]+)/api/:endpoint(.*)",
