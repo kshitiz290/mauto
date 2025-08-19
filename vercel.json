@@ -9,17 +9,9 @@
     }
   },
   "rewrites": [
-    {
-      "source": "/:host([^/]*\\.[^/]*)(/.*)?",
-      "destination": "https://template-fmcg.vercel.app/:host"
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.ts"
-    },
-    {
-      "source": "/((?!api/|_next/|assets/|uploads/|.*\\..*).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/:host([^/]+)", "destination": "https://template-fmcg.vercel.app/:host" },
+    { "source": "/:host([^/]+)/:path(.*)", "destination": "https://template-fmcg.vercel.app/:host/:path" },
+    { "source": "/api/(.*)", "destination": "/api/index.ts" },
+    { "source": "/((?!api/|_next/|assets/|uploads/|.*\\..*).*)", "destination": "/index.html" }
   ]
 }
