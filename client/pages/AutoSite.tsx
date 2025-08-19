@@ -557,7 +557,21 @@ export default function AutoSite() {
     if (savedCompanyId && !isNaN(Number(savedCompanyId))) {
       setCompanyId(Number(savedCompanyId));
     }
-    fetch("/api/load-form", { credentials: "include" })
+    const userID = localStorage.getItem('userID');
+    if (!userID) {
+      // If user not identified yet, initialize defaults and exit
+      setCurrentStep(0);
+      setFormData(defaultFormData);
+      setCompanyId(0);
+      localStorage.removeItem("autoSiteCompanyId");
+      return;
+    }
+    fetch(`/api/load-form`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: "include",
+      body: JSON.stringify({ user_id: userID })
+    })
       .then(res => res.json())
       .then(data => {
         setCurrentStep(data.step_number || 0);
