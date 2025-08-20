@@ -37,7 +37,7 @@ const WeFocusQuality = () => {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="max-w-6xl mx-auto px-4 py-16 md:py-24"
     >
-      <h2 className="text-3xl md:text-4xl font-bold mb-6 text-left md:text-center leading-[1.25] md:leading-[1.3]"
+      <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center leading-[1.25] md:leading-[1.3]"
         style={{ background: 'linear-gradient(90deg, #FF9800 40%, #B721FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
       >
         We focus on quality, never focus on quantity
@@ -47,11 +47,11 @@ const WeFocusQuality = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.7, delay: 0.2 }}
-        className="text-lg text-foreground/80 mb-10 text-left md:text-center max-w-3xl mx-auto"
+        className="text-lg text-foreground/80 mb-10 text-center max-w-3xl mx-auto"
       >
         Our integrated product ecosystem empowers businesses to expand market share, accelerate revenue growth, and maximize profitability.
       </motion.p>
-      <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 r">
+      <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center r">
         {[
           {
             label: 'Years within Industry', value: 15,

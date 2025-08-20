@@ -277,7 +277,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
               {/* Heading and tagline inline */}
               <div className="flex flex-col justify-center">
                 <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-black bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent tracking-wider leading-tight">
-                  MANACLE
+                  MANACLE TECH.
                 </span>
                 <span className="text-xs md:text-sm lg:text-sm xl:text-base text-foreground/60 font-medium leading-tight">
                   A bond to deliver Success

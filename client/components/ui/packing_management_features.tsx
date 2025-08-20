@@ -42,7 +42,7 @@ const PackingManagementFeatures = () => (
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7 }}
-                className="text-3xl md:text-4xl font-extrabold text-left md:text-center mb-2 leading-tight"
+                className="text-3xl md:text-4xl font-extrabold text-center mb-2 leading-tight"
             >
                 <span className="bg-gradient-to-r from-orange-500 via-yellow-500 to-pink-500 bg-clip-text text-transparent leading-[1.25] md:leading-[1.3]">
                     Packing Management Solution
