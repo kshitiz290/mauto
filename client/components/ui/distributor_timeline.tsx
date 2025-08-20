@@ -4,7 +4,7 @@ const steps = [
     {
         title: 'Centralized Distributor Portal',
         desc: 'Manage all distributor interactions and performance in one place.',
-        img: 'solutions/portal.jpg'
+        img: 'https://img.freepik.com/premium-photo/business-man-holding-tablet-with-franchise-icon_218381-6864.jpg?w=740'
     },
     {
         title: 'Order & Invoice Automation',
@@ -14,22 +14,22 @@ const steps = [
     {
         title: 'Inventory & Stock Tracking',
         desc: 'Real-time visibility into stock levels and product movement.',
-        img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/free-photo/medium-shot-man-holding-device_23-2149214309.jpg?t=st=1755718958~exp=1755722558~hmac=9ef58a2ad81832709ec809831fecb0e263aa7d1269759cee57468ac3d8447fb4&w=740'
     },
     {
         title: 'Sales Target & Incentive Management',
         desc: 'Monitor targets, schemes, and distributor rewards efficiently.',
-        img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/free-vector/business-people-setting-company-target_1262-20615.jpg?t=st=1755718390~exp=1755721990~hmac=aef55b90b8a07ac85d5255fd104fe806bfb48cad1ea3f8691aceb331513bd44c&w=740'
     },
     {
         title: 'Geo-tagged Order Booking',
         desc: 'Ensure authenticity and location tracking of orders.',
-        img: 'https://images.unsplash.com/photo-1515168833906-d2a3b82b1e2e?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/premium-vector/online-shopping-concept-vector-cartoon-people-with-gadgets-online-store-illustration-online-shopping-store-website-shop_80590-8753.jpg?w=740'
     },
     {
         title: 'Analytics & Reports',
         desc: 'Actionable insights on distributor performance, revenue, and stock trends.',
-        img: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/free-vector/stock-market-analysis-with-chart_23-2148584739.jpg?t=st=1755718583~exp=1755722183~hmac=abaf6104c3a7ed492b01134f48e251e9dd3c3d78a38a781da06a2ee10b7e9f14&w=740'
     }
 ];
 

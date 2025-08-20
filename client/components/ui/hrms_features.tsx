@@ -27,7 +27,7 @@ const features = [
             "Timesheet Management.",
             "Reporting and Analytics."
         ],
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+        image: "https://img.freepik.com/free-vector/people-calendar-time-management-concept_23-2148822826.jpg?t=st=1755719363~exp=1755722963~hmac=30818bf9725b8645c8a103558bc8b3f25bd1e663cff82fbb487f2e40b59474ba&w=740"
     },
     {
         title: "Recruitment & Onboarding",
@@ -41,7 +41,7 @@ const features = [
             "Timesheet Management.",
             "Reporting and Analytics."
         ],
-        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80"
+        image: "https://img.freepik.com/free-vector/flat-employment-agency-search-new-employees-hire_88138-802.jpg?t=st=1755719418~exp=1755723018~hmac=aeb543a00d4a55ea2f7a1bb3160f84153617fa0aff8923ddca384b8d3ef4bac8&w=740"
     },
     {
         title: "Payroll Management",
@@ -55,7 +55,7 @@ const features = [
             "Tax Filing & Reporting.",
             "Payroll Disbursement."
         ],
-        image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
+        image: "https://img.freepik.com/premium-vector/salary-payroll-system-vector-illustration_108061-2093.jpg?w=740"
     },
     {
         title: "Automate Processes for Efficiency",
@@ -67,7 +67,7 @@ const features = [
             "Drive Productivity with Process Automation.",
             "Transform Workflows with Intelligent Automation."
         ],
-        image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80"
+        image: "https://img.freepik.com/free-vector/cartoon-man-robot-sitting-laptops-workplace-together_74855-20052.jpg?t=st=1755719567~exp=1755723167~hmac=26446866b35972528683781864082c2d80e9c24ae885737187a1fc25c664f34f&w=740"
     },
     {
         title: "Training & Development",
@@ -81,7 +81,7 @@ const features = [
             "Development Initiatives Leadership.",
             "Learning Methods: e-Learning, Workshops."
         ],
-        image: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=400&q=80"
+        image: "https://img.freepik.com/free-vector/coach-speaking-before-audience-mentor-presenting-charts-reports-employees-meeting-business-training-seminar-conference-vector-illustration-presentation-lecture-education_74855-8294.jpg?t=st=1755719614~exp=1755723214~hmac=a099604e77a6d80d04dfce4f760b62e2395cfb8d9ddb2cba5ebdaee0c55c2be2&w=740"
     }
 ];
 

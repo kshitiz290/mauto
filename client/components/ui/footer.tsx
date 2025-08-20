@@ -9,7 +9,7 @@ export default function Footer() {
                         <div className="flex items-center mb-4 group">
                             <div className="flex flex-col">
                                 <h3 className="text-3xl font-bold bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent">
-                                    Manacle
+                                    Manacle Technologies
                                 </h3>
                                 <span className="text-sm text-foreground/60 font-medium -mt-1">A bond to deliver Success</span>
                             </div>
@@ -69,9 +69,10 @@ export default function Footer() {
                                 </a>
                             </li>
                             <li>
-                                <a href="https://maps.google.com/?q=India" target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-primary hover:underline transition-all duration-300 break-all">
+                                <a href="https://maps.app.goo.gl/EBSUNvyE5Ca69yuj9" target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-primary hover:underline transition-all duration-300 break-all">
                                     <MapPin className="w-5 h-5 mr-2 flex-shrink-0" />
-                                    <span>Location: India</span>
+                                    <span>Location: E-71, 4th floor, Sector-6, Noida
+                                        Uttar-Pradesh 201301</span>
                                 </a>
                             </li>
                         </ul>

@@ -106,25 +106,25 @@ export function WhyChooseUs() {
         {/* Stats Counter Section */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20 items-stretch">
           <AnimatedCounter
-            end={10}
+            end={15}
             suffix="+"
             color="from-orange-500/20 to-yellow-500/20 from-orange-500 to-yellow-500"
             label="Years within Industry"
           />
           <AnimatedCounter
-            end={500}
+            end={200}
             suffix="+"
             color="from-blue-500/20 to-cyan-500/20 from-blue-500 to-cyan-500"
             label="Happy Customers"
           />
           <AnimatedCounter
-            end={1000}
+            end={2000}
             suffix="+"
             color="from-purple-500/20 to-pink-500/20 from-purple-500 to-pink-500"
             label="Distributors Onboard"
           />
           <AnimatedCounter
-            end={5000}
+            end={10000}
             suffix="+"
             color="from-green-500/20 to-emerald-500/20 from-green-500 to-emerald-500"
             label="Active Salespeople"

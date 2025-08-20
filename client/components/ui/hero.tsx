@@ -24,7 +24,7 @@ export function Hero() {
         <div className="max-w-4xl mx-auto">
           {/* Main Heading */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2">
-            <span className="gradient-text text-orange-500 lg:text-5xl sm:text-4xl">MANACLE</span>
+            <span className="gradient-text text-orange-500 lg:text-5xl sm:text-4xl">Manacle Technologies</span>
             <span className="block mt-1 sm:mt-2">Empowering FMCG & Enterprises</span>
           </h1>
 

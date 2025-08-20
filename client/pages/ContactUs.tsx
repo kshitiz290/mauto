@@ -154,9 +154,11 @@ export function ContactUs() {
       <style>{`
         html, body, #root { overflow-x: hidden !important; }
         body { position: relative; }
-        * { box-sizing: border-box; }
-        .contact-us-page-wrapper, .contact-us-page-wrapper * { max-width: 100%; }
-        .contact-us-page-wrapper img, .contact-us-page-wrapper iframe { max-width: 100%; height: auto; }
+      * { box-sizing: border-box; }
+      /* Removed the overly broad max-width rule that forced all descendants to full width
+        (was collapsing the header dropdown & stretching desktop layout). */
+      .contact-us-page-wrapper img,
+      .contact-us-page-wrapper iframe { max-width: 100%; height: auto; }
       `}</style>
       <div className="contact-us-page-wrapper min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden w-full">
         <Header />
@@ -284,12 +286,8 @@ export function ContactUs() {
                     </div>
                     <div className="space-y-4 text-base">
                       <div className="flex justify-between">
-                        <span className="text-foreground font-bold">Monday - Friday</span>
+                        <span className="text-foreground font-bold">Monday - Saturday</span>
                         <span className="font-bold text-primary">9:00 AM - 7:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-foreground font-bold">Saturday</span>
-                        <span className="font-bold text-primary">10:00 AM - 4:00 PM</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-foreground font-bold">Sunday</span>

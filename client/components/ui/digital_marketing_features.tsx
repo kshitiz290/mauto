@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const services = [
     {
         title: "Search Engine Optimization (SEO)",
-        image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
+        image: "https://img.freepik.com/free-vector/seo-ranking-analysis-internet-technology_107791-2380.jpg?t=st=1755720030~exp=1755723630~hmac=a04817820d816711e9432e8d7a960ab1bfb729f2e0066753423759765e54c940&w=740",
         desc: "Improve your website’s visibility on Google and other search engines with advanced SEO strategies.",
         points: [
             "On-page & Off-page Optimization",
@@ -14,7 +14,7 @@ const services = [
     },
     {
         title: "Social Media Marketing (SMM)",
-        image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80",
+        image: "https://img.freepik.com/free-vector/hand-drawn-illustration-people-with-smartphone-marketing_52683-66659.jpg?t=st=1755720408~exp=1755724008~hmac=36860c17cdfbea8cef34f398f02abcbd0664ad5c8e4ce22fdc49cf9094da67b6&w=740",
         desc: "Build a strong brand presence across platforms like Facebook, Instagram, LinkedIn, and Twitter.",
         points: [
             "Strategy and Content Creation",
@@ -25,7 +25,7 @@ const services = [
     },
     {
         title: "Email Marketing",
-        image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80",
+        image: "https://img.freepik.com/free-photo/letter-envelop-message-notification-concept_53876-13786.jpg?t=st=1755720456~exp=1755724056~hmac=6508e21d2fad8e287952ddbdf14a7e55cb86cf7b7b6a5749b9d0eb08f225b0bc&w=740",
         desc: "Stay connected with your audience and convert leads into customers through personalized email campaigns.",
         points: [
             "Campaign Strategy",
@@ -36,7 +36,7 @@ const services = [
     },
     {
         title: "Pay-Per-Click Advertising (PPC)",
-        image: "https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=400&q=80",
+        image: "https://img.freepik.com/free-vector/pop-ups-concept-illustrated_23-2149121840.jpg?t=st=1755720530~exp=1755724130~hmac=ba54acd4fa4c7ebca654957fa9359c069ea2f1f3c6d58f1788b951b1995cd0ed&w=740",
         desc: "Drive instant traffic and leads with targeted ads on Google, Bing, Facebook, and more.",
         points: [
             "Google Ads & Bing Ads",
@@ -47,7 +47,7 @@ const services = [
     },
     {
         title: "E-Commerce Marketing",
-        image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80",
+        image: "https://img.freepik.com/free-photo/full-shot-woman-online-shopping-concept_23-2149629600.jpg?t=st=1755720580~exp=1755724180~hmac=fb158235deb8365258c455f6cfd05e5ca8b9312652c6864c9b0e7b618fc3e633&w=740",
         desc: "Boost your online store’s traffic and conversions with specialized marketing strategies.",
         points: [
             "Product Listing Optimization",
@@ -58,7 +58,7 @@ const services = [
     },
     {
         title: "Content Marketing",
-        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+        image: "https://img.freepik.com/free-photo/media-journalism-global-daily-news-content-concept_53876-123733.jpg?t=st=1755720669~exp=1755724269~hmac=b05aa5a1b61c8bee5d6a31a2f9da975769cbf2f49c8167fe18bf230c2f57d32a&w=2000",
         desc: "Improve your website’s visibility on Google and other search engines with advanced SEO strategies.",
         points: [
             "Blog Writing",

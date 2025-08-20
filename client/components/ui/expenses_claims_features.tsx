@@ -4,12 +4,12 @@ const features = [
     {
         title: 'Automated Expense Tracking',
         desc: 'Say goodbye to manual entry and spreadsheets. Our solution allows employees to submit expenses digitally with real-time tracking and auto-categorization of costs.',
-        img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/free-photo/invoice-bill-paid-payment-financial-account-concept_53876-122994.jpg?t=st=1755719039~exp=1755722639~hmac=db6d84853a6f8b87bdabafe2376665a75b71e03cf4a56a99801e563c77320e17&w=740'
     },
     {
         title: 'Smart Approval Workflows',
         desc: 'Customize multi-level approval flows to match your organizational hierarchy. Approvers can view, verify, and better compliance—reducing bottlenecks while boosting productivity.',
-        img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/free-photo/standard-quality-control-collage-concept_23-2149595828.jpg?t=st=1755719109~exp=1755722709~hmac=ae1da91db323f760d497d1c764a9c5367300772d33ef3a522f58459d57622031&w=2000'
     },
     {
         title: 'Policy Compliance Monitoring',
@@ -19,17 +19,17 @@ const features = [
     {
         title: 'Real-Time Analytics & Reports',
         desc: 'Gain insights into company spending with dashboards and detailed reports. Analyze patterns, detect anomalies, and make informed financial decisions.',
-        img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/free-photo/business-people-working-with-ipad-side-view_23-2150103553.jpg?t=st=1755719154~exp=1755722754~hmac=cd4d5e39bc2078a01f52e5eea5e7dfed605bc0b6c73966acac1ac1917351391a&w=740'
     },
     {
         title: 'Reimbursement Tracking',
         desc: 'Refers to the process of managing, monitoring, and ensuring timely repayment of expenses incurred by employees, field staff, or business units.',
-        img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/free-photo/closeup-shot-entrepreneur-working-from-home-his-personal-finances-savings_181624-21394.jpg?t=st=1755719226~exp=1755722826~hmac=59793ab9bf64203945b0a2211ac9d92c88a03018121d0b3b89d559b4933bb0d8&w=740'
     },
     {
         title: 'Mobile Access & Cloud Sync',
         desc: 'Let your workforce submit claims, upload receipts, and check statuses on the go. All data syncs securely to the cloud, ensuring accessibility and data integrity.',
-        img: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80'
+        img: 'https://img.freepik.com/free-photo/hand-touching-tablet_1134-426.jpg?t=st=1755719281~exp=1755722881~hmac=de7058f8426594118753ebdc22c39d6d0a133f86c60c8036495d5a299caae501&w=2000'
     }
 ];
 
