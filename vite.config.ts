@@ -19,6 +19,12 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     minify: "esbuild",
     target: "es2015",
+    // Reduce bundle size and TBT by removing debug noise in production
+    terserOptions: undefined,
+    esbuild: {
+      drop: ["console", "debugger"],
+      legalComments: "none",
+    },
     rollupOptions: {
       onwarn(warning, warn) {
         if (typeof warning.message === 'string' && warning.message.includes('Error when using sourcemap for reporting an error')) {

@@ -5,7 +5,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="flex items-center justify-center relative overflow-hidden pt-20 pb-16 sm:pt-24 md:pt-16 px-4 sm:px-6 lg:px-8 min-h-[60vh] sm:min-h-[80vh] lg:min-h-screen"
+      className="flex items-center justify-center relative overflow-hidden pt-20 pb-16 sm:pt-24 md:pt-16 px-4 sm:px-6 lg:px-8 min-h-[60vh] sm:min-h-[80vh] lg:min-h-screen cv-auto"
     >
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">

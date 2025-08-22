@@ -246,6 +246,9 @@ const DispatchFundamentals = () => {
                                         src="/blogs_thumbs/dispatch_blog_image.jpeg"
                                         alt="Dispatch automation benefits: lower fuel usage, fewer delays and penalties, reduced scheduling effort, and better fleet utilisation"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="1200"
+                                        height="800"
                                         sizes="(min-width: 1024px) 768px, 100vw"
                                         className="block w-full max-w-3xl mx-auto h-auto object-contain rounded-xl shadow-sm max-h-64 sm:max-h-72 md:max-h-80 lg:max-h-96"
                                     />

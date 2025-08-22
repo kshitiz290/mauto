@@ -8,8 +8,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from './components/ProtectedRoute';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import AppLoader from '@/components/ui/app-loader';
+import { prefetchRoute } from './lib/prefetchRoutes';
 // Route-level code splitting: each page lazily loaded so initial bundle shrinks.
 const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -61,6 +62,18 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        {/* Idle prefetch a few likely next routes */}
+        {(() => {
+          const idle = (cb: () => void) => {
+            // @ts-ignore
+            const ric = (globalThis as any).requestIdleCallback as ((cb: () => void) => number) | undefined;
+            if (typeof ric === 'function') ric(() => cb()); else setTimeout(cb, 200);
+          };
+          idle(() => {
+            ['/about-us', '/contact-us', '/blogs', '/dispatch-management'].forEach(prefetchRoute);
+          });
+          return null;
+        })()}
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />

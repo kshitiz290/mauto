@@ -58,7 +58,7 @@
    * HSL color variables for beautiful dark 3D website design
   */
 
- 
+
   .dark {
     --background: 220 25% 8%;
     --foreground: 0 0% 95%;
@@ -113,6 +113,19 @@
     min-height: 100vh;
   }
 
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Light theme background */
   body:not(.dark) {
     background: linear-gradient(135deg,
@@ -128,6 +141,11 @@
         hsl(220 20% 10%) 50%,
         hsl(240 15% 6%) 100%);
   }
+}
+
+/* Enhance perception of performance when navigating */
+html:focus-within {
+  scroll-behavior: smooth;
 }
 
 @layer components {
@@ -562,6 +580,16 @@
     box-shadow:
       0 25px 80px hsla(var(--card-glow)),
       0 8px 20px hsla(var(--pleasant-blue), 0.3);
+  }
+}
+
+@layer utilities {
+
+  /* Defer rendering of offscreen sections to cut main thread work */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1000px 800px;
+    /* reserve space to avoid layout shifts */
   }
 }
 

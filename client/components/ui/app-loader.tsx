@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 export default function AppLoader() {
     return (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-background text-foreground overflow-hidden">
@@ -9,28 +7,17 @@ export default function AppLoader() {
 
             {/* center content */}
             <div className="flex flex-col items-center">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    className="relative flex items-center justify-center"
-                    aria-hidden
-                >
+                <div className="relative flex items-center justify-center opacity-0 animate-[fadeIn_.5s_ease-out_.05s_forwards]" aria-hidden>
                     {/* ring spinner */}
                     <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-primary/25 border-t-primary animate-spin" />
                     {/* inner logo wordmark */}
                     <span className="absolute text-lg md:text-xl font-black bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent tracking-wider">
                         MANACLE
                     </span>
-                </motion.div>
-                <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
-                    className="mt-4 text-sm md:text-base text-foreground/70"
-                >
+                </div>
+                <div className="mt-4 text-sm md:text-base text-foreground/70 opacity-0 animate-[fadeUp_.5s_ease-out_.12s_forwards]">
                     Preparing your experience…
-                </motion.div>
+                </div>
             </div>
 
             {/* top progress shimmer */}
@@ -45,6 +32,8 @@ export default function AppLoader() {
           50% { transform: translateX(30%); }
           100% { transform: translateX(120%); }
         }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(.96) } to { opacity: 1; transform: scale(1) } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: translateY(0) } }
       `}</style>
 
             {/* a11y text */}

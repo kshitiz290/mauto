@@ -6,6 +6,7 @@ import { MobileNav } from "./mobile-nav";
 import { Button } from "./button";
 import { ThemeToggle } from "./theme-toggle";
 import { apiFetch } from '../../lib/apiFetch';
+import { prefetchRoute } from '../../lib/prefetchRoutes';
 
 // Header component
 export function Header() {
@@ -346,6 +347,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
                       <div className="flex items-center">
                         <a
                           href={item.href}
+                          onMouseEnter={() => prefetchRoute(item.href)}
                           className={`${item.highlight
                             ? "bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-extrabold"
                             : "text-foreground hover:text-primary"
@@ -399,6 +401,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
                                         <Link
                                           to={subItem.href || `#${subItem.name.toLowerCase().replace(/\s+/g, "-")}`}
                                           className={`block group/item ${item.name === 'Resources' ? '' : ''}`}
+                                          onMouseEnter={() => subItem.href && prefetchRoute(subItem.href)}
                                           onClick={() => {
                                             setClickedDropdown(null);
                                             setActiveDropdown(null);
