@@ -94,8 +94,9 @@ const DispatchFundamentals = () => {
                     <div className="max-w-4xl mx-auto px-6 lg:px-8">
                         <motion.div initial={{ opacity: 0, y: 48 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeOut' }} className="text-center">
                             <p className="text-xs uppercase tracking-wider font-semibold text-primary mb-5">Dispatch • Operations</p>
-                            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-3">
-                                From Chaos to Control: Why Dispatch Automation Wins
+                            <h1 className="font-extrabold leading-tight mb-3 text-[clamp(1.25rem,6.4vw,2rem)] sm:text-4xl md:text-5xl">
+                                <span className="block whitespace-nowrap">From Chaos to Control:</span>
+                                <span className="block">Why Dispatch Automation <span className="block sm:inline">Wins</span></span>
                             </h1>
                             <div className="text-sm md:text-base font-semibold text-foreground/70 mb-6">By Apoorv Mohan</div>
                             <p className="text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto leading-relaxed font-medium">
