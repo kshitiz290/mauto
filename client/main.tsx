@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from './components/ProtectedRoute';
 import { Suspense, lazy } from 'react';
+import AppLoader from '@/components/ui/app-loader';
 // Route-level code splitting: each page lazily loaded so initial bundle shrinks.
 const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -51,11 +52,8 @@ const Whatsapp_Ordering = lazy(() => import('./pages/solutions/Whatsapp_Ordering
 const queryClient = new QueryClient();
 
 
-const LoadingFallback = () => (
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', fontFamily: 'sans-serif', fontSize: 14, opacity: .7 }}>
-    Loading...
-  </div>
-);
+// Themed full-screen loader used during route lazy-loading
+const LoadingFallback = () => <AppLoader />;
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
