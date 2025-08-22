@@ -77,7 +77,134 @@ function AnimatedCounter({ end, duration = 2000, suffix = "", color, label }: Co
   );
 }
 
+// Card model for the grid below
+type CardItem = {
+  title: string;
+  desc: string;
+  iconBg: string;
+  cardBg: string;
+  icon: JSX.Element;
+  hover: string;
+};
+
+// A smooth, responsive, GPU-accelerated card with gentle hover effects
+function FeatureCard({ card, index: _i }: { card: CardItem; index: number }) {
+  return (
+    <div className="group relative h-full w-full overflow-visible transform-gpu will-change-transform">
+      {/* Soft gradient wash on hover */}
+      <div
+        className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br ${card.cardBg} opacity-0 group-hover:opacity-100 transition-opacity duration-800 ease-in-out`}
+      />
+
+      {/* Card container */}
+      <div
+        className="relative rounded-2xl bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/30 dark:border-gray-800/50 shadow-xl transform-gpu transition-[transform,box-shadow] duration-300 ease-in-out group-hover:shadow-2xl group-hover:scale-[1.04] group-hover:-translate-y-2 will-change-transform motion-reduce:transition-none motion-reduce:transform-none h-full min-h-[240px] md:min-h-[320px]"
+      >
+        <div className="p-4 xs:p-6 sm:p-8">
+          <div
+            className={`w-16 h-16 bg-gradient-to-br ${card.iconBg} rounded-2xl flex items-center justify-center mb-6 transform-gpu transition-transform duration-900 ease-in-out delay-150 group-hover:rotate-6 group-hover:scale-[1.06] will-change-transform motion-reduce:transition-none motion-reduce:transform-none`}
+          >
+            {card.icon}
+          </div>
+
+          <h3
+            className={`text-2xl font-bold mb-4 text-foreground ${card.hover} transition-colors duration-300 ease-in-out`}
+          >
+            {card.title}
+          </h3>
+
+          <p className="text-foreground/70 leading-relaxed transition-colors duration-700 ease-in-out group-hover:text-foreground/90">
+            {card.desc}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function WhyChooseUs() {
+  // Cards content
+  const cards: CardItem[] = [
+    {
+      title: "Innovative Technology Solutions",
+      desc:
+        "We empower businesses by delivering cutting-edge technology tailored to their unique needs, enabling seamless automation and enhanced efficiency.",
+      iconBg: "from-orange-500 to-yellow-500",
+      cardBg: "from-orange-500/10 to-yellow-500/10",
+      icon: (
+        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      ),
+      hover: "group-hover:text-orange-500",
+    },
+    {
+      title: "Data-Driven Insights",
+      desc:
+        "Leveraging advanced analytics and AI, we provide actionable insights that help companies make smarter decisions and optimize operations.",
+      iconBg: "from-blue-500 to-cyan-500",
+      cardBg: "from-blue-500/10 to-cyan-500/10",
+      icon: (
+        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 0 01-2-2z" />
+        </svg>
+      ),
+      hover: "group-hover:text-cyan-500 text-blue-600",
+    },
+    {
+      title: "Scalable & Flexible Platforms",
+      desc:
+        "Our scalable software platforms grow alongside your business, allowing you to adapt quickly to market changes without disruption.",
+      iconBg: "from-purple-500 to-pink-500",
+      cardBg: "from-purple-500/10 to-pink-500/10",
+      icon: (
+        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V7a2 2 0 00-2-2H7a2 2 0 00-2 2v14m16 0a2 2 0 01-2 2H5a2 2 0 01-2-2m16 0V7a2 2 0 00-2-2H7a2 2 0 00-2 2v14" />
+        </svg>
+      ),
+      hover: "group-hover:text-purple-500",
+    },
+    {
+      title: "Customer-Centric Approach",
+      desc:
+        "By focusing on enhancing the end-user experience, we help companies build stronger customer relationships and increase retention.",
+      iconBg: "from-green-500 to-emerald-500",
+      cardBg: "from-green-500/10 to-emerald-500/10",
+      icon: (
+        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+        </svg>
+      ),
+      hover: "group-hover:text-green-500",
+    },
+    {
+      title: "End-to-End Support",
+      desc:
+        "From strategy to implementation and ongoing optimization, we partner with companies at every step for sustainable growth.",
+      iconBg: "from-indigo-500 to-blue-500",
+      cardBg: "from-indigo-500/10 to-blue-500/10",
+      icon: (
+        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      ),
+      hover: "group-hover:text-indigo-500 text-blue-600",
+    },
+    {
+      title: "Market Expansion & Competitive Edge",
+      desc:
+        "We help businesses identify untapped markets and streamline processes to outpace competitors as industry leaders.",
+      iconBg: "from-red-500 to-orange-500",
+      cardBg: "from-red-500/10 to-orange-500/10",
+      icon: (
+        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+      ),
+      hover: "group-hover:text-red-500",
+    },
+  ];
+
   return (
     <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-[#0a0a0a] dark:via-[#111111] dark:to-[#0a0a0a] relative overflow-hidden">
       {/* Animated Background Elements */}
@@ -133,82 +260,8 @@ export function WhyChooseUs() {
 
         {/* Key Advantages Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 gap-y-8 items-stretch w-full">
-          {[
-            {
-              title: "Innovative Technology Solutions",
-              desc: "We empower businesses by delivering cutting-edge technology tailored to their unique needs, enabling seamless automation and enhanced efficiency.",
-              iconBg: "from-orange-500 to-yellow-500",
-              cardBg: "from-orange-500/10 to-yellow-500/10",
-              icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              ),
-              hover: "group-hover:text-orange-500"
-            },
-            {
-              title: "Data-Driven Insights",
-              desc: "Leveraging advanced analytics and AI, we provide actionable insights that help companies make smarter decisions and optimize operations.",
-              iconBg: "from-blue-500 to-cyan-500",
-              cardBg: "from-blue-500/10 to-cyan-500/10",
-              icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 0 01-2-2z" /></svg>
-              ),
-              hover: "group-hover:text-cyan-500 text-blue-600"
-            },
-            {
-              title: "Scalable & Flexible Platforms",
-              desc: "Our scalable software platforms grow alongside your business, allowing you to adapt quickly to market changes without disruption.",
-              iconBg: "from-purple-500 to-pink-500",
-              cardBg: "from-purple-500/10 to-pink-500/10",
-              icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V7a2 2 0 00-2-2H7a2 2 0 00-2 2v14m16 0a2 2 0 01-2 2H5a2 2 0 01-2-2m16 0V7a2 2 0 00-2-2H7a2 2 0 00-2 2v14" /></svg>
-              ),
-              hover: "group-hover:text-purple-500"
-            },
-            {
-              title: "Customer-Centric Approach",
-              desc: "By focusing on enhancing the end-user experience, we help companies build stronger customer relationships and increase retention.",
-              iconBg: "from-green-500 to-emerald-500",
-              cardBg: "from-green-500/10 to-emerald-500/10",
-              icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-              ),
-              hover: "group-hover:text-green-500"
-            },
-            {
-              title: "End-to-End Support",
-              desc: "From strategy to implementation and ongoing optimization, we partner with companies at every step for sustainable growth.",
-              iconBg: "from-indigo-500 to-blue-500",
-              cardBg: "from-indigo-500/10 to-blue-500/10",
-              icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-              ),
-              hover: "group-hover:text-indigo-500 text-blue-600"
-            },
-            {
-              title: "Market Expansion & Competitive Edge",
-              desc: "We help businesses identify untapped markets and streamline processes to outpace competitors as industry leaders.",
-              iconBg: "from-red-500 to-orange-500",
-              cardBg: "from-red-500/10 to-orange-500/10",
-              icon: (
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-              ),
-              hover: "group-hover:text-red-500"
-            }
-          ].map((card, idx) => (
-            <div key={card.title} className="group relative overflow-hidden h-full flex flex-col">
-              <div className={`absolute inset-0 bg-gradient-to-br ${card.cardBg} rounded-2xl transform rotate-1 group-hover:rotate-2 transition-transform duration-500`}></div>
-              <div className="relative bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-xl rounded-2xl p-4 xs:p-6 sm:p-8 border border-white/30 dark:border-gray-800/50 shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 flex flex-col h-full min-h-[220px] md:min-h-[320px] w-full max-w-full">
-                <div className={`w-16 h-16 bg-gradient-to-br ${card.iconBg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500`}>
-                  {card.icon}
-                </div>
-                <h3 className={`text-2xl font-bold mb-4 text-foreground ${card.hover} transition-colors duration-300`}>
-                  {card.title}
-                </h3>
-                <p className="text-foreground/70 leading-relaxed group-hover:text-foreground/90 transition-colors duration-300 flex-1">
-                  {card.desc}
-                </p>
-              </div>
-            </div>
+          {cards.map((card, idx) => (
+            <FeatureCard key={card.title} card={card} index={idx} />
           ))}
         </div>
 

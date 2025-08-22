@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MapPin, CalendarCheck2, Clock, Link2, Bell, FileCog } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -72,62 +72,89 @@ const cardVariants = {
     })
 };
 
-const AttendanceLeaveFeatures = () => (
-    <motion.section
-        className="w-full max-w-7xl mx-auto px-4 py-16 md:py-20"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={sectionVariants}
-    >
-        <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-3xl md:text-4xl font-bold mb-8 text-center leading-[1.25] md:leading-[1.3]"
-            style={{ background: 'linear-gradient(90deg, #FF9800 40%, #B721FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+const AttendanceLeaveFeatures = () => {
+    const [isMobilePortrait, setIsMobilePortrait] = useState(false);
+
+    useEffect(() => {
+        const detect = () => {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            setIsMobilePortrait(h > w && w <= 768);
+        };
+        detect();
+        window.addEventListener('resize', detect as any, { passive: true } as any);
+        window.addEventListener('orientationchange', detect as any);
+        return () => {
+            window.removeEventListener('resize', detect as any);
+            window.removeEventListener('orientationchange', detect as any);
+        };
+    }, []);
+
+    return (
+        <motion.section
+            className="w-full max-w-7xl mx-auto px-4 py-16 md:py-20"
+            initial="hidden"
+            {...(isMobilePortrait
+                ? { animate: 'visible' }
+                : { whileInView: 'visible', viewport: { once: true, amount: 0.2 } }
+            )}
+            variants={sectionVariants}
         >
-            Attendance and Leave Management Solution
-        </motion.h2>
-        <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-lg text-foreground/80 mb-12 text-center max-w-3xl mx-auto"
-        >
-            An Attendance and Leave Management Solution for a Sales Team should be tailored to the mobile and field-based nature of sales roles. Here's a comprehensive outline for such a solution, including its features, benefits, and implementation.
-        </motion.p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, idx) => (
-                <motion.div
-                    key={idx}
-                    className="group bg-white/80 dark:bg-black/70 border border-glass-border rounded-2xl shadow-xl hover:shadow-[0_8px_32px_0_rgba(255,152,0,0.18),0_2px_8px_0_rgba(183,33,255,0.10)] transition-all duration-300 p-8 flex flex-col items-start hover:-translate-y-2 backdrop-blur-xl "
-                    custom={idx}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.2 }}
-                    variants={cardVariants}
-                >
-                    <div className="mb-3 group-hover:scale-110 transition-transform duration-300">
-                        {feature.icon}
-                    </div>
-                    <h3 className="text-xl font-bold mb-3 text-primary group-hover:text-accent transition-colors duration-300">
-                        {feature.title}
-                    </h3>
-                    <ul className="pl-0 space-y-1 text-foreground/70 text-base">
-                        {feature.points.map((point, i) => (
-                            <li key={i} className="flex items-start gap-2">
-                                <svg className="inline w-5 h-5 text-green-500 mr-2 align-text-bottom flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                                <span>{point}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </motion.div>
-            ))}
-        </div>
-    </motion.section>
-);
+            <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                {...(isMobilePortrait
+                    ? { animate: { opacity: 1, y: 0 } }
+                    : { whileInView: { opacity: 1, y: 0 }, viewport: { once: true } }
+                )}
+                transition={{ duration: 0.7 }}
+                className="text-3xl md:text-4xl font-bold mb-8 text-center leading-[1.25] md:leading-[1.3]"
+                style={{ background: 'linear-gradient(90deg, #FF9800 40%, #B721FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+            >
+                Attendance and Leave Management Solution
+            </motion.h2>
+            <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                {...(isMobilePortrait
+                    ? { animate: { opacity: 1, y: 0 } }
+                    : { whileInView: { opacity: 1, y: 0 }, viewport: { once: true } }
+                )}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="text-lg text-foreground/80 mb-12 text-center max-w-3xl mx-auto"
+            >
+                An Attendance and Leave Management Solution for a Sales Team should be tailored to the mobile and field-based nature of sales roles. Here's a comprehensive outline for such a solution, including its features, benefits, and implementation.
+            </motion.p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {features.map((feature, idx) => (
+                    <motion.div
+                        key={idx}
+                        className="group bg-white/80 dark:bg-black/70 border border-glass-border rounded-2xl shadow-xl hover:shadow-[0_8px_32px_0_rgba(255,152,0,0.18),0_2px_8px_0_rgba(183,33,255,0.10)] transition-all duration-300 p-8 flex flex-col items-start hover:-translate-y-2 backdrop-blur-xl "
+                        custom={idx}
+                        initial="hidden"
+                        {...(isMobilePortrait
+                            ? { animate: 'visible' }
+                            : { whileInView: 'visible', viewport: { once: true, amount: 0.2 } }
+                        )}
+                        variants={cardVariants}
+                    >
+                        <div className="mb-3 group-hover:scale-110 transition-transform duration-300">
+                            {feature.icon}
+                        </div>
+                        <h3 className="text-xl font-bold mb-3 text-primary group-hover:text-accent transition-colors duration-300">
+                            {feature.title}
+                        </h3>
+                        <ul className="pl-0 space-y-1 text-foreground/70 text-base">
+                            {feature.points.map((point, i) => (
+                                <li key={i} className="flex items-start gap-2">
+                                    <svg className="inline w-5 h-5 text-green-500 mr-2 align-text-bottom flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                    <span>{point}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </motion.div>
+                ))}
+            </div>
+        </motion.section>
+    );
+};
 
 export default AttendanceLeaveFeatures;

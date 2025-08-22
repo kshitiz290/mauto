@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 
@@ -38,13 +38,31 @@ const features = [
 ];
 
 export default function OrderManagementFeaturesWithAnimation() {
+    const [isMobilePortrait, setIsMobilePortrait] = useState<boolean>(false);
+
+    useEffect(() => {
+        const detect = () => {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            setIsMobilePortrait(h > w && w <= 768);
+        };
+        detect();
+        window.addEventListener('resize', detect, { passive: true } as any);
+        window.addEventListener('orientationchange', detect as any);
+        return () => {
+            window.removeEventListener('resize', detect as any);
+            window.removeEventListener('orientationchange', detect as any);
+        };
+    }, []);
     return (
         <section className="w-full max-w-7xl mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center gap-12 md:gap-20">
             {/* Left: Features List */}
             <motion.div
                 initial={{ opacity: 0, x: -48 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
+                {...(isMobilePortrait
+                    ? { animate: { opacity: 1, x: 0 } }
+                    : { whileInView: { opacity: 1, x: 0 }, viewport: { once: true, amount: 0.5 } }
+                )}
                 transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
                 className="flex-1 w-full"
             >
@@ -59,9 +77,11 @@ export default function OrderManagementFeaturesWithAnimation() {
                         <motion.li
                             key={f.title}
                             initial={{ opacity: 0, x: -32 }}
-                            whileInView={{ opacity: 1, x: 0 }}
+                            {...(isMobilePortrait
+                                ? { animate: { opacity: 1, x: 0 } }
+                                : { whileInView: { opacity: 1, x: 0 }, viewport: { once: true } }
+                            )}
                             transition={{ delay: i * 0.07, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                            viewport={{ once: true }}
                             className="flex items-start gap-3 group hover:bg-orange-50/60 dark:hover:bg-orange-900/20 rounded-xl px-3 py-2 transition-all duration-300 select-none"
                         >
                             <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
@@ -81,9 +101,11 @@ export default function OrderManagementFeaturesWithAnimation() {
             <motion.div
                 className="flex-1 flex justify-center items-center w-full max-w-md"
                 initial={{ y: 60, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
+                {...(isMobilePortrait
+                    ? { animate: { y: 0, opacity: 1 } }
+                    : { whileInView: { y: 0, opacity: 1 }, viewport: { once: true } }
+                )}
                 transition={{ duration: 0.8, type: "spring" }}
-                viewport={{ once: true }}
             >
                 <motion.div
                     animate={{ y: [0, -16, 0, 16, 0], rotate: [0, 2, 0, -2, 0] }}

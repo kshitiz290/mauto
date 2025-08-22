@@ -11,6 +11,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { Suspense, lazy, useEffect } from 'react';
 import AppLoader from '@/components/ui/app-loader';
 import { prefetchRoute } from './lib/prefetchRoutes';
+import { useLocation } from 'react-router-dom';
+import { applySeo, routeSeo } from './lib/seo';
 // Route-level code splitting: each page lazily loaded so initial bundle shrinks.
 const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -56,6 +58,17 @@ const queryClient = new QueryClient();
 // Themed full-screen loader used during route lazy-loading
 const LoadingFallback = () => <AppLoader />;
 
+function RouteSeoUpdater() {
+  const location = useLocation();
+  useEffect(() => {
+    const path = location.pathname;
+    const meta = routeSeo[path] || routeSeo['/'];
+    const canonical = `https://www.manacletech.com${path === '/' ? '/' : path}`;
+    applySeo(path, { ...meta, canonical });
+  }, [location.pathname]);
+  return null;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -74,6 +87,7 @@ const App = () => (
           });
           return null;
         })()}
+        <RouteSeoUpdater />
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />
