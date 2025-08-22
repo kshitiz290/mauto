@@ -114,7 +114,7 @@ export default function Index() {
         {/* Floating Action Buttons */}
         {/* WhatsApp for Desktop */}
         <a
-          href="https://wa.me/918645322914"
+          href="https://wa.me/919873250200"
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 z-50 hidden md:flex w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
@@ -125,7 +125,7 @@ export default function Index() {
         </a>
         {/* Phone Call for Mobile */}
         <a
-          href="tel:+918645322914"
+          href="tel:+919873250200"
           className="fixed bottom-6 right-6 z-50 flex md:hidden w-14 h-14 bg-blue-500 hover:bg-blue-600 rounded-full items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 group"
           aria-label="Call us"
         >

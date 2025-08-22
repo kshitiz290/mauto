@@ -63,9 +63,9 @@ export default function Footer() {
                                 </a>
                             </li>
                             <li>
-                                <a href="tel:+918645322914" className="flex items-center hover:text-primary hover:underline transition-all duration-300 break-all">
+                                <a href="tel:+919873250200" className="flex items-center hover:text-primary hover:underline transition-all duration-300 break-all">
                                     <Phone className="w-5 h-5 mr-2 flex-shrink-0" />
-                                    <span>Phone: +91 8645322914</span>
+                                    <span>Phone: +91 9873250200</span>
                                 </a>
                             </li>
                             <li>
@@ -114,7 +114,7 @@ export default function Footer() {
                             MANACLE
                         </span>
                     </div>
-                    <p className="text-lg text-foreground/60 font-medium">All rights reserved © 2025 MANACLE</p>
+                    <p className="text-lg text-foreground/60 font-medium">All rights reserved © 2025 Manacle Technologies Pvt Ltd.</p>
                 </div>
             </div>
         </footer>

@@ -14,12 +14,16 @@ const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
-const Services = lazy(() => import('./pages/Services'));
 // const Gallery = lazy(() => import('./pages/Gallery'));
 const AutoSite = lazy(() => import('./pages/AutoSite'));
 const Login = lazy(() => import('./pages/Login'));
 const AccessDenied = lazy(() => import('./pages/AccessDenied'));
 const Signup = lazy(() => import('./pages/Signup'));
+const Blogs = lazy(() => import('./pages/Blogs'));
+const CRMSoftwareFundamentals = lazy(() => import('./pages/blogs/CRMSoftwareFundamentals'));
+const DispatchFundamentals = lazy(() => import('./pages/blogs/DispatchFundamentals'));
+const Podcasts = lazy(() => import('./pages/Podcasts'));
+const SeminarsWebinars = lazy(() => import('./pages/SeminarsWebinars'));
 // Solutions pages
 const Attendance_Leave_Management = lazy(() => import('./pages/solutions/Attendance_Leave_Management'));
 const Order_Management_Solution = lazy(() => import('./pages/solutions/Order_Management_Solution'));
@@ -64,7 +68,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/services" element={<Services />} />
+            {/* <Route path="/services" element={<Services />} /> */}
             {/* <Route path="/gallery" element={<Gallery />} /> */}
             <Route path="/auto-site" element={
               <ProtectedRoute>
@@ -95,6 +99,12 @@ const App = () => (
             <Route path="/crm-software" element={<CRM />} />
             <Route path="/digital-marketing-services" element={<Digital_Marketing />} />
             <Route path="/whatsapp-ordering-system" element={<Whatsapp_Ordering />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blogs/crm-software-fundamentals" element={<CRMSoftwareFundamentals />} />
+            <Route path="/blogs/dispatch-automation-fundamentals" element={<DispatchFundamentals />} />
+            <Route path="/podcasts" element={<Podcasts />} />
+            <Route path="/seminars-webinars" element={<SeminarsWebinars />} />
+            {/* Redirects */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -19,6 +19,8 @@ export function Header() {
   const [clickedDropdown, setClickedDropdown] = useState<string | null>(null);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  // Force mobile (hamburger) view when horizontal space is tight or in portrait orientation at certain widths
+  const [forceMobileNav, setForceMobileNav] = useState(false);
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -65,6 +67,29 @@ export function Header() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY]);
+
+  // Determine when to force the hamburger menu regardless of Tailwind breakpoints
+  useEffect(() => {
+    const evaluateLayout = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const isPortrait = h > w; // orientation check
+      /* Heuristics:
+         - Always mobile below 1024px (covers existing lg breakpoint logic)
+         - In portrait, give more room: force mobile if width < 1280 (prevents cramped nav)
+         - Also force mobile if available width is wide but still under a threshold where items start wrapping (~1150)
+      */
+      const shouldForce = w < 1024 || (isPortrait && w < 1280) || (w >= 1024 && w < 1150);
+      setForceMobileNav(shouldForce);
+    };
+    evaluateLayout();
+    window.addEventListener('resize', evaluateLayout, { passive: true });
+    window.addEventListener('orientationchange', evaluateLayout);
+    return () => {
+      window.removeEventListener('resize', evaluateLayout);
+      window.removeEventListener('orientationchange', evaluateLayout);
+    };
+  }, []);
 
   // Handle clicks outside the dropdown to close it
   useEffect(() => {
@@ -213,6 +238,23 @@ export function Header() {
         ],
       },
     },
+    {
+      name: "Resources",
+      href: "#",
+      hasDropdown: true,
+      dropdownContent: {
+        categories: [
+          {
+            title: "Our Resources",
+            items: [
+              { name: "Blogs", href: "/blogs" },
+              { name: "Podcasts", href: "/podcasts" },
+              { name: "Seminars & Webinars", href: "/seminars-webinars" },
+            ]
+          }
+        ]
+      }
+    },
   /*
   {
     name: "Portfolio",
@@ -277,7 +319,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
               {/* Heading and tagline inline */}
               <div className="flex flex-col justify-center">
                 <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-black bg-gradient-to-r from-orange-500 to-yellow-400 bg-clip-text text-transparent tracking-wider leading-tight">
-                  MANACLE 
+                  MANACLE
                 </span>
                 <span className="text-xs md:text-sm lg:text-sm xl:text-base text-foreground/60 font-medium leading-tight">
                   A bond to deliver Success
@@ -286,126 +328,132 @@ Gallery", description: "View all our projects", href: "/gallery" },
             </a>
           </div>
 
-          {/* Centered Navigation Menu - Responsive */}
-          <div className="hidden lg:flex flex-1 justify-center">
-            <nav className="bg-card/90 backdrop-blur-xl border border-glass-border rounded-full px-4 md:px-5 lg:px-6 xl:px-7 py-2 md:py-2 lg:py-2.5 xl:py-2.5 shadow-lg scale-100 md:scale-105 lg:scale-110 xl:scale-110 transform">
-              <div className="flex items-center space-x-4 md:space-x-5 lg:space-x-6 xl:space-x-8">
-                {navItems.map((item) => (
-                  <div
-                    key={item.name}
-                    className="relative"
-                    ref={item.hasDropdown ? (node) => {
-                      dropdownRefs.current[item.name] = node;
-                    } : null}
-                    onMouseEnter={() => item.hasDropdown && handleMouseEnter(item.name)}
-                    onMouseLeave={() => item.hasDropdown && handleMouseLeave()}
-                  >
-                    <div className="flex items-center">
-                      <a
-                        href={item.href}
-                        className={`${item.highlight
-                          ? "bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-extrabold"
-                          : "text-foreground hover:text-primary"
-                          } transition-colors duration-300 relative group font-bold text-sm md:text-sm lg:text-base xl:text-base`}
-                      >
-                        {item.name}
-                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent transition-all duration-300 group-hover:w-full"></span>
-                      </a>
-                      {item.hasDropdown && (
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDropdownClick(item.name);
-                          }}
-                          className="ml-1 text-foreground hover:text-primary transition-colors duration-300"
+          {/* Centered Navigation Menu - Responsive & Forced Collapse Logic */}
+          {!forceMobileNav && (
+            <div className="flex flex-1 justify-center">
+              <nav className="inline-flex items-center bg-card/90 backdrop-blur-xl border border-glass-border rounded-full px-4 md:px-5 py-2 shadow-lg">
+                <div className="flex items-center space-x-4 md:space-x-5 lg:space-x-6">
+                  {navItems.map((item) => (
+                    <div
+                      key={item.name}
+                      className="relative"
+                      ref={item.hasDropdown ? (node) => {
+                        dropdownRefs.current[item.name] = node;
+                      } : null}
+                      onMouseEnter={() => item.hasDropdown && handleMouseEnter(item.name)}
+                      onMouseLeave={() => item.hasDropdown && handleMouseLeave()}
+                    >
+                      <div className="flex items-center">
+                        <a
+                          href={item.href}
+                          className={`${item.highlight
+                            ? "bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent font-extrabold"
+                            : "text-foreground hover:text-primary"
+                            } transition-colors duration-300 relative group font-bold text-sm md:text-sm lg:text-base xl:text-base`}
                         >
-                          <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible(item.name) ? "rotate-180" : ""
-                              }`}
-                          />
-                        </button>
-                      )}
-                    </div>
+                          {item.name}
+                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-accent transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        {item.hasDropdown && (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDropdownClick(item.name);
+                            }}
+                            className="ml-1 text-foreground hover:text-primary transition-colors duration-300"
+                          >
+                            <ChevronDown
+                              className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible(item.name) ? "rotate-180" : ""
+                                }`}
+                            />
+                          </button>
+                        )}
+                      </div>
 
-                    {/* Mega Menu Dropdown */}
-                    {item.hasDropdown && isDropdownVisible(item.name) && (
-                      <>
-                        {/* Invisible bridge to prevent dropdown from closing */}
-                        <div
-                          className="absolute top-full left-1/2 transform -translate-x-1/2 w-[480px] md:w-[520px] lg:w-[580px] xl:w-[600px] h-3 z-40"
-                          onMouseEnter={handleDropdownMouseEnter}
-                          onMouseLeave={handleDropdownMouseLeave}
-                        />
-                        <div
-                          className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[95vw] sm:w-[600px] md:w-[700px] lg:w-[900px] max-w-[98vw] glass-effect border border-glass-border rounded-2xl p-4 md:p-5 lg:p-6 xl:p-6 shadow-2xl z-50 bg-card/95 backdrop-blur-xl max-h-[75vh] md:max-h-[420px] overflow-y-auto"
-                          onMouseEnter={handleDropdownMouseEnter}
-                          onMouseLeave={handleDropdownMouseLeave}
-                          style={{ scrollbarWidth: 'thin' }}
-                        >
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {item.dropdownContent?.categories.map(
-                              (category, index) => (
-                                <div key={index} className="space-y-3">
-                                  <h3 className="font-bold text-base md:text-lg gradient-text mb-2">
+                      {/* Mega Menu Dropdown */}
+                      {item.hasDropdown && isDropdownVisible(item.name) && (
+                        <>
+                          {/* Invisible bridge to prevent dropdown from closing */}
+                          <div
+                            className="absolute top-full left-1/2 transform -translate-x-1/2 w-[480px] md:w-[520px] lg:w-[580px] xl:w-[600px] h-3 z-40"
+                            onMouseEnter={handleDropdownMouseEnter}
+                            onMouseLeave={handleDropdownMouseLeave}
+                          />
+                          <div
+                            className={`absolute top-full left-1/2 -translate-x-1/2 mt-3 ${item.name === 'Resources' ? 'w-[260px]' : 'w-[95vw] sm:w-[600px] md:w-[700px] lg:w-[900px]'} max-w-[98vw] glass-effect border border-glass-border rounded-2xl p-4 md:p-5 shadow-2xl z-50 bg-card/95 backdrop-blur-xl max-h-[75vh] md:max-h-[420px] overflow-y-auto`}
+                            onMouseEnter={handleDropdownMouseEnter}
+                            onMouseLeave={handleDropdownMouseLeave}
+                            style={{ scrollbarWidth: 'thin' }}
+                          >
+                            <div className={`grid ${item.name === 'Resources'
+                              ? 'grid-cols-1 '
+                              : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'} gap-6`}>
+                              {item.dropdownContent?.categories.map((category, index) => (
+                                <div key={index} className={`space-y-3 ${item.name === 'Resources' ? 'w-full' : ''}`}>
+                                  <h3 className={`font-bold text-base md:text-lg gradient-text mb-2 ${item.name === 'Resources' ? '' : ''}`}>
                                     {category.title}
                                   </h3>
-                                  <ul className="space-y-2">
+                                  <ul className={`space-y-2 ${item.name === 'Resources' ? 'w-full' : ''}`}>
                                     {category.items.map((subItem, subIndex) => (
-                                      <li key={subIndex}>
+                                      <li key={subIndex} className={item.name === 'Resources' ? 'w-full' : ''}>
                                         <Link
                                           to={subItem.href || `#${subItem.name.toLowerCase().replace(/\s+/g, "-")}`}
-                                          className="block group/item"
+                                          className={`block group/item ${item.name === 'Resources' ? '' : ''}`}
                                           onClick={() => {
                                             setClickedDropdown(null);
                                             setActiveDropdown(null);
                                           }}
                                         >
-                                          <div className="font-medium text-sm md:text-base text-foreground group-hover/item:text-primary transition-colors duration-200">
+                                          <div className={`font-medium text-sm md:text-base text-foreground group-hover/item:text-primary transition-colors duration-200 ${item.name === 'Resources' ? '' : ''}`}>
                                             {subItem.name}
                                           </div>
-                                          <div className="text-xs md:text-sm text-foreground/80 group-hover/item:text-foreground transition-colors duration-200">
-                                            {subItem.description}
-                                          </div>
+                                          {subItem.description && (
+                                            <div className={`text-xs md:text-sm text-foreground/80 group-hover/item:text-foreground transition-colors duration-200 ${item.name === 'Resources' ? '' : ''}`}>
+                                              {subItem.description}
+                                            </div>
+                                          )}
                                         </Link>
                                       </li>
                                     ))}
                                   </ul>
                                 </div>
-                              ),
+                              ))}
+                            </div>
+                            {/* Featured Section (omit for Resources dropdown) */}
+                            {item.name !== 'Resources' && (
+                              <div className="mt-4 pt-4 border-t border-glass-border">
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <h4 className="font-bold text-foreground mb-1 text-sm md:text-base">
+                                      Ready to start your project?
+                                    </h4>
+                                    <p className="text-xs md:text-sm text-foreground/70">
+                                      Let's discuss your requirements and bring your vision
+                                      to life.
+                                    </p>
+                                  </div>
+                                  <Button
+                                    size="sm"
+                                    className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300 text-xs md:text-sm"
+                                    onClick={() => {
+                                      setClickedDropdown(null);
+                                      window.location.href = '/contact-us';
+                                    }}
+                                  >
+                                    Get A Quote
+                                  </Button>
+                                </div>
+                              </div>
                             )}
                           </div>
-                          {/* Featured Section */}
-                          <div className="mt-4 pt-4 border-t border-glass-border">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <h4 className="font-bold text-foreground mb-1 text-sm md:text-base">
-                                  Ready to start your project?
-                                </h4>
-                                <p className="text-xs md:text-sm text-foreground/70">
-                                  Let's discuss your requirements and bring your vision
-                                  to life.
-                                </p>
-                              </div>
-                              <Button
-                                size="sm"
-                                className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300 text-xs md:text-sm"
-                                onClick={() => {
-                                  setClickedDropdown(null);
-                                  window.location.href = '/contact-us';
-                                }}
-                              >
-                                Get A Quote
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </nav>
-          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </nav>
+            </div>
+          )}
 
           {/* Right Side Elements - Separated and Responsive */}
           <div className="hidden lg:flex items-center">
@@ -452,7 +500,8 @@ Gallery", description: "View all our projects", href: "/gallery" },
 
           {/* Mobile Menu Button - Consistent with responsive design */}
           <button
-            className="lg:hidden text-foreground"
+            aria-label="Toggle navigation menu"
+            className={`${forceMobileNav ? 'block' : 'lg:hidden'} text-foreground focus:outline-none focus:ring-2 focus:ring-primary rounded-md p-1`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}

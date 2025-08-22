@@ -157,8 +157,10 @@ export function ContactUs() {
       * { box-sizing: border-box; }
       /* Removed the overly broad max-width rule that forced all descendants to full width
         (was collapsing the header dropdown & stretching desktop layout). */
-      .contact-us-page-wrapper img,
-      .contact-us-page-wrapper iframe { max-width: 100%; height: auto; }
+  /* Allow images to scale responsively */
+  .contact-us-page-wrapper img { max-width: 100%; height: auto; }
+  /* Ensure embedded iframes (Google Maps) fill their container height */
+  .contact-us-page-wrapper iframe { width: 100%; height: 100%; display: block; }
       `}</style>
       <div className="contact-us-page-wrapper min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden w-full">
         <Header />
@@ -248,17 +250,17 @@ export function ContactUs() {
                         </div>
                       </a>
 
-                      <a href="tel:+918645322914" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-accent/10 transition-all duration-300">
+                      <a href="tel:+919873250200" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-accent/10 transition-all duration-300">
                         <div className="w-12 h-12 bg-gradient-to-r from-accent to-neon-purple rounded-full flex items-center justify-center">
                           <Phone className="w-6 h-6 text-white" />
                         </div>
                         <div>
                           <h3 className="font-extrabold text-lg">Call Us</h3>
-                          <p className="text-foreground text-base font-medium">+91 8645322914</p>
+                          <p className="text-foreground text-base font-medium">+91 9873250200</p>
                         </div>
                       </a>
 
-                      <a href="https://wa.me/918645322914" target="_blank" rel="noopener noreferrer" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-green-500/10 transition-all duration-300">
+                      <a href="https://wa.me/919873250200" target="_blank" rel="noopener noreferrer" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-green-500/10 transition-all duration-300">
                         <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
                           <MessageCircle className="w-6 h-6 text-white" />
                         </div>

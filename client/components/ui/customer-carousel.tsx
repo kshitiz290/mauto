@@ -12,19 +12,19 @@ const reviews = [
     rating: 5,
   },
   {
-    name: "Anjali Sharma",
-    company: "Himalaya Wellness",
-    photo: "/customers/anjali-sharma.jpg",
+    name: "RD Mishra (CIO)",
+    company: "Om Sweets & Snacks",
+    photo: "/customers/rd-mishra.jpg",
     review:
-      "The SFA and DMS solutions from Manacle have transformed our field operations. Real-time insights and easy integration!",
+      "From sweets outlets to FMCG products the leap was tough but thanks to mSELL and their SFA solution to bring out the full potential of our sales force.",
     rating: 5,
   },
   {
-    name: "Ramesh Kumar",
-    company: "Patanjali Ayurved",
-    photo: "/customers/ramesh-kumar.jpg",
+    name: "Piyush Pant",
+    company: "Neha Herbal",
+    photo: "/customers/piyush-pant.jpg",
     review:
-      "Excellent support and robust technology. Our sales and distribution are now seamless and fully automated.",
+      "I knew we had a salesforce efficiency problem and needed it to be resolved ASAP. Thanks to mSELL for the rescue. Keep going mSELL.",
     rating: 5,
   },
 ];
