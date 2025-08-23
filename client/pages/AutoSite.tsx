@@ -1330,7 +1330,7 @@ export default function AutoSite() {
                       <img src={bannerPreview} alt="Banner Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
                     )}
                   </div>
-                  <div>
+                  {/* <div>
                     <Label>Homepage Photo 1 (Optional)</Label>
                     <Input
                       type="file"
@@ -1377,7 +1377,7 @@ export default function AutoSite() {
                     {photoPreviews[3] && photoPreviews[3] !== "" && (
                       <img src={photoPreviews[3]} alt="Photo 4 Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="mb-8">
