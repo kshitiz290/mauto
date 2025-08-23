@@ -50,12 +50,22 @@ export function Hero() {
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-2">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-2">
             <div className="inline-block group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl blur-sm group-hover:blur-md transition-all duration-500 opacity-70 group-hover:opacity-100"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
               <a href="/auto-site">
-                <button className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-1">
+                <button className="relative px-5 py-2.5 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98]">
                   Build your free website
+                </button>
+              </a>
+            </div>
+
+            <div className="inline-block group relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
+              <a href="/contact-us">
+                <button className="relative px-4 py-2.5 sm:px-5 sm:py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-pink-600 hover:to-purple-600 text-white font-semibold text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-2">
+                  Get Free Consultation
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
               </a>
             </div>

@@ -89,31 +89,96 @@ type CardItem = {
 
 // A smooth, responsive, GPU-accelerated card with gentle hover effects
 function FeatureCard({ card, index: _i }: { card: CardItem; index: number }) {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    setMousePosition({ x, y });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   return (
-    <div className="group relative h-full w-full overflow-visible transform-gpu will-change-transform">
-      {/* Soft gradient wash on hover */}
+    <div
+      ref={cardRef}
+      className="group relative h-full w-full overflow-hidden transform-gpu will-change-transform"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Dynamic gradient that follows mouse - Light theme */}
       <div
-        className={`pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br ${card.cardBg} opacity-0 group-hover:opacity-100 transition-opacity duration-800 ease-in-out`}
+        className={`pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-200 ease-out dark:hidden`}
+        style={{
+          background: isHovered
+            ? `radial-gradient(350px circle at ${mousePosition.x}% ${mousePosition.y}%, ${card.cardBg.includes('orange')
+              ? 'rgba(124, 45, 18, 0.95), rgba(154, 52, 18, 0.85) 15%, rgba(180, 83, 9, 0.75) 30%, rgba(194, 65, 12, 0.65) 45%, rgba(217, 119, 6, 0.5) 60%, rgba(245, 158, 11, 0.3) 75%, rgba(251, 191, 36, 0.15) 85%, transparent 95%'
+              : card.cardBg.includes('blue')
+                ? 'rgba(23, 37, 84, 0.95), rgba(29, 78, 216, 0.85) 15%, rgba(30, 64, 175, 0.75) 30%, rgba(37, 99, 235, 0.65) 45%, rgba(59, 130, 246, 0.5) 60%, rgba(96, 165, 250, 0.3) 75%, rgba(147, 197, 253, 0.15) 85%, transparent 95%'
+                : card.cardBg.includes('purple')
+                  ? 'rgba(59, 7, 100, 0.95), rgba(88, 28, 135, 0.85) 15%, rgba(107, 33, 168, 0.75) 30%, rgba(126, 34, 206, 0.65) 45%, rgba(147, 51, 234, 0.5) 60%, rgba(168, 85, 247, 0.3) 75%, rgba(196, 181, 253, 0.15) 85%, transparent 95%'
+                  : card.cardBg.includes('green')
+                    ? 'rgba(14, 53, 28, 0.95), rgba(20, 83, 45, 0.85) 15%, rgba(21, 128, 61, 0.75) 30%, rgba(22, 163, 74, 0.65) 45%, rgba(34, 197, 94, 0.5) 60%, rgba(74, 222, 128, 0.3) 75%, rgba(134, 239, 172, 0.15) 85%, transparent 95%'
+                    : card.cardBg.includes('indigo')
+                      ? 'rgba(49, 46, 129, 0.95), rgba(55, 48, 163, 0.85) 15%, rgba(67, 56, 202, 0.75) 30%, rgba(79, 70, 229, 0.65) 45%, rgba(99, 102, 241, 0.5) 60%, rgba(129, 140, 248, 0.3) 75%, rgba(165, 180, 252, 0.15) 85%, transparent 95%'
+                      : 'rgba(127, 29, 29, 0.95), rgba(153, 27, 27, 0.85) 15%, rgba(185, 28, 28, 0.75) 30%, rgba(220, 38, 38, 0.65) 45%, rgba(239, 68, 68, 0.5) 60%, rgba(248, 113, 113, 0.3) 75%, rgba(252, 165, 165, 0.15) 85%, transparent 95%'
+            })`
+            : 'transparent',
+          opacity: isHovered ? 1 : 0,
+        }}
+      />
+
+      {/* Dynamic gradient that follows mouse - Dark theme */}
+      <div
+        className={`pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-200 ease-out dark:block hidden`}
+        style={{
+          background: isHovered
+            ? `radial-gradient(300px circle at ${mousePosition.x}% ${mousePosition.y}%, ${card.cardBg.includes('orange')
+              ? 'rgba(255, 159, 64, 1), rgba(255, 183, 77, 0.9) 25%, rgba(255, 206, 84, 0.7) 45%, rgba(255, 224, 130, 0.4) 65%, transparent 80%'
+              : card.cardBg.includes('blue')
+                ? 'rgba(66, 165, 245, 1), rgba(100, 181, 246, 0.9) 25%, rgba(144, 202, 249, 0.7) 45%, rgba(187, 222, 251, 0.4) 65%, transparent 80%'
+                : card.cardBg.includes('purple')
+                  ? 'rgba(186, 104, 200, 1), rgba(206, 147, 216, 0.9) 25%, rgba(225, 190, 231, 0.7) 45%, rgba(243, 232, 255, 0.4) 65%, transparent 80%'
+                  : card.cardBg.includes('green')
+                    ? 'rgba(102, 187, 106, 1), rgba(129, 199, 132, 0.9) 25%, rgba(165, 214, 167, 0.7) 45%, rgba(200, 230, 201, 0.4) 65%, transparent 80%'
+                    : card.cardBg.includes('indigo')
+                      ? 'rgba(121, 134, 203, 1), rgba(149, 164, 224, 0.9) 25%, rgba(179, 198, 255, 0.7) 45%, rgba(224, 231, 255, 0.4) 65%, transparent 80%'
+                      : 'rgba(229, 115, 115, 1), rgba(239, 154, 154, 0.9) 25%, rgba(255, 183, 183, 0.7) 45%, rgba(255, 205, 210, 0.4) 65%, transparent 80%'
+            })`
+            : 'transparent',
+          opacity: isHovered ? 1 : 0,
+        }}
       />
 
       {/* Card container */}
       <div
-        className="relative rounded-2xl bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/30 dark:border-gray-800/50 shadow-xl transform-gpu transition-[transform,box-shadow] duration-300 ease-in-out group-hover:shadow-2xl group-hover:scale-[1.04] group-hover:-translate-y-2 will-change-transform motion-reduce:transition-none motion-reduce:transform-none h-full min-h-[240px] md:min-h-[320px]"
+        className="relative rounded-2xl bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/30 dark:border-gray-800/50 shadow-xl h-full min-h-[240px] md:min-h-[320px] overflow-hidden"
       >
         <div className="p-4 xs:p-6 sm:p-8">
           <div
-            className={`w-16 h-16 bg-gradient-to-br ${card.iconBg} rounded-2xl flex items-center justify-center mb-6 transform-gpu transition-transform duration-900 ease-in-out delay-150 group-hover:rotate-6 group-hover:scale-[1.06] will-change-transform motion-reduce:transition-none motion-reduce:transform-none`}
+            className={`w-16 h-16 bg-gradient-to-br ${card.iconBg} rounded-2xl flex items-center justify-center mb-6`}
           >
             {card.icon}
           </div>
 
-          <h3
-            className={`text-2xl font-bold mb-4 text-foreground ${card.hover} transition-colors duration-300 ease-in-out`}
-          >
+          <h3 className="text-2xl font-bold mb-4 text-foreground">
             {card.title}
           </h3>
 
-          <p className="text-foreground/70 leading-relaxed transition-colors duration-700 ease-in-out group-hover:text-foreground/90">
+          <p className="text-foreground/70 leading-relaxed">
             {card.desc}
           </p>
         </div>
