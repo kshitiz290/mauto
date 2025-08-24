@@ -1,24 +1,37 @@
 import { ArrowRight, BarChart2, Cpu, Smartphone, Users } from "lucide-react";
 import { Button } from "./button";
+import { useEffect, useState } from "react";
 
 export function Hero() {
+  // Defer heavy visual effects until after first paint/idle to improve FCP on mobile
+  const [visualsOn, setVisualsOn] = useState(false);
+  useEffect(() => {
+    const enable = () => setVisualsOn(true);
+    // Prefer idle callback; fallback to small timeout
+    // @ts-ignore
+    const ric = (globalThis as any).requestIdleCallback as ((cb: () => void) => number) | undefined;
+    if (typeof ric === 'function') ric(() => enable()); else setTimeout(enable, 300);
+  }, []);
+
   return (
     <section
       id="home"
       className="flex items-center justify-center relative overflow-hidden pt-20 pb-16 sm:pt-24 md:pt-16 px-4 sm:px-6 lg:px-8 min-h-[60vh] sm:min-h-[80vh] lg:min-h-screen cv-auto"
     >
       {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl floating-animation"></div>
-        <div
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-3xl floating-animation"
-          style={{ animationDelay: "2s" }}
-        ></div>
-        <div
-          className="absolute top-3/4 left-1/2 w-64 h-64 bg-neon-blue/10 rounded-full blur-3xl floating-animation"
-          style={{ animationDelay: "4s" }}
-        ></div>
-      </div>
+      {visualsOn && (
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl floating-animation"></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-3xl floating-animation"
+            style={{ animationDelay: "2s" }}
+          ></div>
+          <div
+            className="absolute top-3/4 left-1/2 w-64 h-64 bg-neon-blue/10 rounded-full blur-3xl floating-animation"
+            style={{ animationDelay: "4s" }}
+          ></div>
+        </div>
+      )}
 
       <div className="container mx-auto text-center relative z-10">
         <div className="max-w-4xl mx-auto">

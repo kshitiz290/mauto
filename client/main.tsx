@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from './components/ProtectedRoute';
 import { Suspense, lazy, useEffect } from 'react';
-import AppLoader from '@/components/ui/app-loader';
+// Keep fallback ultra-light to reduce initial JS and improve FCP
 import { prefetchRoute } from './lib/prefetchRoutes';
 import { useLocation } from 'react-router-dom';
 import { applySeo, routeSeo } from './lib/seo';
@@ -55,8 +55,8 @@ const Whatsapp_Ordering = lazy(() => import('./pages/solutions/Whatsapp_Ordering
 const queryClient = new QueryClient();
 
 
-// Themed full-screen loader used during route lazy-loading
-const LoadingFallback = () => <AppLoader />;
+// Tiny fallback keeps bundle small and paints text immediately
+const LoadingFallback = () => <div style={{ height: 1, width: 1, position: 'absolute', overflow: 'hidden' }}> </div>;
 
 function RouteSeoUpdater() {
   const location = useLocation();

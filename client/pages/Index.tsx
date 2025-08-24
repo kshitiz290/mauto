@@ -5,8 +5,9 @@ import { ThemeProvider } from "../components/ui/theme-provider";
 import { Button } from "../components/ui/button";
 import { Facebook, Instagram, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import Footer from "../components/ui/footer";
-import HowHelpingCompanies from "../components/ui/how-helping-companies";
-import CustomerCarousel from "../components/ui/customer-carousel";
+import { lazy, Suspense } from "react";
+const HowHelpingCompanies = lazy(() => import("../components/ui/how-helping-companies"));
+const CustomerCarousel = lazy(() => import("../components/ui/customer-carousel"));
 
 
 
@@ -31,25 +32,25 @@ export default function Index() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 items-center justify-center">
                 {/* SFA */}
                 <div className="bg-white dark:bg-[#23232a] rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 border-t-4 border-orange-400 dark:border-orange-500">
-                  <img src="/icons/marketing-3d.svg" alt="SFA" className="w-20 h-20 mb-4" loading="lazy" decoding="async" />
+                  <img src="/icons/marketing-3d.svg" alt="SFA" className="w-20 h-20 mb-4" loading="lazy" decoding="async" fetchPriority="low" />
                   <h3 className="text-xl font-bold mb-2 text-orange-500 dark:text-orange-400">Sales Force Automation</h3>
                   <p className="text-foreground/80 dark:text-foreground/70 text-center">Automate field sales, order management, and activity tracking for your sales team.</p>
                 </div>
                 {/* DMS */}
                 <div className="bg-white dark:bg-[#23232a] rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 border-t-4 border-yellow-400 dark:border-yellow-500">
-                  <img src="/icons/branding-3d.svg" alt="DMS" className="w-20 h-20 mb-4" loading="lazy" decoding="async" />
+                  <img src="/icons/branding-3d.svg" alt="DMS" className="w-20 h-20 mb-4" loading="lazy" decoding="async" fetchPriority="low" />
                   <h3 className="text-xl font-bold mb-2 text-yellow-500 dark:text-yellow-400">Distributor Management</h3>
                   <p className="text-foreground/80 dark:text-foreground/70 text-center">Optimize your distribution network and supply chain for maximum efficiency.</p>
                 </div>
                 {/* Visual Merchandising */}
                 <div className="bg-white dark:bg-[#23232a] rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 border-t-4 border-pink-400 dark:border-pink-500">
-                  <img src="/icons/web-design-3d.svg" alt="Visual Merchandising" className="w-20 h-20 mb-4" loading="lazy" decoding="async" />
+                  <img src="/icons/web-design-3d.svg" alt="Visual Merchandising" className="w-20 h-20 mb-4" loading="lazy" decoding="async" fetchPriority="low" />
                   <h3 className="text-xl font-bold mb-2 text-pink-500 dark:text-pink-400">Visual Merchandising</h3>
                   <p className="text-foreground/80 dark:text-foreground/70 text-center">Enhance retail space appeal and boost sales with advanced merchandising tools.</p>
                 </div>
                 {/* Attendance & Leave Management */}
                 <div className="bg-white dark:bg-[#23232a] rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 border-t-4 border-green-400 dark:border-green-500">
-                  <img src="/icons/maintenance-3d.svg" alt="Attendance & Leave" className="w-20 h-20 mb-4" loading="lazy" decoding="async" />
+                  <img src="/icons/maintenance-3d.svg" alt="Attendance & Leave" className="w-20 h-20 mb-4" loading="lazy" decoding="async" fetchPriority="low" />
                   <h3 className="text-xl font-bold mb-2 text-green-500 dark:text-green-400">Attendance & Leave</h3>
                   <p className="text-foreground/80 dark:text-foreground/70 text-center">Cloud-based solution for employee time tracking, leave, and compliance.</p>
                 </div>
@@ -58,8 +59,8 @@ export default function Index() {
           </section>
           {/* <TechStack /> */}
           {/* How Are We Helping Companies Section */}
-          <div className="cv-auto"><HowHelpingCompanies /></div>
-          <div className="cv-auto"><CustomerCarousel /></div>
+          <div className="cv-auto"><Suspense fallback={null}><HowHelpingCompanies /></Suspense></div>
+          <div className="cv-auto"><Suspense fallback={null}><CustomerCarousel /></Suspense></div>
           {/* AI Website Builder CTA Section */}
           {/* <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
