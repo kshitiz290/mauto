@@ -1,70 +1,88 @@
 import { Header } from "../components/ui/header";
 import { Hero } from "../components/ui/hero";
 import { WhyChooseUs } from "../components/ui/why-choose-us";
-import { TrustedByCompanies } from "../components/ui/trusted-by-companies";
 import { ThemeProvider } from "../components/ui/theme-provider";
 import { Button } from "../components/ui/button";
-import { Facebook, Instagram, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
+import { Phone, MessageCircle } from "lucide-react";
 import Footer from "../components/ui/footer";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
+
+// Lazy load heavy components for better initial load
+const TrustedByCompanies = lazy(() => import("../components/ui/trusted-by-companies").then(module => ({ default: module.TrustedByCompanies })));
 const HowHelpingCompanies = lazy(() => import("../components/ui/how-helping-companies"));
 const CustomerCarousel = lazy(() => import("../components/ui/customer-carousel"));
+const RetailTransformation = lazy(() => import("../components/ui/retail-transformation"));
+
+// Lightweight loading fallback
+const LoadingFallback = () => (
+  <div className="w-full h-32 flex items-center justify-center">
+    <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+);
+
+// Mobile-first progressive loading
+const useProgressiveLoading = () => {
+  const [loadStage, setLoadStage] = useState(0);
+
+  useEffect(() => {
+    // Stage 1: Load immediately after Hero
+    const timer1 = setTimeout(() => setLoadStage(1), 1000);
+    // Stage 2: Load after user interaction or 3s
+    const timer2 = setTimeout(() => setLoadStage(2), 3000);
+    // Stage 3: Load remaining heavy components
+    const timer3 = setTimeout(() => setLoadStage(3), 5000);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
+
+  return loadStage;
+};
 
 
 
 
 export default function Index() {
+  const loadStage = useProgressiveLoading();
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
         <Header />
         <main className="pt-4 sm:pt-6">
           <Hero />
-           <WhyChooseUs />
-          
-          {/* Transforming Retail Industry Section */}
-          <section className="py-20 bg-gradient-to-br from-white via-slate-50 to-slate-100 dark:from-[#18181b] dark:via-[#23232a] dark:to-[#18181b] relative overflow-hidden cv-auto">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-              <div className="text-center mb-14">
-                <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent leading-tight sm:leading-[1.15] pb-2">Transforming Retail Industry with Integrated Technology</h2>
-                <p className="text-xl sm:text-2xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
-                  Empower your FMCG and retail business with Manacle’s suite of integrated solutions: SFA, DMS, Visual Merchandising, Attendance & Leave Management, and more. Achieve operational excellence, real-time insights, and exponential growth with our innovative, scalable platforms.
-                </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 items-center justify-center">
-                {/* SFA */}
-                <div className="bg-white dark:bg-[#23232a] rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 border-t-4 border-orange-400 dark:border-orange-500">
-                  <img src="/icons/marketing-3d.svg" alt="SFA" className="w-20 h-20 mb-4" loading="lazy" decoding="async" fetchPriority="low" />
-                  <h3 className="text-xl font-bold mb-2 text-orange-500 dark:text-orange-400">Sales Force Automation</h3>
-                  <p className="text-foreground/80 dark:text-foreground/70 text-center">Automate field sales, order management, and activity tracking for your sales team.</p>
-                </div>
-                {/* DMS */}
-                <div className="bg-white dark:bg-[#23232a] rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 border-t-4 border-yellow-400 dark:border-yellow-500">
-                  <img src="/icons/branding-3d.svg" alt="DMS" className="w-20 h-20 mb-4" loading="lazy" decoding="async" fetchPriority="low" />
-                  <h3 className="text-xl font-bold mb-2 text-yellow-500 dark:text-yellow-400">Distributor Management</h3>
-                  <p className="text-foreground/80 dark:text-foreground/70 text-center">Optimize your distribution network and supply chain for maximum efficiency.</p>
-                </div>
-                {/* Visual Merchandising */}
-                <div className="bg-white dark:bg-[#23232a] rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 border-t-4 border-pink-400 dark:border-pink-500">
-                  <img src="/icons/web-design-3d.svg" alt="Visual Merchandising" className="w-20 h-20 mb-4" loading="lazy" decoding="async" fetchPriority="low" />
-                  <h3 className="text-xl font-bold mb-2 text-pink-500 dark:text-pink-400">Visual Merchandising</h3>
-                  <p className="text-foreground/80 dark:text-foreground/70 text-center">Enhance retail space appeal and boost sales with advanced merchandising tools.</p>
-                </div>
-                {/* Attendance & Leave Management */}
-                <div className="bg-white dark:bg-[#23232a] rounded-2xl shadow-xl p-8 flex flex-col items-center hover:scale-105 transition-transform duration-300 border-t-4 border-green-400 dark:border-green-500">
-                  <img src="/icons/maintenance-3d.svg" alt="Attendance & Leave" className="w-20 h-20 mb-4" loading="lazy" decoding="async" fetchPriority="low" />
-                  <h3 className="text-xl font-bold mb-2 text-green-500 dark:text-green-400">Attendance & Leave</h3>
-                  <p className="text-foreground/80 dark:text-foreground/70 text-center">Cloud-based solution for employee time tracking, leave, and compliance.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-          {/* <TechStack /> */}
-          {/* How Are We Helping Companies Section */}
-          <div className="cv-auto"><Suspense fallback={null}><HowHelpingCompanies /></Suspense></div>
 
-          <TrustedByCompanies />
-          <div className="cv-auto"><Suspense fallback={null}><CustomerCarousel /></Suspense></div>
+          {/* Stage 1: Essential content only */}
+          {loadStage >= 1 && (
+            <Suspense fallback={<LoadingFallback />}>
+              <RetailTransformation />
+            </Suspense>
+          )}
+
+          <WhyChooseUs />
+
+          {/* Stage 2: Secondary content */}
+          {loadStage >= 2 && (
+            <Suspense fallback={<LoadingFallback />}>
+              <HowHelpingCompanies />
+            </Suspense>
+          )}
+
+          {/* Stage 3: Heavy components last */}
+          {loadStage >= 3 && (
+            <>
+              <Suspense fallback={<LoadingFallback />}>
+                <TrustedByCompanies />
+              </Suspense>
+
+              <Suspense fallback={<LoadingFallback />}>
+                <CustomerCarousel />
+              </Suspense>
+            </>
+          )}
           {/* AI Website Builder CTA Section */}
           {/* <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">

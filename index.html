@@ -7,23 +7,29 @@
   <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f5f7fb" media="(prefers-color-scheme: light)">
   <meta name="color-scheme" content="light dark">
+
+  <!-- Critical Resource Preloading -->
+  <link rel="preload" href="/client/main.tsx" as="script" crossorigin>
+  <link rel="preload" href="/manacle_logo.png" as="image" type="image/png">
+
+  <!-- DNS Prefetch for external resources -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+  <!-- Canonical and SEO -->
   <link rel="canonical" href="https://www.manacletech.com/">
   <meta name="robots" content="index,follow,max-image-preview:large">
+
   <title>Manacle Technologies - Digital Transformation & Business Solutions</title>
   <link rel="icon" type="image/png" href="/manacle_logo.png" />
   <link rel="shortcut icon" type="image/png" href="/manacle_logo.png" />
   <link rel="apple-touch-icon" href="/manacle_logo.png" />
+
   <meta name="description"
     content="Manacle Technologies is a leading provider of digital transformation, SaaS, web development, automation, CRM, HRMS, and business solutions. Empowering enterprises with innovative technology, seamless integration, and scalable platforms." />
   <meta name="keywords"
     content="Manacle Technologies, SaaS, digital transformation, web development, CRM, HRMS, automation, business solutions, software, cloud, mobile apps, ERP, field force, distributor management, WhatsApp ordering, retail, enterprise solutions, India, technology partner" />
   <meta name="author" content="Manacle Technologies" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <!-- Preload above-the-fold font if used; swap to avoid FOIT -->
-  <!-- <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-400.woff2" crossorigin> -->
   <meta property="og:title" content="Manacle Technologies - Digital Transformation & Business Solutions" />
   <meta property="og:description"
     content="Empowering enterprises with SaaS, automation, CRM, HRMS, and digital solutions. Your trusted technology partner for business growth." />

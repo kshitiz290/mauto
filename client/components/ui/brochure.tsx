@@ -71,6 +71,10 @@ const Brochure = () => {
             className="absolute left-0 top-0 w-full h-full object-cover "
             // style={{ boxShadow: '0 8px 32px 0 rgba(255,152,0,0.12)' }}
             loading="lazy"
+            decoding="async"
+            fetchPriority="low"
+            width="300"
+            height="300"
             animate={{ y: [0, -8, 0] }}
             transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
           />

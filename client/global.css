@@ -2,6 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Optimize critical CSS loading */
+@layer base {
+
+  /* Optimize font loading */
+  body {
+    font-display: swap;
+  }
+
+  /* Optimize image loading */
+  img {
+    content-visibility: auto;
+    contain-intrinsic-size: 200px;
+  }
+}
+
+/* Custom animations for carousel - optimized */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile-first performance: Disable heavy animations on mobile */
+@media (max-width: 768px) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.1s !important;
+  }
+
+  /* Disable gradient animations on mobile */
+  .animate-gradient-x {
+    animation: none !important;
+    background: linear-gradient(to right, #f97316, #eab308) !important;
+    background-clip: text !important;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer base {
 
   /**

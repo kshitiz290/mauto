@@ -4,7 +4,7 @@ import { CheckCircle, BarChart2, Cpu, Users, Smartphone, Smile, Repeat, Trending
 
 const features = [
   {
-    icon: <Cpu className="text-orange-500 w-7 h-7" />, 
+    icon: <Cpu className="text-orange-500 w-7 h-7" />,
     title: "Innovative Technology Solutions",
     desc: "Delivering cutting-edge technology tailored to unique business needs, enabling seamless automation and efficiency."
   },
@@ -41,31 +41,132 @@ export default function HowHelpingCompanies() {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-16 flex flex-col md:flex-row items-center gap-8 md:gap-12">
         {/* Left: Features */}
         <div className="flex-1 w-full space-y-8">
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent leading-tight pb-2 drop-shadow-md">
+          <motion.h2
+            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent leading-tight pb-2 drop-shadow-md"
+            initial={{ opacity: 0, y: -30, scale: 0.95 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              duration: 0.8,
+              ease: [0.25, 0.25, 0.25, 1.25],
+              type: "spring",
+              stiffness: 100
+            }}
+            viewport={{ once: true, margin: "-100px" }}
+          >
             How Are We Helping Companies
-            <span className="block mt-2 text-gray-700 dark:text-orange-200 font-normal text-lg sm:text-xl">Achieve Tremendous Growth?</span>
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl text-foreground/70 dark:text-gray-300 mb-6 max-w-xl">
+            <motion.span
+              className="block mt-2 text-gray-700 dark:text-orange-200 font-normal text-lg sm:text-xl"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{
+                delay: 0.3,
+                duration: 0.7,
+                ease: "easeOut"
+              }}
+              viewport={{ once: true }}
+            >
+              Achieve Tremendous Growth?
+            </motion.span>
+          </motion.h2>
+          <motion.p
+            className="text-base sm:text-lg md:text-xl text-foreground/70 dark:text-gray-300 mb-6 max-w-xl"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              delay: 0.5,
+              duration: 0.7,
+              ease: "easeOut"
+            }}
+            viewport={{ once: true }}
+          >
             We help our clients accelerate sales & distribution growth with 360° retail intelligence. In doing so, we focus on:
-          </p>
+          </motion.p>
           <ul className="space-y-6">
             {features.map((f, i) => (
               <motion.li
                 key={f.title}
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + i * 0.2, duration: 0.6, type: "spring" }}
-                viewport={{ once: true }}
-                className="flex items-start gap-4"
+                initial={{ opacity: 0, x: -60, scale: 0.95 }}
+                whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{
+                  delay: 0.1 + i * 0.15,
+                  duration: 0.8,
+                  ease: [0.25, 0.25, 0.25, 1.25],
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 15
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/40 dark:hover:bg-slate-800/40 backdrop-blur-sm transition-colors duration-200 cursor-pointer"
               >
-                <span className="mt-1">{f.icon}</span>
-                <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-foreground dark:text-orange-200 mb-1 flex items-center gap-2 drop-shadow">
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    delay: 0.1 + i * 0.1,
+                    duration: 0.6,
+                    type: "spring",
+                    stiffness: 150,
+                    damping: 15
+                  }}
+                  viewport={{ once: true }}
+                  className="text-blue-500"
+                >
+                  {f.icon}
+                </motion.span>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.3 + i * 0.15,
+                    duration: 0.7,
+                    ease: [0.25, 0.25, 0.25, 1]
+                  }}
+                  viewport={{ once: true }}
+                >
+                  <motion.h3
+                    className="text-lg sm:text-xl font-semibold text-foreground dark:text-orange-200 mb-1 flex items-center gap-2 drop-shadow"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: 0.4 + i * 0.15,
+                      duration: 0.6,
+                      ease: "easeOut"
+                    }}
+                    viewport={{ once: true }}
+                  >
                     {f.title}
-                    <CheckCircle className="w-5 h-5 text-orange-400 ml-1" />
-                  </h3>
-                  <div className="text-foreground/70 dark:text-gray-400 text-sm sm:text-base">{f.desc}</div>
-                </div>
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      transition={{
+                        delay: 0.6 + i * 0.15,
+                        duration: 0.4,
+                        ease: "backOut"
+                      }}
+                      viewport={{ once: true }}
+                      whileHover={{
+                        scale: 1.2,
+                        rotate: 360,
+                        transition: { duration: 0.2, ease: "easeOut" }
+                      }}
+                    >
+                      <CheckCircle className="w-5 h-5 text-orange-400 ml-1" />
+                    </motion.div>
+                  </motion.h3>
+                  <motion.div
+                    className="text-foreground/70 dark:text-gray-400 text-sm sm:text-base"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: 0.5 + i * 0.15,
+                      duration: 0.6,
+                      ease: "easeOut"
+                    }}
+                    viewport={{ once: true }}
+                  >
+                    {f.desc}
+                  </motion.div>
+                </motion.div>
               </motion.li>
             ))}
           </ul>
@@ -120,11 +221,11 @@ export default function HowHelpingCompanies() {
               <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex-1 flex flex-col justify-end">
                 <div className="text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1">Sales Insights</div>
                 <div className="flex items-end h-24 gap-2 w-full">
-                  <motion.div animate={{ height: [32, 64, 32] }} transition={{ repeat: Infinity, duration: 2, repeatType: 'mirror', delay: 0 }} className="w-6 rounded bg-orange-400/80 dark:bg-orange-600/80" style={{height:48}} />
-                  <motion.div animate={{ height: [64, 32, 64] }} transition={{ repeat: Infinity, duration: 2.1, repeatType: 'mirror', delay: 0.1 }} className="w-6 rounded bg-blue-400/80 dark:bg-blue-600/80" style={{height:36}} />
-                  <motion.div animate={{ height: [40, 72, 40] }} transition={{ repeat: Infinity, duration: 2.2, repeatType: 'mirror', delay: 0.2 }} className="w-6 rounded bg-green-400/80 dark:bg-green-600/80" style={{height:60}} />
-                  <motion.div animate={{ height: [52, 28, 52] }} transition={{ repeat: Infinity, duration: 2.3, repeatType: 'mirror', delay: 0.3 }} className="w-6 rounded bg-gray-300/80 dark:bg-gray-700/80" style={{height:32}} />
-                  <motion.div animate={{ height: [28, 52, 28] }} transition={{ repeat: Infinity, duration: 2.4, repeatType: 'mirror', delay: 0.4 }} className="w-6 rounded bg-yellow-300/80 dark:bg-yellow-600/80" style={{height:40}} />
+                  <motion.div animate={{ height: [32, 64, 32] }} transition={{ repeat: Infinity, duration: 2, repeatType: 'mirror', delay: 0 }} className="w-6 rounded bg-orange-400/80 dark:bg-orange-600/80" style={{ height: 48 }} />
+                  <motion.div animate={{ height: [64, 32, 64] }} transition={{ repeat: Infinity, duration: 2.1, repeatType: 'mirror', delay: 0.1 }} className="w-6 rounded bg-blue-400/80 dark:bg-blue-600/80" style={{ height: 36 }} />
+                  <motion.div animate={{ height: [40, 72, 40] }} transition={{ repeat: Infinity, duration: 2.2, repeatType: 'mirror', delay: 0.2 }} className="w-6 rounded bg-green-400/80 dark:bg-green-600/80" style={{ height: 60 }} />
+                  <motion.div animate={{ height: [52, 28, 52] }} transition={{ repeat: Infinity, duration: 2.3, repeatType: 'mirror', delay: 0.3 }} className="w-6 rounded bg-gray-300/80 dark:bg-gray-700/80" style={{ height: 32 }} />
+                  <motion.div animate={{ height: [28, 52, 28] }} transition={{ repeat: Infinity, duration: 2.4, repeatType: 'mirror', delay: 0.4 }} className="w-6 rounded bg-yellow-300/80 dark:bg-yellow-600/80" style={{ height: 40 }} />
                 </div>
                 <div className="flex justify-between text-[10px] text-gray-400 dark:text-gray-500 mt-1">
                   <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span>

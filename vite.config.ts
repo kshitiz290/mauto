@@ -18,17 +18,17 @@ export default defineConfig(({ mode }) => ({
     emptyOutDir: true,
     sourcemap: false,
     minify: "esbuild",
-    target: "es2015",
-    // Reduce bundle size and TBT by removing debug noise in production
-    terserOptions: undefined,
+    target: "es2020", // Updated for better optimization
+    cssMinify: "esbuild",
     esbuild: {
       drop: ["console", "debugger"],
       legalComments: "none",
+      treeShaking: true,
     },
     rollupOptions: {
       onwarn(warning, warn) {
         if (typeof warning.message === 'string' && warning.message.includes('Error when using sourcemap for reporting an error')) {
-          return; // suppress specific sourcemap location warning
+          return;
         }
         warn(warning);
       },
@@ -36,17 +36,22 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           react: ["react", "react-dom"],
           router: ["react-router-dom"],
-          // animation libs
           motion: ["framer-motion"],
           radix: ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu"],
           query: ["@tanstack/react-query"],
+          icons: ["lucide-react"],
         },
+        // Optimize chunk names for caching
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
-    // Allow a few more chunks before warning once split; still keep default near 500.
-    chunkSizeWarningLimit: 700,
+    chunkSizeWarningLimit: 300, // Even smaller chunks for mobile
     assetsDir: "assets",
     copyPublicDir: true,
+    // Enable compression and optimization
+    assetsInlineLimit: 2048, // Smaller inline limit for mobile
   },
   plugins: [react(), ...(mode === "development" ? [expressPlugin()] : [])],
   resolve: {

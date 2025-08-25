@@ -4,44 +4,58 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export function Hero() {
-  // Defer heavy visual effects until after first paint/idle to improve FCP on mobile
+  // Mobile-first optimization: Defer ALL visual effects on mobile
   const [visualsOn, setVisualsOn] = useState(false);
   const [currentStats, setCurrentStats] = useState({ clients: 200, years: 15, solutions: 50 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const enable = () => setVisualsOn(true);
-    // Prefer idle callback; fallback to small timeout
-    // @ts-ignore
-    const ric = (globalThis as any).requestIdleCallback as ((cb: () => void) => number) | undefined;
-    if (typeof ric === 'function') ric(() => enable()); else setTimeout(enable, 300);
+    // Detect mobile
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
 
-    // Animated stats counter
-    const animateStats = () => {
-      const targetStats = { clients: 200, years: 15, solutions: 50 };
-      let frame = 0;
-      const animate = () => {
-        frame++;
-        if (frame <= 60) {
-          setCurrentStats({
-            clients: Math.floor((targetStats.clients * frame) / 60),
-            years: Math.floor((targetStats.years * frame) / 60),
-            solutions: Math.floor((targetStats.solutions * frame) / 60)
-          });
-          requestAnimationFrame(animate);
-        }
+    // On mobile: delay visuals much longer, on desktop: faster
+    const visualDelay = isMobile ? 2000 : 100;
+    const timer = setTimeout(() => setVisualsOn(true), visualDelay);
+
+    // Skip animations entirely on mobile for faster LCP
+    if (!isMobile) {
+      const animateStats = () => {
+        const targetStats = { clients: 200, years: 15, solutions: 50 };
+        let frame = 0;
+        const animate = () => {
+          frame++;
+          if (frame <= 15) { // Further reduced frames for mobile
+            setCurrentStats({
+              clients: Math.floor((targetStats.clients * frame) / 15),
+              years: Math.floor((targetStats.years * frame) / 15),
+              solutions: Math.floor((targetStats.solutions * frame) / 15)
+            });
+            requestAnimationFrame(animate);
+          }
+        };
+        setTimeout(() => requestAnimationFrame(animate), 1000);
       };
-      setTimeout(() => requestAnimationFrame(animate), 1000);
+      animateStats();
+    } else {
+      // On mobile: set stats immediately, no animation
+      setCurrentStats({ clients: 200, years: 15, solutions: 50 });
+    }
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkMobile);
     };
-    animateStats();
-  }, []);
+  }, [isMobile]);
 
   return (
     <section
       id="home"
       className="relative overflow-hidden min-h-screen flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800"
     >
-      {/* Dynamic Background Elements */}
-      {visualsOn && (
+      {/* Dynamic Background Elements - Skip on mobile for LCP */}
+      {visualsOn && !isMobile && (
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
             className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-orange-400/20 to-yellow-400/10 rounded-full blur-3xl"
@@ -90,11 +104,11 @@ export function Hero() {
       )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 lp:pl-16 relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-6 xl:gap-8 items-center min-h-screen py-16 md:py-12 lg:py-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center min-h-screen py-16 md:py-12 lg:py-8">
 
           {/* Left Content */}
           <motion.div
-            className="text-center md:text-left lg:text-left space-y-4 md:space-y-5 lg:space-y-8 order-1 md:order-1 lg:order-1"
+            className="text-center md:text-left lg:text-left space-y-4 md:space-y-5 lg:space-y-8 order-1 md:order-1 lg:order-1 md:pr-4 lg:pr-8 xl:pr-12"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
@@ -111,31 +125,30 @@ export function Hero() {
             </motion.div>
 
             {/* Main Heading */}
-            <motion.div
-              className="space-y-2 md:space-y-3 lg:space-y-4"
-              initial={{ opacity: 0, y: 30 }}
+            {/* Main Heading */}
+            <motion.h1
+              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight sm:leading-tight md:leading-tight lg:leading-tight xl:leading-tight text-center md:text-left lg:text-left tracking-tight"
+              initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
+              transition={!isMobile ? { delay: 0.2, duration: 0.8 } : { duration: 0 }}
             >
-              <h1 className="text-4xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
-                <span className="bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                  Transform
-                </span>
-                <br />
-                <span className="text-foreground">Your Business</span>
-                <br />
-                <span className="text-foreground/80 text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
-                  with Technology
-                </span>
-              </h1>
-            </motion.div>
+              <span className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent bg-size-200 animate-gradient-x">
+                Transform
+              </span>
+              <br />
+              <span className="text-foreground">Your Business</span>
+              <br />
+              <span className="text-foreground/80 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+                with Technology
+              </span>
+            </motion.h1>
 
             {/* Subtitle */}
             <motion.p
-              className="text-base md:text-lg lg:text-xl text-foreground/70 max-w-xl md:max-w-2xl lg:max-w-none leading-relaxed mx-auto md:mx-0"
-              initial={{ opacity: 0, y: 20 }}
+              className="text-sm sm:text-base md:text-lg lg:text-xl text-foreground/70 max-w-2xl leading-relaxed text-center md:text-left lg:text-left px-4 md:px-0"
+              initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
+              transition={!isMobile ? { delay: 0.4, duration: 0.8 } : { duration: 0 }}
             >
               Empowering businesses across all industries with cutting-edge
               <span className="text-orange-500 font-semibold"> SFA, ERP, CRM, HRMS</span> and
@@ -145,7 +158,7 @@ export function Hero() {
 
             {/* Stats */}
             <motion.div
-              className="flex flex-row sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-2 sm:py-3 md:py-4 lg:py-6 justify-center md:justify-start lg:justify-start"
+              className="flex flex-row sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-2 sm:py-3 md:py-4 lg:py-6 justify-center md:justify-start lg:justify-start md:ml-2 lg:ml-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.8 }}
@@ -166,7 +179,7 @@ export function Hero() {
 
             {/* CTA Buttons */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4 justify-center md:justify-start lg:justify-start items-center"
+              className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4 justify-center md:justify-start lg:justify-start items-center md:ml-2 lg:ml-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.8 }}

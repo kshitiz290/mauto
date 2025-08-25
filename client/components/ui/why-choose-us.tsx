@@ -14,8 +14,14 @@ function AnimatedCounter({ end, duration = 2000, suffix = "", color, label }: Co
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const counterRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Detect mobile
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -29,22 +35,31 @@ function AnimatedCounter({ end, duration = 2000, suffix = "", color, label }: Co
       observer.observe(counterRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   useEffect(() => {
     if (!isVisible) return;
+
+    // On mobile: skip animation, set value immediately
+    if (isMobile) {
+      setCount(end);
+      return;
+    }
 
     let startTime: number;
     let animationFrame: number;
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const progress = Math.min((timestamp - startTime) / (duration / 2), 1); // Faster animation
 
-      // Easing function for smooth animation
-      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(easeOutQuart * end));
+      // Simplified easing
+      const easeOut = 1 - Math.pow(1 - progress, 2);
+      setCount(Math.floor(easeOut * end));
 
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);
@@ -58,7 +73,7 @@ function AnimatedCounter({ end, duration = 2000, suffix = "", color, label }: Co
         cancelAnimationFrame(animationFrame);
       }
     };
-  }, [isVisible, end, duration]);
+  }, [isVisible, end, duration, isMobile]);
 
   return (
     <div ref={counterRef} className="relative h-full w-full min-w-0">

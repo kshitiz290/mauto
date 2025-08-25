@@ -12,14 +12,19 @@ export function TrustedByCompanies() {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isHovered, setIsHovered] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const containerRefTP = useRef<HTMLDivElement>(null); // tablet-portrait carousel
     const [mounted, setMounted] = useState(false);
     const [animationTime, setAnimationTime] = useState(0);
     const [spotlightIndex, setSpotlightIndex] = useState(0);
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [isAutoSpotlightPaused, setIsAutoSpotlightPaused] = useState(false);
-    const [currentSlide, setCurrentSlide] = useState(0);
+    const [currentSlide, setCurrentSlide] = useState(0); // mobile
+    const [currentSlideTP, setCurrentSlideTP] = useState(0); // tablet portrait
     const [touchStart, setTouchStart] = useState(0);
     const [touchEnd, setTouchEnd] = useState(0);
+    const [touchStartTP, setTouchStartTP] = useState(0);
+    const [touchEndTP, setTouchEndTP] = useState(0);
+    const [deviceMode, setDeviceMode] = useState<'mobile' | 'tablet-portrait' | 'desktop'>('desktop');
 
     useEffect(() => {
         setMounted(true);
@@ -34,55 +39,60 @@ export function TrustedByCompanies() {
 
         animationId = requestAnimationFrame(animate);
 
-        // Smooth auto-sliding for mobile with proper timing
-        const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+        // Device mode detection - more inclusive for tablets
+        const updateMode = () => {
+            if (typeof window === 'undefined') return;
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            if (w < 768) {
+                setDeviceMode('mobile');
+            } else if (w >= 768 && w < 1200) {
+                // Any tablet size (both portrait and landscape) - use carousel
+                setDeviceMode('tablet-portrait');
+            } else {
+                // Large screens - use ellipse
+                setDeviceMode('desktop');
+            }
+        };
+        updateMode();
+        window.addEventListener('resize', updateMode);
 
-        if (isMobileDevice) {
-            // Mobile: Smooth auto-slide carousel
-            const mobileSlideInterval = setInterval(() => {
+        let intervalId: number | undefined;
+        let desktopSpotlightInterval: number | undefined;
+
+        if (deviceMode === 'mobile') {
+            // Mobile: 2-logo carousel
+            intervalId = window.setInterval(() => {
                 setCurrentSlide(prev => {
                     const totalSlides = Math.ceil(clientLogos.length / 2);
                     return (prev + 1) % totalSlides;
                 });
             }, 2500);
-
-            // Store mobile interval reference
-            return () => {
-                if (animationId) {
-                    cancelAnimationFrame(animationId);
-                }
-                clearInterval(mobileSlideInterval);
-            };
+        } else if (deviceMode === 'tablet-portrait') {
+            // Tablet Portrait: 4-logo smooth carousel
+            intervalId = window.setInterval(() => {
+                setCurrentSlideTP(prev => {
+                    const totalSlides = Math.ceil(clientLogos.length / 4);
+                    return (prev + 1) % totalSlides;
+                });
+            }, 3000); // Slightly slower for better viewing
         } else {
             // Desktop: Spotlight effect with pause/resume functionality
-            let desktopSpotlightInterval: NodeJS.Timeout;
-
-            const startSpotlightInterval = () => {
-                desktopSpotlightInterval = setInterval(() => {
-                    if (!isAutoSpotlightPaused) {
-                        setSpotlightIndex((prev) => (prev + 1) % clientLogos.length);
-                    }
-                }, 2500);
-            };
-
-            startSpotlightInterval();
-
-            // Handle window resize for responsive behavior
-            const handleResize = () => {
-                setAnimationTime(prev => prev + 1); // Trigger re-render
-            };
-
-            window.addEventListener('resize', handleResize);
-
-            return () => {
-                if (animationId) {
-                    cancelAnimationFrame(animationId);
+            const tick = () => {
+                if (!isAutoSpotlightPaused) {
+                    setSpotlightIndex((prev) => (prev + 1) % clientLogos.length);
                 }
-                clearInterval(desktopSpotlightInterval);
-                window.removeEventListener('resize', handleResize);
             };
+            desktopSpotlightInterval = window.setInterval(tick, 2500);
         }
-    }, []);
+
+        return () => {
+            if (animationId) cancelAnimationFrame(animationId);
+            if (intervalId) clearInterval(intervalId);
+            if (desktopSpotlightInterval) clearInterval(desktopSpotlightInterval);
+            window.removeEventListener('resize', updateMode);
+        };
+    }, [deviceMode, isAutoSpotlightPaused]);
 
     const clientLogos: ClientLogo[] = [
         { src: "/clients/haldirams_logo.png", name: "Haldirams", size: "large" },
@@ -170,6 +180,39 @@ export function TrustedByCompanies() {
         setTouchEnd(0);
     };
 
+    // Tablet Portrait touch handlers
+    const handleTouchStartTP = (e: React.TouchEvent<HTMLDivElement>) => {
+        setTouchStartTP(e.targetTouches[0].clientX);
+        setIsHovered(true);
+    };
+
+    const handleTouchMoveTP = (e: React.TouchEvent<HTMLDivElement>) => {
+        setTouchEndTP(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEndTP = () => {
+        if (!touchStartTP || !touchEndTP) {
+            setIsHovered(false);
+            return;
+        }
+
+        const distance = touchStartTP - touchEndTP;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+        const totalSlides = Math.ceil(clientLogos.length / 4);
+
+        if (isLeftSwipe) {
+            setCurrentSlideTP(prev => Math.min(prev + 1, totalSlides - 1));
+        }
+        if (isRightSwipe) {
+            setCurrentSlideTP(prev => Math.max(prev - 1, 0));
+        }
+
+        setIsHovered(false);
+        setTouchStartTP(0);
+        setTouchEndTP(0);
+    };
+
     const handleLogoMouseEnter = (index: number) => {
         setHoveredIndex(index);
         setIsAutoSpotlightPaused(true);
@@ -217,8 +260,8 @@ export function TrustedByCompanies() {
         const isLargePortrait = typeof window !== 'undefined' && window.innerWidth >= 1280 && window.innerHeight > window.innerWidth;
         const isLargeScreen = typeof window !== 'undefined' && window.innerWidth >= 1280;
 
-        // Mobile uses carousel, so return empty for mobile
-        if (isMobile) {
+        // Mobile/Tablet Portrait use carousel, so return empty for those modes
+        if (deviceMode === 'mobile' || deviceMode === 'tablet-portrait') {
             return { display: 'none' };
         }
 
@@ -391,6 +434,7 @@ export function TrustedByCompanies() {
                                                                 }`}
                                                             loading="lazy"
                                                             decoding="async"
+                                                            fetchPriority="low"
                                                         />
                                                     </div>
                                                 </div>
@@ -402,79 +446,172 @@ export function TrustedByCompanies() {
                         </div>
                     </div>
 
-                    {/* Desktop/Tablet Elliptical Constellation - Positioned Higher */}
-                    <div
-                        ref={containerRef}
-                        className="hidden md:block relative w-full"
-                        onMouseMove={handleMouseMove}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                    >
-                        {/* Ellipse Container with Fixed Height */}
-                        <div className="relative h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px] flex items-center justify-center overflow-visible">
-                            <div className="relative w-full max-w-6xl mx-auto">
-                                {/* Main Elliptical Ring Logos */}
-                                {clientLogos.map((logo, index) => {
-                                    const isSpotlight = hoveredIndex !== null ? index === hoveredIndex : index === spotlightIndex;
-
-                                    return (
-                                        <div
-                                            key={logo.name}
-                                            className={getLogoClasses(logo.size, index)}
-                                            style={{
-                                                position: 'absolute',
-                                                left: '50%',
-                                                top: '50%',
-                                                marginLeft: '-40px', // Center the logo
-                                                marginTop: '-40px',  // Center the logo
-                                                ...getOrbitStyle(index)
-                                            }}
-                                            onMouseEnter={() => handleLogoMouseEnter(index)}
-                                            onMouseLeave={handleLogoMouseLeave}
-                                        >
-                                            {/* Clean Highlighted Logo Container - No Brown Background */}
-                                            <div className={`relative w-full h-full backdrop-blur-lg rounded-2xl border transition-all duration-1000 overflow-hidden ${isSpotlight
-                                                ? 'bg-white dark:bg-[#0a0a0a] border-blue-400/40 dark:border-blue-400/40 shadow-2xl shadow-blue-500/20 dark:shadow-blue-500/30'
-                                                : 'bg-white/90 dark:bg-[#1a1a1a]/90 border-white/50 dark:border-gray-700/50 shadow-lg dark:shadow-xl dark:shadow-black/50 group-hover:bg-white/95 group-hover:dark:bg-[#1a1a1a]/95 group-hover:shadow-xl group-hover:dark:shadow-2xl group-hover:dark:shadow-black/60 group-hover:border-slate-400/40'
-                                                }`}>
-                                                {/* Clean shimmer effect - No Amber */}
-                                                <div className={`absolute inset-0 skew-x-12 transition-transform duration-1200 ${isSpotlight
-                                                    ? 'translate-x-[200%] bg-gradient-to-r from-transparent via-blue-200/20 dark:via-blue-200/20 to-transparent'
-                                                    : 'translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/15 to-transparent'
-                                                    }`}></div>
-
-                                                {/* Logo Image with Dark Theme Compatibility */}
-                                                <div className="relative w-full h-full p-3 sm:p-4 flex items-center justify-center">
-                                                    <img
-                                                        src={logo.src}
-                                                        alt={logo.name}
-                                                        className={`max-w-full max-h-full object-contain transition-all duration-800 ${
-                                                            // Special handling for logos with black text - Always invert in dark theme
-                                                            (logo.name === 'Inforcare' || logo.name === 'Aeris' || logo.name === 'Finegrow' || logo.name === 'Hindkush')
-                                                                ? (isSpotlight
-                                                                    ? 'filter-none scale-105 dark:invert' // Inverted in dark theme during spotlight
-                                                                    : 'filter grayscale hover:grayscale-0 group-hover:grayscale-0 group-hover:scale-105 dark:invert dark:hover:invert dark:group-hover:invert')
-                                                                : (isSpotlight
-                                                                    ? 'filter-none scale-105 dark:brightness-110 dark:contrast-125'
-                                                                    : 'filter grayscale group-hover:grayscale-0 group-hover:scale-105 dark:brightness-110 dark:contrast-125 dark:invert-[0.1]')
-                                                            }`}
-                                                        loading="lazy"
-                                                        decoding="async"
-                                                    />
-                                                </div>
-
-                                                {/* Clean highlight overlay - No Brown/Amber */}
-                                                <div className={`absolute inset-0 rounded-2xl transition-all duration-800 ${isSpotlight
-                                                    ? 'bg-gradient-to-br from-blue-500/5 to-indigo-500/5 dark:from-blue-500/5 dark:to-indigo-500/5'
-                                                    : 'bg-gradient-to-br from-slate-500/0 to-slate-600/0 group-hover:from-slate-500/3 group-hover:to-slate-600/3'
-                                                    }`}></div>
+                    {/* Tablet Portrait Carousel (4 logos per slide, mobile-style smooth carousel) */}
+                    {deviceMode === 'tablet-portrait' && (
+                        <div className="hidden sm:flex w-full items-center justify-center relative">
+                            <div
+                                ref={containerRefTP}
+                                className="relative w-full max-w-4xl px-6"
+                                onTouchStart={handleTouchStartTP}
+                                onTouchMove={handleTouchMoveTP}
+                                onTouchEnd={handleTouchEndTP}
+                            >
+                                <div className="overflow-hidden rounded-2xl">
+                                    <div
+                                        className="flex transition-all duration-1000 ease-in-out"
+                                        style={{
+                                            transform: `translateX(-${currentSlideTP * 100}%)`,
+                                            opacity: 1
+                                        }}
+                                    >
+                                        {/* Create slides of 4 logos each */}
+                                        {Array.from({ length: Math.ceil(clientLogos.length / 4) }, (_, slideIndex) => (
+                                            <div key={slideIndex} className="flex-shrink-0 w-full flex justify-center items-center gap-8 py-4">
+                                                {clientLogos.slice(slideIndex * 4, slideIndex * 4 + 4).map((logo, logoIndex) => (
+                                                    <div
+                                                        key={logo.name}
+                                                        className="w-32 h-32 transition-all duration-500 ease-out"
+                                                        style={{
+                                                            animation: `fadeInUp 0.6s ease-out ${logoIndex * 0.1}s both`,
+                                                        }}
+                                                    >
+                                                        <div className="w-full h-full bg-white/90 dark:bg-[#1a1a1a]/90 backdrop-blur-lg rounded-xl border border-white/50 dark:border-gray-700/50 shadow-lg dark:shadow-xl dark:shadow-black/50 p-4 flex items-center justify-center hover:scale-105 transition-transform duration-300">
+                                                            <img
+                                                                src={logo.src}
+                                                                alt={logo.name}
+                                                                className={`max-w-full max-h-full object-contain filter-none transition-all duration-300 ${
+                                                                    // Special inversion for logos with black text in dark theme
+                                                                    (logo.name === 'Inforcare' || logo.name === 'Aeris' || logo.name === 'Finegrow' || logo.name === 'Hindkush')
+                                                                        ? 'dark:invert'
+                                                                        : 'dark:brightness-110 dark:contrast-125 dark:invert-[0.1]'
+                                                                    }`}
+                                                                loading="lazy"
+                                                                decoding="async"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        </div>
-                                    );
-                                })}
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Scroll Indicators */}
+                                <div className="flex justify-center mt-6 space-x-2">
+                                    {Array.from({ length: Math.ceil(clientLogos.length / 4) }, (_, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setCurrentSlideTP(index)}
+                                            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlideTP
+                                                    ? 'bg-orange-500 scale-110'
+                                                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-orange-300'
+                                                }`}
+                                            aria-label={`Go to slide ${index + 1}`}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Navigation Arrows */}
+                                <button
+                                    onClick={() => setCurrentSlideTP(prev => Math.max(prev - 1, 0))}
+                                    disabled={currentSlideTP === 0}
+                                    className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 dark:bg-black/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    aria-label="Previous slide"
+                                >
+                                    <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </button>
+
+                                <button
+                                    onClick={() => setCurrentSlideTP(prev => Math.min(prev + 1, Math.ceil(clientLogos.length / 4) - 1))}
+                                    disabled={currentSlideTP === Math.ceil(clientLogos.length / 4) - 1}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 dark:bg-black/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    aria-label="Next slide"
+                                >
+                                    <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-                    </div>
+                    )}
+
+                    {/* Desktop/Large Portrait Elliptical Constellation - only for large screens */}
+                    {deviceMode === 'desktop' && (
+                        <div
+                            ref={containerRef}
+                            className="hidden md:block relative w-full"
+                            onMouseMove={handleMouseMove}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                        >
+                            {/* Ellipse Container with Fixed Height */}
+                            <div className="relative h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px] flex items-center justify-center overflow-visible">
+                                <div className="relative w-full max-w-6xl mx-auto">
+                                    {/* Main Elliptical Ring Logos */}
+                                    {clientLogos.map((logo, index) => {
+                                        const isSpotlight = hoveredIndex !== null ? index === hoveredIndex : index === spotlightIndex;
+
+                                        return (
+                                            <div
+                                                key={logo.name}
+                                                className={getLogoClasses(logo.size, index)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    left: '50%',
+                                                    top: '50%',
+                                                    marginLeft: '-40px', // Center the logo
+                                                    marginTop: '-40px',  // Center the logo
+                                                    ...getOrbitStyle(index)
+                                                }}
+                                                onMouseEnter={() => handleLogoMouseEnter(index)}
+                                                onMouseLeave={handleLogoMouseLeave}
+                                            >
+                                                {/* Clean Highlighted Logo Container - No Brown Background */}
+                                                <div className={`relative w-full h-full backdrop-blur-lg rounded-2xl border transition-all duration-1000 overflow-hidden ${isSpotlight
+                                                    ? 'bg-white dark:bg-[#0a0a0a] border-blue-400/40 dark:border-blue-400/40 shadow-2xl shadow-blue-500/20 dark:shadow-blue-500/30'
+                                                    : 'bg-white/90 dark:bg-[#1a1a1a]/90 border-white/50 dark:border-gray-700/50 shadow-lg dark:shadow-xl dark:shadow-black/50 group-hover:bg-white/95 group-hover:dark:bg-[#1a1a1a]/95 group-hover:shadow-xl group-hover:dark:shadow-2xl group-hover:dark:shadow-black/60 group-hover:border-slate-400/40'
+                                                    }`}>
+                                                    {/* Clean shimmer effect - No Amber */}
+                                                    <div className={`absolute inset-0 skew-x-12 transition-transform duration-1200 ${isSpotlight
+                                                        ? 'translate-x-[200%] bg-gradient-to-r from-transparent via-blue-200/20 dark:via-blue-200/20 to-transparent'
+                                                        : 'translate-x-[-100%] group-hover:translate-x-[100%] bg-gradient-to-r from-transparent via-white/15 to-transparent'
+                                                        }`}></div>
+
+                                                    {/* Logo Image with Dark Theme Compatibility */}
+                                                    <div className="relative w-full h-full p-3 sm:p-4 flex items-center justify-center">
+                                                        <img
+                                                            src={logo.src}
+                                                            alt={logo.name}
+                                                            className={`max-w-full max-h-full object-contain transition-all duration-800 ${
+                                                                // Special handling for logos with black text - Always invert in dark theme
+                                                                (logo.name === 'Inforcare' || logo.name === 'Aeris' || logo.name === 'Finegrow' || logo.name === 'Hindkush')
+                                                                    ? (isSpotlight
+                                                                        ? 'filter-none scale-105 dark:invert' // Inverted in dark theme during spotlight
+                                                                        : 'filter grayscale hover:grayscale-0 group-hover:grayscale-0 group-hover:scale-105 dark:invert dark:hover:invert dark:group-hover:invert')
+                                                                    : (isSpotlight
+                                                                        ? 'filter-none scale-105 dark:brightness-110 dark:contrast-125'
+                                                                        : 'filter grayscale group-hover:grayscale-0 group-hover:scale-105 dark:brightness-110 dark:contrast-125 dark:invert-[0.1]')
+                                                                }`}
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                        />
+                                                    </div>
+
+                                                    {/* Clean highlight overlay - No Brown/Amber */}
+                                                    <div className={`absolute inset-0 rounded-2xl transition-all duration-800 ${isSpotlight
+                                                        ? 'bg-gradient-to-br from-blue-500/5 to-indigo-500/5 dark:from-blue-500/5 dark:to-indigo-500/5'
+                                                        : 'bg-gradient-to-br from-slate-500/0 to-slate-600/0 group-hover:from-slate-500/3 group-hover:to-slate-600/3'
+                                                        }`}></div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </motion.div>
 
                 {/* Separated Stats Section - More spacing for large portraits */}

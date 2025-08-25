@@ -253,6 +253,11 @@ function StaticOfficeGrid() {
           src="/about/team-collaboration.jpg"
           alt="Team Collaboration"
           className="w-full h-32 md:h-40 object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-90"
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
+          width="400"
+          height="160"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
@@ -261,6 +266,11 @@ function StaticOfficeGrid() {
           src="/about/working-together.jpg"
           alt="Working Together"
           className="w-full h-32 md:h-40 object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-90"
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
+          width="400"
+          height="160"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
