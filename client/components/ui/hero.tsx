@@ -1,6 +1,6 @@
 import { ArrowRight, BarChart2, Cpu, Smartphone, Users, Zap, Globe, TrendingUp, Sparkles, Play } from "lucide-react";
 import { Button } from "./button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { motion } from "framer-motion";
 
 export function Hero() {
@@ -52,7 +52,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden min-h-screen flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800"
+      className="relative overflow-hidden min-h-screen md:h-screen flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-12 md:py-0"
     >
       {/* Dynamic Background Elements - Skip on mobile for LCP */}
       {visualsOn && !isMobile && (
@@ -104,7 +104,7 @@ export function Hero() {
       )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 lp:pl-16 relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center min-h-screen py-12 md:py-8 lg:py-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center py-8 md:py-6 lg:py-4">
 
           {/* Left Content */}
           <motion.div
@@ -115,7 +115,7 @@ export function Hero() {
           >
             {/* Badge */}
             <motion.div
-              className="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 font-medium backdrop-blur-sm text-xs md:text-sm mb-2 md:mb-3"
+              className="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 font-medium backdrop-blur-sm text-xs md:text-sm mb-2 md:mb-3 mt-4 md:mt-0"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
@@ -186,10 +186,10 @@ export function Hero() {
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
                 <a href="/auto-site">
-                  <button className="relative px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-sm sm:text-base lg:text-lg rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 sm:gap-3 w-48 sm:w-auto">
+                  <button className="relative px-3 md:px-4 lg:px-8 py-2 md:py-2.5 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-xs md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-1 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
 
                     Build your free website
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    <ArrowRight className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </button>
                 </a>
               </div>
@@ -197,8 +197,8 @@ export function Hero() {
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
                 <a href="/contact-us">
-                  <button className="relative px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-sm sm:text-base lg:text-lg rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-2 sm:gap-3 w-48 sm:w-auto">
-                    <Users className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+                  <button className="relative px-3 md:px-4 lg:px-8 py-2 md:py-2.5 lg:py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-xs md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-1 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
+                    <Users className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     Talk to Expert
                   </button>
                 </a>
@@ -213,10 +213,10 @@ export function Hero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 1 }}
           >
-            <div className="relative w-full max-w-xs md:max-w-sm lg:max-w-lg">
+            <div className="relative w-full max-w-xs md:max-w-xs lg:max-w-lg">
               {/* Main Device */}
               <motion.div
-                className="relative w-64 h-[420px] md:w-72 md:h-[480px] lg:w-80 lg:h-[600px] mx-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-2xl border-3 md:border-4 lg:border-8 border-slate-300 dark:border-slate-700 overflow-hidden"
+                className="relative w-56 h-[360px] md:w-64 md:h-[400px] lg:w-80 lg:h-[600px] mx-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-2xl border-3 md:border-4 lg:border-8 border-slate-300 dark:border-slate-700 overflow-hidden"
                 animate={{
                   y: [0, -15, 0],
                   rotateY: [0, 3, 0, -3, 0],
@@ -444,6 +444,8 @@ export function Hero() {
             </div>
           </motion.div>
         </div>
+
+
       </div>
     </section>
   );

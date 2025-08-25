@@ -5,6 +5,7 @@ import { ThemeProvider } from "../components/ui/theme-provider";
 import { Button } from "../components/ui/button";
 import { Phone, MessageCircle } from "lucide-react";
 import Footer from "../components/ui/footer";
+import LogoStrip from "../components/ui/logo-strip";
 import { lazy, Suspense, useState, useEffect } from "react";
 
 // Lazy load heavy components for better initial load
@@ -54,6 +55,9 @@ export default function Index() {
         <Header />
         <main className="pt-4 sm:pt-6">
           <Hero />
+
+          {/* Logo Strip Component */}
+          <LogoStrip />
 
           {/* Stage 1: Essential content only */}
           {loadStage >= 1 && (

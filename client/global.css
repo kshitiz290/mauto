@@ -30,12 +30,167 @@
   }
 }
 
-/* Mobile-first performance: Disable heavy animations on mobile */
+/* Smooth scrolling animation for brand logos */
+@keyframes scroll-brands {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-33.333%);
+    /* Move by 1/3 since we have 3 sets */
+  }
+}
+
+/* Fast scrolling animation for independent brand strip */
+@keyframes scroll-brands-fast {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-20%);
+  }
+}
+
+.animate-scroll-brands {
+  animation: scroll-brands 40s linear infinite;
+  white-space: nowrap;
+}
+
+.animate-scroll-brands-infinite {
+  animation: scroll-brands 60s linear infinite;
+  white-space: nowrap;
+}
+
+.animate-scroll-brands-fast {
+  animation: scroll-brands-fast 25s linear infinite;
+  white-space: nowrap;
+}
+
+/* Edge fade without extra elements - uses CSS mask for both light and dark */
+.edge-fade-x {
+  /* Standard mask */
+  mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+  mask-mode: match-source;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  /* WebKit mask for Safari */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+}
+
+/* BRAND LOGO STRIP ANIMATION - SIMPLE APPROACH */
+@keyframes moveLeft {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+@keyframes logo-scroll {
+  0% {
+    left: 0%;
+  }
+
+  100% {
+    left: -100%;
+  }
+}
+
+/* ALTERNATIVE: MARGIN BASED ANIMATION */
+@keyframes logo-scroll-margin {
+  0% {
+    margin-left: 0%;
+  }
+
+  100% {
+    margin-left: -100%;
+  }
+}
+
+/* ALTERNATIVE: SCROLL BEHAVIOR ANIMATION */
+@keyframes logo-scroll-transform {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-33.333%);
+  }
+}
+
+/* AGGRESSIVE UNIVERSAL ANIMATION - POSITION BASED */
+.logo-strip-animate {
+  display: flex !important;
+  position: relative !important;
+  animation: logo-scroll 10s linear infinite !important;
+  animation-play-state: running !important;
+  animation-fill-mode: both !important;
+  animation-delay: 0s !important;
+  /* Force container to be wide enough */
+  width: 300% !important;
+  left: 0 !important;
+}
+
+/* OVERRIDE ANY CONFLICTING RULES */
+.logo-strip-animate * {
+  pointer-events: none !important;
+}
+
+/* SUPER AGGRESSIVE LAPTOP/DESKTOP OVERRIDE */
+@media (min-width: 1024px) {
+  .logo-strip-animate {
+    animation: logo-scroll 10s linear infinite !important;
+    animation-play-state: running !important;
+    /* Make it super obvious it's moving */
+    border-top: 2px solid rgba(255, 0, 0, 0.3) !important;
+    border-bottom: 2px solid rgba(0, 255, 0, 0.3) !important;
+  }
+}
+
+/* SPECIFIC OVERRIDE FOR PORTRAIT LAPTOPS */
+@media (orientation: portrait) and (min-width: 1024px) {
+  .logo-strip-animate {
+    animation: logo-scroll 8s linear infinite !important;
+    animation-play-state: running !important;
+    /* Extra debug visibility */
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5) !important;
+  }
+}
+
+/* FORCE OVERRIDE ANY PERFORMANCE OPTIMIZATIONS */
+@media (min-width: 768px) {
+  .logo-strip-animate {
+    animation-duration: 12s !important;
+    animation-iteration-count: infinite !important;
+    animation-timing-function: linear !important;
+    animation-play-state: running !important;
+    animation-name: logo-scroll !important;
+  }
+}
+
+/* FORCE ANIMATION ON ALL DEVICES - AGGRESSIVE OVERRIDE */
+.logo-strip-animate {
+  animation-play-state: running !important;
+}
+
+/* Mobile-first performance: Disable heavy animations on mobile BUT KEEP LOGO STRIP */
 @media (max-width: 768px) {
-  * {
+  *:not(.logo-strip-animate):not(.animate-scroll-brands):not(.animate-scroll-brands-infinite):not(.animate-scroll-brands-fast) {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.1s !important;
+  }
+
+  /* FORCE LOGO STRIP TO WORK ON MOBILE */
+  .logo-strip-animate {
+    animation: logo-scroll 18s linear infinite !important;
+    animation-play-state: running !important;
   }
 
   /* Disable gradient animations on mobile */
@@ -44,11 +199,40 @@
     background: linear-gradient(to right, #f97316, #eab308) !important;
     background-clip: text !important;
   }
+
+  /* Keep brand scrolling but make it faster on mobile */
+  .animate-scroll-brands {
+    animation-duration: 20s !important;
+    animation-iteration-count: infinite !important;
+  }
+
+  .animate-scroll-brands-fast {
+    animation-duration: 15s !important;
+    animation-iteration-count: infinite !important;
+  }
+
+  .animate-scroll-brands-infinite {
+    animation-duration: 25s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+
+/* Ensure animations work properly on desktop - FORCE MARQUEE */
+@media (min-width: 1024px) {
+  .animate-scroll-brands {
+    animation: scroll-brands 50s linear infinite !important;
+    animation-play-state: running !important;
+  }
+
+  .animate-scroll-brands-infinite {
+    animation: scroll-brands 80s linear infinite !important;
+    animation-play-state: running !important;
+  }
 }
 
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *:not(.logo-strip-animate):not(.animate-scroll-brands):not(.animate-scroll-brands-infinite):not(.animate-scroll-brands-fast) {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

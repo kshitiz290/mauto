@@ -24,7 +24,7 @@ const RetailTransformation = () => {
                 "Performance analytics & insights"
             ],
             metrics: {
-                primary: "40%",
+                primary: "Upto 40%",
                 primaryLabel: "Sales Increase",
                 secondary: "60%",
                 secondaryLabel: "Time Saved"
@@ -68,7 +68,7 @@ const RetailTransformation = () => {
                 "Visual audit automation"
             ],
             metrics: {
-                primary: "25%",
+                primary: "Upto 25%",
                 primaryLabel: "Sales Uplift",
                 secondary: "80%",
                 secondaryLabel: "Compliance Rate"
@@ -90,7 +90,7 @@ const RetailTransformation = () => {
                 "Employee self-service portal"
             ],
             metrics: {
-                primary: "90%",
+                primary: "99.9%",
                 primaryLabel: "Accuracy",
                 secondary: "70%",
                 secondaryLabel: "Admin Time Saved"
