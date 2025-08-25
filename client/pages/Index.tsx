@@ -1,6 +1,7 @@
 import { Header } from "../components/ui/header";
 import { Hero } from "../components/ui/hero";
 import { WhyChooseUs } from "../components/ui/why-choose-us";
+import { TrustedByCompanies } from "../components/ui/trusted-by-companies";
 import { ThemeProvider } from "../components/ui/theme-provider";
 import { Button } from "../components/ui/button";
 import { Facebook, Instagram, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
@@ -19,7 +20,8 @@ export default function Index() {
         <Header />
         <main className="pt-4 sm:pt-6">
           <Hero />
-          <WhyChooseUs />
+           <WhyChooseUs />
+          
           {/* Transforming Retail Industry Section */}
           <section className="py-20 bg-gradient-to-br from-white via-slate-50 to-slate-100 dark:from-[#18181b] dark:via-[#23232a] dark:to-[#18181b] relative overflow-hidden cv-auto">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -60,6 +62,8 @@ export default function Index() {
           {/* <TechStack /> */}
           {/* How Are We Helping Companies Section */}
           <div className="cv-auto"><Suspense fallback={null}><HowHelpingCompanies /></Suspense></div>
+
+          <TrustedByCompanies />
           <div className="cv-auto"><Suspense fallback={null}><CustomerCarousel /></Suspense></div>
           {/* AI Website Builder CTA Section */}
           {/* <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden">

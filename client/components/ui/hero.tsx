@@ -1,96 +1,436 @@
-import { ArrowRight, BarChart2, Cpu, Smartphone, Users } from "lucide-react";
+import { ArrowRight, BarChart2, Cpu, Smartphone, Users, Zap, Globe, TrendingUp, Sparkles, Play } from "lucide-react";
 import { Button } from "./button";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export function Hero() {
   // Defer heavy visual effects until after first paint/idle to improve FCP on mobile
   const [visualsOn, setVisualsOn] = useState(false);
+  const [currentStats, setCurrentStats] = useState({ clients: 200, years: 15, solutions: 50 });
+
   useEffect(() => {
     const enable = () => setVisualsOn(true);
     // Prefer idle callback; fallback to small timeout
     // @ts-ignore
     const ric = (globalThis as any).requestIdleCallback as ((cb: () => void) => number) | undefined;
     if (typeof ric === 'function') ric(() => enable()); else setTimeout(enable, 300);
+
+    // Animated stats counter
+    const animateStats = () => {
+      const targetStats = { clients: 200, years: 15, solutions: 50 };
+      let frame = 0;
+      const animate = () => {
+        frame++;
+        if (frame <= 60) {
+          setCurrentStats({
+            clients: Math.floor((targetStats.clients * frame) / 60),
+            years: Math.floor((targetStats.years * frame) / 60),
+            solutions: Math.floor((targetStats.solutions * frame) / 60)
+          });
+          requestAnimationFrame(animate);
+        }
+      };
+      setTimeout(() => requestAnimationFrame(animate), 1000);
+    };
+    animateStats();
   }, []);
 
   return (
     <section
       id="home"
-      className="flex items-center justify-center relative overflow-hidden pt-20 pb-16 sm:pt-24 md:pt-16 px-4 sm:px-6 lg:px-8 min-h-[60vh] sm:min-h-[80vh] lg:min-h-screen cv-auto"
+      className="relative overflow-hidden min-h-screen flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800"
     >
-      {/* Background Effects */}
+      {/* Dynamic Background Elements */}
       {visualsOn && (
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl floating-animation"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/20 rounded-full blur-3xl floating-animation"
-            style={{ animationDelay: "2s" }}
-          ></div>
-          <div
-            className="absolute top-3/4 left-1/2 w-64 h-64 bg-neon-blue/10 rounded-full blur-3xl floating-animation"
-            style={{ animationDelay: "4s" }}
-          ></div>
+          <motion.div
+            className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-orange-400/20 to-yellow-400/10 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.6, 0.3],
+              x: [0, 30, 0],
+              y: [0, -20, 0]
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-purple-400/15 to-pink-400/10 rounded-full blur-3xl"
+            animate={{
+              scale: [1.2, 1, 1.2],
+              opacity: [0.2, 0.5, 0.2],
+              x: [0, -40, 0],
+              y: [0, 30, 0]
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          />
+          <motion.div
+            className="absolute bottom-20 left-1/4 w-64 h-64 bg-gradient-to-br from-blue-400/20 to-cyan-400/10 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.25, 0.45, 0.25],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+          />
+
+          {/* Floating Icons */}
+          <motion.div
+            className="absolute bottom-1/3 right-16 p-2 bg-white/8 dark:bg-black/8 backdrop-blur-xl rounded-lg border border-white/15 hidden xl:block"
+            animate={{
+              y: [0, 6, 0],
+              rotate: [0, -2, 0]
+            }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          >
+            <Globe className="w-5 h-5 text-blue-500" />
+          </motion.div>
+
+
         </div>
       )}
 
-      <div className="container mx-auto text-center relative z-10">
-        <div className="max-w-4xl mx-auto">
-          {/* Main Heading */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 leading-tight px-2">
-            <span className="gradient-text text-orange-500 lg:text-5xl sm:text-4xl">Manacle Technologies</span>
-            <span className="block mt-1 sm:mt-2">Empowering FMCG & Enterprises</span>
-          </h1>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 lp:pl-16 relative z-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-6 xl:gap-8 items-center min-h-screen py-16 md:py-12 lg:py-8">
 
-          {/* Subtitle */}
-          <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 mb-6 sm:mb-8 max-w-3xl mx-auto px-2 leading-relaxed">
-            Leading provider of SFA, ERP, DMS, HRMS, and digital automation solutions for FMCG and enterprise sectors. Transform your business with scalable, data-driven technology from Manacle.
-          </p>
-
-          {/* Feature Icons - Software Solutions */}
-          <div className="flex justify-center items-center space-x-4 sm:space-x-6 md:space-x-8 mb-8 sm:mb-10 md:mb-12 px-2">
-            <div className="p-3 sm:p-4 glass-effect rounded-full group transition-transform duration-300">
-              <BarChart2 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-primary transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
-            </div>
-            <div className="p-3 sm:p-4 glass-effect rounded-full group transition-transform duration-300">
-              <Cpu className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-accent transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
-            </div>
-            <div className="p-3 sm:p-4 glass-effect rounded-full group transition-transform duration-300">
-              <Smartphone className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-neon-blue transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
-            </div>
-            <div className="p-3 sm:p-4 glass-effect rounded-full group transition-transform duration-300">
-              <Users className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-green-500 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6" />
-            </div>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-2">
-            <div className="inline-block group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
-              <a href="/auto-site">
-                <button className="relative px-5 py-2.5 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98]">
-                  Build your free website
-                </button>
-              </a>
-            </div>
-
-            <div className="inline-block group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
-              <a href="/contact-us">
-                <button className="relative px-4 py-2.5 sm:px-5 sm:py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-pink-600 hover:to-purple-600 text-white font-semibold text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-2">
-                  Get Free Consultation
-                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
-              </a>
-            </div>
-            {/* <Button
-              size="lg"
-              className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-1 w-full sm:w-auto"
-              onClick={() => window.location.href = '/auto-site'}
+          {/* Left Content */}
+          <motion.div
+            className="text-center md:text-left lg:text-left space-y-4 md:space-y-5 lg:space-y-8 order-1 md:order-1 lg:order-1"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            {/* Badge */}
+            <motion.div
+              className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 font-medium backdrop-blur-sm text-sm"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
             >
-              Build your free website
-              <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
-            </Button> */}
-          </div>
+              <Sparkles className="w-3 h-3 md:w-4 md:h-4" />
+              Trusted by 27+ Leading Companies
+            </motion.div>
+
+            {/* Main Heading */}
+            <motion.div
+              className="space-y-2 md:space-y-3 lg:space-y-4"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              <h1 className="text-4xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
+                <span className="bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
+                  Transform
+                </span>
+                <br />
+                <span className="text-foreground">Your Business</span>
+                <br />
+                <span className="text-foreground/80 text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+                  with Technology
+                </span>
+              </h1>
+            </motion.div>
+
+            {/* Subtitle */}
+            <motion.p
+              className="text-base md:text-lg lg:text-xl text-foreground/70 max-w-xl md:max-w-2xl lg:max-w-none leading-relaxed mx-auto md:mx-0"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+            >
+              Empowering businesses across all industries with cutting-edge
+              <span className="text-orange-500 font-semibold"> SFA, ERP, CRM, HRMS</span> and
+              <span className="text-purple-500 font-semibold"> AI-driven solutions</span>.
+              Scale your operations, boost efficiency, and drive growth.
+            </motion.p>
+
+            {/* Stats */}
+            <motion.div
+              className="flex flex-row sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-2 sm:py-3 md:py-4 lg:py-6 justify-center md:justify-start lg:justify-start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+            >
+              <div className="text-center md:text-left lg:text-left flex-1 sm:flex-none">
+                <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-orange-500">{currentStats.clients}+</div>
+                <div className="text-xs sm:text-sm text-foreground/60">Happy Customers</div>
+              </div>
+              <div className="text-center md:text-left lg:text-left flex-1 sm:flex-none">
+                <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-purple-500">{currentStats.years}+</div>
+                <div className="text-xs sm:text-sm text-foreground/60">Years Experience</div>
+              </div>
+              <div className="text-center md:text-left lg:text-left flex-1 sm:flex-none">
+                <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-500">{currentStats.solutions}+</div>
+                <div className="text-xs sm:text-sm text-foreground/60">Solutions</div>
+              </div>
+            </motion.div>
+
+            {/* CTA Buttons */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4 justify-center md:justify-start lg:justify-start items-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.8 }}
+            >
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
+                <a href="/auto-site">
+                  <button className="relative px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-sm sm:text-base lg:text-lg rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 sm:gap-3 w-48 sm:w-auto">
+
+                    Build your free website
+                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </button>
+                </a>
+              </div>
+
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
+                <a href="/contact-us">
+                  <button className="relative px-4 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-sm sm:text-base lg:text-lg rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-2 sm:gap-3 w-48 sm:w-auto">
+                    <Users className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+                    Talk to Expert
+                  </button>
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Visual */}
+          <motion.div
+            className="flex justify-center md:justify-end lg:justify-end order-2 md:order-2 lg:order-2 mt-8 sm:mt-10 md:mt-0"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 1 }}
+          >
+            <div className="relative w-full max-w-xs md:max-w-sm lg:max-w-lg">
+              {/* Main Device */}
+              <motion.div
+                className="relative w-64 h-[420px] md:w-72 md:h-[480px] lg:w-80 lg:h-[600px] mx-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-2xl border-3 md:border-4 lg:border-8 border-slate-300 dark:border-slate-700 overflow-hidden"
+                animate={{
+                  y: [0, -15, 0],
+                  rotateY: [0, 3, 0, -3, 0],
+                  x: [0, 5, 0, -5, 0]
+                }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+              >
+                {/* Screen Content */}
+                <div className="absolute inset-1.5 md:inset-2 lg:inset-4 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-black rounded-[1.5rem] md:rounded-[1.8rem] lg:rounded-[2rem] overflow-hidden">
+                  {/* Status Bar */}
+                  <div className="flex justify-between items-center p-2.5 md:p-3 lg:p-4 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 md:w-6 md:h-6 bg-orange-500 rounded-lg flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">M</span>
+                      </div>
+                      <div>
+                        <div className="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Manacle Technologies Pvt Ltd</div>
+                      </div>
+                    </div>
+                    <div className="w-4 h-4 md:w-5 md:h-5 text-slate-600 dark:text-slate-400">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Tab Navigation */}
+                  <div className="flex bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                    <div className="flex-1 py-2 md:py-3 text-center">
+                      <div className="text-xs md:text-sm font-semibold text-orange-500 border-b-2 border-orange-500 pb-1">Performance</div>
+                    </div>
+                    <div className="flex-1 py-2 md:py-3 text-center">
+                      <div className="text-xs md:text-sm text-slate-500 dark:text-slate-400">Product View</div>
+                    </div>
+                    <div className="flex-1 py-2 md:py-3 text-center">
+                      <div className="text-xs md:text-sm text-slate-500 dark:text-slate-400">Analysis</div>
+                    </div>
+                  </div>
+
+                  {/* Main Content */}
+                  <div className="p-2 md:p-3 lg:p-5 space-y-2 md:space-y-3 lg:space-y-4 bg-slate-50 dark:bg-slate-900">
+                    {/* Employee Card */}
+                    <motion.div
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-3 md:p-4 text-white relative overflow-hidden"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.2, duration: 0.8 }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center">
+                          <svg className="w-6 h-6 md:w-7 md:h-7 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-sm md:text-base font-semibold text-blue-200">Shashank Satyam</div>
+                          <div className="text-xs text-blue-100">Technical Support Engineer</div>
+                        </div>
+                        <div className="text-xs text-blue-100">1:23:21</div>
+                      </div>
+                    </motion.div>
+
+                    {/* MTP Alert */}
+                    <motion.div
+                      className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.4, duration: 0.8 }}
+                    >
+                      <div className="text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">No MTP Filled!!</div>
+                      <div className="flex justify-between text-xs text-blue-400">
+                        <span>riding two-wheeler</span>
+                        <span>Please wear a ma...</span>
+                      </div>
+                    </motion.div>
+
+                    {/* Chart Section */}
+                    <motion.div
+                      className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.6, duration: 0.8 }}
+                    >
+                      {/* Chart Grid */}
+                      <div className="space-y-1 md:space-y-2">
+                        {/* Y-axis labels and grid lines */}
+                        {[1.2, 0.8, 0.4, 0.0, -0.4, -0.8, -1.2].map((value, i) => (
+                          <div key={i} className="flex items-center">
+                            <div className="w-6 text-xs text-slate-500 text-right">{value}</div>
+                            <div className="flex-1 ml-2 border-b border-slate-200 dark:border-slate-600 h-4 md:h-5"></div>
+                            <div className="w-6 text-xs text-slate-500 text-left">{value}</div>
+                          </div>
+                        ))}
+
+                        {/* X-axis dates */}
+                        <div className="flex justify-between mt-2 px-6">
+                          {['2025-05-01', '2025-05-02', '2025-05-03', '2025-05-04', '2025-05-05'].map((date, i) => (
+                            <div key={i} className="text-xs text-slate-500 transform -rotate-45 origin-left">{date}</div>
+                          ))}
+                        </div>
+
+                        {/* Legend */}
+                        <div className="flex gap-4 mt-2 px-2">
+                          <div className="flex items-center gap-1">
+                            <div className="w-3 h-2 bg-red-500"></div>
+                            <span className="text-xs text-slate-600 dark:text-slate-400">Target</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <div className="w-3 h-2 bg-blue-600"></div>
+                            <span className="text-xs text-slate-600 dark:text-slate-400">Achievements</span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Sales Metrics */}
+                    <motion.div
+                      className="grid grid-cols-3 gap-2 md:gap-3"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.8, duration: 0.8 }}
+                    >
+                      <div className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700 text-center relative">
+                        <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-1 bg-blue-100 rounded-lg flex items-center justify-center relative">
+                          <svg className="w-4 h-4 md:w-5 md:h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                          </svg>
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                            <span className="text-xs text-white font-bold">0</span>
+                          </div>
+                        </div>
+                        <div className="text-sm md:text-base font-bold text-orange-500">0.0</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">Pri. Sale</div>
+                      </div>
+
+                      <div className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700 text-center relative">
+                        <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-1 bg-blue-100 rounded-lg flex items-center justify-center relative">
+                          <svg className="w-4 h-4 md:w-5 md:h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                          </svg>
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                            <span className="text-xs text-white font-bold">0</span>
+                          </div>
+                        </div>
+                        <div className="text-sm md:text-base font-bold text-orange-500">0.0</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">Sec. Sale</div>
+                      </div>
+
+                      <div className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700 text-center relative">
+                        <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-1 bg-blue-100 rounded-lg flex items-center justify-center relative">
+                          <svg className="w-4 h-4 md:w-5 md:h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.75 2.524z" />
+                          </svg>
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
+                            <span className="text-xs text-white font-bold">0</span>
+                          </div>
+                        </div>
+                        <div className="text-sm md:text-base font-bold text-orange-500">0</div>
+                        <div className="text-xs text-slate-600 dark:text-slate-400">New Outlet</div>
+                      </div>
+                    </motion.div>
+
+                    {/* Recent Module Access */}
+                    <motion.div
+                      className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 2.0, duration: 0.8 }}
+                    >
+                      <div className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Recent Module Access</div>
+                      <div className="flex gap-2 md:gap-3">
+                        <div className="flex-1 bg-purple-50 dark:bg-purple-900/20 rounded-lg p-2 flex items-center gap-2">
+                          <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-medium text-purple-700 dark:text-purple-300 truncate">Employee</div>
+                            <div className="text-xs text-purple-600 dark:text-purple-400">2 min ago</div>
+                          </div>
+                        </div>
+
+                        <div className="flex-1 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 flex items-center gap-2">
+                          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-medium text-blue-700 dark:text-blue-300 truncate">Reports</div>
+                            <div className="text-xs text-blue-600 dark:text-blue-400">5 min ago</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Quick Actions */}
+                      <div className="mt-2 md:mt-3 flex gap-2">
+                        <button className="flex-1 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs py-1.5 rounded-md font-medium">
+                          Check In
+                        </button>
+                        <button className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs py-1.5 rounded-md font-medium">
+                          View Tasks
+                        </button>
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Additional Floating Icons */}
+              <motion.div
+                className="absolute top-10 md:top-12 lg:top-16 -left-6 md:-left-8 lg:-left-12 w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-white/8 dark:bg-black/8 backdrop-blur-xl rounded-lg md:rounded-xl lg:rounded-2xl border border-white/15 items-center justify-center hidden md:flex"
+                animate={{
+                  y: [0, -15, 0],
+                  rotate: [0, 5, 0]
+                }}
+                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              >
+                <Smartphone className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-blue-500" />
+              </motion.div>
+
+
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

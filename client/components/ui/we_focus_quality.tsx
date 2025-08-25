@@ -35,8 +35,17 @@ const WeFocusQuality = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="max-w-6xl mx-auto px-4 py-16 md:py-24"
+      className="max-w-6xl mx-auto px-4 py-8 md:py-12"
     >
+      {/* Free Trial Button above everything */}
+      <div className="flex justify-center mb-12">
+        <a href="/contact-us" className="inline-block group relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
+          <button type="button" className="relative px-6 py-3 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98]">
+            START YOUR FREE TRIAL
+          </button>
+        </a>
+      </div>
       <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center leading-[1.25] md:leading-[1.3]"
         style={{ background: 'linear-gradient(90deg, #FF9800 40%, #B721FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
       >

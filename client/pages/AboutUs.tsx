@@ -3,6 +3,8 @@ import Footer from "../components/ui/footer";
 import LottiePlayer from "react-lottie-player";
 import { Check, Users, Award, Target, Clock, Zap, Facebook, Instagram, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 import { Header } from "../components/ui/header";
+import { TrustedByCompanies } from "../components/ui/trusted-by-companies";
+import { Certifications } from "../components/ui/certifications";
 import { ThemeProvider } from "../components/ui/theme-provider";
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
@@ -148,6 +150,9 @@ export function AboutUs() {
           </motion.section>
 
 
+
+
+
           {/* Why We Are Different Section */}
           <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -217,10 +222,12 @@ export function AboutUs() {
 
 
 
-      
-          <WeFocusQuality />
 
-          <Brochure/>
+          <WeFocusQuality />
+          <Certifications />
+          <TrustedByCompanies />
+
+          <Brochure />
 
 
         </main>

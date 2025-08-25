@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      screens: {
+        // Large portrait orientation (>= lg width and portrait)
+        lp: { raw: "(min-width: 1024px) and (orientation: portrait)" },
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

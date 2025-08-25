@@ -61,14 +61,14 @@ function AnimatedCounter({ end, duration = 2000, suffix = "", color, label }: Co
   }, [isVisible, end, duration]);
 
   return (
-    <div ref={counterRef} className="relative h-full">
+    <div ref={counterRef} className="relative h-full w-full min-w-0">
       <div className={`absolute inset-0 bg-gradient-to-r ${color} rounded-2xl blur-xl pointer-events-none transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:blur-lg`}></div>
-      <div className="relative bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-gray-800/50 shadow-md transition-all duration-300 group hover:shadow-lg hover:ring-2 hover:ring-orange-400/30 h-full">
+      <div className="relative bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-xl rounded-2xl p-4 xs:p-5 sm:p-6 border border-white/20 dark:border-gray-800/50 shadow-md transition-all duration-300 group hover:shadow-lg hover:ring-2 hover:ring-orange-400/30 h-full">
         <div className="text-center">
-          <div className={`text-3xl sm:text-4xl font-bold bg-gradient-to-r ${color.replace('/20', '').replace('from-', 'from-').replace('to-', 'to-')} bg-clip-text text-transparent mb-2`}>
+          <div className={`text-2xl xs:text-3xl sm:text-4xl font-bold bg-gradient-to-r ${color.replace('/20', '').replace('from-', 'from-').replace('to-', 'to-')} bg-clip-text text-transparent mb-2 leading-tight`}>
             {count}{suffix}
           </div>
-          <div className="text-sm font-semibold text-foreground/80">
+          <div className="text-xs sm:text-sm font-semibold text-foreground/80">
             {label}
           </div>
         </div>
@@ -296,7 +296,7 @@ export function WhyChooseUs() {
         </div>
 
         {/* Stats Counter Section */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20 items-stretch">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-16 sm:mb-20 items-stretch">
           <AnimatedCounter
             end={15}
             suffix="+"
