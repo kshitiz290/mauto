@@ -104,18 +104,18 @@ export function Hero() {
       )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 lp:pl-16 relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center min-h-screen py-16 md:py-12 lg:py-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center min-h-screen py-12 md:py-8 lg:py-6">
 
           {/* Left Content */}
           <motion.div
-            className="text-center md:text-left lg:text-left space-y-4 md:space-y-5 lg:space-y-8 order-1 md:order-1 lg:order-1 md:pr-4 lg:pr-8 xl:pr-12"
+            className="text-center md:text-left lg:text-left space-y-2 md:space-y-3 lg:space-y-4 order-1 md:order-1 lg:order-1 md:pr-4 lg:pr-8 xl:pr-12"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
             {/* Badge */}
             <motion.div
-              className="inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 font-medium backdrop-blur-sm text-sm"
+              className="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 font-medium backdrop-blur-sm text-xs md:text-sm mb-2 md:mb-3"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
@@ -125,9 +125,8 @@ export function Hero() {
             </motion.div>
 
             {/* Main Heading */}
-            {/* Main Heading */}
             <motion.h1
-              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight sm:leading-tight md:leading-tight lg:leading-tight xl:leading-tight text-center md:text-left lg:text-left tracking-tight"
+              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.1] md:leading-[1.1] lg:leading-[1.1] xl:leading-[1.1] text-center md:text-left lg:text-left tracking-tight mt-2 md:mt-3"
               initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               transition={!isMobile ? { delay: 0.2, duration: 0.8 } : { duration: 0 }}
@@ -138,14 +137,14 @@ export function Hero() {
               <br />
               <span className="text-foreground">Your Business</span>
               <br />
-              <span className="text-foreground/80 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+              <span className="text-foreground/80 text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl">
                 with Technology
               </span>
             </motion.h1>
 
             {/* Subtitle */}
             <motion.p
-              className="text-sm sm:text-base md:text-lg lg:text-xl text-foreground/70 max-w-2xl leading-relaxed text-center md:text-left lg:text-left px-4 md:px-0"
+              className="text-sm sm:text-base md:text-lg lg:text-xl text-foreground/70 max-w-2xl leading-[1.4] md:leading-[1.5] text-center md:text-left lg:text-left px-4 md:px-0 mt-2 md:mt-3"
               initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               transition={!isMobile ? { delay: 0.4, duration: 0.8 } : { duration: 0 }}
@@ -158,7 +157,7 @@ export function Hero() {
 
             {/* Stats */}
             <motion.div
-              className="flex flex-row sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-2 sm:py-3 md:py-4 lg:py-6 justify-center md:justify-start lg:justify-start md:ml-2 lg:ml-4"
+              className="flex flex-row sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-1 sm:py-2 md:py-3 justify-center md:justify-start lg:justify-start md:ml-2 lg:ml-4 mt-3 md:mt-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.8 }}
