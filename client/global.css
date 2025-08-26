@@ -4,6 +4,7 @@
 
 /* Optimize critical CSS loading */
 @layer base {
+
   /* Prevent flash of unstyled content */
   html {
     background-color: theme('colors.background');
