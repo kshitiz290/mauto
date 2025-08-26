@@ -6,7 +6,8 @@ import { Button } from "../components/ui/button";
 import { Phone, MessageCircle } from "lucide-react";
 import Footer from "../components/ui/footer";
 import LogoStrip from "../components/ui/logo-strip";
-import { lazy, Suspense, useState, useEffect } from "react";
+import { ComponentLoading } from "../components/ui/loading";
+import { lazy, Suspense } from "react";
 
 // Lazy load heavy components for better initial load
 const TrustedByCompanies = lazy(() => import("../components/ui/trusted-by-companies").then(module => ({ default: module.TrustedByCompanies })));
@@ -14,40 +15,12 @@ const HowHelpingCompanies = lazy(() => import("../components/ui/how-helping-comp
 const CustomerCarousel = lazy(() => import("../components/ui/customer-carousel"));
 const RetailTransformation = lazy(() => import("../components/ui/retail-transformation"));
 
-// Lightweight loading fallback
-const LoadingFallback = () => (
-  <div className="w-full h-32 flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-  </div>
+// Beautiful loading fallback for sections
+const SectionLoadingFallback = ({ message }: { message?: string }) => (
+  <ComponentLoading message={message} />
 );
 
-// Mobile-first progressive loading
-const useProgressiveLoading = () => {
-  const [loadStage, setLoadStage] = useState(0);
-
-  useEffect(() => {
-    // Stage 1: Load immediately after Hero
-    const timer1 = setTimeout(() => setLoadStage(1), 1000);
-    // Stage 2: Load after user interaction or 3s
-    const timer2 = setTimeout(() => setLoadStage(2), 3000);
-    // Stage 3: Load remaining heavy components
-    const timer3 = setTimeout(() => setLoadStage(3), 5000);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-    };
-  }, []);
-
-  return loadStage;
-};
-
-
-
-
 export default function Index() {
-  const loadStage = useProgressiveLoading();
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
@@ -59,34 +32,26 @@ export default function Index() {
           {/* Logo Strip Component */}
           <LogoStrip />
 
-          {/* Stage 1: Essential content only */}
-          {loadStage >= 1 && (
-            <Suspense fallback={<LoadingFallback />}>
-              <RetailTransformation />
-            </Suspense>
-          )}
+          {/* Retail Transformation Section */}
+          <Suspense fallback={<SectionLoadingFallback message="Loading transformation insights..." />}>
+            <RetailTransformation />
+          </Suspense>
 
           <WhyChooseUs />
 
-          {/* Stage 2: Secondary content */}
-          {loadStage >= 2 && (
-            <Suspense fallback={<LoadingFallback />}>
-              <HowHelpingCompanies />
-            </Suspense>
-          )}
+          {/* Company Insights Section */}
+          <Suspense fallback={<SectionLoadingFallback message="Loading company insights..." />}>
+            <HowHelpingCompanies />
+          </Suspense>
 
-          {/* Stage 3: Heavy components last */}
-          {loadStage >= 3 && (
-            <>
-              <Suspense fallback={<LoadingFallback />}>
-                <TrustedByCompanies />
-              </Suspense>
+          {/* Trusted Companies & Customer Stories */}
+          <Suspense fallback={<SectionLoadingFallback message="Loading trusted companies..." />}>
+            <TrustedByCompanies />
+          </Suspense>
 
-              <Suspense fallback={<LoadingFallback />}>
-                <CustomerCarousel />
-              </Suspense>
-            </>
-          )}
+          <Suspense fallback={<SectionLoadingFallback message="Loading customer stories..." />}>
+            <CustomerCarousel />
+          </Suspense>
           {/* AI Website Builder CTA Section */}
           {/* <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">

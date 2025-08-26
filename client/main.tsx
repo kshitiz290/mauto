@@ -13,6 +13,7 @@ import { Suspense, lazy, useEffect } from 'react';
 import { prefetchRoute } from './lib/prefetchRoutes';
 import { useLocation } from 'react-router-dom';
 import { applySeo, routeSeo } from './lib/seo';
+import { RouteLoading } from './components/ui/loading';
 // Route-level code splitting: each page lazily loaded so initial bundle shrinks.
 const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -54,9 +55,8 @@ const Whatsapp_Ordering = lazy(() => import('./pages/solutions/Whatsapp_Ordering
 
 const queryClient = new QueryClient();
 
-
-// Tiny fallback keeps bundle small and paints text immediately
-const LoadingFallback = () => <div style={{ height: 1, width: 1, position: 'absolute', overflow: 'hidden' }}> </div>;
+// Beautiful loading fallback for route transitions
+const LoadingFallback = () => <RouteLoading />;
 
 function RouteSeoUpdater() {
   const location = useLocation();

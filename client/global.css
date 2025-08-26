@@ -4,16 +4,36 @@
 
 /* Optimize critical CSS loading */
 @layer base {
+  /* Prevent flash of unstyled content */
+  html {
+    background-color: theme('colors.background');
+    color: theme('colors.foreground');
+  }
+
+  /* Root element optimization */
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
   /* Optimize font loading */
   body {
     font-display: swap;
+    background-color: theme('colors.background');
+    color: theme('colors.foreground');
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Optimize image loading */
   img {
     content-visibility: auto;
     contain-intrinsic-size: 200px;
+  }
+
+  /* Smooth transitions for theme changes */
+  * {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
   }
 }
 
