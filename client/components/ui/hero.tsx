@@ -115,18 +115,18 @@ export function Hero() {
           >
             {/* Badge */}
             <motion.div
-              className="inline-flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 font-medium backdrop-blur-sm text-xs md:text-sm mb-2 md:mb-3 mt-4 md:mt-0"
+              className="inline-flex items-center gap-2 px-4 md:px-4 py-2 md:py-1.5 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 font-medium backdrop-blur-sm text-sm md:text-sm mb-4 md:mb-3 mt-4 md:mt-0"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.8 }}
             >
-              <Sparkles className="w-3 h-3 md:w-4 md:h-4" />
+              <Sparkles className="w-4 h-4 md:w-4 md:h-4" />
               Trusted by 27+ Leading Companies
             </motion.div>
 
             {/* Main Heading */}
             <motion.h1
-              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.1] md:leading-[1.1] lg:leading-[1.1] xl:leading-[1.1] text-center md:text-left lg:text-left tracking-tight mt-2 md:mt-3"
+              className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.1] md:leading-[1.1] lg:leading-[1.1] xl:leading-[1.1] text-center md:text-left lg:text-left tracking-tight mt-4 md:mt-3"
               initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               transition={!isMobile ? { delay: 0.2, duration: 0.8 } : { duration: 0 }}
@@ -137,14 +137,14 @@ export function Hero() {
               <br />
               <span className="text-foreground">Your Business</span>
               <br />
-              <span className="text-foreground/80 text-lg sm:text-xl md:text-3xl lg:text-4xl xl:text-5xl">
+              <span className="text-foreground/80 text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-5xl">
                 with Technology
               </span>
             </motion.h1>
 
             {/* Subtitle */}
             <motion.p
-              className="text-sm sm:text-base md:text-lg lg:text-xl text-foreground/70 max-w-2xl leading-[1.4] md:leading-[1.5] text-center md:text-left lg:text-left px-4 md:px-0 mt-2 md:mt-3"
+              className="text-lg sm:text-xl md:text-lg lg:text-xl text-foreground/70 max-w-2xl leading-[1.5] md:leading-[1.5] text-center md:text-left lg:text-left px-2 md:px-0 mt-4 md:mt-3"
               initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               transition={!isMobile ? { delay: 0.4, duration: 0.8 } : { duration: 0 }}
@@ -183,13 +183,14 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.8 }}
             >
+
+
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
                 <a href="/auto-site">
-                  <button className="relative px-3 md:px-4 lg:px-8 py-2 md:py-2.5 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-xs md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-1 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
-
+                  <button className="relative px-5 md:px-4 lg:px-8 py-3 md:py-2.5 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
                     Build your free website
-                    <ArrowRight className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    <ArrowRight className="w-4 h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </button>
                 </a>
               </div>
@@ -197,8 +198,8 @@ export function Hero() {
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
                 <a href="/contact-us">
-                  <button className="relative px-3 md:px-4 lg:px-8 py-2 md:py-2.5 lg:py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-xs md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-1 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
-                    <Users className="w-3 h-3 md:w-4 md:h-4 lg:w-5 lg:h-5" />
+                  <button className="relative px-5 md:px-4 lg:px-8 py-3 md:py-2.5 lg:py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
+                    <Users className="w-4 h-4 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     Talk to Expert
                   </button>
                 </a>
@@ -213,10 +214,10 @@ export function Hero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 1 }}
           >
-            <div className="relative w-full max-w-xs md:max-w-xs lg:max-w-lg">
+            <div className="relative w-full max-w-sm md:max-w-xs lg:max-w-lg">
               {/* Main Device */}
               <motion.div
-                className="relative w-56 h-[360px] md:w-64 md:h-[400px] lg:w-80 lg:h-[600px] mx-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-2xl border-3 md:border-4 lg:border-8 border-slate-300 dark:border-slate-700 overflow-hidden"
+                className="relative w-64 h-[400px] md:w-64 md:h-[400px] lg:w-80 lg:h-[600px] mx-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-2xl border-4 md:border-4 lg:border-8 border-slate-300 dark:border-slate-700 overflow-hidden"
                 animate={{
                   y: [0, -15, 0],
                   rotateY: [0, 3, 0, -3, 0],
