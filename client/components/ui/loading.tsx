@@ -51,9 +51,9 @@ export const Loading = ({
                         animate={{ rotateY: [0, 360] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     >
-                        <img 
-                            src="/manacle_logo.png" 
-                            alt="Manacle Technologies" 
+                        <img
+                            src="/manacle_logo.png"
+                            alt="Manacle Technologies"
                             className={`${logoSizes[size]} object-contain drop-shadow-lg`}
                         />
                     </motion.div>
@@ -95,9 +95,9 @@ export const Loading = ({
 
 // Page Loading Component
 export const PageLoading = () => (
-    <Loading 
-        message="Loading page..." 
-        size="large" 
+    <Loading
+        message="Loading page..."
+        size="large"
         fullScreen={true}
         showLogo={true}
     />
@@ -106,9 +106,9 @@ export const PageLoading = () => (
 // Route Loading Component
 export const RouteLoading = () => (
     <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loading 
-            message="Loading..." 
-            size="large" 
+        <Loading
+            message="Loading..."
+            size="large"
             showLogo={true}
         />
     </div>
@@ -117,9 +117,9 @@ export const RouteLoading = () => (
 // Component Loading
 export const ComponentLoading = ({ message }: { message?: string }) => (
     <div className="flex items-center justify-center py-12">
-        <Loading 
-            message={message || "Loading content..."} 
-            size="medium" 
+        <Loading
+            message={message || "Loading content..."}
+            size="medium"
             showLogo={false}
         />
     </div>

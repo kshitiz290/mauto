@@ -126,6 +126,18 @@
       "destination": "/index.html"
     },
     {
+      "source": "/blogs",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blogs/crm-software-fundamentals",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/blogs/dispatch-automation-fundamentals",
+      "destination": "/index.html"
+    },
+    {
       "source": "/crm-software",
       "destination": "/index.html"
     },
