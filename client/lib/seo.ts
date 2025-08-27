@@ -47,7 +47,7 @@ export function applySeo(path: string, meta: SeoMeta = {}) {
 
 export const routeSeo: Record<string, SeoMeta> = {
     '/': {
-        title: 'Manacle Technologies – FMCG SFA, ERP, DMS, HRMS & Digital Solutions',
+        title: 'Manacle Technologies – Digital Transformation & Business Solutions',
         description: 'Leading provider of SFA, ERP, DMS, HRMS and digital automation solutions for FMCG and enterprise sectors. Transform your business with scalable, data‑driven technology from Manacle.',
         keywords: ['FMCG software', 'SFA', 'ERP', 'DMS', 'HRMS', 'field force automation', 'distributor management', 'retail execution', 'enterprise automation', 'India'],
         canonical: 'https://www.manacletech.com/',
