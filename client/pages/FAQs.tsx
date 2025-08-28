@@ -281,14 +281,22 @@ export function FAQs() {
 
                 <div className="glass-effect p-4 rounded-lg space-y-3">
                   <Phone className="w-8 h-8 text-accent mx-auto" />
-                  <h3 className="text-lg font-semibold">Call Us</h3>
+                  <h3 className="text-lg font-semibold hidden md:block">Contact Us</h3>
+                  <h3 className="text-lg font-semibold md:hidden">Call Us</h3>
                   <Button 
                     size="sm"
                     variant="outline" 
                     className="w-full border-accent text-accent hover:bg-accent hover:text-white"
-                    onClick={() => window.location.href = '/contact-us'}
+                    onClick={() => {
+                      if (window.innerWidth < 768) {
+                        window.location.href = 'tel:+919873250200';
+                      } else {
+                        window.location.href = '/contact-us';
+                      }
+                    }}
                   >
-                    Contact Us
+                    <span className="hidden md:inline">Contact Us</span>
+                    <span className="md:hidden">Call Us</span>
                   </Button>
                 </div>
 
