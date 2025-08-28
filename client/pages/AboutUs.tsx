@@ -115,7 +115,7 @@ export function AboutUs() {
                   className="bg-clip-text text-transparent"
                   style={{ background: 'linear-gradient(90deg, #FF9800 40%, #B721FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
                 >
-                  Manacle Technologies Pvt Ltd
+                  Manacle Technologies 
                 </span>
               </motion.h2>
               <motion.p
