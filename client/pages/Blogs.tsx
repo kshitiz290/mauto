@@ -77,7 +77,7 @@ export default function Blogs() {
     } as const;
 
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
             <div className="min-h-screen flex flex-col bg-background text-foreground">
                 <Header />
                 {/* Hero Section */}

@@ -11,7 +11,7 @@ import AttendanceLeaveFeatures from '@/components/ui/attendance_leave_features';
 
 const Attendance_Leave_Management = () => {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
 
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
         <Header />

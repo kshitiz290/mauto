@@ -12,7 +12,7 @@ import ProductionManagementSections from '@/components/ui/production_management_
 
 const Production_Management = () => {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
 
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
         <Header />

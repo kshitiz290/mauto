@@ -11,7 +11,7 @@ export function PricingPromo() {
             <div className="absolute top-0 left-0 w-32 h-32 bg-primary/20 rounded-full blur-2xl animate-pulse"></div>
             <div className="absolute bottom-0 right-0 w-40 h-40 bg-accent/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-primary/5 to-accent/5 rounded-full blur-3xl"></div>
-            
+
             <div className="relative z-10 p-8 md:p-12">
               <div className="text-center mb-8">
                 <div className="inline-flex items-center bg-gradient-to-r from-primary to-accent text-white px-6 py-2 rounded-full text-sm font-bold mb-4 shadow-lg animate-bounce">
@@ -65,15 +65,15 @@ export function PricingPromo() {
                   </div>
                   <div className="flex items-center gap-3">
                     <Globe className="w-6 h-6 text-accent" />
-                    <span className="text-lg font-bold">www.codifye.in</span>
+                    <span className="text-lg font-bold">www.manacle.in</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Users className="w-6 h-6 text-primary" />
-                    <span className="text-lg font-bold">@codifyee_</span>
+                    <span className="text-lg font-bold">@manacle_official</span>
                   </div>
                 </div>
-                
-                <Button 
+
+                <Button
                   className="px-8 py-4 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300 text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
                   onClick={() => window.location.href = '/contact-us'}
                 >

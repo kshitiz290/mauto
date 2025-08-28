@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f5f7fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
 
   <!-- Critical Resource Preloading -->
@@ -63,29 +63,28 @@
 
     html {
       color-scheme: light dark;
-      /* Immediately apply dark background to prevent flash */
-      background-color: #0f0f23;
+      /* Default to light to avoid dark-first flash for new users */
+      background-color: #ffffff;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      /* Default to dark theme to prevent white flash */
-      background-color: #0f0f23;
-      color: #f1f5f9;
+      background-color: #ffffff;
+      color: #0f172a;
       overflow-x: hidden;
       transition: none;
       /* Remove transition during initial load */
     }
 
-    /* Light theme override */
-    @media (prefers-color-scheme: light) {
+    /* Dark theme override (if user/system prefers) */
+    @media (prefers-color-scheme: dark) {
       html {
-        background-color: #ffffff;
+        background-color: #0f0f23;
       }
 
       body {
-        background-color: #ffffff;
-        color: #0f172a;
+        background-color: #0f0f23;
+        color: #f1f5f9;
       }
     }
 
@@ -231,6 +230,27 @@
     .loaded body {
       transition: background-color 0.3s ease, color 0.3s ease;
     }
+
+    /* Explicit theme class overrides (final authority) */
+    html.light,
+    .light body {
+      background-color: #ffffff;
+      color: #0f172a;
+    }
+
+    html.dark,
+    .dark body {
+      background-color: #0f0f23;
+      color: #f1f5f9;
+    }
+
+    .light .initial-loader {
+      background-color: #ffffff;
+    }
+
+    .dark .initial-loader {
+      background-color: #0f0f23;
+    }
   </style>
 </head>
 
@@ -250,6 +270,19 @@
   </div>
 
   <div id="root"></div>
+  <!-- Set theme before hydration: prefer stored value, else light -->
+  <script>
+    (function () {
+      try {
+        var storageKey = 'manacle_theme';
+        var stored = localStorage.getItem(storageKey);
+        var theme = (stored === 'dark' || stored === 'light') ? stored : 'light';
+        var root = document.documentElement;
+        root.classList.remove('light', 'dark');
+        root.classList.add(theme);
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
   <script type="module" src="/client/main.tsx" fetchpriority="high"></script>
 
   <script>

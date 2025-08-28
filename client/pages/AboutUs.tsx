@@ -10,6 +10,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import WeFocusQuality from "@/components/ui/we_focus_quality";
 import Brochure from "@/components/ui/brochure";
+import { FAQRedirect } from "@/components/ui/faq-redirect";
 // ...existing code...
 
 // AnimatedCounter component with framer-motion scroll trigger
@@ -54,7 +55,7 @@ export function AboutUs() {
 
   // Build About Us page here:
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
         <Header />
         <main>
@@ -115,7 +116,7 @@ export function AboutUs() {
                   className="bg-clip-text text-transparent"
                   style={{ background: 'linear-gradient(90deg, #FF9800 40%, #B721FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
                 >
-                  Manacle Technologies 
+                  Manacle Technologies
                 </span>
               </motion.h2>
               <motion.p
@@ -226,11 +227,11 @@ export function AboutUs() {
           <WeFocusQuality />
           <Certifications />
           <TrustedByCompanies />
-
           <Brochure />
 
 
         </main>
+        <FAQRedirect />
         {/* Footer */}
         <Footer />
       </div>

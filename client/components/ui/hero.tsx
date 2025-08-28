@@ -52,7 +52,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden min-h-screen md:h-screen flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-12 md:py-0"
+      className="relative overflow-hidden min-h-[100svh] flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-8 md:py-16 lg:py-20 xl:py-24"
     >
       {/* Dynamic Background Elements - Skip on mobile for LCP */}
       {visualsOn && !isMobile && (

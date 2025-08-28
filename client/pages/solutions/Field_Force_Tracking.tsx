@@ -12,7 +12,7 @@ import FieldForceFeatures from '@/components/ui/field_force_features';
 
 const Field_Force_Tracking = () => {
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
 
             <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
                 <Header />

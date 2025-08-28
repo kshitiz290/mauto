@@ -898,7 +898,7 @@ export const handleTimesEdited = async (req: Request, res: Response) => {
 //       currentStep++;
 //     } else {
 //       // Site is ready
-//       const previewUrl = `https://preview.${data.domain.replace(/^https?:\/\//, '')}.codifye.dev`;
+//       const previewUrl = `https://preview.${data.domain.replace(/^https?:\/\//, '')}.manacle.dev`;
 
 //       siteBuilds.set(buildId, {
 //         status: "ready",

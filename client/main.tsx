@@ -51,6 +51,8 @@ const Website_Development = lazy(() => import('./pages/solutions/Website_Develop
 const CRM = lazy(() => import('./pages/solutions/CRM'));
 const Digital_Marketing = lazy(() => import('./pages/solutions/Digital_Marketing'));
 const Whatsapp_Ordering = lazy(() => import('./pages/solutions/Whatsapp_Ordering'));
+const FAQs = lazy(() => import('./pages/FAQs'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 
 
 const queryClient = new QueryClient();
@@ -129,6 +131,8 @@ const App = () => (
             <Route path="/blogs/dispatch-automation-fundamentals" element={<DispatchFundamentals />} />
             <Route path="/podcasts" element={<Podcasts />} />
             <Route path="/seminars-webinars" element={<SeminarsWebinars />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             {/* Redirects */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

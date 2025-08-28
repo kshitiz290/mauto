@@ -12,7 +12,7 @@ import Brochure from '@/components/ui/brochure';
 
 const Demand_Generation = () => {
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
 
             <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
                 <Header />

@@ -23,7 +23,7 @@ const SectionLoadingFallback = ({ message }: { message?: string }) => (
 export default function Index() {
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+    <ThemeProvider defaultTheme="light" storageKey="manacle_theme">
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
         <Header />
         <main className="pt-4 sm:pt-6">

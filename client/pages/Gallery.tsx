@@ -138,12 +138,12 @@ export default function Gallery() {
 
   const industries = ["All", "Education", "Healthcare", "Printing Services", "Hospitality", "NGO"];
 
-  const filteredItems = selectedIndustry === "All" 
-    ? galleryItems 
+  const filteredItems = selectedIndustry === "All"
+    ? galleryItems
     : galleryItems.filter(item => item.industry === selectedIndustry);
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
         <Header />
         <main>
@@ -157,7 +157,7 @@ export default function Gallery() {
                 <p className="text-xl text-foreground/80 mb-8 leading-relaxed">
                   Explore our diverse collection of websites across various industries. Each project showcases our commitment to quality, performance, and user experience.
                 </p>
-                
+
                 {/* Promotional Banner */}
                 <div className="max-w-2xl mx-auto mb-8">
                   <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 border border-primary/30 backdrop-blur-xl p-6 shadow-2xl">
@@ -192,18 +192,17 @@ export default function Gallery() {
                     <button
                       key={industry}
                       onClick={() => setSelectedIndustry(industry)}
-                      className={`px-6 py-2 rounded-full border transition-all duration-300 ${
-                        selectedIndustry === industry
+                      className={`px-6 py-2 rounded-full border transition-all duration-300 ${selectedIndustry === industry
                           ? 'bg-primary text-white border-primary'
                           : 'bg-card/50 border-glass-border hover:border-primary/50'
-                      }`}
+                        }`}
                     >
                       {industry}
                     </button>
                   ))}
                 </div>
                 <p className="text-foreground/70 mt-4">
-                  Showing {filteredItems.length} project{filteredItems.length !== 1 ? 's' : ''} 
+                  Showing {filteredItems.length} project{filteredItems.length !== 1 ? 's' : ''}
                   {selectedIndustry !== "All" && ` in ${selectedIndustry}`}
                 </p>
               </div>
@@ -243,7 +242,7 @@ export default function Gallery() {
                         </div>
                       </div>
                     </CardHeader>
-                    
+
                     <CardContent className="p-6">
                       <CardTitle className="text-2xl mb-3 group-hover:text-primary transition-colors">
                         {item.title}
@@ -308,7 +307,7 @@ export default function Gallery() {
                     </CardContent>
 
                     <CardFooter className="p-6 pt-0 flex flex-col gap-3">
-                      <Button 
+                      <Button
                         className="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300 group"
                         onClick={() => window.location.href = '/contact-us'}
                       >
@@ -317,18 +316,18 @@ export default function Gallery() {
                         <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </Button>
                       <div className="flex gap-2 w-full">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           className="flex-1 border-glass-border"
                           onClick={() => window.open(item.url, '_blank')}
                         >
                           <ExternalLink className="w-4 h-4 mr-1" />
                           Live Preview
                         </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           className="flex-1 border-glass-border"
                           onClick={() => window.location.href = '/contact-us'}
                         >
@@ -351,10 +350,10 @@ export default function Gallery() {
                   Ready to Create Your <span className="gradient-text">Professional Website</span>?
                 </h2>
                 <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                  Choose any style from our gallery or let us create a custom design for your business. 
+                  Choose any style from our gallery or let us create a custom design for your business.
                   Professional websites starting at just ₹999/month.
                 </p>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                   <div className="bg-card/80 backdrop-blur-xl border border-glass-border rounded-xl p-6">
                     <Smartphone className="w-8 h-8 text-primary mx-auto mb-3" />
@@ -374,7 +373,7 @@ export default function Gallery() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button 
+                  <Button
                     size="lg"
                     className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300"
                     onClick={() => window.location.href = '/contact-us'}
@@ -382,7 +381,7 @@ export default function Gallery() {
                     Start Your Website - ₹999/month
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
-                  <Button 
+                  <Button
                     size="lg"
                     variant="outline"
                     className="border-glass-border"
@@ -400,10 +399,10 @@ export default function Gallery() {
                       <span className="font-bold">📞 +91 85408 89842</span>
                     </div>
                     <div className="flex items-center">
-                      <span className="font-bold">🌐 www.codifye.in</span>
+                      <span className="font-bold">🌐 www.manacle.in</span>
                     </div>
                     <div className="flex items-center">
-                      <span className="font-bold">📧 codifyee@gmail.com</span>
+                      <span className="font-bold">📧 contact@manacle.in</span>
                     </div>
                   </div>
                 </div>
@@ -418,14 +417,14 @@ export default function Gallery() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
                 <div className="flex items-center mb-4 group">
-                  <img 
-                    src="/codifye_logo.png" 
-                    alt="Codifye Logo" 
+                  <img
+                    src="/manacle_logo.png"
+                    alt="Manacle Logo"
                     className="w-14 h-14 mr-3 group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="flex flex-col">
                     <h3 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                      Codifye
+                      Manacle
                     </h3>
                     <span className="text-sm text-foreground/60 font-medium -mt-1">Web Solutions</span>
                   </div>
@@ -457,9 +456,9 @@ export default function Gallery() {
                 <h4 className="font-bold mb-4 text-xl">Contact</h4>
                 <ul className="space-y-3 text-lg text-foreground/70 font-medium">
                   <li>
-                    <a href="mailto:codifyee@gmail.com" className="flex items-center hover:text-primary hover:underline transition-all duration-300">
+                    <a href="mailto:contact@manacle.in" className="flex items-center hover:text-primary hover:underline transition-all duration-300">
                       <Mail className="w-5 h-5 mr-2 flex-shrink-0" />
-                      Email: codifyee@gmail.com
+                      Email: contact@manacle.in
                     </a>
                   </li>
                   <li>
@@ -475,30 +474,30 @@ export default function Gallery() {
                     </a>
                   </li>
                 </ul>
-                
+
                 {/* Social Media Icons */}
                 <div className="mt-6">
                   <h5 className="font-bold mb-3 text-base">Follow Us</h5>
                   <div className="flex space-x-4">
-                    <a 
-                      href="https://x.com/home" 
-                      target="_blank" 
+                    <a
+                      href="https://x.com/home"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300 group"
                     >
                       <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
                     </a>
-                    <a 
-                      href="https://www.facebook.com/profile.php?id=61574541927345" 
-                      target="_blank" 
+                    <a
+                      href="https://www.facebook.com/profile.php?id=61574541927345"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-blue-600 hover:scale-110 transition-all duration-300 group"
                     >
                       <Facebook className="w-5 h-5 text-foreground/70 group-hover:text-white" />
                     </a>
-                    <a 
-                      href="https://instagram.com/codifyee_" 
-                      target="_blank" 
+                    <a
+                      href="https://instagram.com/manacle_official"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:scale-110 transition-all duration-300 group"
                     >
@@ -510,16 +509,16 @@ export default function Gallery() {
             </div>
             <div className="mt-8 pt-8 border-t border-glass-border/30 text-center">
               <div className="flex items-center justify-center mb-3">
-                <img 
-                  src="/codifye_logo.png" 
-                  alt="Codifye Logo" 
+                <img
+                  src="/manacle_logo.png"
+                  alt="Manacle Logo"
                   className="w-7 h-7 mr-2 opacity-70"
                 />
                 <span className="text-base font-medium bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  CODIFYE
+                  MANACLE
                 </span>
               </div>
-              <p className="text-lg text-foreground/60 font-medium">All rights reserved © 2025 CODIFYE</p>
+              <p className="text-lg text-foreground/60 font-medium">All rights reserved © 2025 MANACLE</p>
             </div>
           </div>
         </footer>

@@ -25,14 +25,17 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = "light",
-  storageKey = "codifye-theme",
+  storageKey = "manacle_theme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
+    // Always prefer a stored value; otherwise default to light for first-time visitors
     if (typeof window !== "undefined") {
-      return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+      const stored = localStorage.getItem(storageKey) as Theme | null;
+      if (stored === "dark" || stored === "light") return stored;
+      return "light"; // force light as the initial default
     }
-    return defaultTheme;
+    return "light";
   });
 
   useEffect(() => {

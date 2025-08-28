@@ -53,4 +53,14 @@ const AccordionContent = React.forwardRef<
 
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
+// Add accordion animations to Tailwind config if not present
+// @keyframes accordion-down {
+//   from { height: 0 }
+//   to { height: var(--radix-accordion-content-height) }
+// }
+// @keyframes accordion-up {
+//   from { height: var(--radix-accordion-content-height) }
+//   to { height: 0 }
+// }
+
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };

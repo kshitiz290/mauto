@@ -251,6 +251,7 @@ export function Header() {
               { name: "Blogs", href: "/blogs" },
               { name: "Podcasts", href: "/podcasts" },
               { name: "Seminars & Webinars", href: "/seminars-webinars" },
+              { name: "FAQs", href: "/faqs" },
             ]
           }
         ]

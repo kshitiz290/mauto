@@ -8,7 +8,7 @@ import { Header } from '../components/ui/header';
 
 const AccessDenied = () => {
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
             <Header />
             <div className="min-h-screen relative overflow-hidden">
                 {/* Animated Background */}

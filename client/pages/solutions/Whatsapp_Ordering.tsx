@@ -12,7 +12,7 @@ import WhatsappOrderingFeatures from '@/components/ui/whatsapp_ordering_features
 
 const Whatsapp_Ordering = () => {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
 
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
         <Header />

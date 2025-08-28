@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Codifye Website Deployment Script for Hostinger
+# Manacle Website Deployment Script for Hostinger
 # This script prepares the website for production deployment
 
-echo "🚀 Starting Codifye Website Deployment Process..."
+echo "🚀 Starting Manacle Website Deployment Process..."
 
 # Colors for output
 RED='\033[0;31m'

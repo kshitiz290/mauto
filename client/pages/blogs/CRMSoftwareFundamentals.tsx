@@ -6,7 +6,7 @@ import { ThemeProvider } from '../../components/ui/theme-provider';
 
 export default function CRMSoftwareFundamentals() {
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
             <div className="min-h-screen flex flex-col bg-background text-foreground">
                 <Header />
                 <article className="pt-40 pb-24 max-w-4xl mx-auto px-6 lg:px-8">

@@ -53,8 +53,8 @@ const portfolioItems: PortfolioItem[] = [
     ],
     duration: "4 months",
     teamSize: "5 developers",
-    liveUrl: "https://ecommerce-demo.codifye.com",
-    githubUrl: "https://github.com/codifye/ecommerce-platform",
+    liveUrl: "https://ecommerce-demo.manacle.in",
+    githubUrl: "https://github.com/manacle-tech/ecommerce-platform",
   },
   {
     id: 2,
@@ -88,8 +88,8 @@ const portfolioItems: PortfolioItem[] = [
     ],
     duration: "6 months",
     teamSize: "8 developers",
-    liveUrl: "https://techhub-demo.codifye.com",
-    githubUrl: "https://github.com/codifye/tech-innovation-hub",
+    liveUrl: "https://techhub-demo.manacle.in",
+    githubUrl: "https://github.com/manacle-tech/tech-innovation-hub",
   },
   {
     id: 3,
@@ -122,8 +122,8 @@ const portfolioItems: PortfolioItem[] = [
     ],
     duration: "3 months",
     teamSize: "3 developers",
-    liveUrl: "https://portfolio-demo.codifye.com",
-    githubUrl: "https://github.com/codifye/creative-portfolio",
+    liveUrl: "https://portfolio-demo.manacle.in",
+    githubUrl: "https://github.com/manacle-tech/creative-portfolio",
   },
   {
     id: 4,
@@ -156,8 +156,8 @@ const portfolioItems: PortfolioItem[] = [
     ],
     duration: "5 months",
     teamSize: "6 developers",
-    liveUrl: "https://storytelling-demo.codifye.com",
-    githubUrl: "https://github.com/codifye/digital-storytelling",
+    liveUrl: "https://storytelling-demo.manacle.in",
+    githubUrl: "https://github.com/manacle-tech/digital-storytelling",
   },
 ];
 

@@ -150,7 +150,7 @@ export function ContactUs() {
   // };
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
       <style>{`
         html, body, #root { overflow-x: hidden !important; }
         body { position: relative; }
@@ -524,7 +524,7 @@ export function ContactUs() {
                           allowFullScreen={true}
                           loading="lazy"
                           referrerPolicy="no-referrer-when-downgrade"
-                          title="Codifye Location - Maharani Colony, Patna"
+                          title="Manacle Location - Maharani Colony, Patna"
                         ></iframe>
                       </div>
                     </div>

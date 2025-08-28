@@ -1,11 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
 
-REM Codifye Website Deployment Script for Hostinger (Windows)
+REM Manacle Website Deployment Script for Hostinger (Windows)
 REM This script prepares the website for production deployment
 
 echo.
-echo 🚀 Starting Codifye Website Deployment Process...
+echo 🚀 Starting Manacle Website Deployment Process...
 echo.
 
 REM Step 1: Clean previous builds

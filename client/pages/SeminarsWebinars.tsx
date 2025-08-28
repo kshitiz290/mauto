@@ -5,7 +5,7 @@ import InProgressSection from '@/components/ui/in-progress-section';
 
 export default function SeminarsWebinars() {
     return (
-        <ThemeProvider defaultTheme="dark" storageKey="codifye-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
             <div className="min-h-screen flex flex-col bg-background text-foreground">
                 <Header />
                 <section className="relative min-h-[50svh] flex items-center justify-center text-center overflow-hidden">
