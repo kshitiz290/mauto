@@ -130,6 +130,14 @@
       "destination": "/index.html"
     },
     {
+      "source": "/faqs",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/index.html"
+    },
+    {
       "source": "/blogs/crm-software-fundamentals",
       "destination": "/index.html"
     },
