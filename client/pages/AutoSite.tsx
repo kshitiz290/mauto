@@ -409,24 +409,28 @@ export default function AutoSite() {
     goal: "",
     impact: ""
   };
-  // Helper to clear formData and step on new user registration/login
+  // Helper to detect user changes and reset form state
   useEffect(() => {
-    // Only clear progress if a new user logs in or registers
     const userID = localStorage.getItem('userID');
     const lastUserID = localStorage.getItem('autoSiteLastUserID');
+    
     if (userID && userID !== lastUserID) {
-      // New user detected, clear formData and step, and request backend to delete user_form_progress
-      localStorage.setItem('autoSiteFormData', JSON.stringify(defaultFormData));
-      localStorage.setItem('autoSiteCurrentStep', '0');
+      console.log('[AutoSite] User change detected:', { lastUserID, newUserID: userID });
+      
+      // Store the new user ID
       localStorage.setItem('autoSiteLastUserID', userID);
+      
+      // Clear localStorage form data (but not needed since we use DB now)
+      localStorage.removeItem('autoSiteFormData');
+      localStorage.removeItem('autoSiteCurrentStep');
+      localStorage.removeItem('autoSiteCompanyId');
+      
+      // Reset component state to defaults (will be overridden by DB load)
       setFormData(defaultFormData);
       setCurrentStep(0);
-      // Call backend to delete progress for this user
-      fetch('/api/reset-form', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include'
-      });
+      setCompanyId(0);
+      
+      console.log('[AutoSite] Reset state for new user:', userID);
     }
   }, [localStorage.getItem('userID')]);
 
@@ -574,10 +578,16 @@ export default function AutoSite() {
 
     // Wait for userID to be available after Google auth
     const attemptLoadForm = async () => {
+      console.log('[AutoSite] Starting form load attempt...');
+      
       let userID = localStorage.getItem('userID');
       let attempts = 0;
-      while (!userID && attempts < 10) {
-        await new Promise(resolve => setTimeout(resolve, 200));
+      const maxAttempts = 15; // Increased from 10 to 15
+      
+      // Wait for userID to be available (especially important after OAuth)
+      while (!userID && attempts < maxAttempts) {
+        console.log(`[AutoSite] Waiting for userID, attempt ${attempts + 1}/${maxAttempts}`);
+        await new Promise(resolve => setTimeout(resolve, 300)); // Increased from 200ms to 300ms
         userID = localStorage.getItem('userID');
         attempts++;
       }
@@ -591,7 +601,8 @@ export default function AutoSite() {
         return;
       }
 
-      console.log('[AutoSite] Loading form for userID:', userID);
+      console.log('[AutoSite] Found userID:', userID, 'loading form data...');
+      
       try {
         const response = await fetch(`/api/load-form`, {
           method: 'POST',
@@ -605,9 +616,18 @@ export default function AutoSite() {
         }
 
         const data = await response.json();
-        console.log('[AutoSite] Form data loaded:', data);
+        console.log('[AutoSite] Form data loaded for user', userID, ':', {
+          step_number: data.step_number,
+          has_form_data: !!data.form_data && Object.keys(data.form_data).length > 0,
+          has_company: !!data.company,
+          debug: data.debug
+        });
 
-        setCurrentStep(data.step_number || 0);
+        // Always use the step_number from the database, no fallbacks to localStorage
+        const dbStepNumber = data.step_number || 0;
+        setCurrentStep(dbStepNumber);
+        console.log('[AutoSite] Set current step to:', dbStepNumber);
+        
         // Robustly parse form_data if string
         let parsedFormData = defaultFormData;
         if (typeof data.form_data === "string") {
@@ -615,6 +635,7 @@ export default function AutoSite() {
             const parsed = JSON.parse(data.form_data);
             parsedFormData = Object.keys(parsed).length ? parsed : defaultFormData;
           } catch {
+            console.warn('[AutoSite] Failed to parse form_data string');
             parsedFormData = defaultFormData;
           }
         } else if (data.form_data && Object.keys(data.form_data).length) {
@@ -623,6 +644,7 @@ export default function AutoSite() {
           parsedFormData = defaultFormData;
         }
         setFormData(parsedFormData);
+        
         // Restore products and campaigns arrays if present in loaded form_data
         if (parsedFormData.products && Array.isArray(parsedFormData.products)) {
           setProducts(parsedFormData.products);
@@ -630,13 +652,20 @@ export default function AutoSite() {
         if (parsedFormData.campaigns && Array.isArray(parsedFormData.campaigns)) {
           setCampaigns(parsedFormData.campaigns);
         }
+        
         // Set companyId from backend if available
         if (data.company && data.company.id) {
           setCompanyId(data.company.id);
           localStorage.setItem("autoSiteCompanyId", String(data.company.id));
+          console.log('[AutoSite] Set companyId from database:', data.company.id);
+        } else {
+          // Clear company ID if no company exists
+          setCompanyId(0);
+          localStorage.removeItem("autoSiteCompanyId");
+          console.log('[AutoSite] No company found, cleared companyId');
         }
       } catch (error) {
-        console.warn('[AutoSite] Failed to load form:', error);
+        console.error('[AutoSite] Failed to load form for user', userID, ':', error);
         setCurrentStep(0);
         setFormData(defaultFormData);
         setCompanyId(0);
