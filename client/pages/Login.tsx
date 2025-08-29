@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -20,6 +20,52 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const { toast } = useToast();
     const navigate = useNavigate();
+
+    // Handle OAuth errors from URL parameters
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const code = urlParams.get('code');
+        const message = urlParams.get('message');
+
+        if (error === 'google_auth_failed' && code && message) {
+            const decodedMessage = decodeURIComponent(message);
+
+            if (code === 'account_conflict') {
+                toast({
+                    title: 'Account Conflict',
+                    description: decodedMessage,
+                    variant: 'destructive',
+                    duration: 10000, // Show for 10 seconds for this important message
+                });
+            } else if (code === 'google_profile_incomplete') {
+                toast({
+                    title: 'Google Profile Issue',
+                    description: decodedMessage,
+                    variant: 'destructive',
+                    duration: 8000,
+                });
+            } else if (code === 'account_creation_failed') {
+                toast({
+                    title: 'Account Creation Failed',
+                    description: decodedMessage,
+                    variant: 'destructive',
+                    duration: 8000,
+                });
+            } else {
+                toast({
+                    title: 'Google Sign-In Failed',
+                    description: decodedMessage,
+                    variant: 'destructive',
+                    duration: 6000,
+                });
+            }
+
+            // Clean up URL parameters
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+    }, [toast]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();

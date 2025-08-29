@@ -1,15 +1,25 @@
-import { useState } from 'react';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Label } from '../components/ui/label';
-import { useToast } from '../components/ui/use-toast';
-import { ThemeProvider } from '../components/ui/theme-provider';
-import { Header } from '../components/ui/header';
-import { apiFetch } from '../lib/apiFetch';
-import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, User, Phone, UserPlus } from 'lucide-react';
+import { useState, useRef, useEffect } from "react";
+import emailjs from 'emailjs-com';
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
+import { motion, useInView } from "framer-motion";
+import {
+    UserPlus,
+    Mail,
+    Phone,
+    Lock,
+    User,
+    Eye,
+    EyeOff
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Label } from "../components/ui/label";
+import { useToast } from "../components/ui/use-toast";
+import { ThemeProvider } from "../components/ui/theme-provider";
+import { Header } from "../components/ui/header";
 import { GoogleIcon } from '../components/ui/google-icon';
+import { apiFetch } from '../lib/apiFetch';
 
 const apiBase = window.location.origin;
 
@@ -38,6 +48,52 @@ export default function Signup() {
     function isValidContact(contact: string) {
         return /^\d{10}$/.test(contact);
     }
+
+    // Handle OAuth errors from URL parameters
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const code = urlParams.get('code');
+        const message = urlParams.get('message');
+
+        if (error === 'google_auth_failed' && code && message) {
+            const decodedMessage = decodeURIComponent(message);
+
+            if (code === 'account_conflict') {
+                toast({
+                    title: 'Account Already Exists',
+                    description: decodedMessage,
+                    variant: 'destructive',
+                    duration: 10000, // Show for 10 seconds for this important message
+                });
+            } else if (code === 'google_profile_incomplete') {
+                toast({
+                    title: 'Google Profile Issue',
+                    description: decodedMessage,
+                    variant: 'destructive',
+                    duration: 8000,
+                });
+            } else if (code === 'account_creation_failed') {
+                toast({
+                    title: 'Signup Failed',
+                    description: decodedMessage,
+                    variant: 'destructive',
+                    duration: 8000,
+                });
+            } else {
+                toast({
+                    title: 'Google Sign-Up Failed',
+                    description: decodedMessage,
+                    variant: 'destructive',
+                    duration: 6000,
+                });
+            }
+
+            // Clean up URL parameters
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+    }, [toast]);
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();

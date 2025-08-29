@@ -113,13 +113,13 @@ function isAuth(req, res, next) {
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 // Use HTTPS for production by default, HTTP only for local development
-const DEFAULT_BASE_URL = process.env.BASE_URL || 
+const DEFAULT_BASE_URL = process.env.BASE_URL ||
     (process.env.NODE_ENV === 'production' ? 'https://mauto-ten.vercel.app' : 'http://localhost:8080');
 
 // Helper function to get the correct protocol (force HTTPS in production)
 function getCorrectProtocol(req: express.Request): string {
     // Check if we're in production or if the request came through HTTPS
-    if (process.env.NODE_ENV === 'production' || 
+    if (process.env.NODE_ENV === 'production' ||
         req.headers['x-forwarded-proto'] === 'https' ||
         req.get('host')?.includes('vercel.app')) {
         return 'https';
@@ -139,7 +139,10 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
             const googleId = profile.id;
 
             if (!email || !googleId) {
-                return done(null, false, { message: 'Missing email or Google ID' });
+                return done(null, false, {
+                    message: 'google_profile_incomplete',
+                    userMessage: 'Google profile is missing required information. Please ensure your Google account has a valid email address.'
+                });
             }
 
             const baseLoginId = email.split('@')[0];
@@ -166,7 +169,10 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
                 user = Array.isArray(rows2) && (rows2 as any[]).length ? (rows2 as any[])[0] : null;
 
                 if (!user) {
-                    return done(null, false, { message: 'Failed to create user account' });
+                    return done(null, false, {
+                        message: 'account_creation_failed',
+                        userMessage: 'Failed to create your account. Please try again or contact support if the problem persists.'
+                    });
                 }
                 created = true;
 
@@ -177,9 +183,12 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
                 user.provider = 'google';
                 created = false;
 
-            }  else {
+            } else {
                 // Account conflict - email exists but different Google ID
-                return done(null, false, { message: 'Account conflict: email already associated with different account' });
+                return done(null, false, {
+                    message: 'account_conflict',
+                    userMessage: `This email is already registered with a different account. Please:\n\n• Sign in with your regular email/password instead\n• Or contact support to link your Google account\n• Or use a different Google account`
+                });
             }
 
             return done(null, user, { createdNewUser: created });
@@ -276,9 +285,10 @@ app.get('/api/auth/google/callback', (req, res, next) => {
             return res.redirect('/login?error=google_auth_failed&reason=server_error');
         }
         if (!user) {
-            const reason = info?.message || 'authentication_failed';
-            console.log('[OAuth] Authentication failed:', reason);
-            return res.redirect(`/login?error=google_auth_failed&reason=${encodeURIComponent(reason)}`);
+            const errorCode = info?.message || 'authentication_failed';
+            const userMessage = info?.userMessage || 'Authentication failed. Please try again.';
+            console.log('[OAuth] Authentication failed:', errorCode, userMessage);
+            return res.redirect(`/login?error=google_auth_failed&code=${encodeURIComponent(errorCode)}&message=${encodeURIComponent(userMessage)}`);
         }
         req.login(user, (e) => {
             if (e) {
