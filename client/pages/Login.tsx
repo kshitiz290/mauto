@@ -52,6 +52,13 @@ export default function Login() {
                     variant: 'destructive',
                     duration: 8000,
                 });
+            } else if (code === 'existing_account_different_provider') {
+                toast({
+                    title: 'Account Found',
+                    description: decodedMessage,
+                    variant: 'default', // Use default variant instead of destructive for this case
+                    duration: 8000,
+                });
             } else {
                 toast({
                     title: 'Google Sign-In Failed',
@@ -294,7 +301,7 @@ export default function Login() {
                                     >
                                         <Button
                                             variant="outline"
-                                            onClick={() => { window.location.href = '/api/auth/google'; }}
+                                            onClick={() => { window.location.href = '/api/auth/google?intent=login'; }}
                                             className="w-full bg-secondary/80 dark:bg-background/50 border-2 border-border dark:border-border text-foreground hover:bg-secondary hover:text-foreground dark:hover:bg-background/80 dark:hover:text-foreground hover:border-primary/50 dark:hover:border-border/80 h-12 mb-2 flex items-center justify-center gap-3 transition-all duration-200"
                                         >
                                             <GoogleIcon className="w-5 h-5" />

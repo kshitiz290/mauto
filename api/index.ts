@@ -133,10 +133,14 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
         clientSecret: GOOGLE_CLIENT_SECRET,
         callbackURL: `${DEFAULT_BASE_URL}/api/auth/google/callback`,
         passReqToCallback: true
-    }, async (_req, _at, _rt, profile, done) => {
+    }, async (req, _at, _rt, profile, done) => {
         try {
             const email = profile.emails?.[0]?.value;
             const googleId = profile.id;
+            // Get the intent from state parameter in the OAuth callback
+            const intent = req.query?.state || 'login'; // Google returns state in query params
+            
+            console.log('[OAuth Strategy] Intent:', intent, 'Query state:', req.query?.state);
 
             if (!email || !googleId) {
                 return done(null, false, {
@@ -183,11 +187,30 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
                 user.provider = 'google';
                 created = false;
 
+            } else if (user.google_id === googleId) {
+                // User exists with this Google ID - normal login
+                created = false;
+
+            } else if (user.email_id === email && user.google_id && user.google_id !== googleId) {
+                // Email exists but with different Google ID
+                if (intent === 'signup') {
+                    // On signup page - show conflict error
+                    return done(null, false, {
+                        message: 'account_conflict',
+                        userMessage: `This email is already registered with a different account. Please:\n\n• Sign in with your regular email/password instead\n• Or contact support to link your Google account\n• Or use a different Google account`
+                    });
+                } else {
+                    // On login page - suggest using regular login
+                    return done(null, false, {
+                        message: 'existing_account_different_provider',
+                        userMessage: `This email is already registered with a regular account. Please sign in using your email and password instead.`
+                    });
+                }
             } else {
-                // Account conflict - email exists but different Google ID
+                // Other conflict cases
                 return done(null, false, {
-                    message: 'account_conflict',
-                    userMessage: `This email is already registered with a different account. Please:\n\n• Sign in with your regular email/password instead\n• Or contact support to link your Google account\n• Or use a different Google account`
+                    message: 'authentication_failed',
+                    userMessage: 'Authentication failed. Please try again or contact support.'
                 });
             }
 
@@ -275,10 +298,20 @@ app.get('/api/logout', (req, res) => {
 app.get('/api/auth/google', (req, res, next) => {
     if (!GOOGLE_CLIENT_ID) return res.status(500).json({ error: 'Google OAuth not configured' });
     const callbackURL = `${getCorrectProtocol(req)}://${req.get('host')}/api/auth/google/callback`;
-    passport.authenticate('google', { scope: ['profile', 'email'], callbackURL } as any)(req, res, next);
+    // Pass the intent (login/signup) as state parameter
+    const intent = req.query.intent || 'login'; // default to login for existing links
+    passport.authenticate('google', { 
+        scope: ['profile', 'email'], 
+        callbackURL,
+        state: intent 
+    } as any)(req, res, next);
 });
 app.get('/api/auth/google/callback', (req, res, next) => {
     const callbackURL = `${getCorrectProtocol(req)}://${req.get('host')}/api/auth/google/callback`;
+    
+    // Log the callback request to see where the state parameter is
+    console.log('[OAuth Callback] Query params:', req.query);
+    
     passport.authenticate('google', { callbackURL } as any, (err, user, info) => {
         if (err) {
             console.error('[OAuth Callback Error]', err);
@@ -288,7 +321,12 @@ app.get('/api/auth/google/callback', (req, res, next) => {
             const errorCode = info?.message || 'authentication_failed';
             const userMessage = info?.userMessage || 'Authentication failed. Please try again.';
             console.log('[OAuth] Authentication failed:', errorCode, userMessage);
-            return res.redirect(`/login?error=google_auth_failed&code=${encodeURIComponent(errorCode)}&message=${encodeURIComponent(userMessage)}`);
+            
+            // Check if we have intent information to redirect appropriately
+            const intent = req.query?.state || 'login';
+            const redirectPage = intent === 'signup' ? 'signup' : 'login';
+            
+            return res.redirect(`/${redirectPage}?error=google_auth_failed&code=${encodeURIComponent(errorCode)}&message=${encodeURIComponent(userMessage)}`);
         }
         req.login(user, (e) => {
             if (e) {
