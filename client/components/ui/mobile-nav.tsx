@@ -179,6 +179,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                             <Button
                                 className="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white"
                                 onClick={() => {
+                                    // Dispatch logout event BEFORE removing session data
+                                    window.dispatchEvent(new CustomEvent('user-logout'));
+                                    
                                     localStorage.removeItem('manacle_session');
                                     apiFetch('/api/logout').then(() => {
                                         // Hard redirect to ensure clean state

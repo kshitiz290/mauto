@@ -182,16 +182,35 @@ export default function AutoSite() {
   }, [campaigns]);
   // Clear localStorage on logout or new user session
   React.useEffect(() => {
-    // Listen for logout or user change event (customize as needed)
-    const handleUserChange = () => {
-      localStorage.removeItem("autoSiteCurrentStep");
-      localStorage.removeItem("autoSiteFormData");
+    // Listen for user logout/login events
+    const handleUserLogout = () => {
+      console.log('[AutoSite] User logout event received');
+      // On logout, we clear all localStorage (user will be gone)
+      localStorage.removeItem('autoSiteFormData');
+      localStorage.removeItem('autoSiteCurrentStep');
+      localStorage.removeItem('autoSiteCompanyId');
+      localStorage.removeItem('autoSiteLastUserID'); // Clear the last user tracking
+      
+      // Reset to defaults
+      setFormData(defaultFormData);
+      setCurrentStep(0);
+      setCompanyId(0);
+      
+      console.log('[AutoSite] Cleared form data due to logout');
     };
-    window.addEventListener("user-logout", handleUserChange);
-    window.addEventListener("user-login", handleUserChange);
+
+    const handleUserLogin = () => {
+      console.log('[AutoSite] User login event received');
+      // On login, we DON'T clear anything immediately
+      // The user change detection effect above will handle it properly
+      // This prevents clearing data when the same user logs back in
+    };
+
+    window.addEventListener("user-logout", handleUserLogout);
+    window.addEventListener("user-login", handleUserLogin);
     return () => {
-      window.removeEventListener("user-logout", handleUserChange);
-      window.removeEventListener("user-login", handleUserChange);
+      window.removeEventListener("user-logout", handleUserLogout);
+      window.removeEventListener("user-login", handleUserLogin);
     };
   }, []);
   // Product/Service array state for step 3
@@ -409,18 +428,32 @@ export default function AutoSite() {
     goal: "",
     impact: ""
   };
-  // Helper to detect user changes and reset form state
+  // Helper to detect user changes and reset form state ONLY for different users
   useEffect(() => {
     const userID = localStorage.getItem('userID');
     const lastUserID = localStorage.getItem('autoSiteLastUserID');
     
-    if (userID && userID !== lastUserID) {
-      console.log('[AutoSite] User change detected:', { lastUserID, newUserID: userID });
+    // Only proceed if we have a current user ID
+    if (!userID) {
+      console.log('[AutoSite] No userID found, skipping user change detection');
+      return;
+    }
+    
+    // If no lastUserID is stored, this might be first visit or after logout
+    if (!lastUserID) {
+      console.log('[AutoSite] No previous user ID stored, setting current user:', userID);
+      localStorage.setItem('autoSiteLastUserID', userID);
+      return; // Don't reset progress, just track the user
+    }
+    
+    // Only reset if it's actually a DIFFERENT user
+    if (userID !== lastUserID) {
+      console.log('[AutoSite] DIFFERENT user detected:', { lastUserID, newUserID: userID });
       
       // Store the new user ID
       localStorage.setItem('autoSiteLastUserID', userID);
       
-      // Clear localStorage form data (but not needed since we use DB now)
+      // Clear localStorage form data (since we use DB now, this is just cleanup)
       localStorage.removeItem('autoSiteFormData');
       localStorage.removeItem('autoSiteCurrentStep');
       localStorage.removeItem('autoSiteCompanyId');
@@ -430,7 +463,9 @@ export default function AutoSite() {
       setCurrentStep(0);
       setCompanyId(0);
       
-      console.log('[AutoSite] Reset state for new user:', userID);
+      console.log('[AutoSite] Reset state for different user:', userID);
+    } else {
+      console.log('[AutoSite] Same user returning:', userID, '- keeping their progress');
     }
   }, [localStorage.getItem('userID')]);
 

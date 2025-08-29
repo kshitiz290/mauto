@@ -475,6 +475,9 @@ Gallery", description: "View all our projects", href: "/gallery" },
                     size="sm"
                     className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs md:text-xs lg:text-sm xl:text-sm px-3 md:px-3 lg:px-4 xl:px-4 py-1.5 md:py-1.5 lg:py-2 xl:py-2"
                     onClick={() => {
+                      // Dispatch logout event BEFORE removing session data
+                      window.dispatchEvent(new CustomEvent('user-logout'));
+                      
                       // Remove session flag and call logout API
                       localStorage.removeItem('manacle_session');
                       apiFetch('/api/logout').then(() => {
