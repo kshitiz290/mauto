@@ -13,30 +13,56 @@ export default function AuthResult() {
         // Mark session present
         localStorage.setItem('manacle_session', 'true');
         
-        const ensureUserId = async () => {
+        const ensureUserId = async (retryCount = 0) => {
+            const maxRetries = 3;
             try {
-                console.log('[AuthResult] Fetching user data...');
-                const response = await fetch('/api/me', { credentials: 'include' });
+                console.log(`[AuthResult] Attempt ${retryCount + 1}/${maxRetries + 1} - Fetching user data...`);
+                console.log('[AuthResult] Current URL:', window.location.href);
+                console.log('[AuthResult] Document cookies:', document.cookie);
+                
+                const response = await fetch('/api/me', { 
+                    credentials: 'include',
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Pragma': 'no-cache'
+                    }
+                });
                 console.log('[AuthResult] Response status:', response.status);
+                console.log('[AuthResult] Response headers:', Object.fromEntries(response.headers.entries()));
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    const errorText = await response.text();
+                    console.error('[AuthResult] Error response body:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`);
                 }
                 
                 const data = await response.json();
-                console.log('[AuthResult] Response data:', data);
+                console.log('[AuthResult] Full response data:', JSON.stringify(data, null, 2));
                 
                 if (data?.authenticated && data?.user?.id) {
                     const userId = String(data.user.id);
                     localStorage.setItem('userID', userId);
-                    console.log('[AuthResult] User ID set in localStorage:', userId);
+                    console.log('[AuthResult] SUCCESS - User ID set in localStorage:', userId);
                     return userId;
+                } else if (!data?.authenticated) {
+                    console.warn('[AuthResult] User not authenticated, response:', data);
+                    if (retryCount < maxRetries) {
+                        console.log(`[AuthResult] Retrying in 1 second... (${retryCount + 1}/${maxRetries})`);
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        return ensureUserId(retryCount + 1);
+                    }
+                    throw new Error(`Not authenticated after ${maxRetries + 1} attempts`);
                 } else {
-                    console.warn('[AuthResult] Authentication failed or no user ID:', data);
-                    throw new Error(`Authentication failed: ${JSON.stringify(data)}`);
+                    console.warn('[AuthResult] Authenticated but no user ID:', data);
+                    throw new Error(`No user ID in response: ${JSON.stringify(data)}`);
                 }
             } catch (error) {
-                console.error('[AuthResult] Failed to get user ID:', error);
+                console.error(`[AuthResult] Attempt ${retryCount + 1} failed:`, error);
+                if (retryCount < maxRetries) {
+                    console.log(`[AuthResult] Retrying in 1 second... (${retryCount + 1}/${maxRetries})`);
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    return ensureUserId(retryCount + 1);
+                }
                 throw error;
             }
         };

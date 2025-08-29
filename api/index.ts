@@ -353,6 +353,32 @@ app.get('/api/auth/google/callback', (req, res, next) => {
     })(req, res, next);
 });
 
+// Session debug endpoint
+app.get('/api/debug/session', (req, res) => {
+    const session = (req as any).session;
+    const user = (req as any).user;
+    const sessionId = (req as any).sessionID;
+    
+    res.json({
+        sessionId,
+        hasSession: !!session,
+        sessionData: session ? {
+            cookie: session.cookie,
+            passport: session.passport,
+            keys: Object.keys(session)
+        } : null,
+        hasUser: !!user,
+        user: user ? {
+            id: user.id,
+            email: user.email_id || user.email,
+            keys: Object.keys(user)
+        } : null,
+        isAuthenticated: req.isAuthenticated?.(),
+        cookies: req.headers.cookie,
+        timestamp: new Date().toISOString()
+    });
+});
+
 // OAuth debug endpoint for production troubleshooting
 app.get('/api/auth/google/debug', (req, res) => {
     res.json({
@@ -372,25 +398,49 @@ app.get('/api/auth/google/debug', (req, res) => {
 
 // Auth status
 app.get('/api/me', (req, res) => {
-    console.log('[/api/me] Session ID:', (req as any).sessionID);
-    console.log('[/api/me] Is authenticated:', req.isAuthenticated?.());
-    console.log('[/api/me] User object:', (req as any).user);
+    const sessionId = (req as any).sessionID;
+    const isAuth = req.isAuthenticated?.();
+    const user = (req as any).user;
+    const cookies = req.headers.cookie;
+    
+    console.log('=== /api/me DEBUG START ===');
+    console.log('[/api/me] Session ID:', sessionId);
+    console.log('[/api/me] Cookies:', cookies);
+    console.log('[/api/me] Is authenticated function exists:', typeof req.isAuthenticated);
+    console.log('[/api/me] Is authenticated result:', isAuth);
+    console.log('[/api/me] User object:', JSON.stringify(user, null, 2));
+    console.log('[/api/me] Session object:', JSON.stringify((req as any).session, null, 2));
+    console.log('=== /api/me DEBUG END ===');
     
     if (req.isAuthenticated && req.isAuthenticated()) {
         const u: any = (req as any).user;
         if (!u || !u.id) {
             console.warn('[/api/me] User object missing or no ID:', u);
-            return res.json({ authenticated: false, error: 'User data incomplete' });
+            return res.json({ 
+                authenticated: false, 
+                error: 'User data incomplete',
+                debug: { sessionId, user: u, hasSession: !!(req as any).session }
+            });
         }
         const userData = { 
             id: String(u.id), // Ensure ID is string
             email: u.email_id || u.email 
         };
-        console.log('[/api/me] Returning user data:', userData);
+        console.log('[/api/me] SUCCESS - Returning user data:', userData);
         return res.json({ authenticated: true, user: userData });
     }
-    console.log('[/api/me] Not authenticated');
-    res.json({ authenticated: false });
+    console.log('[/api/me] Not authenticated - returning false');
+    res.json({ 
+        authenticated: false,
+        debug: { 
+            sessionId, 
+            hasIsAuthenticated: typeof req.isAuthenticated === 'function',
+            isAuthResult: isAuth,
+            hasUser: !!user,
+            hasSession: !!(req as any).session,
+            cookies: !!cookies
+        }
+    });
 });
 
 // Business sectors
