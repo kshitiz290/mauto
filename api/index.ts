@@ -398,8 +398,15 @@ app.post('/api/load-form', async (req, res) => {
             step_number = row.step_number;
             try { form_data = typeof row.form_data === 'string' ? JSON.parse(row.form_data) : row.form_data; } catch { form_data = {}; }
         }
+        
+        // Only return company data if company actually exists in company_mast table
+        // This ensures company data is only sent after company-details step is completed
+        let company = null;
         const [companyRows] = await db.promise().query('SELECT * FROM company_mast WHERE user_id = ? LIMIT 1', [userId]);
-        const company = Array.isArray(companyRows) && (companyRows as any[]).length ? (companyRows as any[])[0] : null;
+        if (Array.isArray(companyRows) && (companyRows as any[]).length > 0) {
+            company = (companyRows as any[])[0];
+        }
+        
         res.json({ step_number, form_data, company });
     } catch { res.status(500).json({ error: 'DB error' }); }
 });
