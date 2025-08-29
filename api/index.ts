@@ -112,7 +112,21 @@ function isAuth(req, res, next) {
 // Google OAuth Strategy for serverless
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
-const DEFAULT_BASE_URL = process.env.BASE_URL || 'http://localhost:8080';
+// Use HTTPS for production by default, HTTP only for local development
+const DEFAULT_BASE_URL = process.env.BASE_URL || 
+    (process.env.NODE_ENV === 'production' ? 'https://mauto-ten.vercel.app' : 'http://localhost:8080');
+
+// Helper function to get the correct protocol (force HTTPS in production)
+function getCorrectProtocol(req: express.Request): string {
+    // Check if we're in production or if the request came through HTTPS
+    if (process.env.NODE_ENV === 'production' || 
+        req.headers['x-forwarded-proto'] === 'https' ||
+        req.get('host')?.includes('vercel.app')) {
+        return 'https';
+    }
+    return req.protocol;
+}
+
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
     passport.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
@@ -257,11 +271,11 @@ app.get('/api/logout', (req, res) => {
 // Google auth endpoints
 app.get('/api/auth/google', (req, res, next) => {
     if (!GOOGLE_CLIENT_ID) return res.status(500).json({ error: 'Google OAuth not configured' });
-    const callbackURL = `${req.protocol}://${req.get('host')}/api/auth/google/callback`;
+    const callbackURL = `${getCorrectProtocol(req)}://${req.get('host')}/api/auth/google/callback`;
     passport.authenticate('google', { scope: ['profile', 'email'], callbackURL } as any)(req, res, next);
 });
 app.get('/api/auth/google/callback', (req, res, next) => {
-    const callbackURL = `${req.protocol}://${req.get('host')}/api/auth/google/callback`;
+    const callbackURL = `${getCorrectProtocol(req)}://${req.get('host')}/api/auth/google/callback`;
     passport.authenticate('google', { callbackURL } as any, (err, user, info) => {
         if (err) {
             console.error('[OAuth Callback Error]', err);
@@ -290,7 +304,11 @@ app.get('/api/auth/google/debug', (req, res) => {
         clientIdPrefix: GOOGLE_CLIENT_ID ? GOOGLE_CLIENT_ID.slice(0, 12) + '...' : null,
         hasClientSecret: Boolean(GOOGLE_CLIENT_SECRET),
         baseUrl: DEFAULT_BASE_URL,
-        callbackURL: `${req.protocol}://${req.get('host')}/api/auth/google/callback`,
+        callbackURL: `${getCorrectProtocol(req)}://${req.get('host')}/api/auth/google/callback`,
+        detectedProtocol: getCorrectProtocol(req),
+        originalProtocol: req.protocol,
+        forwardedProto: req.headers['x-forwarded-proto'],
+        host: req.get('host'),
         environment: process.env.NODE_ENV || 'development',
         timestamp: new Date().toISOString()
     });
