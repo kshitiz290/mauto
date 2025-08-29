@@ -185,7 +185,7 @@ export function Hero() {
             >
 
 
-              <div className="group relative">
+              {/* <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
                 <a href="/auto-site">
                   <button className="relative px-4 sm:px-5 md:px-4 lg:px-8 py-2.5 sm:py-3 md:py-2.5 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-sm sm:text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
@@ -193,7 +193,7 @@ export function Hero() {
                     <ArrowRight className="w-4 h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </button>
                 </a>
-              </div>
+              </div> */}
 
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>

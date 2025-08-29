@@ -190,12 +190,12 @@ export default function AutoSite() {
       localStorage.removeItem('autoSiteCurrentStep');
       localStorage.removeItem('autoSiteCompanyId');
       localStorage.removeItem('autoSiteLastUserID'); // Clear the last user tracking
-      
+
       // Reset to defaults
       setFormData(defaultFormData);
       setCurrentStep(0);
       setCompanyId(0);
-      
+
       console.log('[AutoSite] Cleared form data due to logout');
     };
 
@@ -432,37 +432,37 @@ export default function AutoSite() {
   useEffect(() => {
     const userID = localStorage.getItem('userID');
     const lastUserID = localStorage.getItem('autoSiteLastUserID');
-    
+
     // Only proceed if we have a current user ID
     if (!userID) {
       console.log('[AutoSite] No userID found, skipping user change detection');
       return;
     }
-    
+
     // If no lastUserID is stored, this might be first visit or after logout
     if (!lastUserID) {
       console.log('[AutoSite] No previous user ID stored, setting current user:', userID);
       localStorage.setItem('autoSiteLastUserID', userID);
       return; // Don't reset progress, just track the user
     }
-    
+
     // Only reset if it's actually a DIFFERENT user
     if (userID !== lastUserID) {
       console.log('[AutoSite] DIFFERENT user detected:', { lastUserID, newUserID: userID });
-      
+
       // Store the new user ID
       localStorage.setItem('autoSiteLastUserID', userID);
-      
+
       // Clear localStorage form data (since we use DB now, this is just cleanup)
       localStorage.removeItem('autoSiteFormData');
       localStorage.removeItem('autoSiteCurrentStep');
       localStorage.removeItem('autoSiteCompanyId');
-      
+
       // Reset component state to defaults (will be overridden by DB load)
       setFormData(defaultFormData);
       setCurrentStep(0);
       setCompanyId(0);
-      
+
       console.log('[AutoSite] Reset state for different user:', userID);
     } else {
       console.log('[AutoSite] Same user returning:', userID, '- keeping their progress');
@@ -614,11 +614,11 @@ export default function AutoSite() {
     // Wait for userID to be available after Google auth
     const attemptLoadForm = async () => {
       console.log('[AutoSite] Starting form load attempt...');
-      
+
       let userID = localStorage.getItem('userID');
       let attempts = 0;
       const maxAttempts = 15; // Increased from 10 to 15
-      
+
       // Wait for userID to be available (especially important after OAuth)
       while (!userID && attempts < maxAttempts) {
         console.log(`[AutoSite] Waiting for userID, attempt ${attempts + 1}/${maxAttempts}`);
@@ -637,7 +637,7 @@ export default function AutoSite() {
       }
 
       console.log('[AutoSite] Found userID:', userID, 'loading form data...');
-      
+
       try {
         const response = await fetch(`/api/load-form`, {
           method: 'POST',
@@ -662,7 +662,7 @@ export default function AutoSite() {
         const dbStepNumber = data.step_number || 0;
         setCurrentStep(dbStepNumber);
         console.log('[AutoSite] Set current step to:', dbStepNumber);
-        
+
         // Robustly parse form_data if string
         let parsedFormData = defaultFormData;
         if (typeof data.form_data === "string") {
@@ -679,7 +679,7 @@ export default function AutoSite() {
           parsedFormData = defaultFormData;
         }
         setFormData(parsedFormData);
-        
+
         // Restore products and campaigns arrays if present in loaded form_data
         if (parsedFormData.products && Array.isArray(parsedFormData.products)) {
           setProducts(parsedFormData.products);
@@ -687,7 +687,7 @@ export default function AutoSite() {
         if (parsedFormData.campaigns && Array.isArray(parsedFormData.campaigns)) {
           setCampaigns(parsedFormData.campaigns);
         }
-        
+
         // Set companyId from backend if available
         if (data.company && data.company.id) {
           setCompanyId(data.company.id);

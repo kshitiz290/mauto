@@ -174,14 +174,14 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                     </div>
 
                     {/* Auth Buttons */}
-                    <div className="mt-5 pt-5 border-t border-glass-border flex flex-col space-y-2">
+                    {/* <div className="mt-5 pt-5 border-t border-glass-border flex flex-col space-y-2">
                         {isAuthenticated ? (
                             <Button
                                 className="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white"
                                 onClick={() => {
                                     // Dispatch logout event BEFORE removing session data
                                     window.dispatchEvent(new CustomEvent('user-logout'));
-                                    
+
                                     localStorage.removeItem('manacle_session');
                                     apiFetch('/api/logout').then(() => {
                                         // Hard redirect to ensure clean state
@@ -201,7 +201,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                                 </Link>
                             </>
                         )}
-                    </div>
+                    </div> */}
                 </div>
             </div>
             {/* Animations (utility) */}

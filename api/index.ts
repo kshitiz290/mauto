@@ -141,7 +141,7 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
             const googleId = profile.id;
             // Get the intent from state parameter in the OAuth callback
             const intent = req.query?.state || 'login'; // Google returns state in query params
-            
+
             console.log('[OAuth Strategy] Intent:', intent, 'Query state:', req.query?.state);
 
             if (!email || !googleId) {
@@ -315,18 +315,18 @@ app.get('/api/auth/google', (req, res, next) => {
     const callbackURL = `${getCorrectProtocol(req)}://${req.get('host')}/api/auth/google/callback`;
     // Pass the intent (login/signup) as state parameter
     const intent = req.query.intent || 'login'; // default to login for existing links
-    passport.authenticate('google', { 
-        scope: ['profile', 'email'], 
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
         callbackURL,
-        state: intent 
+        state: intent
     } as any)(req, res, next);
 });
 app.get('/api/auth/google/callback', (req, res, next) => {
     const callbackURL = `${getCorrectProtocol(req)}://${req.get('host')}/api/auth/google/callback`;
-    
+
     // Log the callback request to see where the state parameter is
     console.log('[OAuth Callback] Query params:', req.query);
-    
+
     passport.authenticate('google', { callbackURL } as any, (err, user, info) => {
         if (err) {
             console.error('[OAuth Callback Error]', err);
@@ -336,11 +336,11 @@ app.get('/api/auth/google/callback', (req, res, next) => {
             const errorCode = info?.message || 'authentication_failed';
             const userMessage = info?.userMessage || 'Authentication failed. Please try again.';
             console.log('[OAuth] Authentication failed:', errorCode, userMessage);
-            
+
             // Check if we have intent information to redirect appropriately
             const intent = req.query?.state || 'login';
             const redirectPage = intent === 'signup' ? 'signup' : 'login';
-            
+
             return res.redirect(`/${redirectPage}?error=google_auth_failed&code=${encodeURIComponent(errorCode)}&message=${encodeURIComponent(userMessage)}`);
         }
         req.login(user, (e) => {
@@ -351,16 +351,16 @@ app.get('/api/auth/google/callback', (req, res, next) => {
             console.log('[OAuth] Session created successfully for user:', user.id);
             console.log('[OAuth] Session ID:', (req as any).sessionID);
             console.log('[OAuth] User object in session:', JSON.stringify(user, null, 2));
-            
+
             const isNew = (info as any)?.createdNewUser ? '1' : '0';
-            
+
             // Force session save before redirect (important for serverless)
             (req as any).session.save((saveErr) => {
                 if (saveErr) {
                     console.error('[OAuth] Session save error:', saveErr);
                 }
                 console.log('[OAuth] Session save result - error:', saveErr ? 'YES' : 'NO');
-                
+
                 // Always redirect - AuthResult will handle session verification
                 // Pass user ID as backup in case session doesn't work in serverless
                 const userId = encodeURIComponent(String(user.id));
@@ -376,7 +376,7 @@ app.get('/api/debug/session', (req, res) => {
     const session = (req as any).session;
     const user = (req as any).user;
     const sessionId = (req as any).sessionID;
-    
+
     res.json({
         sessionId,
         hasSession: !!session,
@@ -420,7 +420,7 @@ app.get('/api/me', (req, res) => {
     const isAuth = req.isAuthenticated?.();
     const user = (req as any).user;
     const cookies = req.headers.cookie;
-    
+
     console.log('=== /api/me DEBUG START ===');
     console.log('[/api/me] Session ID:', sessionId);
     console.log('[/api/me] Cookies:', cookies);
@@ -429,29 +429,29 @@ app.get('/api/me', (req, res) => {
     console.log('[/api/me] User object:', JSON.stringify(user, null, 2));
     console.log('[/api/me] Session object:', JSON.stringify((req as any).session, null, 2));
     console.log('=== /api/me DEBUG END ===');
-    
+
     if (req.isAuthenticated && req.isAuthenticated()) {
         const u: any = (req as any).user;
         if (!u || !u.id) {
             console.warn('[/api/me] User object missing or no ID:', u);
-            return res.json({ 
-                authenticated: false, 
+            return res.json({
+                authenticated: false,
                 error: 'User data incomplete',
                 debug: { sessionId, user: u, hasSession: !!(req as any).session }
             });
         }
-        const userData = { 
+        const userData = {
             id: String(u.id), // Ensure ID is string
-            email: u.email_id || u.email 
+            email: u.email_id || u.email
         };
         console.log('[/api/me] SUCCESS - Returning user data:', userData);
         return res.json({ authenticated: true, user: userData });
     }
     console.log('[/api/me] Not authenticated - returning false');
-    res.json({ 
+    res.json({
         authenticated: false,
-        debug: { 
-            sessionId, 
+        debug: {
+            sessionId,
             hasIsAuthenticated: typeof req.isAuthenticated === 'function',
             isAuthResult: isAuth,
             hasUser: !!user,
@@ -471,29 +471,29 @@ app.get('/api/business-sectors', async (_req, res) => {
 app.post('/api/save-step', async (req, res) => {
     let { step_number, form_data, user_id } = req.body || {};
     if (!user_id && (req as any).user?.id) user_id = (req as any).user.id;
-    
+
     // Enhanced validation
     if (typeof step_number !== 'number' || form_data == null || !user_id) {
         console.warn('[save-step] Missing required fields:', { step_number, has_form_data: !!form_data, user_id });
         return res.status(400).json({ error: 'Missing required fields (user_id, step_number, form_data)' });
     }
-    
+
     // Validate step number is reasonable (0-9)
     if (step_number < 0 || step_number > 9) {
         console.warn('[save-step] Invalid step number:', step_number, 'for user:', user_id);
         return res.status(400).json({ error: 'Invalid step number' });
     }
-    
+
     try {
         console.log('[save-step] Saving step:', step_number, 'for user:', user_id, 'with data keys:', Object.keys(form_data));
-        
+
         const formDataString = JSON.stringify(form_data);
         await db.promise().query(
             `INSERT INTO user_form_progress (user_id, step_number, form_data) VALUES (?,?,?) 
-             ON DUPLICATE KEY UPDATE step_number=VALUES(step_number), form_data=VALUES(form_data)`, 
+             ON DUPLICATE KEY UPDATE step_number=VALUES(step_number), form_data=VALUES(form_data)`,
             [user_id, step_number, formDataString]
         );
-        
+
         console.log('[save-step] Successfully saved step:', step_number, 'for user:', user_id);
         res.json({ success: true, step_number, user_id });
     } catch (e) {
@@ -507,31 +507,31 @@ app.post('/api/save-step', async (req, res) => {
 app.post('/api/load-form', async (req, res) => {
     const userId = req.body?.user_id;
     if (!userId) return res.status(400).json({ error: 'Missing user_id' });
-    
+
     try {
         console.log('[load-form] Loading form for user:', userId);
-        
+
         // First, check if user has any form progress saved
         const [progressRows] = await db.promise().query('SELECT step_number, form_data FROM user_form_progress WHERE user_id = ? LIMIT 1', [userId]);
-        
+
         let step_number = 0;
         let form_data: any = {};
         let hasProgress = false;
-        
+
         if (Array.isArray(progressRows) && (progressRows as any[]).length > 0) {
             const row: any = (progressRows as any[])[0];
             step_number = row.step_number;
             hasProgress = true;
-            try { 
-                form_data = typeof row.form_data === 'string' ? JSON.parse(row.form_data) : row.form_data; 
-            } catch { 
+            try {
+                form_data = typeof row.form_data === 'string' ? JSON.parse(row.form_data) : row.form_data;
+            } catch {
                 console.warn('[load-form] Failed to parse form_data for user:', userId);
-                form_data = {}; 
+                form_data = {};
             }
         }
-        
+
         console.log('[load-form] User progress:', { userId, hasProgress, step_number, form_data_keys: Object.keys(form_data) });
-        
+
         // Check if company exists (only for informational purposes, doesn't affect step)
         let company: any = null;
         const [companyRows] = await db.promise().query('SELECT * FROM company_mast WHERE user_id = ? LIMIT 1', [userId]);
@@ -541,7 +541,7 @@ app.post('/api/load-form', async (req, res) => {
         } else {
             console.log('[load-form] No company found for user:', userId);
         }
-        
+
         // For new users (no progress), always start at step 0
         if (!hasProgress) {
             console.log('[load-form] New user, starting at step 0');
@@ -549,10 +549,10 @@ app.post('/api/load-form', async (req, res) => {
             form_data = {};
             company = null; // Don't send company data for new users
         }
-        
-        res.json({ 
-            step_number, 
-            form_data, 
+
+        res.json({
+            step_number,
+            form_data,
             company,
             debug: {
                 hasProgress,
@@ -560,9 +560,9 @@ app.post('/api/load-form', async (req, res) => {
                 timestamp: new Date().toISOString()
             }
         });
-    } catch (e) { 
+    } catch (e) {
         console.error('[load-form] Database error:', e);
-        res.status(500).json({ error: 'DB error' }); 
+        res.status(500).json({ error: 'DB error' });
     }
 });
 
@@ -570,17 +570,17 @@ app.post('/api/load-form', async (req, res) => {
 app.post('/api/debug-form-state', async (req, res) => {
     const userId = req.body?.user_id;
     if (!userId) return res.status(400).json({ error: 'Missing user_id' });
-    
+
     try {
         // Get form progress
         const [progressRows] = await db.promise().query('SELECT * FROM user_form_progress WHERE user_id = ?', [userId]);
-        
+
         // Get company data
         const [companyRows] = await db.promise().query('SELECT * FROM company_mast WHERE user_id = ?', [userId]);
-        
+
         // Get user data
         const [userRows] = await db.promise().query('SELECT id, email_id, login_id, created_at FROM users WHERE id = ?', [userId]);
-        
+
         res.json({
             user_id: userId,
             user: userRows[0] || null,
@@ -597,18 +597,18 @@ app.post('/api/debug-form-state', async (req, res) => {
 app.post('/api/reset-form', isAuth, async (req, res) => {
     const userId = (req.user as any)?.id;
     if (!userId) return res.status(400).json({ error: 'User not authenticated' });
-    
+
     try {
         console.log('[reset-form] Resetting form progress for user:', userId);
-        
+
         // Delete form progress
         const [result] = await db.promise().query('DELETE FROM user_form_progress WHERE user_id = ?', [userId]);
-        
+
         console.log('[reset-form] Deleted', (result as any).affectedRows, 'form progress records for user:', userId);
-        res.json({ 
-            success: true, 
+        res.json({
+            success: true,
             deleted_records: (result as any).affectedRows,
-            user_id: userId 
+            user_id: userId
         });
     } catch (e) {
         console.error('[reset-form] Error resetting form for user:', userId, 'error:', e);
