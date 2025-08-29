@@ -276,12 +276,25 @@ app.post('/api/signup', async (req, res, next) => {
 
 // Login
 app.post('/api/login', (req, res, next) => {
+    console.log('[/api/login] Login attempt for:', req.body?.email);
     passport.authenticate('local', (err, user, info) => {
-        if (err) return next(err);
-        if (!user) return res.status(400).json({ error: info?.message || 'Invalid credentials' });
+        if (err) {
+            console.error('[/api/login] Authentication error:', err);
+            return next(err);
+        }
+        if (!user) {
+            console.log('[/api/login] Authentication failed:', info?.message);
+            return res.status(400).json({ error: info?.message || 'Invalid credentials' });
+        }
+        console.log('[/api/login] User authenticated:', { id: user.id, email: user.email_id || user.email });
         req.login(user, e => {
-            if (e) return next(e);
-            res.json({ success: true, user: { id: user.id, email: user.email_id || user.email } });
+            if (e) {
+                console.error('[/api/login] Session creation error:', e);
+                return next(e);
+            }
+            console.log('[/api/login] Session created successfully for user:', user.id);
+            const userData = { id: String(user.id), email: user.email_id || user.email };
+            res.json({ success: true, user: userData });
         });
     })(req, res, next);
 });
@@ -333,6 +346,7 @@ app.get('/api/auth/google/callback', (req, res, next) => {
                 console.error('[OAuth Login Error]', e);
                 return res.redirect('/login?error=session_failed');
             }
+            console.log('[OAuth] Session created successfully for user:', user.id);
             const isNew = (info as any)?.createdNewUser ? '1' : '0';
             res.redirect(`/auth/result?new=${isNew}`);
         });
@@ -358,10 +372,24 @@ app.get('/api/auth/google/debug', (req, res) => {
 
 // Auth status
 app.get('/api/me', (req, res) => {
+    console.log('[/api/me] Session ID:', (req as any).sessionID);
+    console.log('[/api/me] Is authenticated:', req.isAuthenticated?.());
+    console.log('[/api/me] User object:', (req as any).user);
+    
     if (req.isAuthenticated && req.isAuthenticated()) {
         const u: any = (req as any).user;
-        return res.json({ authenticated: true, user: { id: u.id, email: u.email_id || u.email } });
+        if (!u || !u.id) {
+            console.warn('[/api/me] User object missing or no ID:', u);
+            return res.json({ authenticated: false, error: 'User data incomplete' });
+        }
+        const userData = { 
+            id: String(u.id), // Ensure ID is string
+            email: u.email_id || u.email 
+        };
+        console.log('[/api/me] Returning user data:', userData);
+        return res.json({ authenticated: true, user: userData });
     }
+    console.log('[/api/me] Not authenticated');
     res.json({ authenticated: false });
 });
 

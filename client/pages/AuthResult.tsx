@@ -17,16 +17,23 @@ export default function AuthResult() {
             try {
                 console.log('[AuthResult] Fetching user data...');
                 const response = await fetch('/api/me', { credentials: 'include' });
-                const data = await response.json();
+                console.log('[AuthResult] Response status:', response.status);
                 
-                if (data?.user?.id) {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('[AuthResult] Response data:', data);
+                
+                if (data?.authenticated && data?.user?.id) {
                     const userId = String(data.user.id);
                     localStorage.setItem('userID', userId);
                     console.log('[AuthResult] User ID set in localStorage:', userId);
                     return userId;
                 } else {
-                    console.warn('[AuthResult] No user ID received from /api/me:', data);
-                    throw new Error('No user ID received');
+                    console.warn('[AuthResult] Authentication failed or no user ID:', data);
+                    throw new Error(`Authentication failed: ${JSON.stringify(data)}`);
                 }
             } catch (error) {
                 console.error('[AuthResult] Failed to get user ID:', error);
