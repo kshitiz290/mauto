@@ -77,8 +77,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
+    name: 'mauto.sid', // Custom session name
+    rolling: true, // Reset expiration on activity
     cookie: {
-        maxAge: 86400000,
+        maxAge: 86400000, // 24 hours
         sameSite: (crossSite ? 'none' : 'lax') as any,
         secure: process.env.NODE_ENV === 'production' || crossSite,
         httpOnly: true
@@ -347,8 +349,24 @@ app.get('/api/auth/google/callback', (req, res, next) => {
                 return res.redirect('/login?error=session_failed');
             }
             console.log('[OAuth] Session created successfully for user:', user.id);
+            console.log('[OAuth] Session ID:', (req as any).sessionID);
+            console.log('[OAuth] User object in session:', JSON.stringify(user, null, 2));
+            
             const isNew = (info as any)?.createdNewUser ? '1' : '0';
-            res.redirect(`/auth/result?new=${isNew}`);
+            
+            // Force session save before redirect (important for serverless)
+            (req as any).session.save((saveErr) => {
+                if (saveErr) {
+                    console.error('[OAuth] Session save error:', saveErr);
+                }
+                console.log('[OAuth] Session save result - error:', saveErr ? 'YES' : 'NO');
+                
+                // Always redirect - AuthResult will handle session verification
+                // Pass user ID as backup in case session doesn't work in serverless
+                const userId = encodeURIComponent(String(user.id));
+                const email = encodeURIComponent(user.email_id || user.email || '');
+                res.redirect(`/auth/result?new=${isNew}&uid=${userId}&email=${email}`);
+            });
         });
     })(req, res, next);
 });

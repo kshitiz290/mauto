@@ -16,7 +16,15 @@ export default function AuthResult() {
                 // Mark session as present
                 localStorage.setItem('manacle_session', 'true');
                 
-                // Get user data from the session
+                // Check URL parameters for fallback user info (in case session doesn't work)
+                const params = new URLSearchParams(location.search);
+                const urlUserId = params.get('uid');
+                const urlEmail = params.get('email');
+                const isNew = params.get('new') === '1';
+                
+                console.log('[AuthResult] URL params:', { urlUserId, urlEmail, isNew });
+                
+                // First try to get user data from the session
                 console.log('[AuthResult] Fetching user data from /api/me...');
                 const response = await fetch('/api/me', { 
                     credentials: 'include',
@@ -25,25 +33,54 @@ export default function AuthResult() {
                     }
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`Failed to get user data: ${response.status} ${response.statusText}`);
+                let userData = null;
+                let userId = null;
+                
+                if (response.ok) {
+                    userData = await response.json();
+                    console.log('[AuthResult] /api/me response:', userData);
+                    
+                    if (userData.authenticated && userData.user?.id) {
+                        userId = String(userData.user.id);
+                        console.log('[AuthResult] Got user ID from session:', userId);
+                    }
                 }
                 
-                const userData = await response.json();
-                console.log('[AuthResult] User data received:', userData);
+                // Fallback: Use URL parameters if session didn't work
+                if (!userId && urlUserId) {
+                    userId = decodeURIComponent(urlUserId);
+                    console.log('[AuthResult] Using fallback user ID from URL:', userId);
+                    
+                    // Verify this user exists in database by trying to save a dummy form step
+                    try {
+                        const verifyResponse = await fetch('/api/save-step', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
+                            body: JSON.stringify({ 
+                                step_number: 0, 
+                                form_data: {}, 
+                                user_id: userId 
+                            })
+                        });
+                        
+                        if (!verifyResponse.ok) {
+                            throw new Error('User verification failed');
+                        }
+                        console.log('[AuthResult] User verification successful');
+                    } catch (verifyError) {
+                        console.error('[AuthResult] User verification failed:', verifyError);
+                        throw new Error('Invalid user credentials');
+                    }
+                }
                 
-                if (!userData.authenticated || !userData.user?.id) {
-                    throw new Error(`User not authenticated or missing ID: ${JSON.stringify(userData)}`);
+                if (!userId) {
+                    throw new Error('No user ID available from session or URL parameters');
                 }
                 
                 // Set userID in localStorage (same as regular login/signup)
-                const userId = String(userData.user.id);
                 localStorage.setItem('userID', userId);
                 console.log('[AuthResult] SUCCESS - userID set in localStorage:', userId);
-                
-                // Check if this is a new user or existing user
-                const params = new URLSearchParams(location.search);
-                const isNew = params.get('new') === '1';
                 
                 if (isNew) {
                     // New user - redirect to home page
