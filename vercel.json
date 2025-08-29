@@ -14,6 +14,10 @@
       "destination": "https://template-fmcg.vercel.app/api/user-site"
     },
     {
+      "source": "/api/auth/google/callback",
+      "destination": "/auth/google/callback"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/index.ts"
     },
