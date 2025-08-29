@@ -94,8 +94,8 @@ export function setupProductionOAuth(app: any, db: any) {
                                 `INSERT INTO users (
                   email_id, login_id, google_id, provider, 
                   display_name, first_name, last_name, profile_picture,
-                  created_at, last_login_at
-                ) VALUES (?,?,?,?, ?,?,?,?, NOW(), NOW())`,
+                  created_at, 
+                ) VALUES (?,?,?,?, ?,?,?,?, NOW())`,
                                 [
                                     email, loginId, googleId, 'google',
                                     displayName, firstName, lastName, profilePicture
@@ -128,7 +128,6 @@ export function setupProductionOAuth(app: any, db: any) {
                   first_name = COALESCE(first_name, ?),
                   last_name = COALESCE(last_name, ?),
                   profile_picture = COALESCE(profile_picture, ?),
-                  last_login_at = NOW()
                 WHERE id = ?`,
                                 [
                                     googleId, 'google',
@@ -141,19 +140,7 @@ export function setupProductionOAuth(app: any, db: any) {
                             user.provider = 'google';
                             createdNew = false;
 
-                        } else if (user.google_id === googleId) {
-                            // Update last login and profile info
-                            await db.promise().query(
-                                `UPDATE users SET 
-                  last_login_at = NOW(),
-                  display_name = COALESCE(?, display_name),
-                  profile_picture = COALESCE(?, profile_picture)
-                WHERE id = ?`,
-                                [displayName, profilePicture, user.id]
-                            );
-                            createdNew = false;
-
-                        } else {
+                        }else {
                             // Account conflict
                             await db.promise().rollback();
                             logOAuthError(new Error('Account conflict'), req, {

@@ -177,13 +177,7 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
                 user.provider = 'google';
                 created = false;
 
-            } else if (user.google_id === googleId) {
-                // User exists with this Google ID - normal login
-                // Update last login timestamp
-                await db.promise().query('UPDATE users SET last_login_at = NOW() WHERE id = ?', [user.id]);
-                created = false;
-
-            } else {
+            }  else {
                 // Account conflict - email exists but different Google ID
                 return done(null, false, { message: 'Account conflict: email already associated with different account' });
             }
