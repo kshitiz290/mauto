@@ -1,10 +1,12 @@
 // Single-file Express API for Vercel to avoid cross-folder import issues
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
 // @ts-ignore - type defs may not include default export style
 import MySQLStoreImport from 'express-mysql-session';
 import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcryptjs';
 import multer from 'multer';
@@ -87,9 +89,9 @@ passport.use(new LocalStrategy({ usernameField: 'email', passwordField: 'passwor
     try {
         const [rows] = await db.promise().query('SELECT * FROM users WHERE email_id = ? LIMIT 1', [email]);
         const user: any = Array.isArray(rows) && rows.length ? rows[0] : null;
-        if (!user) return done(null, false, { message: 'Incorrect email' });
+        if (!user) return done(null, false, { message: 'No account found with this email. Please sign up first.' });
         const ok = await bcrypt.compare(password, user.password);
-        if (!ok) return done(null, false, { message: 'Incorrect password' });
+        if (!ok) return done(null, false, { message: 'Incorrect password. Please try again.' });
         done(null, user);
     } catch (e) { done(e); }
 }));
@@ -105,6 +107,79 @@ function isAuth(req, res, next) {
     if (req.isAuthenticated && req.isAuthenticated()) return next();
     console.warn('[AUTH] Unauthorized - session id:', (req as any).sessionID, 'user:', (req as any).user);
     return res.status(401).json({ error: 'Unauthorized' });
+}
+
+// Google OAuth Strategy for serverless
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+const DEFAULT_BASE_URL = process.env.BASE_URL || 'http://localhost:8080';
+if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
+    passport.use(new GoogleStrategy({
+        clientID: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+        callbackURL: `${DEFAULT_BASE_URL}/api/auth/google/callback`,
+        passReqToCallback: true
+    }, async (_req, _at, _rt, profile, done) => {
+        try {
+            const email = profile.emails?.[0]?.value;
+            const googleId = profile.id;
+
+            if (!email || !googleId) {
+                return done(null, false, { message: 'Missing email or Google ID' });
+            }
+
+            const baseLoginId = email.split('@')[0];
+
+            // Find existing user by google_id or email
+            const [rows] = await db.promise().query('SELECT * FROM users WHERE google_id = ? OR email_id = ? LIMIT 1', [googleId, email]);
+            let user: any = Array.isArray(rows) && (rows as any[]).length ? (rows as any[])[0] : null;
+            let created = false;
+
+            if (!user) {
+                // No existing user found - create new user
+                let loginId = baseLoginId;
+                const [loginRows] = await db.promise().query('SELECT id FROM users WHERE login_id = ? LIMIT 1', [loginId]);
+                if (Array.isArray(loginRows) && (loginRows as any[]).length > 0) {
+                    loginId = `${baseLoginId}-${Math.floor(Math.random() * 10000)}`;
+                }
+
+                await db.promise().query(
+                    'INSERT INTO users (email_id, login_id, google_id, provider, created_at) VALUES (?,?,?,?,NOW())',
+                    [email, loginId, googleId, 'google']
+                );
+
+                const [rows2] = await db.promise().query('SELECT * FROM users WHERE email_id = ? LIMIT 1', [email]);
+                user = Array.isArray(rows2) && (rows2 as any[]).length ? (rows2 as any[])[0] : null;
+
+                if (!user) {
+                    return done(null, false, { message: 'Failed to create user account' });
+                }
+                created = true;
+
+            } else if (user.email_id === email && !user.google_id) {
+                // User exists with this email but no Google ID - link the accounts
+                await db.promise().query('UPDATE users SET google_id=?, provider=? WHERE id=?', [googleId, 'google', user.id]);
+                user.google_id = googleId;
+                user.provider = 'google';
+                created = false;
+
+            } else if (user.google_id === googleId) {
+                // User exists with this Google ID - normal login
+                // Update last login timestamp
+                await db.promise().query('UPDATE users SET last_login_at = NOW() WHERE id = ?', [user.id]);
+                created = false;
+
+            } else {
+                // Account conflict - email exists but different Google ID
+                return done(null, false, { message: 'Account conflict: email already associated with different account' });
+            }
+
+            return done(null, user, { createdNewUser: created });
+        } catch (e) {
+            console.error('[OAuth Error]', e);
+            return done(e as Error);
+        }
+    }) as any);
 }
 
 // Uploads (ephemeral)
@@ -145,7 +220,7 @@ app.post('/api/signup', async (req, res, next) => {
         if (Array.isArray(existing) && existing.length > 0) {
             const existsEmail = (existing as any[]).some(r => r.email_id === email);
             const existsLogin = (existing as any[]).some(r => r.login_id === login_id);
-            return res.status(400).json({ error: existsEmail && existsLogin ? 'Email and username already exist' : existsEmail ? 'Email already exists' : 'Username already exists' });
+            return res.status(400).json({ error: existsEmail && existsLogin ? 'This email and username are already registered. Please log in instead.' : existsEmail ? 'This email is already registered. Please log in instead.' : 'This username is already taken. Please choose a different username.' });
         }
         const hash = await bcrypt.hash(password, 10);
         await db.promise().query('INSERT INTO users (email_id, contact_no, password, login_id, created_at) VALUES (?,?,?,?,NOW())', [email, contact_no, hash, login_id]);
@@ -179,6 +254,48 @@ app.get('/api/logout', (req, res) => {
     });
 });
 
+// Google auth endpoints
+app.get('/api/auth/google', (req, res, next) => {
+    if (!GOOGLE_CLIENT_ID) return res.status(500).json({ error: 'Google OAuth not configured' });
+    const callbackURL = `${req.protocol}://${req.get('host')}/api/auth/google/callback`;
+    passport.authenticate('google', { scope: ['profile', 'email'], callbackURL } as any)(req, res, next);
+});
+app.get('/api/auth/google/callback', (req, res, next) => {
+    const callbackURL = `${req.protocol}://${req.get('host')}/api/auth/google/callback`;
+    passport.authenticate('google', { callbackURL } as any, (err, user, info) => {
+        if (err) {
+            console.error('[OAuth Callback Error]', err);
+            return res.redirect('/login?error=google_auth_failed&reason=server_error');
+        }
+        if (!user) {
+            const reason = info?.message || 'authentication_failed';
+            console.log('[OAuth] Authentication failed:', reason);
+            return res.redirect(`/login?error=google_auth_failed&reason=${encodeURIComponent(reason)}`);
+        }
+        req.login(user, (e) => {
+            if (e) {
+                console.error('[OAuth Login Error]', e);
+                return res.redirect('/login?error=session_failed');
+            }
+            const isNew = (info as any)?.createdNewUser ? '1' : '0';
+            res.redirect(`/auth/result?new=${isNew}`);
+        });
+    })(req, res, next);
+});
+
+// OAuth debug endpoint for production troubleshooting
+app.get('/api/auth/google/debug', (req, res) => {
+    res.json({
+        hasClientId: Boolean(GOOGLE_CLIENT_ID),
+        clientIdPrefix: GOOGLE_CLIENT_ID ? GOOGLE_CLIENT_ID.slice(0, 12) + '...' : null,
+        hasClientSecret: Boolean(GOOGLE_CLIENT_SECRET),
+        baseUrl: DEFAULT_BASE_URL,
+        callbackURL: `${req.protocol}://${req.get('host')}/api/auth/google/callback`,
+        environment: process.env.NODE_ENV || 'development',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Auth status
 app.get('/api/me', (req, res) => {
     if (req.isAuthenticated && req.isAuthenticated()) {
@@ -196,7 +313,8 @@ app.get('/api/business-sectors', async (_req, res) => {
 
 // Form progress routes
 app.post('/api/save-step', async (req, res) => {
-    const { step_number, form_data, user_id } = req.body || {};
+    let { step_number, form_data, user_id } = req.body || {};
+    if (!user_id && (req as any).user?.id) user_id = (req as any).user.id;
     if (typeof step_number !== 'number' || form_data == null || !user_id) return res.status(400).json({ error: 'Missing required fields (user_id, step_number, form_data)' });
     try {
         await db.promise().query(`INSERT INTO user_form_progress (user_id, step_number, form_data) VALUES (?,?,?) ON DUPLICATE KEY UPDATE step_number=VALUES(step_number), form_data=VALUES(form_data)`, [user_id, step_number, JSON.stringify(form_data)]);

@@ -24,6 +24,7 @@ const AutoSite = lazy(() => import('./pages/AutoSite'));
 const Login = lazy(() => import('./pages/Login'));
 const AccessDenied = lazy(() => import('./pages/AccessDenied'));
 const Signup = lazy(() => import('./pages/Signup'));
+const AuthResult = lazy(() => import('./pages/AuthResult'));
 const Blogs = lazy(() => import('./pages/Blogs'));
 const CRMSoftwareFundamentals = lazy(() => import('./pages/blogs/CRMSoftwareFundamentals'));
 const DispatchFundamentals = lazy(() => import('./pages/blogs/DispatchFundamentals'));
@@ -105,6 +106,7 @@ const App = () => (
             <Route path="/access-denied" element={<AccessDenied />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/auth/result" element={<AuthResult />} />
             <Route path="/attendance-leave-management" element={<Attendance_Leave_Management />} />
             <Route path="/order-management-solution" element={<Order_Management_Solution />} />
             <Route path="/field-force-tracking" element={<Field_Force_Tracking />} />

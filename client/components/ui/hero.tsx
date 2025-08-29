@@ -52,7 +52,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden min-h-[100svh] flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-8 md:py-16 lg:py-20 xl:py-24"
+      className="relative overflow-hidden min-h-[80vh] sm:min-h-[85vh] md:min-h-[90vh] lg:min-h-[100vh] flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-12 sm:py-10 md:py-12 lg:py-20 xl:py-36"
     >
       {/* Dynamic Background Elements - Skip on mobile for LCP */}
       {visualsOn && !isMobile && (
@@ -104,7 +104,7 @@ export function Hero() {
       )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 lp:pl-16 relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center py-8 md:py-6 lg:py-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center py-4 sm:py-6 md:py-8 lg:py-4">
 
           {/* Left Content */}
           <motion.div
@@ -126,7 +126,7 @@ export function Hero() {
 
             {/* Main Heading */}
             <motion.h1
-              className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.1] md:leading-[1.1] lg:leading-[1.1] xl:leading-[1.1] text-center md:text-left lg:text-left tracking-tight mt-4 md:mt-3"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.1] md:leading-[1.1] lg:leading-[1.1] xl:leading-[1.1] text-center md:text-left lg:text-left tracking-tight mt-2 sm:mt-3 md:mt-4"
               initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               transition={!isMobile ? { delay: 0.2, duration: 0.8 } : { duration: 0 }}
@@ -137,14 +137,14 @@ export function Hero() {
               <br />
               <span className="text-foreground">Your Business</span>
               <br />
-              <span className="text-foreground/80 text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-5xl">
+              <span className="text-foreground/80 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
                 with Technology
               </span>
             </motion.h1>
 
             {/* Subtitle */}
             <motion.p
-              className="text-lg sm:text-xl md:text-lg lg:text-xl text-foreground/70 max-w-2xl leading-[1.5] md:leading-[1.5] text-center md:text-left lg:text-left px-2 md:px-0 mt-4 md:mt-3"
+              className="text-base sm:text-lg md:text-lg lg:text-xl text-foreground/70 max-w-2xl leading-[1.4] md:leading-[1.5] text-center md:text-left lg:text-left px-2 md:px-0 mt-2 sm:mt-3 md:mt-4"
               initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               transition={!isMobile ? { delay: 0.4, duration: 0.8 } : { duration: 0 }}
@@ -157,7 +157,7 @@ export function Hero() {
 
             {/* Stats */}
             <motion.div
-              className="flex flex-row sm:flex-row gap-4 sm:gap-6 lg:gap-8 py-1 sm:py-2 md:py-3 justify-center md:justify-start lg:justify-start md:ml-2 lg:ml-4 mt-3 md:mt-4"
+              className="flex flex-row sm:flex-row gap-3 sm:gap-4 lg:gap-6 py-1 sm:py-2 md:py-3 justify-center md:justify-start lg:justify-start md:ml-2 lg:ml-4 mt-2 sm:mt-3 md:mt-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.8 }}
@@ -178,7 +178,7 @@ export function Hero() {
 
             {/* CTA Buttons */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2 md:pt-4 justify-center md:justify-start lg:justify-start items-center md:ml-2 lg:ml-4"
+              className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-1 sm:pt-2 md:pt-4 justify-center md:justify-start lg:justify-start items-center md:ml-2 lg:ml-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.8 }}
@@ -188,7 +188,7 @@ export function Hero() {
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
                 <a href="/auto-site">
-                  <button className="relative px-5 md:px-4 lg:px-8 py-3 md:py-2.5 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
+                  <button className="relative px-4 sm:px-5 md:px-4 lg:px-8 py-2.5 sm:py-3 md:py-2.5 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-sm sm:text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
                     Build your free website
                     <ArrowRight className="w-4 h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </button>
@@ -198,7 +198,7 @@ export function Hero() {
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
                 <a href="/contact-us">
-                  <button className="relative px-5 md:px-4 lg:px-8 py-3 md:py-2.5 lg:py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
+                  <button className="relative px-4 sm:px-5 md:px-4 lg:px-8 py-2.5 sm:py-3 md:py-2.5 lg:py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-sm sm:text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
                     <Users className="w-4 h-4 md:w-4 md:h-4 lg:w-5 lg:h-5" />
                     Talk to Expert
                   </button>
@@ -209,7 +209,7 @@ export function Hero() {
 
           {/* Right Visual */}
           <motion.div
-            className="flex justify-center md:justify-end lg:justify-end order-2 md:order-2 lg:order-2 mt-8 sm:mt-10 md:mt-0"
+            className="flex justify-center md:justify-end lg:justify-end order-2 md:order-2 lg:order-2 mt-4 sm:mt-6 md:mt-0"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 1 }}
@@ -217,7 +217,7 @@ export function Hero() {
             <div className="relative w-full max-w-sm md:max-w-xs lg:max-w-lg">
               {/* Main Device */}
               <motion.div
-                className="relative w-64 h-[400px] md:w-64 md:h-[400px] lg:w-80 lg:h-[600px] mx-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-2xl border-4 md:border-4 lg:border-8 border-slate-300 dark:border-slate-700 overflow-hidden"
+                className="relative w-52 h-[320px] sm:w-60 sm:h-[380px] md:w-64 md:h-[400px] lg:w-80 lg:h-[600px] mx-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-2xl border-3 sm:border-4 md:border-4 lg:border-8 border-slate-300 dark:border-slate-700 overflow-hidden"
                 animate={{
                   y: [0, -15, 0],
                   rotateY: [0, 3, 0, -3, 0],
@@ -259,25 +259,25 @@ export function Hero() {
                   </div>
 
                   {/* Main Content */}
-                  <div className="p-2 md:p-3 lg:p-5 space-y-2 md:space-y-3 lg:space-y-4 bg-slate-50 dark:bg-slate-900">
+                  <div className="p-1.5 sm:p-2 md:p-3 lg:p-5 space-y-1.5 sm:space-y-2 md:space-y-3 lg:space-y-4 bg-slate-50 dark:bg-slate-900">
                     {/* Employee Card */}
                     <motion.div
-                      className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-3 md:p-4 text-white relative overflow-hidden"
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-2 sm:p-3 md:p-4 text-white relative overflow-hidden"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.2, duration: 0.8 }}
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center">
-                          <svg className="w-6 h-6 md:w-7 md:h-7 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center">
+                          <svg className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                           </svg>
                         </div>
                         <div className="flex-1">
-                          <div className="text-sm md:text-base font-semibold text-blue-200">Shashank Satyam</div>
-                          <div className="text-xs text-blue-100">Technical Support Engineer</div>
+                          <div className="text-xs sm:text-sm md:text-base font-semibold text-blue-200">Shashank Satyam</div>
+                          <div className="text-[10px] sm:text-xs text-blue-100">Technical Support Engineer</div>
                         </div>
-                        <div className="text-xs text-blue-100">1:23:21</div>
+                        <div className="text-[10px] sm:text-xs text-blue-100">1:23:21</div>
                       </div>
                     </motion.div>
 

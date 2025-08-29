@@ -157,8 +157,8 @@ export function ContactUs() {
       * { box-sizing: border-box; }
       /* Removed the overly broad max-width rule that forced all descendants to full width
         (was collapsing the header dropdown & stretching desktop layout). */
-  /* Allow images to scale responsively */
-  .contact-us-page-wrapper img { max-width: 100%; height: auto; }
+  /* Allow images to scale responsively, but exclude header logo */
+  .contact-us-page-wrapper main img { max-width: 100%; height: auto; }
   /* Ensure embedded iframes (Google Maps) fill their container height */
   .contact-us-page-wrapper iframe { width: 100%; height: 100%; display: block; }
       `}</style>

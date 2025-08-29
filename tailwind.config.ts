@@ -14,6 +14,8 @@ export default {
     },
     extend: {
       screens: {
+        // Portrait orientation screens
+        portrait: { raw: "(orientation: portrait)" },
         // Large portrait orientation (>= lg width and portrait)
         lp: { raw: "(min-width: 1024px) and (orientation: portrait)" },
       },

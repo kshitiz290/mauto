@@ -26,7 +26,7 @@ import {
   Zap,
   CreditCard
 } from "lucide-react";
-import React from "react";
+import * as React from "react";
 import { useToast } from "../components/ui/use-toast";
 
 
@@ -571,26 +571,45 @@ export default function AutoSite() {
     if (savedCompanyId && !isNaN(Number(savedCompanyId))) {
       setCompanyId(Number(savedCompanyId));
     }
-    const userID = localStorage.getItem('userID');
-    if (!userID) {
-      // If user not identified yet, initialize defaults and exit
-      setCurrentStep(0);
-      setFormData(defaultFormData);
-      setCompanyId(0);
-      localStorage.removeItem("autoSiteCompanyId");
-      return;
-    }
-    fetch(`/api/load-form`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: "include",
-      body: JSON.stringify({ user_id: userID })
-    })
-      .then(res => res.json())
-      .then(data => {
+
+    // Wait for userID to be available after Google auth
+    const attemptLoadForm = async () => {
+      let userID = localStorage.getItem('userID');
+      let attempts = 0;
+      while (!userID && attempts < 10) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        userID = localStorage.getItem('userID');
+        attempts++;
+      }
+
+      if (!userID) {
+        console.warn('[AutoSite] No userID found after waiting, initializing defaults');
+        setCurrentStep(0);
+        setFormData(defaultFormData);
+        setCompanyId(0);
+        localStorage.removeItem("autoSiteCompanyId");
+        return;
+      }
+
+      console.log('[AutoSite] Loading form for userID:', userID);
+      try {
+        const response = await fetch(`/api/load-form`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: "include",
+          body: JSON.stringify({ user_id: userID })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('[AutoSite] Form data loaded:', data);
+
         setCurrentStep(data.step_number || 0);
         // Robustly parse form_data if string
-        let parsedFormData: FormData = defaultFormData;
+        let parsedFormData = defaultFormData;
         if (typeof data.form_data === "string") {
           try {
             const parsed = JSON.parse(data.form_data);
@@ -616,13 +635,16 @@ export default function AutoSite() {
           setCompanyId(data.company.id);
           localStorage.setItem("autoSiteCompanyId", String(data.company.id));
         }
-      })
-      .catch(() => {
+      } catch (error) {
+        console.warn('[AutoSite] Failed to load form:', error);
         setCurrentStep(0);
         setFormData(defaultFormData);
         setCompanyId(0);
         localStorage.removeItem("autoSiteCompanyId");
-      });
+      }
+    };
+
+    attemptLoadForm();
   }, []);
 
   const updateFormData = (field: keyof FormData, value: any) => {
@@ -655,9 +677,21 @@ export default function AutoSite() {
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
         console.warn('[saveStep] server rejected', res.status, j);
+        toast({
+          title: 'Save Failed',
+          description: j.error || 'Could not save progress. Please try again.',
+          variant: 'destructive'
+        });
+      } else {
+        console.log('[saveStep] success for step', stepNumber);
       }
     } catch (e) {
       console.warn('[saveStep] network error', e);
+      toast({
+        title: 'Network Error',
+        description: 'Could not save progress. Check connection.',
+        variant: 'destructive'
+      });
     }
   };
 
@@ -672,6 +706,13 @@ export default function AutoSite() {
 
   const handleDomain = async () => {
     setIsLoading(true);
+    // Basic validation before hitting API
+    const d = (formData.domain || '').trim();
+    if (!d) {
+      toast({ title: 'Domain Required', description: 'Please enter a sub-domain before continuing.', variant: 'destructive' });
+      setIsLoading(false);
+      return;
+    }
     if (currentStep < 9) {
       const newStep = currentStep + 1;
       await saveStep(newStep, formData);
@@ -682,9 +723,17 @@ export default function AutoSite() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ domain: formData.domain }),
+          credentials: 'include',
+          body: JSON.stringify({ domain: d }),
         });
-        const data = await response.json();
+        let data: any = {};
+        try { data = await response.json(); } catch { }
+        if (!response.ok) {
+          const msg = data?.error || 'Failed to check domain';
+          toast({ title: 'Domain Check Failed', description: msg, variant: 'destructive' });
+          setIsLoading(false);
+          return;
+        }
         if (data.exists) {
           if (isEditing) {
             // If editing, allow using existing domain, just save progress and go to next step

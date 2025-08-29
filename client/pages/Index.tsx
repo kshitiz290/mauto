@@ -7,7 +7,8 @@ import { Phone, MessageCircle } from "lucide-react";
 import Footer from "../components/ui/footer";
 import LogoStrip from "../components/ui/logo-strip";
 import { ComponentLoading } from "../components/ui/loading";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { useToast } from '@/components/ui/use-toast';
 
 // Lazy load heavy components for better initial load
 const TrustedByCompanies = lazy(() => import("../components/ui/trusted-by-companies").then(module => ({ default: module.TrustedByCompanies })));
@@ -21,6 +22,16 @@ const SectionLoadingFallback = ({ message }: { message?: string }) => (
 );
 
 export default function Index() {
+  const { toast } = useToast();
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (localStorage.getItem('manacle_session') === 'true' && params.get('new') === '1') {
+      toast({ title: 'Thank you!', description: 'You are now signed in.' });
+      params.delete('new');
+      const url = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+      window.history.replaceState({}, '', url);
+    }
+  }, []);
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="manacle_theme">
