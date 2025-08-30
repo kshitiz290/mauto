@@ -52,7 +52,7 @@ export function PrivacyPolicy() {
     <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
       <div className="min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
         <Header />
-        
+
         <main>
           {/* Hero Section */}
           <section className="relative w-screen left-1/2 right-1/2 -mx-[50vw] min-h-[200px] flex items-center justify-center overflow-x-clip pt-32 pb-16 bg-transparent">
@@ -86,7 +86,7 @@ export function PrivacyPolicy() {
             className="max-w-6xl mx-auto px-4 pb-12"
           >
             <div className="glass-effect rounded-2xl p-6 md:p-8 space-y-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">Our Commitment to Your Privacy</h2>
+              <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-600 via-yellow-500 to-orange-600 bg-clip-text text-transparent mb-4">Our Commitment to Your Privacy</h2>
               <p className="text-base md:text-lg text-foreground/80 leading-relaxed">
                 Manacle Technologies Pvt Ltd is committed to protecting your privacy and ensuring transparent data practices across all our software solutions including Sales Force Automation (SFA), Enterprise Resource Planning (ERP), Customer Relationship Management (CRM), and Human Resource Management Systems (HRMS). This comprehensive privacy policy outlines how we collect, process, store, and protect your personal and business data.
               </p>
@@ -115,7 +115,7 @@ export function PrivacyPolicy() {
                       {section.icon}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-bold text-primary mb-4">{section.title}</h3>
+                      <h3 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 via-yellow-500 to-orange-600 bg-clip-text text-transparent mb-4">{section.title}</h3>
                       <p className="text-base md:text-lg text-foreground/80 leading-relaxed">{section.content}</p>
                     </div>
                   </div>
@@ -133,7 +133,7 @@ export function PrivacyPolicy() {
             className="max-w-6xl mx-auto px-4 pb-16"
           >
             <div className="glass-effect rounded-2xl p-6 md:p-8 space-y-6">
-              <h2 className="text-2xl md:text-3xl font-bold text-primary mb-6">Key Privacy Points</h2>
+              <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-600 via-yellow-500 to-orange-600 bg-clip-text text-transparent mb-6">Key Privacy Points</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-bold text-sm">
@@ -181,13 +181,13 @@ export function PrivacyPolicy() {
                 If you have any questions about this Privacy Policy or how we handle your personal information, please contact us.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a 
+                <a
                   href="mailto:sales@manacleindia.com"
                   className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-semibold rounded-lg transition-all duration-300"
                 >
                   Contact Us
                 </a>
-                <a 
+                <a
                   href="/contact-us"
                   className="inline-flex items-center justify-center px-6 py-3 border border-primary text-primary hover:bg-primary hover:text-white font-semibold rounded-lg transition-all duration-300"
                 >

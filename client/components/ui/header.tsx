@@ -180,6 +180,7 @@ export function Header() {
 
   type DropdownCategory = {
     title: string;
+    href?: string; // Make category titles clickable
     items: DropdownItem[];
   };
 
@@ -204,6 +205,7 @@ export function Header() {
         categories: [
           {
             title: "SFA Solutions",
+            href: "/sales-force-automation", // Add href to make title clickable
             items: [
               { name: "Attendance & Leave Management", href: "/attendance-leave-management" },
               { name: "Order Management Solution", href: "/order-management-solution" },
@@ -396,9 +398,25 @@ Gallery", description: "View all our projects", href: "/gallery" },
                                 : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3'} gap-6`}>
                                 {item.dropdownContent?.categories.map((category, index) => (
                                   <div key={index} className={`space-y-3 ${item.name === 'Resources' ? 'w-full' : ''}`}>
-                                    <h3 className={`font-bold text-base md:text-lg gradient-text mb-2 ${item.name === 'Resources' ? '' : ''}`}>
-                                      {category.title}
-                                    </h3>
+                                    {category.href ? (
+                                      <Link
+                                        to={category.href}
+                                        className="block group/category"
+                                        onMouseEnter={() => prefetchRoute(category.href)}
+                                        onClick={() => {
+                                          setClickedDropdown(null);
+                                          setActiveDropdown(null);
+                                        }}
+                                      >
+                                        <h3 className={`font-bold text-base md:text-lg gradient-text mb-2 group-hover/category:text-primary transition-colors cursor-pointer ${item.name === 'Resources' ? '' : ''}`}>
+                                          {category.title}
+                                        </h3>
+                                      </Link>
+                                    ) : (
+                                      <h3 className={`font-bold text-base md:text-lg gradient-text mb-2 ${item.name === 'Resources' ? '' : ''}`}>
+                                        {category.title}
+                                      </h3>
+                                    )}
                                     <ul className={`space-y-2 ${item.name === 'Resources' ? 'w-full' : ''}`}>
                                       {category.items.map((subItem, subIndex) => (
                                         <li key={subIndex} className={item.name === 'Resources' ? 'w-full' : ''}>
@@ -472,7 +490,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
               >
                 Get A Quote
               </Button>
-              
+
               {/* Auth Buttons - Commented Out */}
               {/* <div className="flex items-center space-x-2 md:space-x-3 lg:space-x-4 xl:space-x-4">
                 {isAuthenticated ? (

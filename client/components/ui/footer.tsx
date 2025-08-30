@@ -167,17 +167,13 @@ export default function Footer() {
                         </span>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
-                        <a href="/privacy-policy" className="text-foreground/70 hover:text-primary transition-colors duration-300 font-medium">
-                            Privacy Policy
-                        </a>
+                        <a href="/privacy-policy" className="text-foreground/70 hover:text-primary transition-colors duration-300 font-medium">Privacy Policy</a>
                         <span className="hidden sm:inline text-foreground/40">|</span>
-                        <a href="/contact-us" className="text-foreground/70 hover:text-primary transition-colors duration-300 font-medium">
-                            Contact Us
-                        </a>
+                        <a href="/contact-us" className="text-foreground/70 hover:text-primary transition-colors duration-300 font-medium">Contact Us</a>
                         <span className="hidden sm:inline text-foreground/40">|</span>
-                        <a href="/faqs" className="text-foreground/70 hover:text-primary transition-colors duration-300 font-medium">
-                            FAQs
-                        </a>
+                        <a href="/faqs" className="text-foreground/70 hover:text-primary transition-colors duration-300 font-medium">FAQs</a>
+                        <span className="hidden sm:inline text-foreground/40">|</span>
+                        <a href="/sitemap" className="text-foreground/70 hover:text-primary transition-colors duration-300 font-medium">Sitemap</a>
                     </div>
                     <p className="text-lg text-foreground/60 font-medium">All rights reserved © 2025 Manacle Technologies Pvt Ltd.</p>
                 </div>

@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from './components/ProtectedRoute';
 import { Suspense, lazy, useEffect } from 'react';
+import Sitemap from './pages/Sitemap';
 // Keep fallback ultra-light to reduce initial JS and improve FCP
 import { prefetchRoute } from './lib/prefetchRoutes';
 import { useLocation } from 'react-router-dom';
@@ -30,6 +31,10 @@ const CRMSoftwareFundamentals = lazy(() => import('./pages/blogs/CRMSoftwareFund
 const DispatchFundamentals = lazy(() => import('./pages/blogs/DispatchFundamentals'));
 const Podcasts = lazy(() => import('./pages/Podcasts'));
 const SeminarsWebinars = lazy(() => import('./pages/SeminarsWebinars'));
+// Main SFA page
+const SalesForceAutomation = lazy(() => import('./pages/SalesForceAutomation'));
+// Visual Merchandising page
+const VisualMerchandising = lazy(() => import('./pages/VisualMerchandising'));
 // Solutions pages
 const Attendance_Leave_Management = lazy(() => import('./pages/solutions/Attendance_Leave_Management'));
 const Order_Management_Solution = lazy(() => import('./pages/solutions/Order_Management_Solution'));
@@ -107,6 +112,11 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/auth/result" element={<AuthResult />} />
+            {/* Main SFA Page */}
+            <Route path="/sales-force-automation" element={<SalesForceAutomation />} />
+            {/* Visual Merchandising Page */}
+            <Route path="/visual-merchandising" element={<VisualMerchandising />} />
+            {/* Individual SFA Solutions */}
             <Route path="/attendance-leave-management" element={<Attendance_Leave_Management />} />
             <Route path="/order-management-solution" element={<Order_Management_Solution />} />
             <Route path="/field-force-tracking" element={<Field_Force_Tracking />} />
@@ -136,6 +146,7 @@ const App = () => (
             <Route path="/faqs" element={<FAQs />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             {/* Redirects */}
+            <Route path="/sitemap" element={<Sitemap />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

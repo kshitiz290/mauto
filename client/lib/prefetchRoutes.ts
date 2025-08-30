@@ -13,6 +13,7 @@ const importMap: Record<string, () => Promise<unknown>> = {
     "/auto-site": () => import("../pages/AutoSite"),
     "/about-us": () => import("../pages/AboutUs"),
     "/contact-us": () => import("../pages/ContactUs"),
+    "/visual-merchandising": () => import("../pages/VisualMerchandising"),
 };
 
 function idle(cb: () => void) {

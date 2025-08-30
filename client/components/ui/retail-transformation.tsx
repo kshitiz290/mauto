@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { BarChart3, Users, Store, Clock, Zap, Target, TrendingUp, Shield } from "lucide-react"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
 const RetailTransformation = () => {
     const [activeCard, setActiveCard] = useState<number | null>(null)
@@ -16,6 +17,7 @@ const RetailTransformation = () => {
             icon: <Users className="w-8 h-8" />,
             gradient: "from-orange-500 to-red-500",
             bgGradient: "from-orange-50 to-red-50 dark:from-orange-950 dark:to-red-950",
+            href: "/sales-force-automation", // Add navigation link
             features: [
                 "Real-time order management & tracking",
                 "AI-powered sales forecasting",
@@ -24,7 +26,7 @@ const RetailTransformation = () => {
                 "Performance analytics & insights"
             ],
             metrics: {
-                primary: "Upto 40%",
+                primary: "Up to 40%",
                 primaryLabel: "Sales Increase",
                 secondary: "60%",
                 secondaryLabel: "Time Saved"
@@ -38,6 +40,7 @@ const RetailTransformation = () => {
             icon: <BarChart3 className="w-8 h-8" />,
             gradient: "from-yellow-500 to-orange-500",
             bgGradient: "from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950",
+            href: "/distributor-management-solution", // Add navigation link
             features: [
                 "Intelligent inventory management",
                 "Dynamic pricing optimization",
@@ -60,6 +63,7 @@ const RetailTransformation = () => {
             icon: <Store className="w-8 h-8" />,
             gradient: "from-pink-500 to-purple-500",
             bgGradient: "from-pink-50 to-purple-50 dark:from-pink-950 dark:to-purple-950",
+            href: "/visual-merchandising", // Add navigation link
             features: [
                 "Interactive planogram management",
                 "AI-powered product placement",
@@ -68,7 +72,7 @@ const RetailTransformation = () => {
                 "Visual audit automation"
             ],
             metrics: {
-                primary: "Upto 25%",
+                primary: "Up to 25%",
                 primaryLabel: "Sales Uplift",
                 secondary: "80%",
                 secondaryLabel: "Compliance Rate"
@@ -82,6 +86,7 @@ const RetailTransformation = () => {
             icon: <Clock className="w-8 h-8" />,
             gradient: "from-green-500 to-teal-500",
             bgGradient: "from-green-50 to-teal-50 dark:from-green-950 dark:to-teal-950",
+            href: "/attendance-leave-management", // Add navigation link
             features: [
                 "Biometric & GPS-based attendance",
                 "Automated leave management",
@@ -167,104 +172,126 @@ const RetailTransformation = () => {
 
                 {/* Solutions Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
-                    {solutions.map((solution, index) => (
-                        <motion.div
-                            key={solution.id}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: index * 0.1 }}
-                            viewport={{ once: true }}
-                            onMouseEnter={() => setActiveCard(solution.id)}
-                            onMouseLeave={() => setActiveCard(null)}
-                            className={`group relative bg-gradient-to-br ${solution.bgGradient} rounded-3xl p-8 border border-white/20 dark:border-slate-800/50 hover:border-white/40 dark:hover:border-slate-700/50 transition-all duration-500 overflow-hidden h-full`}
-                        >
-                            {/* Gradient Border Effect */}
-                            <div className={`absolute inset-0 bg-gradient-to-r ${solution.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-3xl`}></div>
+                    {solutions.map((solution, index) => {
+                        const CardContent = (
+                            <>
+                                {/* Gradient Border Effect */}
+                                <div className={`absolute inset-0 bg-gradient-to-r ${solution.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-3xl`}></div>
 
-                            {/* Content */}
-                            <div className="relative z-10">
-                                {/* Header */}
-                                <div className="flex items-center gap-4 mb-6">
-                                    <motion.div
-                                        className={`p-4 rounded-2xl bg-gradient-to-r ${solution.gradient} text-white shadow-lg`}
-                                        whileHover={{ scale: 1.05, rotate: 5 }}
-                                        transition={{ type: "spring", stiffness: 200 }}
-                                    >
-                                        {solution.icon}
-                                    </motion.div>
-                                    <div>
-                                        <h3 className="text-2xl font-bold text-foreground mb-1">{solution.title}</h3>
-                                        <p className="text-foreground/60 font-medium">{solution.subtitle}</p>
+                                {/* Content */}
+                                <div className="relative z-10">
+                                    {/* Header */}
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <motion.div
+                                            className={`p-4 rounded-2xl bg-gradient-to-r ${solution.gradient} text-white shadow-lg`}
+                                            whileHover={{ scale: 1.05, rotate: 5 }}
+                                            transition={{ type: "spring", stiffness: 200 }}
+                                        >
+                                            {solution.icon}
+                                        </motion.div>
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">{solution.title}</h3>
+                                            <p className="text-foreground/60 font-medium">{solution.subtitle}</p>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Description */}
-                                <p className="text-foreground/80 text-lg mb-8 leading-relaxed">
-                                    {solution.description}
-                                </p>
+                                    {/* Description */}
+                                    <p className="text-foreground/80 text-lg mb-8 leading-relaxed">
+                                        {solution.description}
+                                    </p>
 
-                                {/* Features & Metrics Layout */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    {/* Features */}
-                                    <div>
-                                        <h4 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                                            <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${solution.gradient}`}></div>
-                                            Key Features
-                                        </h4>
-                                        <ul className="space-y-3">
-                                            {solution.features.map((feature, featureIndex) => (
-                                                <motion.li
-                                                    key={featureIndex}
-                                                    initial={{ opacity: 0, x: -20 }}
-                                                    whileInView={{ opacity: 1, x: 0 }}
-                                                    transition={{ duration: 0.5, delay: featureIndex * 0.1 }}
-                                                    viewport={{ once: true }}
-                                                    className="flex items-start gap-3 text-foreground/70"
+                                    {/* Features & Metrics Layout */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        {/* Features */}
+                                        <div>
+                                            <h4 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                                <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${solution.gradient}`}></div>
+                                                Key Features
+                                            </h4>
+                                            <ul className="space-y-3">
+                                                {solution.features.map((feature, featureIndex) => (
+                                                    <motion.li
+                                                        key={featureIndex}
+                                                        initial={{ opacity: 0, x: -20 }}
+                                                        whileInView={{ opacity: 1, x: 0 }}
+                                                        transition={{ duration: 0.5, delay: featureIndex * 0.1 }}
+                                                        viewport={{ once: true }}
+                                                        className="flex items-start gap-3 text-foreground/70"
+                                                    >
+                                                        <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${solution.gradient} mt-2 flex-shrink-0`}></div>
+                                                        <span className="text-sm leading-relaxed">{feature}</span>
+                                                    </motion.li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                        {/* Metrics */}
+                                        <div className="flex flex-col justify-center">
+                                            <h4 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                                <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${solution.gradient}`}></div>
+                                                Impact Metrics
+                                            </h4>
+                                            <div className="space-y-4">
+                                                <motion.div
+                                                    className="text-center p-4 rounded-xl bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm"
+                                                    whileHover={{ scale: 1.02 }}
+                                                    transition={{ type: "spring", stiffness: 200 }}
                                                 >
-                                                    <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${solution.gradient} mt-2 flex-shrink-0`}></div>
-                                                    <span className="text-sm leading-relaxed">{feature}</span>
-                                                </motion.li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    {/* Metrics */}
-                                    <div className="flex flex-col justify-center">
-                                        <h4 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-                                            <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${solution.gradient}`}></div>
-                                            Impact Metrics
-                                        </h4>
-                                        <div className="space-y-4">
-                                            <motion.div
-                                                className="text-center p-4 rounded-xl bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm"
-                                                whileHover={{ scale: 1.02 }}
-                                                transition={{ type: "spring", stiffness: 200 }}
-                                            >
-                                                <div className={`text-3xl font-bold bg-gradient-to-r ${solution.gradient} bg-clip-text text-transparent`}>
-                                                    {solution.metrics.primary}
-                                                </div>
-                                                <div className="text-sm text-foreground/60 font-medium">
-                                                    {solution.metrics.primaryLabel}
-                                                </div>
-                                            </motion.div>
-                                            <motion.div
-                                                className="text-center p-4 rounded-xl bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm"
-                                                whileHover={{ scale: 1.02 }}
-                                                transition={{ type: "spring", stiffness: 200 }}
-                                            >
-                                                <div className={`text-3xl font-bold bg-gradient-to-r ${solution.gradient} bg-clip-text text-transparent`}>
-                                                    {solution.metrics.secondary}
-                                                </div>
-                                                <div className="text-sm text-foreground/60 font-medium">
-                                                    {solution.metrics.secondaryLabel}
-                                                </div>
-                                            </motion.div>
+                                                    <div className={`text-3xl font-bold bg-gradient-to-r ${solution.gradient} bg-clip-text text-transparent`}>
+                                                        {solution.metrics.primary}
+                                                    </div>
+                                                    <div className="text-sm text-foreground/60 font-medium">
+                                                        {solution.metrics.primaryLabel}
+                                                    </div>
+                                                </motion.div>
+                                                <motion.div
+                                                    className="text-center p-4 rounded-xl bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm"
+                                                    whileHover={{ scale: 1.02 }}
+                                                    transition={{ type: "spring", stiffness: 200 }}
+                                                >
+                                                    <div className={`text-3xl font-bold bg-gradient-to-r ${solution.gradient} bg-clip-text text-transparent`}>
+                                                        {solution.metrics.secondary}
+                                                    </div>
+                                                    <div className="text-sm text-foreground/60 font-medium">
+                                                        {solution.metrics.secondaryLabel}
+                                                    </div>
+                                                </motion.div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                            </>
+                        );
+
+                        return solution.href ? (
+                            <Link key={solution.id} to={solution.href}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 50 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, delay: index * 0.1 }}
+                                    viewport={{ once: true }}
+                                    onMouseEnter={() => setActiveCard(solution.id)}
+                                    onMouseLeave={() => setActiveCard(null)}
+                                    className={`group relative bg-gradient-to-br ${solution.bgGradient} rounded-3xl p-8 border border-white/20 dark:border-slate-800/50 hover:border-white/40 dark:hover:border-slate-700/50 transition-all duration-500 overflow-hidden h-full cursor-pointer hover:scale-105`}
+                                >
+                                    {CardContent}
+                                </motion.div>
+                            </Link>
+                        ) : (
+                            <motion.div
+                                key={solution.id}
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, delay: index * 0.1 }}
+                                viewport={{ once: true }}
+                                onMouseEnter={() => setActiveCard(solution.id)}
+                                onMouseLeave={() => setActiveCard(null)}
+                                className={`group relative bg-gradient-to-br ${solution.bgGradient} rounded-3xl p-8 border border-white/20 dark:border-slate-800/50 hover:border-white/40 dark:hover:border-slate-700/50 transition-all duration-500 overflow-hidden h-full`}
+                            >
+                                {CardContent}
+                            </motion.div>
+                        );
+                    })}
                 </div>
 
                 {/* Benefits Section */}

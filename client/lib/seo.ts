@@ -109,6 +109,14 @@ export const routeSeo: Record<string, SeoMeta> = {
         canonical: 'https://www.manacletech.com/seminars-webinars',
         ogImage: '/manacle_logo.png'
     },
+    // Visual Merchandising
+    '/visual-merchandising': {
+        title: 'Visual Merchandising Solutions – Retail Space Optimization | Manacle',
+        description: 'Transform retail spaces with intelligent merchandising tools. Planogram management, compliance monitoring, and sales analytics for optimal customer experience.',
+        keywords: ['visual merchandising', 'planogram management', 'retail space optimization', 'compliance monitoring', 'customer experience', 'retail analytics'],
+        canonical: 'https://www.manacletech.com/visual-merchandising',
+        ogImage: '/manacle_logo.png'
+    },
     // Solutions
     '/attendance-leave-management': {
         title: 'Attendance & Leave Management Software – HRMS | Manacle',
