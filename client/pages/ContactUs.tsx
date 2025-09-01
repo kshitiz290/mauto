@@ -556,19 +556,7 @@ export function ContactUs() {
                     </div>
 
                     {/* Average Response Time */}
-                    <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4 border border-primary/20">
-                      <div className="text-center">
-                        <p className="text-sm font-bold text-foreground mb-1">
-                          Average Response Time
-                        </p>
-                        <p className="text-2xl font-black text-primary">
-                          2-4 Hours
-                        </p>
-                        <p className="text-xs text-foreground/70 mt-1">
-                          During business hours
-                        </p>
-                      </div>
-                    </div>
+                    
                   </div>
 
                   {/* Office Hours */}
@@ -595,7 +583,20 @@ export function ContactUs() {
 
                       <div className="border-t border-glass-border pt-4 mt-6">
                         <div className="text-center text-sm text-foreground/70">
-                          <p>All times are in <span className="font-semibold text-foreground">IST (UTC +5:30)</span></p>
+                        <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4 border border-primary/20">
+                      <div className="text-center">
+                        <p className="text-sm font-bold text-foreground mb-1">
+                          Average Response Time
+                        </p>
+                        <p className="text-2xl font-black text-primary">
+                          1-2 Hours
+                        </p>
+                        <p className="text-xs text-foreground/70 mt-1">
+                          During business hours
+                        </p>
+                      </div>
+                    </div>
+                          
                         </div>
                       </div>
                     </div>
