@@ -232,19 +232,21 @@ const VisualMerchandising = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.6 }}
                             >
-                                <Button
-                                    size="lg"
-                                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-6 text-lg transition-all duration-300 hover:scale-105 shadow-xl"
-                                >
-                                    Start Free Trial <ArrowRight className="ml-2 w-5 h-5" />
-                                </Button>
-                                <Button
+                                <Link to="/contact-us">
+                                    <Button
+                                        size="lg"
+                                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-6 text-lg transition-all duration-300 hover:scale-105 shadow-xl"
+                                    >
+                                        Start Free Trial <ArrowRight className="ml-2 w-5 h-5" />
+                                    </Button>
+                                </Link>
+                                {/* <Button
                                     size="lg"
                                     variant="outline"
                                     className="px-8 py-6 text-lg border-2 text-foreground hover:bg-muted hover:text-foreground hover:border-muted-foreground transition-all duration-300 hover:scale-105"
                                 >
                                     Watch Demo
-                                </Button>
+                                </Button> */}
                             </motion.div>
                         </motion.div>
                     </div>
@@ -534,13 +536,15 @@ const VisualMerchandising = () => {
                                 to create compelling customer experiences and drive measurable results.
                             </p>
                             <div className="flex justify-center">
-                                <Button
-                                    size="lg"
-                                    variant="secondary"
-                                    className="px-8 py-6 text-lg transition-all duration-300 hover:scale-105 bg-background text-foreground hover:bg-muted hover:text-foreground hover:ring-2 hover:ring-amber-300"
-                                >
-                                    Schedule Consultation
-                                </Button>
+                                <Link to="/contact-us">
+                                    <Button
+                                        size="lg"
+                                        variant="secondary"
+                                        className="px-8 py-6 text-lg transition-all duration-300 hover:scale-105 bg-background text-foreground hover:bg-muted hover:text-foreground hover:ring-2 hover:ring-amber-300"
+                                    >
+                                        Schedule Consultation
+                                    </Button>
+                                </Link>
                             </div>
                         </motion.div>
                     </div>

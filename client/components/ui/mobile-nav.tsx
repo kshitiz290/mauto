@@ -14,7 +14,7 @@ import { apiFetch } from "../../lib/apiFetch";
 import { useEffect, useRef, useCallback, useState } from "react";
 
 export interface MobileNavCategoryItem { name: string; href: string; description?: string }
-export interface MobileNavCategory { title: string; items: MobileNavCategoryItem[] }
+export interface MobileNavCategory { title: string; href?: string; items: MobileNavCategoryItem[] }
 export interface MobileNavItem {
     name: string;
     href: string;
@@ -133,7 +133,19 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                                             <div className="pb-4 pl-2 pr-1 space-y-5">
                                                 {item.dropdownContent?.categories.map((cat, ci) => (
                                                     <div key={ci} className="">
-                                                        <h4 className="text-xs font-bold uppercase tracking-wide text-primary mb-2">{cat.title}</h4>
+                                                        {cat.href ? (
+                                                            <Link
+                                                                to={cat.href}
+                                                                className="block text-xs font-bold uppercase tracking-wide text-primary hover:text-primary/80 mb-2 focus:outline-none focus-visible:ring ring-primary/40 rounded px-1 py-1"
+                                                                onClick={() => {
+                                                                    // Route-change effect handles closing
+                                                                }}
+                                                            >
+                                                                {cat.title}
+                                                            </Link>
+                                                        ) : (
+                                                            <h4 className="text-xs font-bold uppercase tracking-wide text-primary mb-2">{cat.title}</h4>
+                                                        )}
                                                         <ul className="space-y-2">
                                                             {cat.items.map((sub, si) => (
                                                                 <li key={si}>

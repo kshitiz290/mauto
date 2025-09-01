@@ -198,9 +198,15 @@ const SalesForceAutomation = () => {
                 : (isLast ? 0.02 : 0);
         const cardStart = clamp(baseStart - startShift);
         const cardMid = clamp(baseMid - startShift);
-        // End a bit earlier for the last card on tablet/large portrait so it completes within the sticky window
-        const cardEnd = clamp((isTabletPortrait && isLast) ? Math.min(baseEnd, 0.86) : (isLargePortrait && isLast) ? Math.min(baseEnd, 0.88) : baseEnd);
-        const endTail = (isTabletPortrait && isLast) ? 0.01 : (isLargePortrait && isLast) ? 0.015 : 0.02;
+        // End earlier for the last card on tablet portrait so it completes within the sticky window
+        const cardEnd = clamp(
+            (isTabletPortrait && isLast)
+                ? Math.max(0, Math.min(baseEnd - 0.03, 0.66))
+                : (isLargePortrait && isLast)
+                    ? Math.min(baseEnd, 0.88)
+                    : baseEnd
+        );
+        const endTail = (isTabletPortrait && isLast) ? 0.02 : (isLargePortrait && isLast) ? 0.015 : 0.02;
 
         // Cards appear when their turn comes and stay visible
         const opacity = useTransform(
@@ -232,7 +238,7 @@ const SalesForceAutomation = () => {
                 : isTabletPortrait
                     ? [0, 200, 140, 36, -6]
                     : [0, 180, 112, 32, -12];
-        const secondLastTravelTablet = [0, 190, 130, 36, -6];
+        const secondLastTravelTablet = [0, 130, 75, 5, -5];
         const secondLastTravelLarge = [0, 185, 125, 34, -8];
         // Give the last/second-last cards a bit more travel and a tiny overshoot so they fully cover the previous card
         const yValues = isTabletPortrait && isSecondLast
@@ -248,7 +254,7 @@ const SalesForceAutomation = () => {
 
         return (
             <motion.div
-                className="sticky top-16 md:top-20 lp:top-48 mb-6 md:mb-8"
+                className={`sticky top-20 sm:top-24 md:top-28 lg:top-32 lp:top-48 mb-6 md:mb-8 ${isTabletPortrait ? 'pb-16' : ''}`}
                 style={{
                     opacity,
                     scale,

@@ -50,10 +50,22 @@ export function Hero() {
   }, [isMobile]);
 
   return (
-    <section
-      id="home"
-      className="relative overflow-hidden min-h-[80vh] sm:min-h-[85vh] md:min-h-[90vh] lg:min-h-[100vh] flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-12 sm:py-10 md:py-12 lg:py-20 xl:py-36"
-    >
+    <>
+      <style>{`
+        /* Make hero content-height on medium/tablet portraits (and phone desktop-site widths ~980px) */
+        @media (orientation: portrait) and (min-width: 768px) and (max-width: 1100px) {
+          section#home.hero-section {
+            min-height: auto !important;
+            height: auto !important;
+            padding-top: 2.5rem !important;  /* ~py-10 */
+            padding-bottom: 2.5rem !important;
+          }
+        }
+      `}</style>
+      <section
+        id="home"
+        className="hero-section relative overflow-hidden min-h-[80vh] sm:min-h-[85vh] md:min-h-[90vh] lg:min-h-[100vh] flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-12 sm:py-10 md:py-12 lg:py-20 xl:py-36"
+      >
       {/* Dynamic Background Elements - Skip on mobile for LCP */}
       {visualsOn && !isMobile && (
         <div className="absolute inset-0 overflow-hidden">
@@ -448,6 +460,7 @@ export function Hero() {
 
 
       </div>
-    </section>
+      </section>
+    </>
   );
 }

@@ -1,9 +1,9 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import emailjs from 'emailjs-com';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Instagram,
   Youtube,
@@ -18,7 +18,8 @@ import {
   Globe,
   Zap,
   Facebook,
-  Linkedin
+  Linkedin,
+  Star
 } from "lucide-react";
 import { Header } from "../components/ui/header";
 import { ThemeProvider } from "../components/ui/theme-provider";
@@ -37,6 +38,44 @@ export function ContactUs() {
     companyName: "",
     solutionType: "Web Design & Development",
   });
+
+  // Testimonial carousel state
+  const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const nextTestimonial = () => setTestimonialIndex((i) => (i + 1) % testimonials.length);
+  const prevTestimonial = () => setTestimonialIndex((i) => (i - 1 + testimonials.length) % testimonials.length);
+
+  // Testimonials data
+  const testimonials = [
+    {
+      name: "Rajeev Pandey EDP (IT)",
+      company: "Baidyanath",
+      photo: "/customers/rajeev-pandey.jpg",
+      review: "mSELL truly knows what they are doing. They helped our biggest problem of expiry on Distributor end through Their DMS. Thank you mSELL.",
+      rating: 5,
+    },
+    {
+      name: "RD Mishra (CIO)",
+      company: "Om Sweets & Snacks",
+      photo: "/customers/rd-mishra.jpg",
+      review: "From sweets outlets to FMCG products the leap was tough, thanks to mSELL and their SFA solution to bring out the full potential of our sales force.",
+      rating: 5,
+    },
+    {
+      name: "Piyush Pant",
+      company: "Neha Herbal",
+      photo: "/customers/piyush-pant.jpg",
+      review: "I knew we had a salesforce efficiency problem and needed it to be resolved ASAP. Thanks to mSELL for the rescue. Keep going mSELL.",
+      rating: 5,
+    },
+  ];
+
+  // Auto-slide effect for testimonials
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      nextTestimonial();
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [testimonialIndex]);
 
   // const [meetingFormData, setMeetingFormData] = useState({
   //   fullName: "",
@@ -228,123 +267,12 @@ export function ContactUs() {
               {/* Main Contact Grid */}
               <div ref={contactGridRef} className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
 
-                {/* Contact Information & Quick Actions */}
-                <div className="lg:col-span-1 space-y-6">
-
-                  {/* Contact Methods - Animated */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={isContactGridInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                    className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border"
-                  >
-                    <h2 className="text-2xl font-extrabold mb-8 gradient-text">Get In Touch</h2>
-                    <div className="space-y-4">
-                      <a href="mailto:sales@manacleindia.com" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-primary/10 transition-all duration-300">
-                        <div className="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center">
-                          <Mail className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="font-extrabold text-lg">Email Us</h3>
-                          <p className="text-foreground text-base font-medium">sales@manacleindia.com</p>
-                        </div>
-                      </a>
-
-                      <a href="tel:+919873250200" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-accent/10 transition-all duration-300">
-                        <div className="w-12 h-12 bg-gradient-to-r from-accent to-neon-purple rounded-full flex items-center justify-center">
-                          <Phone className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="font-extrabold text-lg">Call Us</h3>
-                          <p className="text-foreground text-base font-medium">+91 9873250200</p>
-                        </div>
-                      </a>
-
-                      <a href="https://wa.me/919873250200" target="_blank" rel="noopener noreferrer" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-green-500/10 transition-all duration-300">
-                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
-                          <MessageCircle className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="font-extrabold text-lg">WhatsApp</h3>
-                          <p className="text-foreground text-base font-medium">Quick chat support</p>
-                        </div>
-                      </a>
-                    </div>
-                  </motion.div>
-
-                  {/* Office Hours - Animated */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                    className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border"
-                  >
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-12 h-12 bg-gradient-to-r from-neon-blue to-neon-pink rounded-lg flex items-center justify-center">
-                        <Clock className="w-6 h-6 text-white" />
-                      </div>
-                      <h2 className="text-xl font-extrabold">Office Hours</h2>
-                    </div>
-                    <div className="space-y-4 text-base">
-                      <div className="flex justify-between">
-                        <span className="text-foreground font-bold">Monday - Saturday</span>
-                        <span className="font-bold text-primary">9:00 AM - 7:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-foreground font-bold">Sunday</span>
-                        <span className="font-bold text-accent">Closed</span>
-                      </div>
-                      <div className="mt-6 p-4 bg-primary/10 rounded-lg">
-                        <p className="text-sm text-center font-medium text-foreground">
-                          <span className="font-bold">Response Time:</span> Within 2-4 hours during business hours
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  {/* Quick Support Links */}
-                  {/* <div className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
-                        <Headphones className="w-6 h-6 text-white" />
-                      </div>
-                      <h2 className="text-xl font-extrabold">Quick Support</h2>
-                    </div>
-                    <div className="space-y-3">
-                      <a href="#faq" className="support-link-sticky flex items-center justify-between p-3 rounded-lg hover:bg-primary/10 transition-all duration-300 group">
-                        <div className="flex items-center space-x-3">
-                          <FileText className="w-5 h-5 text-primary" />
-                          <span className="text-base font-bold">FAQ & Help Center</span>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-primary transform group-hover:translate-x-1 transition-transform duration-300" />
-                      </a>
-
-                      <a href="#portfolio" className="support-link-sticky flex items-center justify-between p-3 rounded-lg hover:bg-accent/10 transition-all duration-300 group">
-                        <div className="flex items-center space-x-3">
-                          <Globe className="w-5 h-5 text-accent" />
-                          <span className="text-base font-bold">Portfolio & Examples</span>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-accent transform group-hover:translate-x-1 transition-transform duration-300" />
-                      </a>
-
-                      <a href="#pricing" className="support-link-sticky flex items-center justify-between p-3 rounded-lg hover:bg-neon-blue/10 transition-all duration-300 group">
-                        <div className="flex items-center space-x-3">
-                          <Zap className="w-5 h-5 text-neon-blue" />
-                          <span className="text-base font-bold">Pricing & Packages</span>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-neon-blue transform group-hover:translate-x-1 transition-transform duration-300" />
-                      </a>
-                    </div>
-                  </div> */}
-                </div>
-
-                {/* Contact Form */}
+                {/* Contact Form - Shows first on mobile, second on desktop */}
                 <motion.div
                   initial={{ opacity: 0, y: 40 }}
                   animate={isContactGridInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                  className="lg:col-span-2"
+                  className="lg:col-span-2 order-1 lg:order-2"
                 >
                   <div className="contact-card-sticky p-12 rounded-3xl bg-card/90 backdrop-blur-sm border border-glass-border">
                     <h2 className="text-4xl font-extrabold mb-10 gradient-text">Send us a Message</h2>
@@ -462,7 +390,218 @@ export function ContactUs() {
                     </form>
                   </div>
                 </motion.div>
+
+                {/* Left Side - Testimonials and Google Ratings - Shows second on mobile, first on desktop */}
+                <div className="lg:col-span-1 space-y-6 order-2 lg:order-1">
+
+                  {/* Customer Testimonials */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={isContactGridInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    className="bg-gradient-to-br from-slate-50 to-white dark:from-[#1a1a1a] dark:to-[#0f0f0f] rounded-2xl border border-slate-200 dark:border-slate-700 shadow-lg h-[380px] flex flex-col overflow-hidden"
+                  >
+                    {/* Chat Header */}
+                    <div className="bg-gradient-to-r from-primary/10 to-accent/10 px-4 py-4 border-b border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center justify-center">
+                        <h3 className="text-lg font-black bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent leading-tight">Join these Leaders</h3>
+                      </div>
+                    </div>
+
+                    {/* Chat Messages Area */}
+                    <div className="flex-1 p-4 overflow-hidden">
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={testimonialIndex}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.4 }}
+                          className="h-full flex flex-col justify-center"
+                        >
+                          {/* Message Bubble */}
+                          <div className="bg-white dark:bg-slate-800 rounded-2xl rounded-bl-md p-4 shadow-sm border border-slate-200 dark:border-slate-600 mb-3 relative">
+                            {/* Message tail */}
+                            <div className="absolute -bottom-2 left-4 w-4 h-4 bg-white dark:bg-slate-800 border-l border-b border-slate-200 dark:border-slate-600 transform rotate-45"></div>
+
+                            {/* Stars */}
+                            <div className="flex gap-1 mb-2">
+                              {[...Array(testimonials[testimonialIndex].rating)].map((_, i) => (
+                                <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                              ))}
+                            </div>
+
+                            {/* Message */}
+                            <p className="text-sm text-foreground/85 leading-relaxed">
+                              "{testimonials[testimonialIndex].review}"
+                            </p>
+                          </div>
+
+                          {/* User Info */}
+                          <div className="flex items-center gap-3 px-1">
+                            <img
+                              src={testimonials[testimonialIndex].photo}
+                              alt={testimonials[testimonialIndex].name}
+                              className="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
+                              loading="lazy"
+                            />
+                            <div>
+                              <div className="text-sm font-semibold text-foreground">
+                                {testimonials[testimonialIndex].name}
+                              </div>
+                              <div className="text-xs text-foreground/60">
+                                {testimonials[testimonialIndex].company}
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+
+                  {/* Google Ratings */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={isContactGridInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border h-[400px] flex flex-col"
+                  >
+                    <div className="text-center flex flex-col h-full justify-center items-center">
+                      {/* Google Logo */}
+                      <div className="mb-6">
+                        <svg className="w-16 h-16 mx-auto" viewBox="0 0 48 48">
+                          <path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                          <path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                          <path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                        </svg>
+                      </div>
+
+                      {/* Rating Display */}
+                      <div className="mb-4">
+                        <div className="flex items-center justify-center gap-3 mb-3">
+                          <span className="text-4xl font-black text-primary">4.5</span>
+                          <div className="flex">
+                            {[...Array(4)].map((_, i) => (
+                              <Star key={i} className="w-7 h-7 text-yellow-400 fill-yellow-400" />
+                            ))}
+                            <Star className="w-7 h-7 text-yellow-400 fill-yellow-400 opacity-50" />
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-extrabold mb-2">Google Reviews</h3>
+                        <p className="text-base text-foreground/70 font-medium">Trusted by our customers</p>
+                      </div>
+
+                      {/* CTA Button */}
+                      {/* <div className="mt-6">
+                        <a
+                          href="https://www.google.com/search?q=manacle+technologies+reviews"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 hover:bg-primary/20 rounded-xl transition-all duration-300 text-base font-semibold hover:scale-105 border border-primary/20 hover:border-primary/30"
+                        >
+                          View Reviews on Google
+                          <ArrowRight className="w-5 h-5" />
+                        </a>
+                      </div> */}
+                    </div>
+                  </motion.div>
+                </div>
+
+
               </div>
+
+              {/* Get In Touch & Office Hours Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 48 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                className="mb-16"
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Contact Methods */}
+                  <div className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border">
+                    <h2 className="text-2xl font-extrabold mb-8 gradient-text">Get In Touch</h2>
+                    <div className="space-y-4 mb-6">
+                      <a href="mailto:sales@manacleindia.com" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-primary/10 transition-all duration-300">
+                        <div className="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center">
+                          <Mail className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-extrabold text-lg">Email Us</h3>
+                          <p className="text-foreground text-base font-medium">sales@manacleindia.com</p>
+                        </div>
+                      </a>
+
+                      <a href="tel:+919873250200" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-accent/10 transition-all duration-300">
+                        <div className="w-12 h-12 bg-gradient-to-r from-accent to-neon-purple rounded-full flex items-center justify-center">
+                          <Phone className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-extrabold text-lg">Call Us</h3>
+                          <p className="text-foreground text-base font-medium">+91 9873250200</p>
+                        </div>
+                      </a>
+
+                      <a href="https://wa.me/919873250200" target="_blank" rel="noopener noreferrer" className="contact-item-sticky flex items-center space-x-4 p-3 rounded-lg hover:bg-green-500/10 transition-all duration-300">
+                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                          <MessageCircle className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-extrabold text-lg">WhatsApp</h3>
+                          <p className="text-foreground text-base font-medium">Quick chat support</p>
+                        </div>
+                      </a>
+                    </div>
+
+                    {/* Average Response Time */}
+                    <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4 border border-primary/20">
+                      <div className="text-center">
+                        <p className="text-sm font-bold text-foreground mb-1">
+                          Average Response Time
+                        </p>
+                        <p className="text-2xl font-black text-primary">
+                          2-4 Hours
+                        </p>
+                        <p className="text-xs text-foreground/70 mt-1">
+                          During business hours
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Office Hours */}
+                  <div className="contact-card-sticky p-8 rounded-2xl bg-card/90 backdrop-blur-sm border border-glass-border">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-12 h-12 bg-gradient-to-r from-neon-blue to-neon-pink rounded-lg flex items-center justify-center">
+                        <Clock className="w-6 h-6 text-white" />
+                      </div>
+                      <h2 className="text-xl font-extrabold">Office Hours</h2>
+                    </div>
+                    <div className="space-y-4 text-base">
+                      <div className="flex justify-between">
+                        <span className="text-foreground font-bold">Monday - Friday</span>
+                        <span className="font-bold text-primary">9:00 AM - 7:00 PM</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-foreground font-bold">Saturday</span>
+                        <span className="font-bold text-primary">10:00 AM - 5:00 PM</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-foreground font-bold">Sunday</span>
+                        <span className="font-bold text-accent">Closed</span>
+                      </div>
+
+                      <div className="border-t border-glass-border pt-4 mt-6">
+                        <div className="text-center text-sm text-foreground/70">
+                          <p>All times are in <span className="font-semibold text-foreground">IST (UTC +5:30)</span></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
 
               {/* Location & Map Section with Framer Motion */}
               <motion.div

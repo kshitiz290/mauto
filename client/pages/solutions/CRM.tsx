@@ -27,14 +27,14 @@ const CRM = () => {
             {/* Breadcrumb */}
             <nav className="relative z-10 w-full max-w-7xl px-2 sm:px-10 flex items-center justify-center">
               <div className="w-full">
-                <div className="rounded-2xl bg-white/70 dark:bg-black/70 backdrop-blur-2xl shadow-2xl border border-glass-border px-10 py-7 flex flex-wrap items-center justify-center gap-4 transition-colors duration-300">
+                <div className="rounded-2xl bg-white/70 dark:bg-black/70 backdrop-blur-2xl shadow-2xl border border-glass-border px-10 py-7 flex flex-nowrap sm:flex-wrap items-center justify-center gap-2 sm:gap-4 transition-colors duration-300">
                   <div className="flex items-center gap-2 text-xl font-semibold">
                     <svg className="w-8 h-8 text-primary mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4" /></svg>
                     <span className="hidden sm:inline text-foreground/70 transition-colors duration-200">Home</span>
                     <span className="inline sm:hidden">/</span>
                   </div>
-                  <span className="mx-2 text-foreground/40 text-2xl font-light">/</span>
-                  <span className="text-primary font-bold text-xl tracking-wide transition-colors duration-200">CRM Software</span>
+                  <span className="hidden sm:inline mx-2 text-foreground/40 text-2xl font-light">/</span>
+                  <span className="text-primary font-bold text-xl tracking-wide transition-colors duration-200 text-center sm:text-left">CRM Software</span>
                 </div>
               </div>
             </nav>
