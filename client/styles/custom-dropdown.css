@@ -1,0 +1,127 @@
+/* Custom Dropdown Styling */
+.custom-dropdown {
+    position: relative;
+}
+
+/* Remove custom trigger styles since we're using Tailwind classes directly */
+
+/* Trigger styles now handled by Tailwind classes in React component */
+
+.custom-dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    margin-top: 4px;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--glass-border, var(--border)));
+    border-radius: 0.5rem;
+    /* matches rounded-lg */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    animation: dropdown-appear 0.2s ease-out;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dark .custom-dropdown-content {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes dropdown-appear {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.custom-dropdown-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid hsl(var(--border));
+    background: hsl(var(--card));
+    min-height: 56px;
+}
+
+.custom-dropdown-option:last-child {
+    border-bottom: none;
+}
+
+.custom-dropdown-option:hover {
+    background: linear-gradient(90deg, rgba(255, 152, 0, 0.1) 0%, rgba(183, 33, 255, 0.1) 100%);
+    color: hsl(var(--primary));
+    transform: translateX(4px);
+}
+
+.custom-dropdown-option.selected {
+    background: linear-gradient(90deg, rgba(255, 152, 0, 0.15) 0%, rgba(183, 33, 255, 0.15) 100%);
+    color: hsl(var(--primary));
+    font-weight: 600;
+}
+
+.custom-dropdown-chevron {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.custom-dropdown-chevron.open {
+    transform: rotate(180deg);
+}
+
+.custom-dropdown-placeholder {
+    color: hsl(var(--muted-foreground));
+}
+
+/* Scrollbar styling for dropdown */
+.custom-dropdown-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-dropdown-content::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+}
+
+.custom-dropdown-content::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground));
+    border-radius: 3px;
+}
+
+.custom-dropdown-content::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary));
+}
+
+/* Ensure trigger matches input sizing */
+.custom-dropdown .dropdown-trigger {
+    height: 56px;
+    /* same as input (py-4 + borders) */
+    line-height: 1.75rem;
+    /* matches text-lg default */
+    font-size: 1.125rem;
+    /* text-lg */
+    padding-top: 1rem;
+    /* py-4 */
+    padding-bottom: 1rem;
+}
+
+/* Normalize native select (if used) */
+.custom-dropdown select,
+.custom-dropdown select:focus {
+    height: 56px;
+    line-height: 1.75rem;
+    font-size: 1.125rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

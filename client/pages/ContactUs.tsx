@@ -19,11 +19,14 @@ import {
   Zap,
   Facebook,
   Linkedin,
-  Star
+  Star,
+  ChevronDown,
+  Check
 } from "lucide-react";
 import { Header } from "../components/ui/header";
 import { ThemeProvider } from "../components/ui/theme-provider";
 import Footer from "@/components/ui/footer";
+import "../styles/custom-dropdown.css";
 
 export function ContactUs() {
   // Shared ref for synchronizing animations (must be inside component)
@@ -37,7 +40,23 @@ export function ContactUs() {
     message: "",
     companyName: "",
     solutionType: "Web Design & Development",
+    privacyPolicy: false,
   });
+
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Solution type options
+  const solutionOptions = [
+    "Attendance & Leave Management",
+    "CRM Software",
+    "Order Management Solution",
+    "HRMS",
+    "Distributor Management Solution",
+    "Purchase Order Management",
+    "Other"
+  ];
 
   // Testimonial carousel state
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -77,6 +96,18 @@ export function ContactUs() {
     return () => clearTimeout(timer);
   }, [testimonialIndex]);
 
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   // const [meetingFormData, setMeetingFormData] = useState({
   //   fullName: "",
   //   email: "",
@@ -92,13 +123,63 @@ export function ContactUs() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  // const [isMeetingModalOpen, setIsMeetingModalOpen] = useState(false);
   // const [isMeetingSubmitting, setIsMeetingSubmitting] = useState(false);
   // const [isMeetingSubmitted, setIsMeetingSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleSolutionSelect = (value: string) => {
+    setFormData((prev) => ({ ...prev, solutionType: value }));
+    setIsDropdownOpen(false);
+    // Clear error when user selects
+    if (errors.solutionType) {
+      setErrors((prev) => ({ ...prev, solutionType: "" }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = "Full name is required";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email address is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters long";
+    }
+
+    if (formData.phone && !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/[\s\-\(\)]/g, ''))) {
+      newErrors.phone = "Please enter a valid phone number";
+    }
+
+    if (!formData.solutionType.trim()) {
+      newErrors.solutionType = "Solution type is required";
+    }
+
+    if (!formData.privacyPolicy) {
+      newErrors.privacyPolicy = "You must agree to the privacy policy";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   // const handleMeetingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -108,6 +189,11 @@ export function ContactUs() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     // Prepare email content
@@ -145,7 +231,8 @@ export function ContactUs() {
         company: "",
         message: "",
         companyName: "",
-        solutionType: "Web Design & Development",
+        solutionType: "",
+        privacyPolicy: false,
       });
       setTimeout(() => {
         setIsSubmitted(false);
@@ -280,30 +367,46 @@ export function ContactUs() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                           <label className="block text-lg font-bold mb-3">
-                            Full Name
+                            Full Name <span className="text-red-500">*</span>
                           </label>
                           <Input
                             name="fullName"
                             value={formData.fullName}
                             onChange={handleChange}
-                            required
-                            className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                            className={`w-full px-6 py-4 text-lg bg-secondary/50 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${errors.fullName
+                              ? 'border-red-500 focus:ring-red-500 bg-red-50/10'
+                              : 'border-glass-border focus:ring-primary'
+                              }`}
                             placeholder="Your Name"
                           />
+                          {errors.fullName && (
+                            <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs">!</span>
+                              {errors.fullName}
+                            </p>
+                          )}
                         </div>
                         <div>
                           <label className="block text-lg font-bold mb-3">
-                            Email Address
+                            Email Address <span className="text-red-500">*</span>
                           </label>
                           <Input
                             name="email"
                             type="email"
                             value={formData.email}
                             onChange={handleChange}
-                            required
-                            className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                            className={`w-full px-6 py-4 text-lg bg-secondary/50 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${errors.email
+                              ? 'border-red-500 focus:ring-red-500 bg-red-50/10'
+                              : 'border-glass-border focus:ring-primary'
+                              }`}
                             placeholder="your@email.com"
                           />
+                          {errors.email && (
+                            <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs">!</span>
+                              {errors.email}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -315,9 +418,18 @@ export function ContactUs() {
                             name="companyName"
                             value={formData.companyName}
                             onChange={handleChange}
-                            className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                            className={`w-full px-6 py-4 text-lg bg-secondary/50 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${errors.companyName
+                              ? 'border-red-500 focus:ring-red-500 bg-red-50/10'
+                              : 'border-glass-border focus:ring-primary'
+                              }`}
                             placeholder="Your Company Name"
                           />
+                          {errors.companyName && (
+                            <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs">!</span>
+                              {errors.companyName}
+                            </p>
+                          )}
                         </div>
                       </div>
 
@@ -331,46 +443,125 @@ export function ContactUs() {
                             type="tel"
                             value={formData.phone}
                             onChange={handleChange}
-                            className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                            className={`w-full px-6 py-4 text-lg bg-secondary/50 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 ${errors.phone
+                              ? 'border-red-500 focus:ring-red-500 bg-red-50/10'
+                              : 'border-glass-border focus:ring-primary'
+                              }`}
                             placeholder="+1 (555) 123-4567"
                           />
+                          {errors.phone && (
+                            <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs">!</span>
+                              {errors.phone}
+                            </p>
+                          )}
                         </div>
                         <div>
                           <label className="block text-lg font-bold mb-3">
-                            Solution Type
+                            Solution Type <span className="text-red-500">*</span>
                           </label>
-                          <div className="w-full">
-                            <select
-                              name="solutionType"
-                              value={formData.solutionType}
-                              onChange={handleChange}
-                              className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300"
+                          <div className="custom-dropdown" ref={dropdownRef}>
+                            <div
+                              className={`w-full px-6 h-[56px] text-lg leading-[1.75rem] bg-secondary/50 border rounded-lg focus:outline-none focus:ring-2 transition-all duration-300 cursor-pointer flex items-center justify-between dropdown-trigger ${errors.solutionType
+                                ? 'border-red-500 focus:ring-red-500 bg-red-50/10'
+                                : 'border-glass-border focus:ring-primary'
+                                }`}
+                              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                              tabIndex={0}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault();
+                                  setIsDropdownOpen(!isDropdownOpen);
+                                }
+                              }}
                             >
-                              <option>Attendance & Leave Management</option>
-                              <option>CRM Software</option>
-                              <option>Order Management Solution</option>
-                              <option>HRMS</option>
-                              <option>Distributor Management Solution</option>
-                              <option>Purchase Order Management</option>
-                              <option>Other</option>
-                            </select>
+                              <span className={formData.solutionType ? '' : 'custom-dropdown-placeholder'}>
+                                {formData.solutionType || 'Select a solution type'}
+                              </span>
+                              <ChevronDown className={`w-5 h-5 text-foreground/60 custom-dropdown-chevron ${isDropdownOpen ? 'open' : ''}`} />
+                            </div>
+
+                            {isDropdownOpen && (
+                              <div className="custom-dropdown-content">
+                                {solutionOptions.map((option) => (
+                                  <div
+                                    key={option}
+                                    className={`custom-dropdown-option ${formData.solutionType === option ? 'selected' : ''}`}
+                                    onClick={() => handleSolutionSelect(option)}
+                                  >
+                                    <span>{option}</span>
+                                    {formData.solutionType === option && (
+                                      <Check className="w-4 h-4 text-primary" />
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
+                          {errors.solutionType && (
+                            <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs">!</span>
+                              {errors.solutionType}
+                            </p>
+                          )}
                         </div>
                       </div>
 
                       <div>
                         <label className="block text-lg font-bold mb-3">
-                          Additional Message
+                          Additional Message <span className="text-red-500">*</span>
                         </label>
                         <Textarea
                           name="message"
                           value={formData.message}
                           onChange={handleChange}
-                          required
                           rows={6}
-                          className="w-full px-6 py-4 text-lg bg-secondary/50 border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none transition-all duration-300"
+                          className={`w-full px-6 py-4 text-lg bg-secondary/50 border rounded-lg focus:outline-none focus:ring-2 resize-none transition-all duration-300 ${errors.message
+                            ? 'border-red-500 focus:ring-red-500 bg-red-50/10'
+                            : 'border-glass-border focus:ring-primary'
+                            }`}
                           placeholder="Tell us about your project requirements, timeline, and budget..."
                         />
+                        {errors.message && (
+                          <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
+                            <span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs">!</span>
+                            {errors.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Privacy Policy Checkbox */}
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          id="privacyPolicy"
+                          name="privacyPolicy"
+                          checked={formData.privacyPolicy}
+                          onChange={handleChange}
+                          className={`mt-1 w-5 h-5 rounded border-2 transition-all duration-300 ${errors.privacyPolicy
+                            ? 'border-red-500 focus:ring-red-500'
+                            : 'border-glass-border focus:ring-primary'
+                            }`}
+                        />
+                        <div className="flex-1">
+                          <label htmlFor="privacyPolicy" className="text-base text-foreground cursor-pointer">
+                            I agree to Manacle Technologies{' '}
+                            <a
+                              href="/privacy-policy"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:text-accent underline font-semibold"
+                            >
+                              Privacy Policy
+                            </a>
+                          </label>
+                          {errors.privacyPolicy && (
+                            <p className="mt-2 text-sm text-red-500 flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-white text-xs">!</span>
+                              {errors.privacyPolicy}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
                       <Button
@@ -556,7 +747,7 @@ export function ContactUs() {
                     </div>
 
                     {/* Average Response Time */}
-                    
+
                   </div>
 
                   {/* Office Hours */}
@@ -583,20 +774,20 @@ export function ContactUs() {
 
                       <div className="border-t border-glass-border pt-4 mt-6">
                         <div className="text-center text-sm text-foreground/70">
-                        <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4 border border-primary/20">
-                      <div className="text-center">
-                        <p className="text-sm font-bold text-foreground mb-1">
-                          Average Response Time
-                        </p>
-                        <p className="text-2xl font-black text-primary">
-                          1-2 Hours
-                        </p>
-                        <p className="text-xs text-foreground/70 mt-1">
-                          During business hours
-                        </p>
-                      </div>
-                    </div>
-                          
+                          <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4 border border-primary/20">
+                            <div className="text-center">
+                              <p className="text-sm font-bold text-foreground mb-1">
+                                Average Response Time
+                              </p>
+                              <p className="text-2xl font-black text-primary">
+                                1-2 Hours
+                              </p>
+                              <p className="text-xs text-foreground/70 mt-1">
+                                During business hours
+                              </p>
+                            </div>
+                          </div>
+
                         </div>
                       </div>
                     </div>

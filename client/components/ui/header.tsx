@@ -196,7 +196,7 @@ export function Header() {
 
   const navItems: NavItem[] = [
     { name: "Home", href: "/" },
-    { name: "Website Builder", href: "/auto-site", highlight: true },
+    // { name: "Website Builder", href: "/auto-site", highlight: true },
     {
       name: "Our Solutions",
       href: "#",
