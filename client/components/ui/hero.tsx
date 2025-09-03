@@ -1,121 +1,1336 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "./button";
 import { ArrowRight, Play, Globe, CheckCircle } from "lucide-react";
+import { useTheme } from "./theme-provider";
+import { useRef } from "react";
+import { CompactSolutions } from "./compact-solutions";
+
+// Load Fredoka font (modern Gen Z style)
+if (typeof document !== 'undefined') {
+  const link = document.createElement('link');
+  link.href = 'https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap';
+  link.rel = 'stylesheet';
+  document.head.appendChild(link);
+}
 
 export function Hero() {
-  return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 overflow-hidden">
-      {/* Navigation Header */}
-      <motion.header 
-        className="relative z-50 w-full px-6 py-4 lg:px-8 lg:py-6"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <motion.div 
-            className="flex items-center space-x-2"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-              <Globe className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Manacle
-            </span>
-          </motion.div>
-          
-          <nav className="hidden lg:flex items-center space-x-8">
-            {["Solutions", "Features", "Pricing", "About", "Contact"].map((item) => (
-              <motion.a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-slate-600 hover:text-blue-600 font-medium transition-colors duration-200"
-                whileHover={{ y: -2 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
-                {item}
-              </motion.a>
-            ))}
-          </nav>
+  const { theme } = useTheme();
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
 
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" className="hidden sm:flex">
-              Sign In
-            </Button>
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-              Get Started
-            </Button>
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
+  return (
+    <div ref={ref} className={`relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900/40 overflow-hidden`}>
+      {/* Professional Space-Type Orbital Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Central Data Core */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-32 h-32"
+          style={{ top: 'calc(50% + 80px)' }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="w-full h-full bg-gradient-to-br from-orange-500/10 to-yellow-400/10 dark:from-orange-400/15 dark:to-yellow-300/15 rounded-full blur-xl" />
+          <div className="absolute inset-4 bg-gradient-to-br from-orange-400/15 to-yellow-500/15 dark:from-orange-300/20 dark:to-yellow-400/20 rounded-full blur-lg" />
+          <div className="absolute inset-8 bg-gradient-to-br from-white/20 to-orange-200/20 dark:from-white/10 dark:to-orange-200/10 rounded-full" />
+        </motion.div>
+
+        {/* Orbital Ring 1 - Inner */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-80 h-80"
+          style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="relative w-full h-full border border-orange-300/20 dark:border-orange-400/30 rounded-full">
+            {/* Data Nodes on Orbit */}
+            {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+              <motion.div
+                key={`inner-${i}`}
+                className="absolute w-3 h-3 bg-gradient-to-r from-orange-400 to-yellow-400 dark:from-orange-300 dark:to-yellow-300 rounded-full shadow-lg"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-150px) rotate(-${angle}deg)`
+                }}
+                animate={{
+                  scale: [1, 1.3, 1],
+                  opacity: [0.7, 1, 0.7]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3
+                }}
+              />
+            ))}
           </div>
+        </motion.div>
+
+        {/* Orbital Ring 2 - Middle */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-[500px] h-[500px]"
+          style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
+          animate={{ rotate: [360, 0] }}
+          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="relative w-full h-full border border-yellow-300/15 dark:border-yellow-400/25 rounded-full">
+            {/* Business Icons on Orbit */}
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+              <motion.div
+                key={`middle-${i}`}
+                className="absolute w-4 h-4 rounded-full"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-240px) rotate(-${angle}deg)`
+                }}
+              >
+                <div className={`w-full h-full bg-gradient-to-br ${i % 4 === 0 ? 'from-orange-400 to-yellow-400' :
+                  i % 4 === 1 ? 'from-yellow-400 to-orange-400' :
+                    i % 4 === 2 ? 'from-primary to-accent' :
+                      'from-accent to-primary'
+                  } rounded-full opacity-60 dark:opacity-80`} />
+                {/* Data pulse effect */}
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 border-orange-300/50 dark:border-yellow-300/50"
+                  animate={{
+                    scale: [1, 2, 1],
+                    opacity: [0.8, 0, 0.8]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: i * 0.4
+                  }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Orbital Ring 3 - Outer */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-[700px] h-[700px]"
+          style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="relative w-full h-full border border-orange-300/10 dark:border-orange-400/20 rounded-full">
+            {/* Satellite Data Points */}
+            {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => (
+              <motion.div
+                key={`outer-${i}`}
+                className="absolute w-2 h-2 bg-gradient-to-r from-orange-400/70 to-yellow-400/70 dark:from-orange-300/80 dark:to-yellow-300/80 rounded-full"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-340px) rotate(-${angle}deg)`
+                }}
+                animate={{
+                  opacity: [0.3, 0.8, 0.3],
+                  scale: [0.8, 1.2, 0.8]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2
+                }}
+              />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Dynamic Data Streams */}
+        <svg className="absolute inset-0 w-full h-full opacity-30 dark:opacity-30" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" style={{ transform: 'translateY(60px)' }}>
+          {/* Reduced curvy lines - covering full screen */}
+          <motion.path
+            d="M 0 340 Q 300 240 600 340 Q 900 440 1200 340"
+            stroke="url(#dataStream1)"
+            strokeWidth="2"
+            fill="none"
+            strokeDasharray="10,5"
+            className="dark:stroke-[url(#dataStream1Dark)]"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{
+              pathLength: [0, 1, 0],
+              opacity: [0, 0.8, 0]
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              times: [0, 0.5, 1]
+            }}
+          />
+
+          <motion.path
+            d="M 0 190 Q 300 140 600 240 Q 900 340 1200 290"
+            stroke="url(#sexyGradient1)"
+            strokeWidth="2.5"
+            fill="none"
+            strokeDasharray="15,8"
+            className="dark:stroke-[url(#sexyGradient1Dark)]"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{
+              pathLength: [0, 1, 0],
+              opacity: [0, 0.7, 0]
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 3,
+              times: [0, 0.4, 1]
+            }}
+          />
+
+          {/* Data Binary Streams - Full screen coverage */}
+          <motion.g opacity="0.6">
+            {/* Top-left binary stream */}
+            {[0, 1, 0, 1, 1].map((bit, i) => (
+              <motion.text
+                key={`binary-tl-${i}`}
+                x={50 + i * 40}
+                y={120}
+                fill="url(#binaryGradient)"
+                fontSize="12"
+                fontFamily="monospace"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [120, 100, 80]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.3
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+
+            {/* Top-right binary stream - Always visible in large portraits */}
+            {[1, 0, 1, 0, 1].map((bit, i) => (
+              <motion.text
+                key={`binary-tr-${i}`}
+                x={800 + i * 35}
+                y={180}
+                fill="url(#binaryGradient)"
+                fontSize="12"
+                fontFamily="monospace"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [180, 160, 140]
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.4
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+
+            {/* Center binary stream for large portraits */}
+            {[1, 0, 1, 1, 0].map((bit, i) => (
+              <motion.text
+                key={`binary-c-${i}`}
+                x={400 + i * 45}
+                y={300}
+                fill="url(#binaryGradient)"
+                fontSize="11"
+                fontFamily="monospace"
+                className="lp:block"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [300, 280, 260]
+                }}
+                transition={{
+                  duration: 4.2,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.25
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+
+            {/* Bottom binary stream */}
+            {[1, 1, 0, 1, 0].map((bit, i) => (
+              <motion.text
+                key={`binary-b-${i}`}
+                x={300 + i * 50}
+                y={620}
+                fill="url(#binaryGradient)"
+                fontSize="11"
+                fontFamily="monospace"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [620, 600, 580]
+                }}
+                transition={{
+                  duration: 4.5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.35
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+
+            {/* Extended binary streams for large portraits */}
+            {[0, 1, 0, 1].map((bit, i) => (
+              <motion.text
+                key={`binary-ext-${i}`}
+                x={150 + i * 60}
+                y={450}
+                fill="url(#binaryGradient)"
+                fontSize="10"
+                fontFamily="monospace"
+                className="lp:block"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [450, 430, 410]
+                }}
+                transition={{
+                  duration: 5.5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.5
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+          </motion.g>
+
+          {/* Database/Server Icons - Full screen distribution */}
+          <motion.g>
+            {/* Top-left server stack */}
+            <motion.rect
+              x="80"
+              y="250"
+              width="25"
+              height="6"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3, repeat: Infinity, delay: 0 }}
+            />
+            <motion.rect
+              x="80"
+              y="259"
+              width="25"
+              height="6"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+            />
+            <motion.rect
+              x="80"
+              y="268"
+              width="25"
+              height="6"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+            />
+
+            {/* Center server stack for large portraits */}
+            <motion.rect
+              x="500"
+              y="350"
+              width="28"
+              height="7"
+              rx="1"
+              fill="url(#serverGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3.2, repeat: Infinity, delay: 0.8 }}
+            />
+            <motion.rect
+              x="500"
+              y="360"
+              width="28"
+              height="7"
+              rx="1"
+              fill="url(#serverGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3.2, repeat: Infinity, delay: 1.3 }}
+            />
+
+            {/* Bottom-right server stack */}
+            <motion.rect
+              x="1000"
+              y="520"
+              width="30"
+              height="7"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }}
+            />
+            <motion.rect
+              x="1000"
+              y="530"
+              width="30"
+              height="7"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3.5, repeat: Infinity, delay: 2 }}
+            />
+
+            {/* Far right server for wide screens */}
+            <motion.rect
+              x="1100"
+              y="300"
+              width="22"
+              height="5"
+              rx="1"
+              fill="url(#serverGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.2, 0.6, 0.2],
+                scale: [0.9, 1.1, 0.9]
+              }}
+              transition={{ duration: 4, repeat: Infinity, delay: 2.5 }}
+            />
+          </motion.g>
+
+          {/* Cloud Computing Shapes - Extended coverage */}
+          <motion.g>
+            {/* Top-right cloud */}
+            <motion.path
+              d="M 950 150 Q 965 135 985 150 Q 1005 135 1020 150 Q 1035 165 1020 180 Q 1005 165 985 180 Q 965 165 950 150"
+              fill="url(#cloudGradient)"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+                scale: [0.8, 1.1, 0.8],
+                y: [0, -8, 0]
+              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
+
+            {/* Left-center cloud */}
+            <motion.path
+              d="M 120 350 Q 135 335 155 350 Q 175 335 190 350 Q 205 365 190 380 Q 175 365 155 380 Q 135 365 120 350"
+              fill="url(#cloudGradient)"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.2, 0.5, 0.2],
+                scale: [0.9, 1.2, 0.9],
+                y: [0, -12, 0]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            />
+
+            {/* Center cloud for large portraits */}
+            <motion.path
+              d="M 550 450 Q 565 435 585 450 Q 605 435 620 450 Q 635 465 620 480 Q 605 465 585 480 Q 565 465 550 450"
+              fill="url(#cloudGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.25, 0.55, 0.25],
+                scale: [0.85, 1.15, 0.85],
+                y: [0, -10, 0]
+              }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+            />
+
+            {/* Bottom-center cloud */}
+            <motion.path
+              d="M 350 580 Q 365 565 385 580 Q 405 565 420 580 Q 435 595 420 610 Q 405 595 385 610 Q 365 595 350 580"
+              fill="url(#cloudGradient)"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.25, 0.55, 0.25],
+                scale: [0.85, 1.15, 0.85],
+                y: [0, -10, 0]
+              }}
+              transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut", delay: 3.5 }}
+            />
+
+            {/* Far top cloud */}
+            <motion.path
+              d="M 700 80 Q 715 65 735 80 Q 755 65 770 80 Q 785 95 770 110 Q 755 95 735 110 Q 715 95 700 80"
+              fill="url(#cloudGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.2, 0.4, 0.2],
+                scale: [0.8, 1.0, 0.8],
+                y: [0, -6, 0]
+              }}
+              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+            />
+          </motion.g>
+
+          {/* Network Nodes - Full screen distribution */}
+          <motion.g>
+            {/* Top network cluster */}
+            {[
+              [200, 200], [280, 180], [340, 220]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-top-${i}`}
+                cx={x}
+                cy={y}
+                r="3"
+                fill="url(#nodeGradient)"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.5, 1, 0.5],
+                  scale: [0.8, 1.3, 0.8]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3
+                }}
+              />
+            ))}
+
+            {/* Center network cluster for large portraits */}
+            {[
+              [550, 300], [620, 280], [680, 320]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-center-${i}`}
+                cx={x}
+                cy={y}
+                r="2.5"
+                fill="url(#nodeGradient)"
+                className="lp:block"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.4, 0.8, 0.4],
+                  scale: [0.7, 1.2, 0.7]
+                }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.35 + 1.5
+                }}
+              />
+            ))}
+
+            {/* Bottom-right network cluster */}
+            {[
+              [800, 480], [880, 460], [920, 500]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-br-${i}`}
+                cx={x}
+                cy={y}
+                r="2.5"
+                fill="url(#nodeGradient)"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.4, 0.9, 0.4],
+                  scale: [0.7, 1.2, 0.7]
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.4 + 1
+                }}
+              />
+            ))}
+
+            {/* Far right nodes for wide screens */}
+            {[
+              [1050, 350], [1120, 370]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-far-${i}`}
+                cx={x}
+                cy={y}
+                r="2"
+                fill="url(#nodeGradient)"
+                className="lp:block"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.3, 0.7, 0.3],
+                  scale: [0.6, 1.1, 0.6]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.5 + 2.5
+                }}
+              />
+            ))}
+
+            {/* Network connections - Extended */}
+            <motion.line
+              x1="200" y1="200" x2="280" y2="180"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+            />
+            <motion.line
+              x1="800" y1="480" x2="880" y2="460"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+            />
+            <motion.line
+              x1="550" y1="300" x2="620" y2="280"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              className="lp:block"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, delay: 2.5 }}
+            />
+            <motion.line
+              x1="1050" y1="350" x2="1120" y2="370"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.6"
+              strokeDasharray="1.5,1"
+              className="lp:block"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 5, repeat: Infinity, delay: 3.5 }}
+            />
+          </motion.g>
+
+          {/* Data Chart Bars - Full screen distribution */}
+          <motion.g>
+            {/* Top-right mini chart */}
+            {[15, 25, 12, 28].map((height, i) => (
+              <motion.rect
+                key={`chart-tr-${i}`}
+                x={950 + i * 12}
+                y={250 - height}
+                width="8"
+                height={height}
+                fill="url(#chartGradient)"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.8, 1],
+                  opacity: [0.4, 0.8, 0.6, 0.8]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+
+            {/* Center chart for large portraits */}
+            {[22, 35, 18, 40, 25].map((height, i) => (
+              <motion.rect
+                key={`chart-center-${i}`}
+                x={500 + i * 14}
+                y={500 - height}
+                width="10"
+                height={height}
+                fill="url(#chartGradient)"
+                className="lp:block"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.7, 1],
+                  opacity: [0.3, 0.7, 0.5, 0.7]
+                }}
+                transition={{
+                  duration: 3.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.25 + 1
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+
+            {/* Bottom-left mini chart */}
+            {[18, 30, 20].map((height, i) => (
+              <motion.rect
+                key={`chart-bl-${i}`}
+                x={150 + i * 15}
+                y={550 - height}
+                width="10"
+                height={height}
+                fill="url(#chartGradient)"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.7, 1],
+                  opacity: [0.3, 0.7, 0.5, 0.7]
+                }}
+                transition={{
+                  duration: 3.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3 + 1.5
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+
+            {/* Far right chart */}
+            {[16, 24, 14, 30].map((height, i) => (
+              <motion.rect
+                key={`chart-far-${i}`}
+                x={1080 + i * 10}
+                y={450 - height}
+                width="7"
+                height={height}
+                fill="url(#chartGradient)"
+                className="lp:block"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.8, 1],
+                  opacity: [0.2, 0.6, 0.4, 0.6]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2 + 2
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+          </motion.g>
+
+          {/* CPU/Processor Representation - Extended coverage */}
+          <motion.g>
+            {/* Top-center CPU */}
+            <motion.rect
+              x="450"
+              y="180"
+              width="20"
+              height="20"
+              rx="1"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="0.8"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.9, 1.1, 0.9]
+              }}
+              transition={{ duration: 4, repeat: Infinity }}
+            />
+
+            {/* CPU pins */}
+            {[0, 1, 2].map((i) => (
+              <motion.rect
+                key={`pin-tc-${i}`}
+                x={449 + i * 6}
+                y="204"
+                width="1.5"
+                height="5"
+                fill="url(#pinGradient)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.3, 0.7, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
+              />
+            ))}
+
+            {/* Center CPU for large portraits */}
+            <motion.rect
+              x="600"
+              y="400"
+              width="22"
+              height="22"
+              rx="1"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="0.9"
+              className="lp:block"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.88, 1.08, 0.88]
+              }}
+              transition={{ duration: 4.5, repeat: Infinity, delay: 1.5 }}
+            />
+
+            {/* CPU pins for center */}
+            {[0, 1, 2, 3].map((i) => (
+              <motion.rect
+                key={`pin-center-${i}`}
+                x={599 + i * 5.5}
+                y="426"
+                width="1.5"
+                height="5"
+                fill="url(#pinGradient)"
+                className="lp:block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.2, 0.6, 0.2] }}
+                transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.12 + 1.5 }}
+              />
+            ))}
+
+            {/* Bottom-right CPU */}
+            <motion.rect
+              x="880"
+              y="550"
+              width="25"
+              height="25"
+              rx="1.5"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="1"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.85, 1.05, 0.85]
+              }}
+              transition={{ duration: 5, repeat: Infinity, delay: 2 }}
+            />
+
+            {/* CPU pins for bottom-right */}
+            {[0, 1, 2, 3].map((i) => (
+              <motion.rect
+                key={`pin-br-${i}`}
+                x={879 + i * 6}
+                y="580"
+                width="2"
+                height="6"
+                fill="url(#pinGradient)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.2, 0.6, 0.2] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.15 + 2 }}
+              />
+            ))}
+
+            {/* Far right CPU for wide screens */}
+            <motion.rect
+              x="1050"
+              y="200"
+              width="18"
+              height="18"
+              rx="1"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="0.7"
+              className="lp:block"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.2, 0.5, 0.2],
+                scale: [0.9, 1.1, 0.9]
+              }}
+              transition={{ duration: 6, repeat: Infinity, delay: 3 }}
+            />
+
+            {/* CPU pins for far right */}
+            {[0, 1, 2].map((i) => (
+              <motion.rect
+                key={`pin-far-${i}`}
+                x={1049 + i * 5}
+                y="222"
+                width="1.2"
+                height="4"
+                fill="url(#pinGradient)"
+                className="lp:block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.1, 0.4, 0.1] }}
+                transition={{ duration: 3, repeat: Infinity, delay: i * 0.1 + 3 }}
+              />
+            ))}
+          </motion.g>
+
+          {/* Network Nodes - Dispersed across screen */}
+          <motion.g className="hidden lg:block">
+            {/* Top network cluster */}
+            {[
+              [200, 200], [280, 180], [340, 220]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-top-${i}`}
+                cx={x}
+                cy={y}
+                r="3"
+                fill="url(#nodeGradient)"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.5, 1, 0.5],
+                  scale: [0.8, 1.3, 0.8]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3
+                }}
+              />
+            ))}
+
+            {/* Bottom-right network cluster */}
+            {[
+              [700, 380], [780, 360], [820, 400]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-br-${i}`}
+                cx={x}
+                cy={y}
+                r="2.5"
+                fill="url(#nodeGradient)"
+                className="hidden xl:block"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.4, 0.9, 0.4],
+                  scale: [0.7, 1.2, 0.7]
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.4 + 1
+                }}
+              />
+            ))}
+
+            {/* Network connections */}
+            <motion.line
+              x1="200" y1="200" x2="280" y2="180"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+            />
+            <motion.line
+              x1="700" y1="380" x2="780" y2="360"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              className="hidden xl:block"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+            />
+          </motion.g>
+
+          {/* Data Chart Bars - Dispersed */}
+          <motion.g className="hidden md:block">
+            {/* Top-right mini chart */}
+            {[15, 25, 12, 28].map((height, i) => (
+              <motion.rect
+                key={`chart-tr-${i}`}
+                x={850 + i * 12}
+                y={300 - height}
+                width="8"
+                height={height}
+                fill="url(#chartGradient)"
+                className="hidden lg:block"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.8, 1],
+                  opacity: [0.4, 0.8, 0.6, 0.8]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+
+            {/* Bottom-left mini chart */}
+            {[18, 30, 20].map((height, i) => (
+              <motion.rect
+                key={`chart-bl-${i}`}
+                x={150 + i * 15}
+                y={450 - height}
+                width="10"
+                height={height}
+                fill="url(#chartGradient)"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.7, 1],
+                  opacity: [0.3, 0.7, 0.5, 0.7]
+                }}
+                transition={{
+                  duration: 3.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3 + 1.5
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+          </motion.g>
+
+          {/* CPU/Processor Representation - Dispersed */}
+          <motion.g className="hidden lg:block">
+            {/* Top-center CPU */}
+            <motion.rect
+              x="450"
+              y="180"
+              width="20"
+              height="20"
+              rx="1"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="0.8"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.9, 1.1, 0.9]
+              }}
+              transition={{ duration: 4, repeat: Infinity }}
+            />
+
+            {/* CPU pins */}
+            {[0, 1, 2].map((i) => (
+              <motion.rect
+                key={`pin-tc-${i}`}
+                x={449 + i * 6}
+                y="204"
+                width="1.5"
+                height="5"
+                fill="url(#pinGradient)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.3, 0.7, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
+              />
+            ))}
+
+            {/* Bottom-right CPU */}
+            <motion.rect
+              x="780"
+              y="450"
+              width="25"
+              height="25"
+              rx="1.5"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="1"
+              className="hidden xl:block"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.85, 1.05, 0.85]
+              }}
+              transition={{ duration: 5, repeat: Infinity, delay: 2 }}
+            />
+
+            {/* CPU pins for bottom-right */}
+            {[0, 1, 2, 3].map((i) => (
+              <motion.rect
+                key={`pin-br-${i}`}
+                x={779 + i * 6}
+                y="480"
+                width="2"
+                height="6"
+                fill="url(#pinGradient)"
+                className="hidden xl:block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.2, 0.6, 0.2] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.15 + 2 }}
+              />
+            ))}
+          </motion.g>
+
+          <defs>
+            {/* Light theme gradients */}
+            <linearGradient id="dataStream1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#64748b" stopOpacity="0.4" />
+              <stop offset="50%" stopColor="#475569" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#334155" stopOpacity="0.4" />
+            </linearGradient>
+            <linearGradient id="sexyGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.3" />
+              <stop offset="30%" stopColor="#eab308" stopOpacity="0.4" />
+              <stop offset="70%" stopColor="#f97316" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#ea580c" stopOpacity="0.25" />
+            </linearGradient>
+            <linearGradient id="binaryGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#64748b" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#94a3b8" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="serverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.4" />
+            </linearGradient>
+            <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#64748b" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#475569" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#eab308" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#f97316" stopOpacity="0.25" />
+            </linearGradient>
+            <linearGradient id="cpuGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.35" />
+            </linearGradient>
+            <linearGradient id="cpuBorderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="pinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#64748b" stopOpacity="0.25" />
+            </linearGradient>
+
+            {/* Dark theme gradients */}
+            <linearGradient id="dataStream1Dark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#06B6D4" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#3B82F6" stopOpacity="1" />
+              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.8" />
+            </linearGradient>
+            <linearGradient id="sexyGradient1Dark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.9" />
+              <stop offset="30%" stopColor="#eab308" stopOpacity="1" />
+              <stop offset="70%" stopColor="#f97316" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#ea580c" stopOpacity="0.7" />
+            </linearGradient>
+            <linearGradient id="binaryGradientDark" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.4" />
+            </linearGradient>
+            <linearGradient id="serverGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.8" />
+            </linearGradient>
+            <linearGradient id="cloudGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.6" />
+            </linearGradient>
+            <linearGradient id="nodeGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.6" />
+            </linearGradient>
+            <linearGradient id="connectionGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.7" />
+            </linearGradient>
+            <linearGradient id="chartGradientDark" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#eab308" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#f97316" stopOpacity="0.5" />
+            </linearGradient>
+            <linearGradient id="cpuGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.7" />
+            </linearGradient>
+            <linearGradient id="cpuBorderGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.6" />
+            </linearGradient>
+            <linearGradient id="pinGradientDark" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#64748b" stopOpacity="0.5" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        {/* Floating Data Particles */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className={`absolute w-1 h-1 rounded-full ${i % 3 === 0 ? 'bg-orange-400 dark:bg-orange-300' :
+              i % 3 === 1 ? 'bg-yellow-400 dark:bg-yellow-300' :
+                'bg-orange-300 dark:bg-yellow-400'
+              }`}
+            style={{
+              left: `${15 + (i * 7) % 70}%`,
+              top: `${20 + (i * 11) % 60}%`
+            }}
+            animate={{
+              y: [0, -20, 0],
+              x: [0, 10, 0],
+              opacity: [0.4, 1, 0.4],
+              scale: [0.5, 1.2, 0.5]
+            }}
+            transition={{
+              duration: 6 + (i % 3),
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5
+            }}
+          />
+        ))}
+
+        {/* Subtle Tech Grid */}
+        <div className="absolute inset-0 opacity-5 dark:opacity-10">
+          <div className="w-full h-full" style={{
+            backgroundImage: `
+              radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 2px, transparent 2px),
+              radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 2px, transparent 2px)
+            `,
+            backgroundSize: '60px 60px',
+            backgroundPosition: '0 0, 30px 30px'
+          }} />
         </div>
-      </motion.header>
+
+        {/* Ambient Glow Effects */}
+        <motion.div
+          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-orange-500/10 to-yellow-500/10 dark:from-orange-400/20 dark:to-yellow-400/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.4, 0.7, 0.4]
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+        />
+      </div>
 
       {/* Main Hero Content */}
-      <motion.main 
-        className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-120px)] px-6 py-20 lg:px-8 lg:py-32"
+      <motion.main
+        className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 pt-20 pb-8 lg:px-8 lg:pt-32 lg:pb-12"
+        style={{ paddingTop: '120px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Background Decorative Elements */}
+        {/* Animated Strip Lines */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Third Strip Line (diagonal) */}
           <motion.div
-            className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.2, 0.4, 0.2],
-              x: [0, 30, 0],
-              y: [0, -20, 0]
+            className="absolute w-px h-full bg-gradient-to-b from-transparent via-purple-400/20 to-transparent dark:via-purple-300/30"
+            style={{
+              left: '15%',
+              transform: 'rotate(15deg)',
+              transformOrigin: 'center',
             }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            animate={{
+              opacity: [0.2, 0.6, 0.2],
+              scaleY: [0.5, 1, 0.5],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
           />
+
+          {/* Fourth Strip Line (diagonal opposite) */}
           <motion.div
-            className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-purple-400/15 to-pink-400/15 rounded-full blur-3xl"
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.15, 0.3, 0.15],
-              x: [0, -40, 0],
-              y: [0, 30, 0]
+            className="absolute w-px h-full bg-gradient-to-b from-transparent via-emerald-400/20 to-transparent dark:via-emerald-300/30"
+            style={{
+              right: '15%',
+              transform: 'rotate(-15deg)',
+              transformOrigin: 'center',
             }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          />
-          <motion.div
-            className="absolute bottom-20 left-1/4 w-64 h-64 bg-gradient-to-br from-cyan-400/20 to-blue-400/20 rounded-full blur-3xl"
             animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.2, 0.35, 0.2],
-              rotate: [0, 180, 360]
+              opacity: [0.6, 0.2, 0.6],
+              scaleY: [1, 0.5, 1],
             }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
           />
         </div>
+
         {/* Hero Headline */}
-        <motion.h1 
-          className="text-4xl sm:text-5xl lg:text-7xl font-bold text-center text-slate-900 max-w-6xl leading-tight"
+        <motion.h1
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center text-slate-900 dark:text-slate-100 max-w-6xl leading-tight"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           Empowering Businesses with{" "}
-          <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent animate-gradient-x bg-size-200">
             Smarter Software Solutions
           </span>
         </motion.h1>
 
         {/* Subheadline */}
-        <motion.p 
-          className="mt-6 text-xl sm:text-2xl text-slate-600 text-center max-w-4xl leading-relaxed"
+        <motion.p
+          className="mt-6 text-xl sm:text-2xl md:text-2xl text-slate-600 dark:text-slate-300 text-center max-w-4xl leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          Your one-stop solution for CRM, ERP, HRMS, SFA, and more. 
-          <span className="font-semibold text-slate-700"> Transform your business operations</span> with our comprehensive suite of enterprise software.
+          Your one-stop solution for CRM, ERP, HRMS, SFA, and more.
+          <span className="font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"> Transform your business operations</span> with our comprehensive suite of enterprise software.
         </motion.p>
 
         {/* CTA Buttons */}
-        <motion.div 
+        <motion.div
           className="mt-10 flex flex-col sm:flex-row items-center gap-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -126,18 +1341,18 @@ export function Hero() {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+            <Button size="lg" className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 hover:from-orange-600 hover:via-yellow-500 hover:to-orange-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
               <Play className="w-5 h-5 mr-2" />
               Start Free Trial
             </Button>
           </motion.div>
-          
+
           <motion.div
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <Button variant="outline" size="lg" className="border-2 border-slate-300 hover:border-blue-500 text-slate-700 hover:text-blue-600 px-8 py-4 text-lg font-semibold transition-all duration-300">
+            <Button variant="outline" size="lg" className="border-2 border-orange-300 dark:border-orange-400 text-orange-600 dark:text-orange-400 hover:border-orange-500 hover:text-orange-700 dark:hover:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-8 py-4 text-lg font-semibold transition-all duration-300">
               Explore Solutions
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
@@ -145,8 +1360,8 @@ export function Hero() {
         </motion.div>
 
         {/* Trust Indicators */}
-        <motion.div 
-          className="mt-12 flex flex-wrap items-center justify-center gap-8 text-slate-500"
+        <motion.div
+          className="mt-12 flex flex-wrap items-center justify-center gap-8 text-slate-500 dark:text-slate-400"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
@@ -166,153 +1381,244 @@ export function Hero() {
         </motion.div>
       </motion.main>
 
-      {/* Hero Visual / Illustration */}
-      <motion.section 
-        className="relative z-10 px-6 lg:px-8 pb-20"
+      {/* Manacle Success & Trust Section */}
+      <motion.section
+        className="relative z-10 px-6 lg:px-8 py-12 lg:py-20"
         initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: 0.8,
+            ease: "easeOut"
+          }
+        }}
+        viewport={{ once: true, margin: "-100px" }}
       >
         <div className="max-w-7xl mx-auto">
-          <div className="relative bg-gradient-to-br from-white/80 to-blue-50/80 backdrop-blur-sm rounded-3xl p-8 lg:p-12 shadow-2xl border border-white/20">
-            {/* Dashboard Mockup */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-6 text-white">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold">Revenue Growth</h3>
-                  <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-white rounded-full"></div>
-                  </div>
-                </div>
-                <div className="text-3xl font-bold">+24.5%</div>
-                <div className="text-blue-100 text-sm">vs last month</div>
-              </div>
-              
-              <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 text-white">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold">Active Users</h3>
-                  <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-white rounded-full"></div>
-                  </div>
-                </div>
-                <div className="text-3xl font-bold">2,847</div>
-                <div className="text-emerald-100 text-sm">+12% this week</div>
-              </div>
-              
-              <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl p-6 text-white">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-semibold">Conversion Rate</h3>
-                  <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-white rounded-full"></div>
-                  </div>
-                </div>
-                <div className="text-3xl font-bold">8.9%</div>
-                <div className="text-orange-100 text-sm">+2.1% improvement</div>
-              </div>
-            </div>
-
-            {/* Chart Visualization */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-slate-800">Business Performance Overview</h3>
-                <div className="flex space-x-2">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-cyan-500 rounded-full"></div>
-                </div>
-              </div>
-              
-              {/* Simplified Chart Bars */}
-              <div className="flex items-end justify-between h-32 space-x-2">
-                {[60, 80, 45, 90, 75, 85, 70].map((height, index) => (
-                  <motion.div
-                    key={index}
-                    className="bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg flex-1"
-                    initial={{ height: 0 }}
-                    animate={{ height: `${height}%` }}
-                    transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.section>
-
-      {/* Interactive Service Tiles */}
-      <motion.section 
-        className="relative z-10 px-6 lg:px-8 pb-32"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <motion.h2 
-            className="text-3xl lg:text-4xl font-bold text-center text-slate-900 mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
+          {/* Cursive Header */}
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0 }}
+            whileInView={{
+              opacity: 1,
+              transition: {
+                duration: 0.6,
+                ease: "easeOut",
+                delay: 0.3
+              }
+            }}
+            viewport={{ once: true }}
           >
-            Our Complete Solution Suite
-          </motion.h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { title: "CRM", description: "Customer Relationship Management", color: "from-blue-500 to-cyan-500" },
-              { title: "ERP", description: "Enterprise Resource Planning", color: "from-purple-500 to-pink-500" },
-              { title: "HRMS", description: "Human Resource Management", color: "from-emerald-500 to-teal-500" },
-              { title: "SFA", description: "Sales Force Automation", color: "from-orange-500 to-red-500" },
-              { title: "Analytics", description: "Business Intelligence", color: "from-indigo-500 to-blue-500" },
-              { title: "Security", description: "Enterprise-grade Protection", color: "from-green-500 to-emerald-500" }
-            ].map((service, index) => (
-              <motion.div
-                key={service.title}
-                className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-slate-100 hover:border-transparent overflow-hidden"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.9 + index * 0.1 }}
-                whileHover={{ 
-                  y: -8,
-                  scale: 1.02
-                }}
-              >
-                {/* Gradient Overlay on Hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-                
-                {/* Service Icon */}
-                <div className={`relative z-10 w-16 h-16 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <div className="w-8 h-8 bg-white rounded-lg"></div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-medium text-slate-800 dark:text-slate-200 mb-4" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
+              Transforming Business Dreams into Digital Reality
+            </h2>
+            <p className="text-xl sm:text-2xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
+              Where innovation meets execution - we turn your boldest business visions into powerful, scalable solutions that drive extraordinary growth.
+            </p>
+          </motion.div>
+
+          {/* Achievement Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+            {/* Left: Key Achievements */}
+            <motion.div
+              className="space-y-8"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+                transition: {
+                  duration: 0.8,
+                  ease: "easeOut",
+                  delay: 0.3
+                }
+              }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <div className="bg-gradient-to-br from-white/90 to-blue-50/90 dark:from-slate-800/90 dark:to-slate-700/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/30 dark:border-slate-600/30">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-6 text-slate-800 dark:text-slate-200" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
+                  The Manacle Advantage
+                </h3>
+
+                <div className="space-y-6">
+                  <motion.div
+                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl border border-emerald-200 dark:border-emerald-700"
+                    whileHover={{ scale: 1.02, x: 5 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      ✓
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-emerald-800 dark:text-emerald-200">200+ Happy Customers</p>
+                      <p className="text-sm text-emerald-600 dark:text-emerald-400">Businesses successfully transformed</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-700"
+                    whileHover={{ scale: 1.02, x: 5 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      ⚡
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-blue-800 dark:text-blue-200">2000+ Distributors Onboard</p>
+                      <p className="text-sm text-blue-600 dark:text-blue-400">Active distribution network across regions</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-2xl border border-purple-200 dark:border-purple-700"
+                    whileHover={{ scale: 1.02, x: 5 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      ★
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-purple-800 dark:text-purple-200">10,000+ Active Salespeople</p>
+                      <p className="text-sm text-purple-600 dark:text-purple-400">Empowered by our SFA solutions</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-2xl border border-orange-200 dark:border-orange-700"
+                    whileHover={{ scale: 1.02, x: 5 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      🏆
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-orange-800 dark:text-orange-200">End-to-End Solutions Provider</p>
+                      <p className="text-sm text-orange-600 dark:text-orange-400">CRM, ERP, HRMS, SFA & more</p>
+                    </div>
+                  </motion.div>
                 </div>
-                
-                {/* Service Content */}
-                <div className="relative z-10">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-slate-800 transition-colors duration-300">
-                    {service.title}
+              </div>
+            </motion.div>
+
+            {/* Right: Live Metrics */}
+            <motion.div
+              className="space-y-8"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+                transition: {
+                  duration: 0.8,
+                  ease: "easeOut",
+                  delay: 0.4
+                }
+              }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <div className="bg-gradient-to-br from-white/90 to-purple-50/90 dark:from-slate-800/90 dark:to-purple-900/20 backdrop-blur-lg rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-2xl border border-white/30 dark:border-slate-600/30 overflow-hidden">
+                <div className="relative">
+                  <motion.div
+                    className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-yellow-400/20 rounded-full blur-2xl"
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                  />
+
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-6 md:mb-8 text-slate-800 dark:text-slate-200 relative z-10" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
+                    Success by the Numbers
                   </h3>
-                  <p className="text-slate-600 leading-relaxed group-hover:text-slate-700 transition-colors duration-300">
-                    {service.description}
-                  </p>
-                  
-                  {/* Hover Description Reveal */}
-                  <div className="mt-4 text-sm text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Streamline operations, boost productivity, and drive growth with our enterprise-grade {service.title.toLowerCase()} solution.
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 relative z-10">
+                    <motion.div
+                      className="text-center p-3 md:p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10 dark:from-green-400/20 dark:to-emerald-400/20 rounded-xl md:rounded-2xl border border-green-200/50 dark:border-green-600/30"
+                      animate={{
+                        boxShadow: [
+                          "0 0 20px rgba(34, 197, 94, 0.2)",
+                          "0 0 30px rgba(34, 197, 94, 0.4)",
+                          "0 0 20px rgba(34, 197, 94, 0.2)"
+                        ]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                    >
+                      <motion.p
+                        className="text-2xl md:text-4xl font-bold text-green-600 dark:text-green-400 mb-1 md:mb-2"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        15+
+                      </motion.p>
+                      <p className="text-xs md:text-sm text-green-700 dark:text-green-300 font-medium">Years in Industry</p>
+                    </motion.div>
+
+                    <motion.div
+                      className="text-center p-3 md:p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-400/20 dark:to-cyan-400/20 rounded-xl md:rounded-2xl border border-blue-200/50 dark:border-blue-600/30"
+                      animate={{
+                        boxShadow: [
+                          "0 0 20px rgba(59, 130, 246, 0.2)",
+                          "0 0 30px rgba(59, 130, 246, 0.4)",
+                          "0 0 20px rgba(59, 130, 246, 0.2)"
+                        ]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                    >
+                      <motion.p
+                        className="text-2xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-1 md:mb-2"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                      >
+                        200+
+                      </motion.p>
+                      <p className="text-xs md:text-sm text-blue-700 dark:text-blue-300 font-medium">Satisfied Clients</p>
+                    </motion.div>
+
+                    <motion.div
+                      className="text-center p-3 md:p-6 bg-gradient-to-br from-purple-500/10 to-violet-500/10 dark:from-purple-400/20 dark:to-violet-400/20 rounded-xl md:rounded-2xl border border-purple-200/50 dark:border-purple-600/30"
+                      animate={{
+                        boxShadow: [
+                          "0 0 20px rgba(147, 51, 234, 0.2)",
+                          "0 0 30px rgba(147, 51, 234, 0.4)",
+                          "0 0 20px rgba(147, 51, 234, 0.2)"
+                        ]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, delay: 2 }}
+                    >
+                      <motion.p
+                        className="text-2xl md:text-4xl font-bold text-purple-600 dark:text-purple-400 mb-1 md:mb-2"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: 2 }}
+                      >
+                        24/7
+                      </motion.p>
+                      <p className="text-xs md:text-sm text-purple-700 dark:text-purple-300 font-medium">Expert Support</p>
+                    </motion.div>
+
+                    <motion.div
+                      className="text-center p-3 md:p-6 bg-gradient-to-br from-orange-500/10 to-red-500/10 dark:from-orange-400/20 dark:to-red-400/20 rounded-xl md:rounded-2xl border border-orange-200/50 dark:border-orange-600/30"
+                      animate={{
+                        boxShadow: [
+                          "0 0 20px rgba(249, 115, 22, 0.2)",
+                          "0 0 30px rgba(249, 115, 22, 0.4)",
+                          "0 0 20px rgba(249, 115, 22, 0.2)"
+                        ]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+                    >
+                      <motion.p
+                        className="text-2xl md:text-4xl font-bold text-orange-600 dark:text-orange-400 mb-1 md:mb-2"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                      >
+                        100%
+                      </motion.p>
+                      <p className="text-xs md:text-sm text-orange-700 dark:text-orange-300 font-medium">Custom Solutions</p>
+                    </motion.div>
                   </div>
                 </div>
-                
-                {/* Arrow Indicator */}
-                <motion.div
-                  className="absolute bottom-6 right-6 text-slate-400 group-hover:text-blue-600 transition-colors duration-300"
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  <ArrowRight className="w-5 h-5" />
-                </motion.div>
-              </motion.div>
-            ))}
+              </div>
+            </motion.div>
           </div>
         </div>
       </motion.section>
+
+      {/* Compact Solutions Section */}
+      <div className="relative z-10">
+        <CompactSolutions />
+      </div>
     </div>
   );
 }
