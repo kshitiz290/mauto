@@ -27,7 +27,7 @@ export function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <div ref={ref} className={`relative min-h-screen bg-gradient-to-br from-orange-50/80 via-yellow-50/60 to-blue-50/70 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900/40 overflow-hidden`}>
+    <div ref={ref} className={`relative min-h-[600px] md:min-h-[700px] lg:min-h-screen bg-gradient-to-br from-orange-50/80 via-yellow-50/60 to-blue-50/70 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900/40 overflow-hidden`}>
       {/* Enhanced Light Theme Background Layers */}
       <div className="absolute inset-0 bg-gradient-to-tr from-orange-100/40 via-transparent to-blue-100/30 dark:opacity-0" />
       <div className="absolute inset-0 bg-gradient-to-bl from-yellow-100/30 via-transparent to-indigo-100/40 dark:opacity-0" />
@@ -1358,7 +1358,7 @@ export function Hero() {
 
       {/* Main Hero Content */}
       <motion.main
-        className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 pt-20 pb-8 lg:px-8 lg:pt-32 lg:pb-12"
+        className="relative z-10 flex flex-col items-center justify-center min-h-[600px] md:min-h-[700px] lg:min-h-screen px-6 pt-20 pb-8 lg:px-8 lg:pt-32 lg:pb-12"
         style={{ paddingTop: '120px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
