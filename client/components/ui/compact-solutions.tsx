@@ -257,16 +257,6 @@ export function CompactSolutions() {
                                 Get Started Today
                             </motion.button>
                         </Link>
-
-                        <Link to="/solutions-suite">
-                            <motion.button
-                                className="px-6 py-3 border-2 border-primary/30 text-primary font-semibold rounded-xl hover:bg-primary/5 transition-all duration-300 text-sm"
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                View All Solutions
-                            </motion.button>
-                        </Link>
                     </div>
                 </motion.div>
             </div>

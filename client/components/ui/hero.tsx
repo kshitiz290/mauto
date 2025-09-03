@@ -4,6 +4,7 @@ import { ArrowRight, Play, Globe, CheckCircle } from "lucide-react";
 import { useTheme } from "./theme-provider";
 import { useRef } from "react";
 import { CompactSolutions } from "./compact-solutions";
+import { useNavigate } from "react-router-dom";
 
 // Load Fredoka font (modern Gen Z style)
 if (typeof document !== 'undefined') {
@@ -15,6 +16,7 @@ if (typeof document !== 'undefined') {
 
 export function Hero() {
   const { theme } = useTheme();
+  const navigate = useNavigate();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -25,7 +27,16 @@ export function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <div ref={ref} className={`relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900/40 overflow-hidden`}>
+    <div ref={ref} className={`relative min-h-screen bg-gradient-to-br from-orange-50/80 via-yellow-50/60 to-blue-50/70 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900/40 overflow-hidden`}>
+      {/* Enhanced Light Theme Background Layers */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-orange-100/40 via-transparent to-blue-100/30 dark:opacity-0" />
+      <div className="absolute inset-0 bg-gradient-to-bl from-yellow-100/30 via-transparent to-indigo-100/40 dark:opacity-0" />
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-50/50 to-transparent dark:opacity-0" />
+
+      {/* Radial gradients for depth */}
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-radial from-orange-200/20 via-transparent to-transparent dark:opacity-0" style={{ background: 'radial-gradient(circle at 20% 30%, rgba(251, 146, 60, 0.15) 0%, transparent 50%)' }} />
+      <div className="absolute top-0 right-0 w-full h-full bg-gradient-radial from-blue-200/20 via-transparent to-transparent dark:opacity-0" style={{ background: 'radial-gradient(circle at 80% 20%, rgba(147, 197, 253, 0.15) 0%, transparent 50%)' }} />
+      <div className="absolute bottom-0 left-1/2 w-full h-full bg-gradient-radial from-yellow-200/15 via-transparent to-transparent dark:opacity-0" style={{ background: 'radial-gradient(circle at 50% 80%, rgba(254, 240, 138, 0.12) 0%, transparent 50%)' }} />
       {/* Professional Space-Type Orbital Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Central Data Core */}
@@ -1197,13 +1208,13 @@ export function Hero() {
           </defs>
         </svg>
 
-        {/* Floating Data Particles */}
+        {/* Enhanced Floating Data Particles */}
         {[...Array(12)].map((_, i) => (
           <motion.div
             key={`particle-${i}`}
-            className={`absolute w-1 h-1 rounded-full ${i % 3 === 0 ? 'bg-orange-400 dark:bg-orange-300' :
-              i % 3 === 1 ? 'bg-yellow-400 dark:bg-yellow-300' :
-                'bg-orange-300 dark:bg-yellow-400'
+            className={`absolute w-1.5 h-1.5 rounded-full ${i % 3 === 0 ? 'bg-orange-400/80 dark:bg-orange-300' :
+              i % 3 === 1 ? 'bg-yellow-400/80 dark:bg-yellow-300' :
+                'bg-blue-400/70 dark:bg-yellow-400'
               }`}
             style={{
               left: `${15 + (i * 7) % 70}%`,
@@ -1212,8 +1223,8 @@ export function Hero() {
             animate={{
               y: [0, -20, 0],
               x: [0, 10, 0],
-              opacity: [0.4, 1, 0.4],
-              scale: [0.5, 1.2, 0.5]
+              opacity: [0.5, 1, 0.5],
+              scale: [0.6, 1.4, 0.6]
             }}
             transition={{
               duration: 6 + (i % 3),
@@ -1224,34 +1235,124 @@ export function Hero() {
           />
         ))}
 
-        {/* Subtle Tech Grid */}
-        <div className="absolute inset-0 opacity-5 dark:opacity-10">
-          <div className="w-full h-full" style={{
-            backgroundImage: `
-              radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 2px, transparent 2px),
-              radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 2px, transparent 2px)
-            `,
-            backgroundSize: '60px 60px',
-            backgroundPosition: '0 0, 30px 30px'
-          }} />
-        </div>
-
-        {/* Ambient Glow Effects */}
+        {/* Light Theme Floating Geometric Shapes */}
         <motion.div
-          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-orange-500/10 to-yellow-500/10 dark:from-orange-400/20 dark:to-yellow-400/20 rounded-full blur-3xl"
+          className="absolute top-1/4 right-1/4 w-8 h-8 bg-gradient-to-br from-orange-300/40 to-yellow-300/30 dark:opacity-0 rounded-lg rotate-45"
+          animate={{
+            rotate: [45, 225, 45],
+            scale: [1, 1.2, 1],
+            opacity: [0.4, 0.8, 0.4]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 left-1/3 w-6 h-6 bg-gradient-to-br from-blue-300/40 to-indigo-300/30 dark:opacity-0 rounded-full"
           animate={{
             scale: [1, 1.3, 1],
-            opacity: [0.3, 0.6, 0.3]
+            opacity: [0.3, 0.7, 0.3],
+            y: [0, -15, 0]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/5 w-4 h-12 bg-gradient-to-b from-yellow-300/35 to-orange-300/25 dark:opacity-0 rounded-full"
+          animate={{
+            rotate: [0, 180, 360],
+            opacity: [0.4, 0.6, 0.4]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear", delay: 1 }}
+        />
+
+        {/* Floating Blue and Orange Dots for Light Theme */}
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={`floating-dot-${i}`}
+            className={`absolute rounded-full dark:opacity-0 ${i % 3 === 0 ? 'w-3 h-3 bg-orange-400/60' :
+                i % 3 === 1 ? 'w-2 h-2 bg-blue-500/50' :
+                  'w-4 h-4 bg-orange-300/40'
+              }`}
+            style={{
+              left: `${10 + (i * 13) % 80}%`,
+              top: `${15 + (i * 17) % 70}%`
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 15, 0],
+              opacity: [0.3, 0.8, 0.3],
+              scale: [0.8, 1.2, 0.8]
+            }}
+            transition={{
+              duration: 8 + (i % 4),
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.7
+            }}
+          />
+        ))}
+
+        {/* Additional Larger Floating Dots */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`large-dot-${i}`}
+            className={`absolute rounded-full dark:opacity-0 ${i % 2 === 0 ? 'w-6 h-6 bg-blue-400/30' : 'w-5 h-5 bg-orange-400/35'
+              }`}
+            style={{
+              left: `${20 + (i * 11) % 60}%`,
+              top: `${25 + (i * 19) % 50}%`
+            }}
+            animate={{
+              y: [0, -20, 0],
+              x: [0, 10, 0],
+              opacity: [0.2, 0.6, 0.2],
+              scale: [1, 1.3, 1]
+            }}
+            transition={{
+              duration: 12 + (i % 3),
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 1.2
+            }}
+          />
+        ))}
+
+        {/* Enhanced Ambient Glow Effects for Light Theme */}
+        <motion.div
+          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-orange-300/25 to-yellow-300/20 dark:from-orange-400/20 dark:to-yellow-400/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.4, 0.7, 0.4]
           }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-br from-primary/10 to-accent/10 dark:from-primary/20 dark:to-accent/20 rounded-full blur-3xl"
+          className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-br from-blue-300/20 to-indigo-300/25 dark:from-primary/20 dark:to-accent/20 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
-            opacity: [0.4, 0.7, 0.4]
+            opacity: [0.5, 0.8, 0.5]
           }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+        />
+
+        {/* Additional Light Theme Glow Elements */}
+        <motion.div
+          className="absolute top-1/3 left-10 w-64 h-64 bg-gradient-to-br from-yellow-200/30 to-orange-200/25 dark:opacity-0 rounded-full blur-2xl"
+          animate={{
+            scale: [0.8, 1.1, 0.8],
+            opacity: [0.3, 0.6, 0.3],
+            x: [0, 20, 0],
+            y: [0, -15, 0]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
+        <motion.div
+          className="absolute bottom-1/3 right-10 w-72 h-72 bg-gradient-to-br from-blue-200/25 to-purple-200/20 dark:opacity-0 rounded-full blur-2xl"
+          animate={{
+            scale: [1.1, 0.9, 1.1],
+            opacity: [0.4, 0.7, 0.4],
+            x: [0, -25, 0],
+            y: [0, 10, 0]
+          }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 7 }}
         />
       </div>
 
@@ -1341,7 +1442,11 @@ export function Hero() {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <Button size="lg" className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 hover:from-orange-600 hover:via-yellow-500 hover:to-orange-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 hover:from-orange-600 hover:via-yellow-500 hover:to-orange-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => navigate('/contact-us')}
+            >
               <Play className="w-5 h-5 mr-2" />
               Start Free Trial
             </Button>
@@ -1352,7 +1457,12 @@ export function Hero() {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-            <Button variant="outline" size="lg" className="border-2 border-orange-300 dark:border-orange-400 text-orange-600 dark:text-orange-400 hover:border-orange-500 hover:text-orange-700 dark:hover:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-8 py-4 text-lg font-semibold transition-all duration-300">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-2 border-orange-300 dark:border-orange-400 text-orange-600 dark:text-orange-400 hover:border-orange-500 hover:text-orange-700 dark:hover:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-8 py-4 text-lg font-semibold transition-all duration-300"
+              onClick={() => navigate('/sales-force-automation')}
+            >
               Explore Solutions
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
