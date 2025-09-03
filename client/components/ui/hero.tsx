@@ -39,9 +39,9 @@ export function Hero() {
       <div className="absolute bottom-0 left-1/2 w-full h-full bg-gradient-radial from-yellow-200/15 via-transparent to-transparent dark:opacity-0" style={{ background: 'radial-gradient(circle at 50% 80%, rgba(254, 240, 138, 0.12) 0%, transparent 50%)' }} />
       {/* Professional Space-Type Orbital Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Central Data Core */}
+        {/* Central Data Core - Hidden on mobile */}
         <motion.div
-          className="absolute left-1/2 transform -translate-x-1/2 w-32 h-32"
+          className="absolute left-1/2 transform -translate-x-1/2 w-32 h-32 hidden sm:block"
           style={{ top: 'calc(50% + 80px)' }}
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
@@ -51,9 +51,19 @@ export function Hero() {
           <div className="absolute inset-8 bg-gradient-to-br from-white/20 to-orange-200/20 dark:from-white/10 dark:to-orange-200/10 rounded-full" />
         </motion.div>
 
-        {/* Orbital Ring 1 - Inner */}
+        {/* Simplified mobile core */}
         <motion.div
-          className="absolute left-1/2 transform -translate-x-1/2 w-80 h-80"
+          className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 sm:hidden"
+          style={{ top: 'calc(50% + 40px)' }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="w-full h-full bg-gradient-to-br from-orange-500/15 to-yellow-400/15 rounded-full blur-lg" />
+        </motion.div>
+
+        {/* Orbital Ring 1 - Inner - Hidden on mobile */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-80 h-80 hidden sm:block"
           style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -84,9 +94,9 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* Orbital Ring 2 - Middle */}
+        {/* Orbital Ring 2 - Middle - Hidden on mobile */}
         <motion.div
-          className="absolute left-1/2 transform -translate-x-1/2 w-[500px] h-[500px]"
+          className="absolute left-1/2 transform -translate-x-1/2 w-[500px] h-[500px] hidden md:block"
           style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
           animate={{ rotate: [360, 0] }}
           transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
@@ -127,9 +137,9 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* Orbital Ring 3 - Outer */}
+        {/* Orbital Ring 3 - Outer - Hidden on mobile */}
         <motion.div
-          className="absolute left-1/2 transform -translate-x-1/2 w-[700px] h-[700px]"
+          className="absolute left-1/2 transform -translate-x-1/2 w-[700px] h-[700px] hidden lg:block"
           style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
@@ -160,8 +170,8 @@ export function Hero() {
           </div>
         </motion.div>
 
-        {/* Dynamic Data Streams */}
-        <svg className="absolute inset-0 w-full h-full opacity-30 dark:opacity-30" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" style={{ transform: 'translateY(60px)' }}>
+        {/* Dynamic Data Streams - Hidden on mobile */}
+        <svg className="absolute inset-0 w-full h-full opacity-30 dark:opacity-30 hidden sm:block" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" style={{ transform: 'translateY(60px)' }}>
           {/* Reduced curvy lines - covering full screen */}
           <motion.path
             d="M 0 340 Q 300 240 600 340 Q 900 440 1200 340"
@@ -1208,11 +1218,11 @@ export function Hero() {
           </defs>
         </svg>
 
-        {/* Enhanced Floating Data Particles */}
+        {/* Enhanced Floating Data Particles - Reduced for mobile */}
         {[...Array(12)].map((_, i) => (
           <motion.div
             key={`particle-${i}`}
-            className={`absolute w-1.5 h-1.5 rounded-full ${i % 3 === 0 ? 'bg-orange-400/80 dark:bg-orange-300' :
+            className={`absolute w-1.5 h-1.5 rounded-full hidden sm:block ${i % 3 === 0 ? 'bg-orange-400/80 dark:bg-orange-300' :
               i % 3 === 1 ? 'bg-yellow-400/80 dark:bg-yellow-300' :
                 'bg-blue-400/70 dark:bg-yellow-400'
               }`}
@@ -1235,9 +1245,31 @@ export function Hero() {
           />
         ))}
 
-        {/* Light Theme Floating Geometric Shapes */}
+        {/* Simplified particles for mobile */}
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={`mobile-particle-${i}`}
+            className={`absolute w-1 h-1 rounded-full sm:hidden ${i % 2 === 0 ? 'bg-orange-400/60' : 'bg-blue-400/50'}`}
+            style={{
+              left: `${20 + (i * 20) % 60}%`,
+              top: `${30 + (i * 15) % 40}%`
+            }}
+            animate={{
+              y: [0, -15, 0],
+              opacity: [0.4, 0.8, 0.4]
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 2
+            }}
+          />
+        ))}
+
+        {/* Light Theme Floating Geometric Shapes - Hidden on mobile */}
         <motion.div
-          className="absolute top-1/4 right-1/4 w-8 h-8 bg-gradient-to-br from-orange-300/40 to-yellow-300/30 dark:opacity-0 rounded-lg rotate-45"
+          className="absolute top-1/4 right-1/4 w-8 h-8 bg-gradient-to-br from-orange-300/40 to-yellow-300/30 dark:opacity-0 rounded-lg rotate-45 hidden sm:block"
           animate={{
             rotate: [45, 225, 45],
             scale: [1, 1.2, 1],
@@ -1246,7 +1278,7 @@ export function Hero() {
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-1/4 left-1/3 w-6 h-6 bg-gradient-to-br from-blue-300/40 to-indigo-300/30 dark:opacity-0 rounded-full"
+          className="absolute bottom-1/4 left-1/3 w-6 h-6 bg-gradient-to-br from-blue-300/40 to-indigo-300/30 dark:opacity-0 rounded-full hidden sm:block"
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.3, 0.7, 0.3],
@@ -1255,7 +1287,7 @@ export function Hero() {
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 3 }}
         />
         <motion.div
-          className="absolute top-1/3 left-1/5 w-4 h-12 bg-gradient-to-b from-yellow-300/35 to-orange-300/25 dark:opacity-0 rounded-full"
+          className="absolute top-1/3 left-1/5 w-4 h-12 bg-gradient-to-b from-yellow-300/35 to-orange-300/25 dark:opacity-0 rounded-full hidden sm:block"
           animate={{
             rotate: [0, 180, 360],
             opacity: [0.4, 0.6, 0.4]
@@ -1263,13 +1295,13 @@ export function Hero() {
           transition={{ duration: 12, repeat: Infinity, ease: "linear", delay: 1 }}
         />
 
-        {/* Floating Blue and Orange Dots for Light Theme */}
+        {/* Floating Blue and Orange Dots for Light Theme - Reduced for mobile */}
         {[...Array(15)].map((_, i) => (
           <motion.div
             key={`floating-dot-${i}`}
-            className={`absolute rounded-full dark:opacity-0 ${i % 3 === 0 ? 'w-3 h-3 bg-orange-400/60' :
-                i % 3 === 1 ? 'w-2 h-2 bg-blue-500/50' :
-                  'w-4 h-4 bg-orange-300/40'
+            className={`absolute rounded-full dark:opacity-0 hidden sm:block ${i % 3 === 0 ? 'w-3 h-3 bg-orange-400/60' :
+              i % 3 === 1 ? 'w-2 h-2 bg-blue-500/50' :
+                'w-4 h-4 bg-orange-300/40'
               }`}
             style={{
               left: `${10 + (i * 13) % 80}%`,
@@ -1290,11 +1322,33 @@ export function Hero() {
           />
         ))}
 
-        {/* Additional Larger Floating Dots */}
+        {/* Simplified dots for mobile */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`mobile-dot-${i}`}
+            className={`absolute rounded-full dark:opacity-0 sm:hidden ${i % 2 === 0 ? 'w-2 h-2 bg-orange-400/50' : 'w-3 h-3 bg-blue-400/40'}`}
+            style={{
+              left: `${15 + (i * 15) % 70}%`,
+              top: `${20 + (i * 20) % 60}%`
+            }}
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.3, 0.7, 0.3]
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 1.5
+            }}
+          />
+        ))}
+
+        {/* Additional Larger Floating Dots - Hidden on mobile */}
         {[...Array(8)].map((_, i) => (
           <motion.div
             key={`large-dot-${i}`}
-            className={`absolute rounded-full dark:opacity-0 ${i % 2 === 0 ? 'w-6 h-6 bg-blue-400/30' : 'w-5 h-5 bg-orange-400/35'
+            className={`absolute rounded-full dark:opacity-0 hidden sm:block ${i % 2 === 0 ? 'w-6 h-6 bg-blue-400/30' : 'w-5 h-5 bg-orange-400/35'
               }`}
             style={{
               left: `${20 + (i * 11) % 60}%`,
