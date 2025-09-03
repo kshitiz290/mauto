@@ -1362,7 +1362,7 @@ export function Hero() {
         style={{ paddingTop: '120px' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
       >
         {/* Animated Strip Lines */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -1409,9 +1409,9 @@ export function Hero() {
         {/* Hero Headline */}
         <motion.h1
           className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center text-slate-900 dark:text-slate-100 max-w-6xl leading-tight"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
         >
           Empowering Businesses with{" "}
           <span className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent animate-gradient-x bg-size-200">
@@ -1422,9 +1422,9 @@ export function Hero() {
         {/* Subheadline */}
         <motion.p
           className="mt-6 text-xl sm:text-2xl md:text-2xl text-slate-600 dark:text-slate-300 text-center max-w-4xl leading-relaxed"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
         >
           Your one-stop solution for CRM, ERP, HRMS, SFA, and more.
           <span className="font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"> Transform your business operations</span> with our comprehensive suite of enterprise software.
@@ -1433,9 +1433,9 @@ export function Hero() {
         {/* CTA Buttons */}
         <motion.div
           className="mt-10 flex flex-col sm:flex-row items-center gap-4"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
         >
           <motion.div
             whileHover={{ scale: 1.05, y: -2 }}
@@ -1472,9 +1472,9 @@ export function Hero() {
         {/* Trust Indicators */}
         <motion.div
           className="mt-12 flex flex-wrap items-center justify-center gap-8 text-slate-500 dark:text-slate-400"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{ duration: 0.3, delay: 0.4, ease: "easeOut" }}
         >
           <div className="flex items-center space-x-2">
             <CheckCircle className="w-5 h-5 text-green-500" />

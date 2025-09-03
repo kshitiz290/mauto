@@ -4,33 +4,33 @@ import { FileText, BadgePercent, Layers, Share2, Users, CheckCircle2, Settings2 
 const features = [
     {
         icon: <FileText className="w-8 h-8 text-primary" />,
-        title: "Auto-Invoice Creation",
-        desc: "Automatically generate invoices from completed sales orders, delivery notes, or payment entries."
+        title: "No More Manual Invoice Typing",
+        desc: "Sold something? Your invoice is ready instantly. Works with your sales orders, delivery receipts, whatever you use - we've got it covered."
     },
     {
         icon: <BadgePercent className="w-8 h-8 text-primary" />,
-        title: "GST & Tax Compliance",
-        desc: "Fully compliant with Indian GST regulations and other regional tax formats—ensuring error-free taxation and documentation."
+        title: "Tax Headaches? We Handle Them",
+        desc: "GST, VAT, whatever tax rules you're dealing with - our system keeps up with the changes so you don't have to worry about getting it wrong."
     },
     {
         icon: <Layers className="w-8 h-8 text-primary" />,
-        title: "Customizable Invoice Templates",
-        desc: "Add your logo, branding, terms, and payment details to create professional-looking invoices."
+        title: "Make It Look Like Yours",
+        desc: "Your logo, your colors, your way of doing business. Create invoices that actually represent your brand, not some generic template."
     },
     {
         icon: <Share2 className="w-8 h-8 text-primary" />,
-        title: "Multi-Format Export & Sharing",
-        desc: "Download or share invoices in PDF, Excel, or print-ready formats. Email directly to customers from the platform."
+        title: "Send It However They Want It",
+        desc: "PDF for email, Excel for their accounts team, or just hit print. Send invoices straight to your customers without jumping between apps."
     },
     {
         icon: <Users className="w-8 h-8 text-primary" />,
-        title: "Integration with Sales & Inventory",
+        title: "Everything Talks to Everything",
         desc: "Seamlessly sync with Manacle’s sales, SFA, and inventory modules for real-time billing accuracy."
     },
     {
         icon: <CheckCircle2 className="w-8 h-8 text-primary" />,
-        title: "Multi-User Access & Approval Workflow",
-        desc: "Set user roles for invoice creation, verification, and approval—ensuring control and compliance."
+        title: "Keep Everyone in Their Lane",
+        desc: "Sales creates, managers approve, accounts send out. Set up who can do what, so nothing goes out the door without the right eyes on it."
     }
 ];
 
@@ -47,7 +47,7 @@ const InvoiceGenerationFeatures = () => (
                     className="text-3xl md:text-4xl font-extrabold text-left mb-2 leading-tight"
                 >
                     <span className="bg-gradient-to-r from-orange-500 via-yellow-500 to-pink-500 bg-clip-text text-transparent">
-                        Generate Dynamic <span className="text-orange-500">Invoice Every Time</span> with Manacle Technologies ERP
+                        Stop Wrestling with <span className="text-orange-500">Invoice Creation</span> - We've Got This Covered
                     </span>
                 </motion.h2>
                 <motion.p
@@ -66,7 +66,7 @@ const InvoiceGenerationFeatures = () => (
                     transition={{ duration: 0.7, delay: 0.15 }}
                     className="text-base md:text-lg text-foreground/70 mb-4 leading-relaxed"
                 >
-                    Invoice Generation is the process of creating detailed, tax-compliant bills for customers after a sale or service is completed. With Manacle, this process becomes automated, streamlined, and fully integrated with your sales and order systems.
+                    Here's the thing about invoicing - it should be the easiest part of your business, not the most frustrating. You make a sale, the invoice should just appear. That's how we've built our system - everything connects, so when you close a deal, your invoice is ready to go.
                 </motion.p>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -75,7 +75,7 @@ const InvoiceGenerationFeatures = () => (
                     transition={{ duration: 0.7, delay: 0.2 }}
                     className="text-base md:text-lg text-foreground/70 mb-6 leading-relaxed"
                 >
-                    Our solution generates real-time invoices based on sales transactions—reducing manual input, ensuring accuracy, and supporting digital records for faster approvals and audits.
+                    No more copying numbers from one system to another. No more wondering if you got the tax calculation right. Everything happens automatically, and you've got a digital trail that makes your accountant happy and audits a breeze.
                 </motion.p>
             </div>
             {/* Right: Features List (animated, not grid) */}

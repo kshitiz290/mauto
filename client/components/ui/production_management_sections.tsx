@@ -6,55 +6,55 @@ import AnimatedDashboard from './AnimatedDashboard';
 const features = [
     {
         icon: <BarChart2 className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Real-Time Production Tracking',
-        desc: 'Monitor every stage of production, from raw material input to finished goods, with live updates and performance analytics.'
+        title: 'See Everything as It Happens',
+        desc: 'Know exactly where each order stands right now. From materials hitting the floor to products ready for shipping - no more wondering or waiting for updates.'
     },
     {
         icon: <Settings className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Resource Optimization',
-        desc: 'Reduce waste, manage inventory smartly, and allocate manpower efficiently.'
+        title: 'Stop Wasting Money on Resources',
+        desc: 'We help you figure out exactly what you need, when you need it. Less waste, smarter inventory decisions, and your team working where they matter most.'
     },
     {
         icon: <FileText className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Automated Reporting',
-        desc: 'Generate reports on productivity, downtime, machine usage, and more—with just a few clicks.'
+        title: 'Reports That Actually Help',
+        desc: 'Get the numbers you need without spending hours creating spreadsheets. Quick insights on what\'s working, what\'s not, and where to focus next.'
     },
     {
         icon: <Layers className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Custom Workflow Design',
-        desc: 'Tailor production stages and workflows to suit your business needs.'
+        title: 'Built Around How You Work',
+        desc: 'Every factory is different. Set up workflows that match your actual processes, not some generic template that doesn\'t fit.'
     },
     {
         icon: <Link2 className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Integration with ERP & SCM',
-        desc: 'Seamless integration with your existing systems for complete operational control.'
+        title: 'Plays Nice with Your Current Systems',
+        desc: 'Already using other software? No problem. Our system connects with what you have, so you don\'t start from scratch.'
     },
     {
         icon: <Smartphone className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Mobile Access',
-        desc: 'Manage production on the go with mobile-friendly dashboards and alerts.'
+        title: 'Check Things from Anywhere',
+        desc: 'Walking the factory floor or stuck in traffic? Pull up your dashboard on your phone and stay in the loop wherever you are.'
     }
 ];
 
 const whyChoose = [
     {
         icon: <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Industry" className="w-12 h-12 mx-auto mb-2" />,
-        title: 'Industry Solutions',
+        title: 'We Know Your Industry',
         desc: 'Whether you’re in textiles, electronics, pharmaceuticals, or FMCG, we provide customized tools suited for your sector.'
     },
     {
         icon: <img src="https://cdn-icons-png.flaticon.com/512/2906/2906279.png" alt="Insights" className="w-12 h-12 mx-auto mb-2" />,
-        title: 'Data-Driven Insights',
+        title: 'Numbers That Make Sense',
         desc: 'Unlock actionable intelligence to improve lead times, reduce costs, and boost production capacity.'
     },
     {
         icon: <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User Interface" className="w-12 h-12 mx-auto mb-2" />,
-        title: 'User-Friendly Interface',
+        title: 'Easy for Everyone to Use',
         desc: 'Intuitive dashboards for both floor supervisors and senior management.'
     },
     {
         icon: <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Cloud" className="w-12 h-12 mx-auto mb-2" />,
-        title: 'Cloud-Based & Scalable',
+        title: 'Grows with Your Business',
         desc: 'Access your production data anytime, anywhere—with a scalable system that grows with your business.'
     }
 ];
@@ -75,7 +75,7 @@ const ProductionManagementSections = () => (
                         What is <span className="text-orange-500">Production Management?</span>
                     </h2>
                     <p className="text-base md:text-lg text-foreground/70 mb-2 leading-relaxed">
-                        We offer cutting-edge Production Management solutions tailored to help manufacturing units, factories, and supply chains stay ahead of operational challenges. Our technology-driven approach enhances visibility, reduces downtime, and ensures that every production milestone is met with precision and efficiency.
+                        Running a manufacturing business? You know how challenging it can be to keep everything running smoothly. That's where our production management solutions come in. We've spent years working with factories and manufacturing units, understanding their pain points, and building tools that actually solve real problems.
                     </p>
                     <p className="text-base md:text-lg text-foreground/70 mb-4 leading-relaxed">
                         Production Management is the backbone of any manufacturing operation. It involves planning, coordinating, and controlling all production activities to deliver high-quality goods—on time and within budget. With Manacle’s intelligent software solutions, production leaders gain real-time insights, enabling smarter decision-making and smoother workflows.
@@ -125,7 +125,7 @@ const ProductionManagementSections = () => (
                     transition={{ duration: 0.7 }}
                     className="text-2xl md:text-3xl font-extrabold text-left md:text-center mb-2 leading-tight"
                 >
-                    <span style={{ color: '#FF9800' }}>Why Choose</span> <span className="text-primary">Manacle</span> for Production Management?
+                    <span style={{ color: '#FF9800' }}>Why Our Clients</span> <span className="text-primary">Keep Coming Back</span>
                 </motion.h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-7 mt-6">
                     {whyChoose.map((item, idx) => (
