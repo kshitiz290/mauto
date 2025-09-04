@@ -22,7 +22,7 @@
     "preview": "vite preview",
     "deploy:prepare": "npm run build && npm run copy:assets && npm run optimize",
     "copy:assets": "echo 'Assets copied during build process'",
-    "optimize": "echo 'Build optimized for production'",
+    "optimize": "echo 'Build tuned for production'",
     "start": "vite",
     "start:prod": "node dist/server/node-build.mjs",
     "dev:prod": "npm run build && npm run start:prod",

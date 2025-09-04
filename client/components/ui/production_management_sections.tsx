@@ -6,56 +6,56 @@ import AnimatedDashboard from './AnimatedDashboard';
 const features = [
     {
         icon: <BarChart2 className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'See Everything as It Happens',
-        desc: 'Know exactly where each order stands right now. From materials hitting the floor to products ready for shipping - no more wondering or waiting for updates.'
+        title: 'Live status, less guesswork',
+        desc: 'See where each job stands—from materials in to dispatch out—without chasing updates.'
     },
     {
         icon: <Settings className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Stop Wasting Money on Resources',
-        desc: 'We help you figure out exactly what you need, when you need it. Less waste, smarter inventory decisions, and your team working where they matter most.'
+        title: 'Use people and stock wisely',
+        desc: 'Plan shifts, materials, and capacity with fewer surprises and less idle time.'
     },
     {
         icon: <FileText className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Reports That Actually Help',
-        desc: 'Get the numbers you need without spending hours creating spreadsheets. Quick insights on what\'s working, what\'s not, and where to focus next.'
+        title: 'Reports you can act on',
+        desc: 'Simple dashboards and exports that show bottlenecks and wins at a glance.'
     },
     {
         icon: <Layers className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Built Around How You Work',
-        desc: 'Every factory is different. Set up workflows that match your actual processes, not some generic template that doesn\'t fit.'
+        title: 'Fits your floor',
+        desc: 'Set up flows that mirror your real process—no wrestling with generic templates.'
     },
     {
         icon: <Link2 className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Plays Nice with Your Current Systems',
-        desc: 'Already using other software? No problem. Our system connects with what you have, so you don\'t start from scratch.'
+        title: 'Works with what you have',
+        desc: 'Connects with existing tools and ERPs, so you can improve without a rebuild.'
     },
     {
         icon: <Smartphone className="w-7 h-7 text-orange-500 flex-shrink-0 mt-1" />,
-        title: 'Check Things from Anywhere',
-        desc: 'Walking the factory floor or stuck in traffic? Pull up your dashboard on your phone and stay in the loop wherever you are.'
+        title: 'Stay updated on the move',
+        desc: 'Mobile dashboards for quick checks from the floor or outside the plant.'
     }
 ];
 
 const whyChoose = [
     {
         icon: <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Industry" className="w-12 h-12 mx-auto mb-2" />,
-        title: 'We Know Your Industry',
-        desc: 'Whether you’re in textiles, electronics, pharmaceuticals, or FMCG, we provide customized tools suited for your sector.'
+        title: 'Built with your sector in mind',
+        desc: 'From textiles to pharma to FMCG—we tune modules to your process and controls.'
     },
     {
         icon: <img src="https://cdn-icons-png.flaticon.com/512/2906/2906279.png" alt="Insights" className="w-12 h-12 mx-auto mb-2" />,
-        title: 'Numbers That Make Sense',
-        desc: 'Unlock actionable intelligence to improve lead times, reduce costs, and boost production capacity.'
+        title: 'Numbers that guide decisions',
+        desc: 'Spot delays, costs, and capacity gaps early, and decide with context.'
     },
     {
         icon: <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User Interface" className="w-12 h-12 mx-auto mb-2" />,
-        title: 'Easy for Everyone to Use',
-        desc: 'Intuitive dashboards for both floor supervisors and senior management.'
+        title: 'Easy for the whole team',
+        desc: 'Clean dashboards for supervisors and management—no long training needed.'
     },
     {
         icon: <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Cloud" className="w-12 h-12 mx-auto mb-2" />,
-        title: 'Grows with Your Business',
-        desc: 'Access your production data anytime, anywhere—with a scalable system that grows with your business.'
+        title: 'Scales as you grow',
+        desc: 'Access securely, add plants and users, and extend modules when needed.'
     }
 ];
 
@@ -72,16 +72,16 @@ const ProductionManagementSections = () => (
                     className="w-full md:w-1/2 flex flex-col gap-5"
                 >
                     <h2 className="text-xl md:text-2xl font-bold mb-2 text-left leading-tight" style={{ color: '#FF9800' }}>
-                        What is <span className="text-orange-500">Production Management?</span>
+                        Make production clear, calm, and predictable
                     </h2>
                     <p className="text-base md:text-lg text-foreground/70 mb-2 leading-relaxed">
-                        Running a manufacturing business? You know how challenging it can be to keep everything running smoothly. That's where our production management solutions come in. We've spent years working with factories and manufacturing units, understanding their pain points, and building tools that actually solve real problems.
+                        If you run a plant, you already juggle people, parts, and timelines. Our tools keep that picture up to date and easy to act on.
                     </p>
                     <p className="text-base md:text-lg text-foreground/70 mb-4 leading-relaxed">
-                        Production Management is the backbone of any manufacturing operation. It involves planning, coordinating, and controlling all production activities to deliver high-quality goods—on time and within budget. With Manacle’s intelligent software solutions, production leaders gain real-time insights, enabling smarter decision-making and smoother workflows.
+                        Plan, track, and adjust production without the scramble. Managers see status in real time and teams get clear next steps.
                     </p>
                     <h3 className="text-lg md:text-xl font-bold mb-3 text-primary leading-tight">
-                        Key Features of Manacle’s Production Management System
+                        What you get
                     </h3>
                     <ul className="flex flex-col gap-3">
                         {features.map((feature, idx) => (

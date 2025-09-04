@@ -206,9 +206,9 @@ export function WhyChooseUs() {
   // Cards content
   const cards: CardItem[] = [
     {
-      title: "Innovative Technology Solutions",
+      title: "Practical technology that works",
       desc:
-        "We empower businesses by delivering cutting-edge technology tailored to their unique needs, enabling seamless automation and enhanced efficiency.",
+        "We deliver modern tools tailored to your work, so everyday tasks get simpler and faster.",
       iconBg: "from-orange-500 to-yellow-500",
       cardBg: "from-orange-500/10 to-yellow-500/10",
       icon: (
@@ -219,9 +219,9 @@ export function WhyChooseUs() {
       hover: "group-hover:text-orange-500",
     },
     {
-      title: "Data-Driven Insights",
+      title: "Clear, useful insights",
       desc:
-        "Leveraging advanced analytics and AI, we provide actionable insights that help companies make smarter decisions and optimize operations.",
+        "We share plain‑language reports that help your team make decisions with confidence.",
       iconBg: "from-blue-500 to-cyan-500",
       cardBg: "from-blue-500/10 to-cyan-500/10",
       icon: (
@@ -232,9 +232,9 @@ export function WhyChooseUs() {
       hover: "group-hover:text-cyan-500 text-blue-600",
     },
     {
-      title: "Scalable & Flexible Platforms",
+      title: "Grows with your business",
       desc:
-        "Our scalable software platforms grow alongside your business, allowing you to adapt quickly to market changes without disruption.",
+        "Our software scales as you add teams, products, or locations—without disruption.",
       iconBg: "from-purple-500 to-pink-500",
       cardBg: "from-purple-500/10 to-pink-500/10",
       icon: (
@@ -245,9 +245,9 @@ export function WhyChooseUs() {
       hover: "group-hover:text-purple-500",
     },
     {
-      title: "Customer-Centric Approach",
+      title: "Built around your customers",
       desc:
-        "By focusing on enhancing the end-user experience, we help companies build stronger customer relationships and increase retention.",
+        "We keep the customer experience front and center, so you build stronger relationships and retention.",
       iconBg: "from-green-500 to-emerald-500",
       cardBg: "from-green-500/10 to-emerald-500/10",
       icon: (
@@ -258,9 +258,9 @@ export function WhyChooseUs() {
       hover: "group-hover:text-green-500",
     },
     {
-      title: "End-to-End Support",
+      title: "Support that stays with you",
       desc:
-        "From strategy to implementation and ongoing optimization, we partner with companies at every step for sustainable growth.",
+        "From setup to everyday use, we’re available to help and keep things running smoothly.",
       iconBg: "from-indigo-500 to-blue-500",
       cardBg: "from-indigo-500/10 to-blue-500/10",
       icon: (
@@ -271,9 +271,9 @@ export function WhyChooseUs() {
       hover: "group-hover:text-indigo-500 text-blue-600",
     },
     {
-      title: "Market Expansion & Competitive Edge",
+      title: "Expand with confidence",
       desc:
-        "We help businesses identify untapped markets and streamline processes to outpace competitors as industry leaders.",
+        "Find new opportunities and tidy up processes so you can compete confidently.",
       iconBg: "from-red-500 to-orange-500",
       cardBg: "from-red-500/10 to-orange-500/10",
       icon: (
@@ -303,10 +303,10 @@ export function WhyChooseUs() {
             </span>
           </div>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent leading-tight pb-2 overflow-visible">
-            Why Customers Prefer Manacle Technologies
+            Built with care for everyday teams
           </h2>
           <p className="text-xl sm:text-2xl text-foreground/70 max-w-4xl mx-auto leading-relaxed">
-            Our product ecosystem empowers businesses to achieve greater market share, revenue, and profitability with cutting-edge solutions.
+            We focus on practical wins: less manual work, clearer visibility, and support when you need it. That’s why teams stay with us.
           </p>
         </div>
 
@@ -316,7 +316,7 @@ export function WhyChooseUs() {
             end={15}
             suffix="+"
             color="from-orange-500/20 to-yellow-500/20 from-orange-500 to-yellow-500"
-            label="Years within Industry"
+            label="Years in business"
           />
           <AnimatedCounter
             end={200}
@@ -328,15 +328,16 @@ export function WhyChooseUs() {
             end={2000}
             suffix="+"
             color="from-purple-500/20 to-pink-500/20 from-purple-500 to-pink-500"
-            label="Distributors Onboard"
+            label="Distributors onboarded"
           />
           <AnimatedCounter
             end={10000}
             suffix="+"
             color="from-green-500/20 to-emerald-500/20 from-green-500 to-emerald-500"
-            label="Active Salespeople"
+            label="Active salespeople"
           />
         </div>
+        <p className="text-xs text-foreground/60 text-center -mt-12 mb-12">Counts are approximate and may vary by deployment.</p>
 
         {/* Key Advantages Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 gap-y-8 items-stretch w-full">
@@ -351,7 +352,7 @@ export function WhyChooseUs() {
             <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl blur-sm group-hover:blur-md transition-all duration-500 opacity-70 group-hover:opacity-100"></div>
             <a href="/contact-us">
               <button className="relative px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:-translate-y-1">
-                START FREE TRIAL
+                REQUEST A DEMO
               </button>
             </a>
           </div>

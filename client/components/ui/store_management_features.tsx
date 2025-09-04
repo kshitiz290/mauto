@@ -5,32 +5,32 @@ const features = [
     {
         icon: <Calculator className="w-12 h-12 text-primary mx-auto mb-3" />,
         title: 'Inventory Management',
-        desc: 'Keep real-time track of stock levels, product movements, reorder points, and expiry dates. Reduce overstocking and stock outs with intelligent inventory control.'
+        desc: 'See stock levels, movements, reorder points, and expiry in one place. Avoid overstock and stockouts with simple rules.'
     },
     {
         icon: <FileText className="w-12 h-12 text-primary mx-auto mb-3" />,
         title: 'Sales & Billing System',
-        desc: 'Create fast, error-free bills with barcode scanning, multi-mode payments, and integrated POS (Point of Sale). Track sales performance across products and stores.'
+        desc: 'Bill faster with barcode scan and multiple payment modes. Track what sells well across stores.'
     },
     {
         icon: <Truck className="w-12 h-12 text-primary mx-auto mb-3" />,
         title: 'Supplier & Purchase Management',
-        desc: 'Manage vendor details, purchase orders, and payment records. Automate purchase suggestions based on low-stock alerts.'
+        desc: 'Keep vendor info, POs, and payments tidy. Get purchase suggestions when stock runs low.'
     },
     {
         icon: <Users className="w-12 h-12 text-primary mx-auto mb-3" />,
         title: 'Customer Relationship Management (CRM)',
-        desc: 'Build loyalty programs, send personalized offers, and track customer purchase history — all to boost retention and sales.'
+        desc: 'Run loyalty offers and see purchase history to bring customers back.'
     },
     {
         icon: <ShoppingBag className="w-12 h-12 text-primary mx-auto mb-3" />,
         title: 'Multi-Store Integration',
-        desc: 'Manage all your retail outlets from a single dashboard. Get centralized visibility and control across locations.'
+        desc: 'Run multiple outlets from one dashboard with the same workflows everywhere.'
     },
     {
         icon: <BarChart2 className="w-12 h-12 text-primary mx-auto mb-3" />,
         title: 'Analytics & Reporting',
-        desc: 'Access detailed reports and dashboards on sales trends, inventory turnover, top-performing products, and more — enabling data-driven decisions.'
+        desc: 'Check sales trends, inventory turns, and top products with clear reports.'
     }
 ];
 
@@ -63,7 +63,7 @@ const StoreManagementFeatures = () => (
                 transition={{ duration: 0.8, delay: 0.1 }}
                 className="text-center text-base md:text-lg text-foreground/70 mb-10 max-w-3xl mx-auto"
             >
-                With Manacle Technologies, running a retail store involves managing stock, tracking sales, monitoring employees, and ensuring customer satisfaction — all at once. Our Store Management Software is designed to bring everything under one digital roof. Whether you run a single outlet or a multi-location chain, our solution empowers you to manage daily operations efficiently and scale seamlessly.
+                Running a store means juggling stock, billing, and people—often at the same time. Our Store Management Software puts the day-to-day in one place. Works for a single outlet or many.
             </motion.p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {features.map((feature, idx) => (

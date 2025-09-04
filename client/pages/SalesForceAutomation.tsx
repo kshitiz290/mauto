@@ -55,7 +55,7 @@ const SalesForceAutomation = () => {
                 "Biometric integration support"
             ],
             href: "/attendance-leave-management",
-            stats: { impact: "Up to 95%", label: "Accuracy" }
+            stats: { impact: "~95%", label: "Accuracy (reported)" }
         },
         {
             id: 2,
@@ -72,14 +72,14 @@ const SalesForceAutomation = () => {
                 "Multi-channel integration"
             ],
             href: "/order-management-solution",
-            stats: { impact: "Up to 60%", label: "Faster Processing" }
+            stats: { impact: "~60%", label: "Faster Processing (reported)" }
         },
         {
             id: 3,
             icon: <MapPin className="w-8 h-8" />,
             title: "Field Force Tracking & Activity",
             subtitle: "Complete Field Visibility",
-            description: "Monitor field activities with real-time tracking, route optimization, and comprehensive performance analytics.",
+            description: "Monitor field activities with real-time tracking, simple route planning, and clear performance views.",
             gradient: "from-purple-500 to-pink-500",
             bgGradient: "from-purple-50 to-pink-50",
             features: [
@@ -89,14 +89,14 @@ const SalesForceAutomation = () => {
                 "Geo-fence management"
             ],
             href: "/field-force-tracking",
-            stats: { impact: "Up to 40%", label: "Route Efficiency" }
+            stats: { impact: "~40%", label: "Route efficiency (reported)" }
         },
         {
             id: 4,
             icon: <Store className="w-8 h-8" />,
             title: "Distributor Management Solution",
             subtitle: "Supply Chain Excellence",
-            description: "Optimize distributor relationships with automated processes, performance tracking, and data-driven insights.",
+            description: "Improve distributor relationships with clear processes, performance tracking, and practical insights.",
             gradient: "from-orange-500 to-red-500",
             bgGradient: "from-orange-50 to-red-50",
             features: [
@@ -106,14 +106,14 @@ const SalesForceAutomation = () => {
                 "Credit limit monitoring"
             ],
             href: "/distributor-management-solution",
-            stats: { impact: "Up to 35%", label: "Cost Reduction" }
+            stats: { impact: "~35%", label: "Cost Reduction (reported)" }
         },
         {
             id: 5,
             icon: <Eye className="w-8 h-8" />,
             title: "Merchandising & Retail Execution",
             subtitle: "Perfect Store Standards",
-            description: "Ensure optimal product placement and brand visibility with comprehensive merchandising and retail execution tools.",
+            description: "Keep product placement and brand visibility on track with practical retail execution tools.",
             gradient: "from-teal-500 to-blue-500",
             bgGradient: "from-teal-50 to-blue-50",
             features: [
@@ -123,14 +123,14 @@ const SalesForceAutomation = () => {
                 "Promotional execution"
             ],
             href: "/merchandising-retail-execution",
-            stats: { impact: "Up to 85%", label: "Compliance Rate" }
+            stats: { impact: "~85%", label: "Compliance Rate (reported)" }
         },
         {
             id: 6,
             icon: <DollarSign className="w-8 h-8" />,
             title: "Expenses & Claims Management",
             subtitle: "Automated Expense Control",
-            description: "Streamline expense reporting and reimbursement with automated workflows and real-time approval systems.",
+            description: "Streamline expense reporting and reimbursement with simple workflows and real-time approvals.",
             gradient: "from-indigo-500 to-purple-500",
             bgGradient: "from-indigo-50 to-purple-50",
             features: [
@@ -140,14 +140,14 @@ const SalesForceAutomation = () => {
                 "Policy compliance checks"
             ],
             href: "/expenses-claims-management",
-            stats: { impact: "Up to 70%", label: "Processing Speed" }
+            stats: { impact: "~70%", label: "Processing Speed (reported)" }
         },
         {
             id: 7,
             icon: <Users className="w-8 h-8" />,
             title: "Retailer Management Solution",
             subtitle: "Customer Relationship Excellence",
-            description: "Build stronger retailer relationships with comprehensive customer management and engagement tools.",
+            description: "Build stronger retailer relationships with clear customer management and engagement tools.",
             gradient: "from-rose-500 to-pink-500",
             bgGradient: "from-rose-50 to-pink-50",
             features: [
@@ -157,14 +157,14 @@ const SalesForceAutomation = () => {
                 "Credit management"
             ],
             href: "/retailer-management-solution",
-            stats: { impact: "Up to 50%", label: "Customer Retention" }
+            stats: { impact: "~50%", label: "Customer Retention (reported)" }
         },
         {
             id: 8,
             icon: <TrendingUp className="w-8 h-8" />,
             title: "Sales Activity Management",
             subtitle: "Productive Sales Operations",
-            description: "Optimize sales activities with intelligent planning, execution tracking, and performance analytics.",
+            description: "Make sales activities easier with thoughtful planning, execution tracking, and performance views.",
             gradient: "from-amber-500 to-orange-500",
             bgGradient: "from-amber-50 to-orange-50",
             features: [
@@ -174,7 +174,7 @@ const SalesForceAutomation = () => {
                 "Sales pipeline management"
             ],
             href: "/sales-activity-management",
-            stats: { impact: "Up to 45%", label: "Sales Growth" }
+            stats: { impact: "~45%", label: "Sales Growth (reported)" }
         }
     ];
 
@@ -453,8 +453,7 @@ const SalesForceAutomation = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
                             >
-                                Transform your sales operations with intelligent automation that drives results.
-                                Empower your field force with cutting-edge technology and real-time insights.
+                                Give your sales team a calm, organized day. Plan visits, capture orders on the go, and see what’s working in real time—without extra admin.
                             </motion.p>
 
                             <motion.div
@@ -476,7 +475,7 @@ const SalesForceAutomation = () => {
                                     size="lg"
                                     variant="outline"
                                     className="px-8 py-6 text-lg border-2 text-foreground hover:bg-muted hover:text-foreground hover:border-muted-foreground transition-all duration-300 hover:scale-105"
-                                    onClick={() => {window.location.href = '/contact-us'}}
+                                    onClick={() => { window.location.href = '/contact-us' }}
                                 >
                                     Get A Quote
                                 </Button>
@@ -569,18 +568,17 @@ const SalesForceAutomation = () => {
                             transition={{ duration: 0.8 }}
                         >
                             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                                Ready to Transform Your Sales Force?
+                                Ready to simplify sales operations?
                             </h2>
                             <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-                                Join thousands of companies who have revolutionized their sales operations with our
-                                comprehensive SFA solutions. Start your digital transformation journey today.
+                                See how teams use these SFA tools to plan better days and close gaps faster.
                             </p>
                             <div className="flex justify-center">
                                 <Button
                                     size="lg"
                                     variant="secondary"
                                     className="px-8 py-6 text-lg transition-all duration-300 hover:scale-105 bg-background text-foreground hover:bg-muted hover:text-foreground hover:ring-2 hover:ring-amber-300"
-                                    onClick={() => {window.location.href = '/contact-us'}}
+                                    onClick={() => { window.location.href = '/contact-us' }}
                                 >
                                     Schedule a Demo
                                 </Button>

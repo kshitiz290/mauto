@@ -40,54 +40,54 @@ const VisualMerchandising = () => {
     const coreFeatures = [
         {
             icon: <Layout className="w-8 h-8" />,
-            title: "Interactive Planogram Management",
-            description: "Design, manage, and optimize your store layouts with our intuitive planogram tools.",
+            title: "Interactive planogram management",
+            description: "Design and manage store layouts with simple, reliable tools your team can use daily.",
             details: [
                 "Drag-and-drop planogram builder",
-                "Real-time layout optimization",
+                "Real-time layout checks",
                 "Multi-store template distribution",
                 "Category management integration"
             ],
-            expectation: "Typically improves space utilization by 15-25%",
+            expectation: "Often improves space use by ~15–25% (reported)",
             color: "from-blue-500 to-cyan-500"
         },
         {
             icon: <Camera className="w-8 h-8" />,
-            title: "Visual Compliance Monitoring",
-            description: "Ensure brand standards are maintained across all locations with automated monitoring.",
+            title: "Visual compliance monitoring",
+            description: "Keep brand standards consistent across locations with photo checks and simple scoring.",
             details: [
-                "Photo-based compliance audits",
-                "Automated anomaly detection",
-                "Real-time compliance scoring",
-                "Historical compliance tracking"
+                "Photo-based audits",
+                "Flag issues for review",
+                "Real-time scoring",
+                "History and trends"
             ],
-            expectation: "Usually achieves 80-90% compliance consistency",
+            expectation: "Usually reaches ~80–90% consistency (reported)",
             color: "from-orange-500 to-purple-600"
         },
         {
             icon: <BarChart3 className="w-8 h-8" />,
-            title: "Sales Performance Analytics",
-            description: "Track how merchandising changes impact sales performance across products and categories.",
+            title: "Sales performance analytics",
+            description: "See how merchandising changes relate to sales across products and categories.",
             details: [
                 "Product performance tracking",
                 "Heat map analytics",
                 "Sales correlation analysis",
                 "ROI measurement tools"
             ],
-            expectation: "Often reveals 10-20% revenue optimization opportunities",
+            expectation: "Often reveals ~10–20% revenue lift chances (reported)",
             color: "from-green-500 to-emerald-500"
         },
         {
             icon: <Smartphone className="w-8 h-8" />,
-            title: "Mobile Store Execution",
-            description: "Empower your field teams with mobile tools for efficient store execution and auditing.",
+            title: "Mobile store execution",
+            description: "Give your field teams mobile tools for quick audits, photos, and updates—online or offline.",
             details: [
-                "Mobile audit applications",
+                "Mobile audit app",
                 "Photo capture and reporting",
-                "Task management system",
-                "Offline capability support"
+                "Task management",
+                "Offline support"
             ],
-            expectation: "Commonly reduces audit time by 40-60%",
+            expectation: "Commonly cuts audit time by ~40–60% (reported)",
             color: "from-orange-500 to-red-500"
         }
     ];
@@ -96,33 +96,33 @@ const VisualMerchandising = () => {
     const advancedCapabilities = [
         {
             icon: <Target className="w-6 h-6" />,
-            title: "AI-Powered Placement Optimization",
-            description: "Machine learning algorithms suggest optimal product placements based on customer behavior and sales data."
+            title: "Placement suggestions",
+            description: "Get suggested product placements based on past performance and shopper patterns."
         },
         {
             icon: <Eye className="w-6 h-6" />,
-            title: "Customer Journey Mapping",
-            description: "Visualize and optimize customer paths through your store for maximum engagement and conversion."
+            title: "Customer journey mapping",
+            description: "Visualize common paths customers take in your store to improve engagement."
         },
         {
             icon: <Zap className="w-6 h-6" />,
-            title: "Real-Time Inventory Integration",
-            description: "Automatically adjust displays based on real-time inventory levels and product availability."
+            title: "Live inventory link",
+            description: "Adjust displays based on current inventory levels and availability."
         },
         {
             icon: <Users className="w-6 h-6" />,
-            title: "Team Collaboration Tools",
-            description: "Enable seamless communication between headquarters, regional teams, and store staff."
+            title: "Team collaboration tools",
+            description: "Keep HQ, regional teams, and stores aligned with simple checklists and messages."
         },
         {
             icon: <Award className="w-6 h-6" />,
-            title: "Performance Benchmarking",
-            description: "Compare store performance against industry standards and internal benchmarks."
+            title: "Performance benchmarking",
+            description: "Compare store performance against internal standards to find gaps."
         },
         {
             icon: <Clock className="w-6 h-6" />,
-            title: "Seasonal Campaign Management",
-            description: "Plan, execute, and measure seasonal merchandising campaigns across your retail network."
+            title: "Seasonal campaign planning",
+            description: "Plan, track, and measure seasonal campaigns across your retail network."
         }
     ];
 
@@ -131,7 +131,7 @@ const VisualMerchandising = () => {
         {
             value: "15-25%",
             label: "Space Utilization Improvement",
-            description: "Better product placement and layout optimization"
+            description: "Better product placement and use of space"
         },
         {
             value: "80-90%",
@@ -145,7 +145,7 @@ const VisualMerchandising = () => {
         },
         {
             value: "10-20%",
-            label: "Revenue Optimization",
+            label: "Revenue Uplift",
             description: "From data-driven merchandising insights"
         }
     ];
@@ -161,13 +161,13 @@ const VisualMerchandising = () => {
         {
             industry: "Grocery Chains",
             challenge: "Category management and promotional execution",
-            solution: "Dynamic shelf optimization and promotion tracking",
+            solution: "Dynamic shelf planning and promotion tracking",
             outcome: "Enhanced category performance and customer satisfaction"
         },
         {
             industry: "Electronics Stores",
             challenge: "Product demonstration and feature highlighting",
-            solution: "Interactive display planning and customer flow optimization",
+            solution: "Interactive display planning and smoother customer flow",
             outcome: "Increased customer engagement and higher conversion rates"
         }
     ];
@@ -221,9 +221,7 @@ const VisualMerchandising = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.4 }}
                             >
-                                Transform your retail spaces into compelling customer experiences.
-                                Optimize product placement, ensure brand compliance, and maximize sales potential
-                                with intelligent merchandising technology.
+                                Make every shelf count. Plan layouts that are easy to execute, verify whats live in stores, and spot gaps before they impact saleswith clear photos, checklists, and simple dashboards.
                             </motion.p>
 
                             <motion.div
@@ -237,7 +235,7 @@ const VisualMerchandising = () => {
                                         size="lg"
                                         className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-6 text-lg transition-all duration-300 hover:scale-105 shadow-xl"
                                     >
-                                        Start Free Trial <ArrowRight className="ml-2 w-5 h-5" />
+                                        Request a Demo <ArrowRight className="ml-2 w-5 h-5" />
                                     </Button>
                                 </Link>
                                 {/* <Button
@@ -266,7 +264,7 @@ const VisualMerchandising = () => {
                                 Core Capabilities
                             </h2>
                             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                                Comprehensive tools designed to optimize every aspect of your visual merchandising strategy
+                                Simple, dependable tools to improve every part of your visual merchandising work
                             </p>
                         </motion.div>
 
@@ -344,7 +342,7 @@ const VisualMerchandising = () => {
                                 Advanced Features
                             </h2>
                             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                                Next-generation capabilities that set us apart from traditional merchandising solutions
+                                Helpful add‑ons that make everyday merchandising smoother
                             </p>
                         </motion.div>
 
@@ -532,8 +530,7 @@ const VisualMerchandising = () => {
                                 Ready to Transform Your Retail Experience?
                             </h2>
                             <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-                                Join forward-thinking retailers who are already using our visual merchandising solutions
-                                to create compelling customer experiences and drive measurable results.
+                                See how retailers use these tools to keep shelves tidy, campaigns on time, and teams in sync.
                             </p>
                             <div className="flex justify-center">
                                 <Link to="/contact-us">

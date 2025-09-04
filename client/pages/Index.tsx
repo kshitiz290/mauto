@@ -63,7 +63,7 @@ export default function Index() {
           <Suspense fallback={<SectionLoadingFallback message="Loading customer stories..." />}>
             <CustomerCarousel />
           </Suspense>
-          {/* AI Website Builder CTA Section */}
+          {/* Website Builder CTA Section */}
           {/* <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl floating-animation"></div>

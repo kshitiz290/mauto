@@ -42,7 +42,7 @@ const WeFocusQuality = () => {
         <a href="/contact-us" className="inline-block group relative">
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
           <button type="button" className="relative px-6 py-3 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98]">
-            START YOUR FREE TRIAL
+            REQUEST A DEMO
           </button>
         </a>
       </div>

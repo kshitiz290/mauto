@@ -2011,8 +2011,8 @@ export default function AutoSite() {
                   <span className="block mt-2">Website Builder</span>
                 </h1>
                 <p className="text-xl sm:text-2xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
-                  Create a professional website in minutes with our intelligent AI builder.
-                  No coding required, just answer a few questions and watch your site come to life.
+                  Create a professional website in minutes with our guided builder.
+                  No coding requiredjust answer a few questions and watch your site come to life.
                 </p>
               </div>
 

@@ -52,7 +52,7 @@ const services: ServiceItem[] = [
     title: "Digital & WhatsApp Ordering",
     iconPath: "/icons/tech/custom/digital.svg", // Digital Ordering: digital.svg is most relevant
     iconAlt: "Digital Ordering Icon",
-    description: "Enable digital and WhatsApp-based ordering for seamless B2B and B2C transactions.",
+    description: "Enable digital and WhatsApp-based ordering for smooth B2B and B2C transactions.",
   },
 ];
 

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 const features = [
     {
-        title: 'Mobile Attendance Tracking',
+        title: 'Easy Retailer Onboarding',
         desc: 'Simplify the onboarding process with digital forms, document uploads, and automated KYC verification for quick and compliant retailer registration.'
     },
     {
@@ -15,7 +15,7 @@ const features = [
     },
     {
         title: 'Promotions & Scheme Management',
-        desc: 'Design and broadcast tailored offers, discounts, and loyalty programs to your retailers instantly. Track scheme performance and optimize campaigns for better ROI.'
+        desc: 'Design and broadcast tailored offers, discounts, and loyalty programs to your retailers instantly. Track scheme performance and improve campaigns for better ROI.'
     },
     {
         title: 'Retailer Performance Analytics',
@@ -60,7 +60,7 @@ const RetailerManagementFeatures = () => (
                     Retailer Management Solution
                 </h2>
                 <p className="text-base md:text-lg text-foreground/70 mb-6 leading-relaxed">
-                    Managing retail networks manually is inefficient and error-prone. Manacle India's Retailer Management Solution empowers businesses to automate operations, streamline retailer interactions, and make data-driven decisions. Here's what we offer:
+                    Managing a retail network by hand gets messy. Our Retailer Management Solution makes daily work easier—fewer calls, fewer spreadsheets, faster decisions. Here’s what you get:
                 </p>
                 <div className="grid grid-cols-1 gap-5">
                     {features.map((feature, idx) => (

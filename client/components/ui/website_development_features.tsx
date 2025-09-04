@@ -4,32 +4,32 @@ const features = [
     {
         title: "Custom Website Design",
         image: "https://img.freepik.com/free-photo/ui-ux-representations-with-laptop_23-2150201871.jpg?t=st=1755719683~exp=1755723283~hmac=afdb164f6a4d279a06baca8ce408498ae7f3ec14d7e6cb06f2c5c604701e41e5&w=740",
-        desc: "Your website is your digital storefront. Our design experts create intuitive, mobile-optimized, and brand-aligned layouts that ensure a seamless user experience and strong visual impact."
+        desc: "Your website is your storefront. We design clean, mobile‑first pages that feel familiar, look on‑brand, and help people find what they need fast."
     },
     {
         title: "Website Development",
         image: "https://img.freepik.com/free-photo/programming-background-with-person-working-with-codes-computer_23-2150010125.jpg?t=st=1755719483~exp=1755723083~hmac=860d97205977595b9a062666ef19bb782cbd21c68f055d9222a08ce727df23e7&w=740",
-        desc: "We develop high-performance websites using modern technologies and frameworks. Whether it’s a static website, dynamic CMS, or full-scale web application — we ensure fast loading, secure, and scalable solutions."
+        desc: "We build fast, secure sites—simple pages, CMS, or full apps—using modern tools."
     },
     {
         title: "E-Commerce Development",
         image: "https://img.freepik.com/free-vector/3d-isometric-e-commerce-concept-online-store_1441-2128.jpg?t=st=1755719782~exp=1755723382~hmac=22383f6e97d05cf9a37a695be6a590e21a63681e3803c209b0c29ef04d7659e1&w=740",
-        desc: "Launch your online store with powerful e-commerce platforms like Shopify, WooCommerce, or custom-built solutions. We focus on high-conversion design, secure payments, and smooth checkout processes."
+        desc: "Launch your store on Shopify, WooCommerce, or custom. Clean product pages, secure payments, and a smooth checkout."
     },
     {
         title: "CMS Integration",
         image: "https://img.freepik.com/free-vector/flat-content-management-system-illustrated_23-2148810388.jpg?t=st=1755719865~exp=1755723465~hmac=c735758657b1c57120c4bdc2bf2281399f8648b22b7753679f152081e74a681b&w=740",
-        desc: "Easily manage your website with powerful content management systems like WordPress, Drupal, or a custom CMS—empowering your team to update content and images without needing technical expertise."
+        desc: "Use WordPress, Drupal, or a simple custom CMS so your team can edit content without calling a developer."
     },
     {
         title: "Responsive & Mobile-Friendly",
         image: "https://img.freepik.com/free-photo/person-paying-with-its-smartphone-wallet-app_23-2149167256.jpg?t=st=1755719968~exp=1755723568~hmac=d7a51357e4d9db9436419d33ebdb3601c603bba418ae1d0fd4fb7d92aa952748&w=740",
-        desc: "Every website we build is responsive and mobile-friendly website adapts seamlessly to all screen sizes—desktops, tablets, and smartphones—ensuring a smooth user experience across devices."
+        desc: "Every site adapts to phones, tablets, and desktops—no pinching, no zooming."
     },
     {
         title: "SEO Performance Optimization",
         image: "https://img.freepik.com/free-vector/seo-ranking-analysis-internet-technology_107791-2380.jpg?t=st=1755720030~exp=1755723630~hmac=a04817820d816711e9432e8d7a960ab1bfb729f2e0066753423759765e54c940&w=740",
-        desc: "Our development includes technical SEO performance optimization, best practices and speed optimization to help your rank better on Google and deliver a lightning-fast experience to users."
+        desc: "We handle technical SEO basics and speed so you load fast and get discovered."
     }
 ];
 

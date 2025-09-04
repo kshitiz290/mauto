@@ -5,33 +5,33 @@ import { CheckCircle, BarChart2, Cpu, Users, Smartphone, Smile, Repeat, Trending
 const features = [
   {
     icon: <Cpu className="text-orange-500 w-7 h-7" />,
-    title: "Innovative Technology Solutions",
-    desc: "Delivering cutting-edge technology tailored to unique business needs, enabling seamless automation and efficiency."
+    title: "Tools that fit your work",
+    desc: "Software that matches your process, so teams spend less time on busywork and more on real results."
   },
   {
     icon: <BarChart2 className="text-blue-500 w-7 h-7" />,
-    title: "Data-Driven Insights",
-    desc: "Providing actionable analytics and AI-powered insights to help companies make smarter decisions and optimize operations."
+    title: "Clear, simple insights",
+    desc: "See what's working and what needs attention—without digging through heavy reports."
   },
   {
     icon: <Users className="text-green-500 w-7 h-7" />,
-    title: "Superior Customer Engagement",
-    desc: "Enhancing customer experience and engagement through personalized solutions and support."
+    title: "Keep customers close",
+    desc: "Track conversations and follow‑ups in one place so nothing slips."
   },
   {
     icon: <Smile className="text-pink-500 w-7 h-7" />,
-    title: "Customer-Centric Approach",
-    desc: "We help companies build stronger relationships, increase retention, and boost lifetime value by focusing on the end-user experience."
+    title: "Built around people",
+    desc: "Plain‑language screens, quick support, and tidy workflows help teams adopt fast."
   },
   {
     icon: <Repeat className="text-indigo-500 w-7 h-7" />,
-    title: "End-to-End Support",
-    desc: "From strategy to implementation and ongoing optimization, we partner with companies at every step, ensuring sustainable growth and continuous innovation."
+    title: "We stay with you",
+    desc: "From setup to everyday use, we help you get value and keep improving over time."
   },
   {
     icon: <TrendingUp className="text-yellow-500 w-7 h-7" />,
-    title: "Market Expansion and Competitive Edge",
-    desc: "We help businesses identify untapped markets and streamline processes to outpace competitors, positioning them as leaders in their industries."
+    title: "Room to grow",
+    desc: "Add modules and users as you scale—without starting over."
   }
 ];
 
@@ -53,7 +53,7 @@ export default function HowHelpingCompanies() {
             }}
             viewport={{ once: true, margin: "-100px" }}
           >
-            How Are We Helping Companies
+            How we help companies
             <motion.span
               className="block mt-2 text-gray-700 dark:text-orange-200 font-normal text-lg sm:text-xl"
               initial={{ opacity: 0, x: -30 }}
@@ -65,7 +65,7 @@ export default function HowHelpingCompanies() {
               }}
               viewport={{ once: true }}
             >
-              Achieve Tremendous Growth?
+              hit their goals, step by step
             </motion.span>
           </motion.h2>
           <motion.p
@@ -79,7 +79,7 @@ export default function HowHelpingCompanies() {
             }}
             viewport={{ once: true }}
           >
-            We help our clients accelerate sales & distribution growth with 360° retail intelligence. In doing so, we focus on:
+            We help sales and distribution teams work faster and with more clarity. Here's where we make a difference:
           </motion.p>
           <ul className="space-y-6">
             {features.map((f, i) => (
@@ -199,7 +199,7 @@ export default function HowHelpingCompanies() {
               </div>
               {/* Banner */}
               <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="relative rounded-xl bg-gradient-to-r from-yellow-200 to-orange-200 dark:from-yellow-600 dark:to-orange-800 flex items-center px-3 py-2 mb-1 overflow-hidden">
-                <span className="text-xs font-semibold text-gray-800 dark:text-white mr-2">Artificial Intelligent Insight Engine</span>
+                <span className="text-xs font-semibold text-gray-800 dark:text-white mr-2">Insight Highlights</span>
                 <span className="ml-auto text-xs bg-yellow-400/80 dark:bg-yellow-700 text-white px-2 py-1 rounded shadow">Try Now</span>
               </motion.div>
               {/* Stats */}

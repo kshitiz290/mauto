@@ -18,6 +18,12 @@ export function Hero() {
   const { theme } = useTheme();
   const navigate = useNavigate();
   const ref = useRef(null);
+  // Prefer a lighter animation path on small portrait phones for smoothness
+  const isMobilePortrait = typeof window !== 'undefined'
+    ? window.matchMedia('(max-width: 480px) and (orientation: portrait)').matches
+    : false;
+  // On small-and-up (tablets/medium/large), slightly slow background animations for a smoother feel
+  const desktopSlowFactor = typeof window !== 'undefined' && window.matchMedia('(min-width: 640px)').matches ? 1.25 : 1;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
@@ -44,7 +50,7 @@ export function Hero() {
           className="absolute left-1/2 transform -translate-x-1/2 w-32 h-32 hidden sm:block"
           style={{ top: 'calc(50% + 80px)' }}
           animate={{ rotate: [0, 360] }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 40 * desktopSlowFactor, repeat: Infinity, ease: "linear" }}
         >
           <div className="w-full h-full bg-gradient-to-br from-orange-500/10 to-yellow-400/10 dark:from-orange-400/15 dark:to-yellow-300/15 rounded-full blur-xl" />
           <div className="absolute inset-4 bg-gradient-to-br from-orange-400/15 to-yellow-500/15 dark:from-orange-300/20 dark:to-yellow-400/20 rounded-full blur-lg" />
@@ -66,7 +72,7 @@ export function Hero() {
           className="absolute left-1/2 transform -translate-x-1/2 w-80 h-80 hidden sm:block"
           style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
           animate={{ rotate: [0, 360] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 20 * desktopSlowFactor, repeat: Infinity, ease: "linear" }}
         >
           <div className="relative w-full h-full border border-orange-300/20 dark:border-orange-400/30 rounded-full">
             {/* Data Nodes on Orbit */}
@@ -99,7 +105,7 @@ export function Hero() {
           className="absolute left-1/2 transform -translate-x-1/2 w-[500px] h-[500px] hidden md:block"
           style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
           animate={{ rotate: [360, 0] }}
-          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 35 * desktopSlowFactor, repeat: Infinity, ease: "linear" }}
         >
           <div className="relative w-full h-full border border-yellow-300/15 dark:border-yellow-400/25 rounded-full">
             {/* Business Icons on Orbit */}
@@ -142,7 +148,7 @@ export function Hero() {
           className="absolute left-1/2 transform -translate-x-1/2 w-[700px] h-[700px] hidden lg:block"
           style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
           animate={{ rotate: [0, 360] }}
-          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 50 * desktopSlowFactor, repeat: Infinity, ease: "linear" }}
         >
           <div className="relative w-full h-full border border-orange-300/10 dark:border-orange-400/20 rounded-full">
             {/* Satellite Data Points */}
@@ -186,7 +192,7 @@ export function Hero() {
               opacity: [0, 0.8, 0]
             }}
             transition={{
-              duration: 8,
+              duration: 8 * desktopSlowFactor,
               repeat: Infinity,
               ease: "easeInOut",
               times: [0, 0.5, 1]
@@ -206,7 +212,7 @@ export function Hero() {
               opacity: [0, 0.7, 0]
             }}
             transition={{
-              duration: 12,
+              duration: 12 * desktopSlowFactor,
               repeat: Infinity,
               ease: "easeInOut",
               delay: 3,
@@ -1433,7 +1439,7 @@ export function Hero() {
               scaleY: [0.5, 1, 0.5],
             }}
             transition={{
-              duration: 12,
+              duration: 12 * desktopSlowFactor,
               repeat: Infinity,
               ease: "easeInOut"
             }}
@@ -1452,7 +1458,7 @@ export function Hero() {
               scaleY: [1, 0.5, 1],
             }}
             transition={{
-              duration: 10,
+              duration: 10 * desktopSlowFactor,
               repeat: Infinity,
               ease: "easeInOut",
               delay: 1
@@ -1467,9 +1473,10 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
         >
-          Empowering Businesses with{" "}
+          The Connection That Counts
+          <br />
           <span className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent animate-gradient-x bg-size-200">
-            Smarter Software Solutions
+            The Result That Lasts
           </span>
         </motion.h1>
 
@@ -1502,7 +1509,7 @@ export function Hero() {
               onClick={() => navigate('/contact-us')}
             >
               <Play className="w-5 h-5 mr-2" />
-              Start Free Trial
+              Request a Demo
             </Button>
           </motion.div>
 
@@ -1536,7 +1543,7 @@ export function Hero() {
           </div>
           <div className="flex items-center space-x-2">
             <CheckCircle className="w-5 h-5 text-green-500" />
-            <span className="font-medium">99.9% uptime guarantee</span>
+            <span className="font-medium">99.9% uptime target</span>
           </div>
           <div className="flex items-center space-x-2">
             <CheckCircle className="w-5 h-5 text-green-500" />
@@ -1548,30 +1555,20 @@ export function Hero() {
       {/* Manacle Success & Trust Section */}
       <motion.section
         className="relative z-10 px-6 lg:px-8 py-12 lg:py-20"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 0.8,
-            ease: "easeOut"
-          }
-        }}
+        initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, y: 50 }}
+        whileInView={isMobilePortrait
+          ? { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+          : { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }}
         viewport={{ once: true, margin: "-100px" }}
       >
         <div className="max-w-7xl mx-auto">
           {/* Cursive Header */}
           <motion.div
             className="text-center mb-16"
-            initial={{ opacity: 0 }}
-            whileInView={{
-              opacity: 1,
-              transition: {
-                duration: 0.6,
-                ease: "easeOut",
-                delay: 0.3
-              }
-            }}
+            initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0 }}
+            whileInView={isMobilePortrait
+              ? { opacity: 1, transition: { duration: 0.4, ease: "easeOut" } }
+              : { opacity: 1, transition: { duration: 0.6, ease: "easeOut", delay: 0.3 } }}
             viewport={{ once: true }}
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-medium text-slate-800 dark:text-slate-200 mb-4" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
@@ -1587,71 +1584,65 @@ export function Hero() {
             {/* Left: Key Achievements */}
             <motion.div
               className="space-y-8"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{
-                opacity: 1,
-                x: 0,
-                transition: {
-                  duration: 0.8,
-                  ease: "easeOut",
-                  delay: 0.3
-                }
-              }}
+              initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, x: -50 }}
+              whileInView={isMobilePortrait
+                ? { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                : { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut", delay: 0.3 } }}
               viewport={{ once: true, margin: "-100px" }}
             >
-              <div className="bg-gradient-to-br from-white/90 to-blue-50/90 dark:from-slate-800/90 dark:to-slate-700/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/30 dark:border-slate-600/30">
+              <div className="bg-gradient-to-br from-white/90 to-blue-50/90 dark:from-slate-800/90 dark:to-slate-700/90 backdrop-blur-lg rounded-3xl p-5 md:p-8 shadow-2xl border border-white/30 dark:border-slate-600/30 text-center mx-auto max-w-md sm:max-w-lg lg:max-w-none">
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-6 text-slate-800 dark:text-slate-200" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
                   The Manacle Advantage
                 </h3>
 
                 <div className="space-y-6">
                   <motion.div
-                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl border border-emerald-200 dark:border-emerald-700"
-                    whileHover={{ scale: 1.02, x: 5 }}
+                    className="flex items-center justify-center space-x-4 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl border border-emerald-200 dark:border-emerald-700"
+                    whileHover={isMobilePortrait ? undefined : { scale: 1.02, x: 5 }}
                   >
                     <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                       ✓
                     </div>
-                    <div>
+                    <div className="text-center">
                       <p className="text-lg font-semibold text-emerald-800 dark:text-emerald-200">200+ Happy Customers</p>
                       <p className="text-sm text-emerald-600 dark:text-emerald-400">Businesses successfully transformed</p>
                     </div>
                   </motion.div>
 
                   <motion.div
-                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-700"
-                    whileHover={{ scale: 1.02, x: 5 }}
+                    className="flex items-center justify-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-700"
+                    whileHover={isMobilePortrait ? undefined : { scale: 1.02, x: 5 }}
                   >
                     <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                       ⚡
                     </div>
-                    <div>
+                    <div className="text-center">
                       <p className="text-lg font-semibold text-blue-800 dark:text-blue-200">2000+ Distributors Onboard</p>
                       <p className="text-sm text-blue-600 dark:text-blue-400">Active distribution network across regions</p>
                     </div>
                   </motion.div>
 
                   <motion.div
-                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-2xl border border-purple-200 dark:border-purple-700"
-                    whileHover={{ scale: 1.02, x: 5 }}
+                    className="flex items-center justify-center space-x-4 p-4 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-2xl border border-purple-200 dark:border-purple-700"
+                    whileHover={isMobilePortrait ? undefined : { scale: 1.02, x: 5 }}
                   >
                     <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                       ★
                     </div>
-                    <div>
+                    <div className="text-center">
                       <p className="text-lg font-semibold text-purple-800 dark:text-purple-200">10,000+ Active Salespeople</p>
                       <p className="text-sm text-purple-600 dark:text-purple-400">Empowered by our SFA solutions</p>
                     </div>
                   </motion.div>
 
                   <motion.div
-                    className="flex items-center space-x-4 p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-2xl border border-orange-200 dark:border-orange-700"
-                    whileHover={{ scale: 1.02, x: 5 }}
+                    className="flex items-center justify-center space-x-4 p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-2xl border border-orange-200 dark:border-orange-700"
+                    whileHover={isMobilePortrait ? undefined : { scale: 1.02, x: 5 }}
                   >
                     <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                       🏆
                     </div>
-                    <div>
+                    <div className="text-center">
                       <p className="text-lg font-semibold text-orange-800 dark:text-orange-200">End-to-End Solutions Provider</p>
                       <p className="text-sm text-orange-600 dark:text-orange-400">CRM, ERP, HRMS, SFA & more</p>
                     </div>
@@ -1663,113 +1654,99 @@ export function Hero() {
             {/* Right: Live Metrics */}
             <motion.div
               className="space-y-8"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{
-                opacity: 1,
-                x: 0,
-                transition: {
-                  duration: 0.8,
-                  ease: "easeOut",
-                  delay: 0.4
-                }
-              }}
+              initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, x: 50 }}
+              whileInView={isMobilePortrait
+                ? { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                : { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut", delay: 0.4 } }}
               viewport={{ once: true, margin: "-100px" }}
             >
-              <div className="bg-gradient-to-br from-white/90 to-purple-50/90 dark:from-slate-800/90 dark:to-purple-900/20 backdrop-blur-lg rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-2xl border border-white/30 dark:border-slate-600/30 overflow-hidden">
+              <div className="rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-8 bg-transparent sm:bg-gradient-to-br sm:from-white/90 sm:to-purple-50/90 dark:sm:from-slate-800/90 dark:sm:to-purple-900/20 sm:backdrop-blur-lg sm:shadow-2xl sm:border sm:border-white/30 dark:sm:border-slate-600/30 overflow-hidden mx-auto max-w-md sm:max-w-none text-center">
                 <div className="relative">
                   <motion.div
                     className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-yellow-400/20 rounded-full blur-2xl"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                    animate={isMobilePortrait ? undefined : { rotate: [0, 360] }}
+                    transition={isMobilePortrait ? undefined : { duration: 15, repeat: Infinity, ease: "linear" }}
                   />
 
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-6 md:mb-8 text-slate-800 dark:text-slate-200 relative z-10" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4 sm:mb-6 md:mb-8 text-slate-800 dark:text-slate-200 relative z-10 text-center" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
                     Success by the Numbers
                   </h3>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 relative z-10">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 md:gap-6 relative z-10">
                     <motion.div
-                      className="text-center p-3 md:p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10 dark:from-green-400/20 dark:to-emerald-400/20 rounded-xl md:rounded-2xl border border-green-200/50 dark:border-green-600/30"
-                      animate={{
-                        boxShadow: [
-                          "0 0 20px rgba(34, 197, 94, 0.2)",
-                          "0 0 30px rgba(34, 197, 94, 0.4)",
-                          "0 0 20px rgba(34, 197, 94, 0.2)"
-                        ]
-                      }}
-                      transition={{ duration: 3, repeat: Infinity }}
+                      className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10 dark:from-green-400/20 dark:to-emerald-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-green-200/40 sm:border-green-200/50 dark:border-green-600/30"
+                      animate={isMobilePortrait ? undefined : { boxShadow: [
+                        "0 0 20px rgba(34, 197, 94, 0.2)",
+                        "0 0 30px rgba(34, 197, 94, 0.4)",
+                        "0 0 20px rgba(34, 197, 94, 0.2)"
+                      ] }}
+                      transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity }}
                     >
                       <motion.p
-                        className="text-2xl md:text-4xl font-bold text-green-600 dark:text-green-400 mb-1 md:mb-2"
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        className="text-xl sm:text-2xl md:text-4xl font-bold text-green-600 dark:text-green-400 mb-0.5 sm:mb-1 md:mb-2"
+                        animate={isMobilePortrait ? undefined : { scale: [1, 1.05, 1] }}
+                        transition={isMobilePortrait ? undefined : { duration: 2, repeat: Infinity }}
                       >
                         15+
                       </motion.p>
-                      <p className="text-xs md:text-sm text-green-700 dark:text-green-300 font-medium">Years in Industry</p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-green-700 dark:text-green-300 font-medium">Years in Industry</p>
                     </motion.div>
 
                     <motion.div
-                      className="text-center p-3 md:p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-400/20 dark:to-cyan-400/20 rounded-xl md:rounded-2xl border border-blue-200/50 dark:border-blue-600/30"
-                      animate={{
-                        boxShadow: [
-                          "0 0 20px rgba(59, 130, 246, 0.2)",
-                          "0 0 30px rgba(59, 130, 246, 0.4)",
-                          "0 0 20px rgba(59, 130, 246, 0.2)"
-                        ]
-                      }}
-                      transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                      className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-400/20 dark:to-cyan-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-blue-200/40 sm:border-blue-200/50 dark:border-blue-600/30"
+                      animate={isMobilePortrait ? undefined : { boxShadow: [
+                        "0 0 20px rgba(59, 130, 246, 0.2)",
+                        "0 0 30px rgba(59, 130, 246, 0.4)",
+                        "0 0 20px rgba(59, 130, 246, 0.2)"
+                      ] }}
+                      transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 1 }}
                     >
                       <motion.p
-                        className="text-2xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-1 md:mb-2"
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                        className="text-xl sm:text-2xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-0.5 sm:mb-1 md:mb-2"
+                        animate={isMobilePortrait ? undefined : { scale: [1, 1.05, 1] }}
+                        transition={isMobilePortrait ? undefined : { duration: 2, repeat: Infinity, delay: 1 }}
                       >
                         200+
                       </motion.p>
-                      <p className="text-xs md:text-sm text-blue-700 dark:text-blue-300 font-medium">Satisfied Clients</p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-blue-700 dark:text-blue-300 font-medium">Satisfied Clients</p>
                     </motion.div>
 
                     <motion.div
-                      className="text-center p-3 md:p-6 bg-gradient-to-br from-purple-500/10 to-violet-500/10 dark:from-purple-400/20 dark:to-violet-400/20 rounded-xl md:rounded-2xl border border-purple-200/50 dark:border-purple-600/30"
-                      animate={{
-                        boxShadow: [
-                          "0 0 20px rgba(147, 51, 234, 0.2)",
-                          "0 0 30px rgba(147, 51, 234, 0.4)",
-                          "0 0 20px rgba(147, 51, 234, 0.2)"
-                        ]
-                      }}
-                      transition={{ duration: 3, repeat: Infinity, delay: 2 }}
+                      className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-purple-500/10 to-violet-500/10 dark:from-purple-400/20 dark:to-violet-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-purple-200/40 sm:border-purple-200/50 dark:border-purple-600/30"
+                      animate={isMobilePortrait ? undefined : { boxShadow: [
+                        "0 0 20px rgba(147, 51, 234, 0.2)",
+                        "0 0 30px rgba(147, 51, 234, 0.4)",
+                        "0 0 20px rgba(147, 51, 234, 0.2)"
+                      ] }}
+                      transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 2 }}
                     >
                       <motion.p
-                        className="text-2xl md:text-4xl font-bold text-purple-600 dark:text-purple-400 mb-1 md:mb-2"
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, delay: 2 }}
+                        className="text-xl sm:text-2xl md:text-4xl font-bold text-purple-600 dark:text-purple-400 mb-0.5 sm:mb-1 md:mb-2"
+                        animate={isMobilePortrait ? undefined : { scale: [1, 1.05, 1] }}
+                        transition={isMobilePortrait ? undefined : { duration: 2, repeat: Infinity, delay: 2 }}
                       >
                         24/7
                       </motion.p>
-                      <p className="text-xs md:text-sm text-purple-700 dark:text-purple-300 font-medium">Expert Support</p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-purple-700 dark:text-purple-300 font-medium">Expert Support</p>
                     </motion.div>
 
                     <motion.div
-                      className="text-center p-3 md:p-6 bg-gradient-to-br from-orange-500/10 to-red-500/10 dark:from-orange-400/20 dark:to-red-400/20 rounded-xl md:rounded-2xl border border-orange-200/50 dark:border-orange-600/30"
-                      animate={{
-                        boxShadow: [
-                          "0 0 20px rgba(249, 115, 22, 0.2)",
-                          "0 0 30px rgba(249, 115, 22, 0.4)",
-                          "0 0 20px rgba(249, 115, 22, 0.2)"
-                        ]
-                      }}
-                      transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+                      className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-orange-500/10 to-red-500/10 dark:from-orange-400/20 dark:to-red-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-orange-200/40 sm:border-orange-200/50 dark:border-orange-600/30"
+                      animate={isMobilePortrait ? undefined : { boxShadow: [
+                        "0 0 20px rgba(249, 115, 22, 0.2)",
+                        "0 0 30px rgba(249, 115, 22, 0.4)",
+                        "0 0 20px rgba(249, 115, 22, 0.2)"
+                      ] }}
+                      transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 0.5 }}
                     >
                       <motion.p
-                        className="text-2xl md:text-4xl font-bold text-orange-600 dark:text-orange-400 mb-1 md:mb-2"
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                        className="text-xl sm:text-2xl md:text-4xl font-bold text-orange-600 dark:text-orange-400 mb-0.5 sm:mb-1 md:mb-2"
+                        animate={isMobilePortrait ? undefined : { scale: [1, 1.05, 1] }}
+                        transition={isMobilePortrait ? undefined : { duration: 2, repeat: Infinity, delay: 0.5 }}
                       >
                         100%
                       </motion.p>
-                      <p className="text-xs md:text-sm text-orange-700 dark:text-orange-300 font-medium">Custom Solutions</p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-orange-700 dark:text-orange-300 font-medium">Custom Solutions</p>
                     </motion.div>
                   </div>
                 </div>

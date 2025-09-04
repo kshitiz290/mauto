@@ -2,33 +2,33 @@ import { motion } from 'framer-motion';
 
 const features = [
     {
-        title: 'Automated Expense Tracking',
-        desc: 'Say goodbye to manual entry and spreadsheets. Our solution allows employees to submit expenses digitally with real-time tracking and auto-categorization of costs.',
+        title: 'Simple expense capture',
+        desc: 'Snap a receipt, pick a category, and submit. No more chasing Excel files.',
         img: 'https://img.freepik.com/free-photo/invoice-bill-paid-payment-financial-account-concept_53876-122994.jpg?t=st=1755719039~exp=1755722639~hmac=db6d84853a6f8b87bdabafe2376665a75b71e03cf4a56a99801e563c77320e17&w=740'
     },
     {
-        title: 'Smart Approval Workflows',
-        desc: 'Customize multi-level approval flows to match your organizational hierarchy. Approvers can view, verify, and better compliance—reducing bottlenecks while boosting productivity.',
+        title: 'Approvals that match your org',
+        desc: 'Set one‑step or multi‑step approvals, with clear visibility for approvers and finance.',
         img: 'https://img.freepik.com/free-photo/standard-quality-control-collage-concept_23-2149595828.jpg?t=st=1755719109~exp=1755722709~hmac=ae1da91db323f760d497d1c764a9c5367300772d33ef3a522f58459d57622031&w=2000'
     },
     {
-        title: 'Policy Compliance Monitoring',
-        desc: 'Ensure that all expense claims are compliant with your company’s internal policies. Our system auto-flags non-compliant entries, reducing fraud and misuse.',
+        title: 'Policy checks built in',
+        desc: 'Flag out‑of‑policy claims automatically and keep notes for audits.',
         img: 'https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?auto=format&fit=crop&w=400&q=80'
     },
     {
-        title: 'Real-Time Analytics & Reports',
-        desc: 'Gain insights into company spending with dashboards and detailed reports. Analyze patterns, detect anomalies, and make informed financial decisions.',
+        title: 'Spending at a glance',
+        desc: 'Dashboards show trends by team, project, or month so you can course‑correct early.',
         img: 'https://img.freepik.com/free-photo/business-people-working-with-ipad-side-view_23-2150103553.jpg?t=st=1755719154~exp=1755722754~hmac=cd4d5e39bc2078a01f52e5eea5e7dfed605bc0b6c73966acac1ac1917351391a&w=740'
     },
     {
-        title: 'Reimbursement Tracking',
-        desc: 'Refers to the process of managing, monitoring, and ensuring timely repayment of expenses incurred by employees, field staff, or business units.',
+        title: 'Track reimbursements',
+        desc: 'See what’s pending and what’s paid, with clear timelines for employees.',
         img: 'https://img.freepik.com/free-photo/closeup-shot-entrepreneur-working-from-home-his-personal-finances-savings_181624-21394.jpg?t=st=1755719226~exp=1755722826~hmac=59793ab9bf64203945b0a2211ac9d92c88a03018121d0b3b89d559b4933bb0d8&w=740'
     },
     {
-        title: 'Mobile Access & Cloud Sync',
-        desc: 'Let your workforce submit claims, upload receipts, and check statuses on the go. All data syncs securely to the cloud, ensuring accessibility and data integrity.',
+        title: 'Works on the go',
+        desc: 'Submit, approve, and check status from mobile. Data stays in sync and secure.',
         img: 'https://img.freepik.com/free-photo/hand-touching-tablet_1134-426.jpg?t=st=1755719281~exp=1755722881~hmac=de7058f8426594118753ebdc22c39d6d0a133f86c60c8036495d5a299caae501&w=2000'
     }
 ];
@@ -62,7 +62,7 @@ const ExpensesClaimsFeatures = () => (
                 transition={{ duration: 0.8, delay: 0.1 }}
                 className="text-center text-base md:text-lg text-foreground/70 mb-10 max-w-3xl mx-auto"
             >
-                At Manacle India, we specialize in delivering cutting-edge digital solutions to streamline your business operations. Our Expenses & Claims Management Solution is designed to eliminate manual processes, reduce errors, and enhance compliance for companies of all sizes. Here’s what we offer:
+                Managing expenses shouldn’t be a headache. This module keeps submissions, approvals, and payouts in one clean flow—so teams move faster and finance stays in control.
             </motion.p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {features.map((feature, idx) => (

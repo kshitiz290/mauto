@@ -29,64 +29,64 @@ const solutions: Solution[] = [
     {
         id: "attendance-leave",
         title: "Attendance & Leave Management",
-        description: "Comprehensive attendance tracking and leave management system for workforce optimization.",
+        description: "Make check‑ins simple and manage leaves without back‑and‑forth — built for teams on the move.",
         icon: <Users className="w-5 h-5" />,
         href: "/attendance-leave-management",
         gradient: "from-blue-500 to-purple-500",
         category: "SFA",
-        stats: "Up to 40% Efficiency"
+        stats: "Teams report ~40% efficiency"
     },
     {
         id: "distributor-management",
         title: "Distributor Management",
-        description: "Complete distributor network management with real-time tracking and analytics.",
+        description: "See what’s moving across your network, spot gaps early, and keep orders flowing.",
         icon: <ShoppingCart className="w-5 h-5" />,
         href: "/distributor-management-solution",
         gradient: "from-emerald-500 to-teal-500",
         category: "SFA",
-        stats: "Up to 35% Growth"
+        stats: "Teams report ~35% growth"
     },
     // ERP Solutions
     {
         id: "merchandising-retail",
         title: "Merchandising & Retail Execution",
-        description: "Advanced retail execution and merchandising solutions for optimal store performance.",
+        description: "Keep shelves in shape with clear tasks and photo checks so sales don’t slip.",
         icon: <Package className="w-5 h-5" />,
         href: "/merchandising-retail-execution",
         gradient: "from-orange-500 to-red-500",
         category: "ERP",
-        stats: "Up to 50% ROI"
+        stats: "Reported ~50% ROI"
     },
     {
         id: "dispatch-management",
         title: "Dispatch Management",
-        description: "Intelligent dispatch and logistics management for streamlined operations.",
+        description: "Plan trips, share digital slips, and track vehicles so orders reach on time.",
         icon: <Factory className="w-5 h-5" />,
         href: "/dispatch-management",
         gradient: "from-violet-500 to-indigo-500",
         category: "ERP",
-        stats: "Up to 30% Savings"
+        stats: "Reported ~30% savings"
     },
     // Other Solutions
     {
         id: "hrms",
         title: "HRMS",
-        description: "Human Resource Management System for complete workforce management.",
+        description: "Keep employee data, attendance, payroll, and leaves in one simple place.",
         icon: <Globe className="w-5 h-5" />,
         href: "/hrms",
         gradient: "from-green-500 to-teal-500",
         category: "Others",
-        stats: "Up to 60% Automation"
+        stats: "Reported ~60% automation"
     },
     {
         id: "crm",
         title: "CRM",
-        description: "Customer Relationship Management for enhanced customer engagement and sales.",
+        description: "Keep contacts, deals, and follow‑ups organized so your team closes more with less stress.",
         icon: <MessageSquare className="w-5 h-5" />,
         href: "/crm-software",
         gradient: "from-pink-500 to-red-500",
         category: "Others",
-        stats: "Up to 45% Sales Boost"
+        stats: "Reported ~45% sales lift"
     }
 ];
 
@@ -103,6 +103,9 @@ const categoryColors = {
 };
 
 export function CompactSolutions() {
+    const isMobilePortrait = typeof window !== 'undefined'
+        ? window.matchMedia('(max-width: 480px) and (orientation: portrait)').matches
+        : false;
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -140,10 +143,10 @@ export function CompactSolutions() {
             <div className="container mx-auto px-4 relative z-10">
                 {/* Compact Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, y: -20 }}
+                    whileInView={isMobilePortrait ? { opacity: 1 } : { opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ type: "spring", stiffness: 120, damping: 25 }}
+                    transition={isMobilePortrait ? { duration: 0.4, ease: "easeOut" } : { type: "spring", stiffness: 120, damping: 25 }}
                     className="text-center mb-8 lg:mb-10"
                 >
                     <motion.div
@@ -171,17 +174,17 @@ export function CompactSolutions() {
 
                 {/* Compact Solutions Grid */}
                 <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
+                    variants={isMobilePortrait ? undefined : containerVariants}
+                    initial={isMobilePortrait ? { opacity: 0 } : "hidden"}
+                    whileInView={isMobilePortrait ? { opacity: 1, transition: { duration: 0.4 } } : "visible"}
                     viewport={{ once: true, margin: "-30px" }}
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 items-stretch"
                 >
                     {solutions.map((solution) => (
                         <motion.div
                             key={solution.id}
-                            variants={itemVariants}
-                            whileHover={{
+                            variants={isMobilePortrait ? undefined : itemVariants}
+                            whileHover={isMobilePortrait ? undefined : {
                                 y: -4,
                                 scale: 1.01,
                                 transition: { type: "spring", stiffness: 300 }
@@ -204,7 +207,7 @@ export function CompactSolutions() {
                                     <div className="flex items-center gap-3 mb-3">
                                         <motion.div
                                             className={`flex-shrink-0 p-2.5 rounded-xl bg-gradient-to-br ${solution.gradient} group-hover:scale-105 transition-transform duration-300`}
-                                            whileHover={{ rotate: 2 }}
+                                            whileHover={isMobilePortrait ? undefined : { rotate: 2 }}
                                         >
                                             <div className="text-white">
                                                 {solution.icon}
@@ -241,10 +244,10 @@ export function CompactSolutions() {
 
                 {/* Compact Call to Action */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, y: 20 }}
+                    whileInView={isMobilePortrait ? { opacity: 1 } : { opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.4 }}
+                    transition={isMobilePortrait ? { duration: 0.4 } : { delay: 0.4 }}
                     className="text-center mt-8 lg:mt-10"
                 >
                     <div className="inline-flex flex-col sm:flex-row gap-3">

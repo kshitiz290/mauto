@@ -25,7 +25,7 @@ const features = [
     {
         icon: <Users className="w-8 h-8 text-primary" />,
         title: "Everything Talks to Everything",
-        desc: "Seamlessly sync with Manacle’s sales, SFA, and inventory modules for real-time billing accuracy."
+        desc: "Sync with Manacle’s sales, SFA, and inventory modules for real-time billing accuracy."
     },
     {
         icon: <CheckCircle2 className="w-8 h-8 text-primary" />,

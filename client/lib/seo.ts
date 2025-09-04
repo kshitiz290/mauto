@@ -7,6 +7,17 @@ export type SeoMeta = {
     ogType?: string;
 };
 
+function upsertScript(id: string, type: string, text: string) {
+    let el = document.getElementById(id) as HTMLScriptElement | null;
+    if (!el) {
+        el = document.createElement('script');
+        el.id = id;
+        el.type = type;
+        document.head.appendChild(el);
+    }
+    el.textContent = text;
+}
+
 function upsertMeta(selector: string, attrs: Record<string, string>) {
     let el = document.head.querySelector<HTMLMetaElement>(selector);
     if (!el) {
@@ -29,6 +40,8 @@ function upsertLink(rel: string, href: string) {
 export function applySeo(path: string, meta: SeoMeta = {}) {
     const { title, description, keywords, canonical, ogImage, ogType } = meta;
     if (title) document.title = title;
+    // Robots default: index, follow (override per-page if needed later)
+    upsertMeta('meta[name="robots"]', { name: 'robots', content: 'index,follow,max-image-preview:large' });
     if (description) upsertMeta('meta[name="description"]', { name: 'description', content: description });
     if (keywords && keywords.length) upsertMeta('meta[name="keywords"]', { name: 'keywords', content: keywords.join(', ') });
     if (canonical) upsertLink('canonical', canonical);
@@ -43,6 +56,37 @@ export function applySeo(path: string, meta: SeoMeta = {}) {
     if (title) upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: title });
     if (description) upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: description });
     if (ogImage) upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: ogImage });
+
+    // Structured Data: Breadcrumbs for all pages except root
+    try {
+        const segments = path.split('/').filter(Boolean);
+        const base = 'https://www.manacletech.com';
+        if (segments.length > 0) {
+            const itemListElement = segments.map((seg, i) => {
+                const urlPath = '/' + segments.slice(0, i + 1).join('/');
+                // Simple, humanized name from segment or title fallback
+                const name = seg
+                    .replace(/[-_]/g, ' ')
+                    .replace(/\b\w/g, c => c.toUpperCase());
+                return {
+                    '@type': 'ListItem',
+                    position: i + 1,
+                    name,
+                    item: `${base}${urlPath}`
+                };
+            });
+            const breadcrumbLd = {
+                '@context': 'https://schema.org',
+                '@type': 'BreadcrumbList',
+                itemListElement
+            };
+            upsertScript('ld-breadcrumbs', 'application/ld+json', JSON.stringify(breadcrumbLd));
+        } else {
+            // Clear breadcrumbs on home
+            const existing = document.getElementById('ld-breadcrumbs');
+            if (existing) existing.remove();
+        }
+    } catch { /* no-op */ }
 }
 
 export const routeSeo: Record<string, SeoMeta> = {
@@ -68,9 +112,9 @@ export const routeSeo: Record<string, SeoMeta> = {
         ogImage: '/manacle_logo.png'
     },
     '/auto-site': {
-        title: 'AI Website Builder – Launch a Modern Business Website | Manacle',
-        description: 'Build a beautiful, responsive website powered by Manacle’s AI Website Builder. Fast, SEO‑ready and mobile‑friendly.',
-        keywords: ['AI website builder', 'responsive website', 'SEO ready', 'business website', 'Vite React Tailwind'],
+        title: 'Website Builder – Launch a Modern Business Website | Manacle',
+        description: 'Build a clean, responsive website with Manacle’s website builder. Fast, SEO‑ready and mobile‑friendly.',
+        keywords: ['website builder', 'responsive website', 'SEO ready', 'business website', 'Vite React Tailwind'],
         canonical: 'https://www.manacletech.com/auto-site',
         ogImage: '/manacle_logo.png'
     },
@@ -111,9 +155,9 @@ export const routeSeo: Record<string, SeoMeta> = {
     },
     // Visual Merchandising
     '/visual-merchandising': {
-        title: 'Visual Merchandising Solutions – Retail Space Optimization | Manacle',
-        description: 'Transform retail spaces with intelligent merchandising tools. Planogram management, compliance monitoring, and sales analytics for optimal customer experience.',
-        keywords: ['visual merchandising', 'planogram management', 'retail space optimization', 'compliance monitoring', 'customer experience', 'retail analytics'],
+        title: 'Visual Merchandising Solutions – Retail Space Planning | Manacle',
+        description: 'Improve retail spaces with practical merchandising tools. Planogram management, compliance monitoring, and sales analytics to support better customer experience.',
+        keywords: ['visual merchandising', 'planogram management', 'retail space planning', 'compliance monitoring', 'customer experience', 'retail analytics'],
         canonical: 'https://www.manacletech.com/visual-merchandising',
         ogImage: '/manacle_logo.png'
     },
@@ -218,7 +262,7 @@ export const routeSeo: Record<string, SeoMeta> = {
     },
     '/dispatch-management': {
         title: 'Dispatch Management Software – Route Optimisation & Last‑Mile',
-        description: 'Optimise routes, assign orders, track deliveries and manage fleet/couriers with real‑time visibility.',
+        description: 'Plan routes, assign orders, track deliveries and manage fleet/couriers with real‑time visibility.',
         keywords: ['dispatch management', 'route optimisation', 'last‑mile delivery', 'fleet management', 'POD tracking'],
         canonical: 'https://www.manacletech.com/dispatch-management',
         ogImage: '/manacle_logo.png'
@@ -260,9 +304,16 @@ export const routeSeo: Record<string, SeoMeta> = {
     },
     '/whatsapp-ordering-system': {
         title: 'WhatsApp Ordering System – Conversational Commerce',
-        description: 'Enable catalog, ordering and notifications on WhatsApp with seamless integrations.',
+        description: 'Enable catalog, ordering and notifications on WhatsApp with simple integrations.',
         keywords: ['WhatsApp ordering', 'conversational commerce', 'chat commerce', 'catalog', 'notifications'],
         canonical: 'https://www.manacletech.com/whatsapp-ordering-system',
+        ogImage: '/manacle_logo.png'
+    },
+    '/faqs': {
+        title: 'FAQs – Answers About Manacle Products & Services',
+        description: 'Find answers to common questions about our SFA, ERP, DMS, HRMS, CRM and digital services. Contact us if you need more help.',
+        keywords: ['FAQs', 'questions', 'support', 'help'],
+        canonical: 'https://www.manacletech.com/faqs',
         ogImage: '/manacle_logo.png'
     },
 };

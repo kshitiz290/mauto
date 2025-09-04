@@ -110,7 +110,7 @@ export function AboutUs() {
                 transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 className="text-3xl md:text-4xl font-bold mb-4 leading-tight text-foreground"
               >
-                Manage Your Sales Force Automation Seamlessly with
+                We build practical software that helps teams work better
                 <br />
                 <span
                   className="bg-clip-text text-transparent"
@@ -126,7 +126,7 @@ export function AboutUs() {
                 transition={{ duration: 0.9, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 className="text-base md:text-lg text-foreground/80 mb-5 leading-relaxed"
               >
-                Manacle Technologies Pvt. Ltd. is a Delhi based software development company providing customized software solutions to organizations. Its proven credentials and commitment to quality services give Manacle an edge over the others in meeting IT and Software demands of the clients. We, at Manacle Technologies, value customer satisfaction and our dedicated team of Software developers always strives to maintain it.
+                We’re a Delhi‑based product team focused on solving real operational problems for growing businesses. For 15+ years, we’ve built dependable tools and paired them with responsive support, so your team can spend less time on busywork and more time creating value.
               </motion.p>
               <motion.p
                 initial={{ opacity: 0, y: 24 }}
@@ -135,7 +135,7 @@ export function AboutUs() {
                 transition={{ duration: 0.9, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className="text-base md:text-lg text-foreground/70 leading-relaxed"
               >
-                Our software solutions are widely used in the manufacturing, FMCG, Pharma, Dairy and Healthcare Industries supporting them in automation of their process. Over the time we have developed expertise in digitalizing the sales and sales force monitoring processes through our application mSELL. Manacle Technologies takes pride in serving New Delhi Municipal Corporation through its application mCIVIC. mCIVIC fully automates citizen relationship management processes of municipalities. mEDU solution digitalizes entire processes of educational institutions (schools & colleges).
+                Today, our platforms support teams across Manufacturing, FMCG, Pharma, Dairy, Healthcare, Education and more. Our SFA suite (mSELL) helps field teams plan days, capture orders and stay on track. mCIVIC powers citizen service workflows at NDMC. And mEDU simplifies everyday processes for schools and colleges. Simple to start, practical to scale.
               </motion.p>
             </motion.div>
             {/* Right: Animated Images */}
@@ -166,7 +166,7 @@ export function AboutUs() {
               className="text-3xl md:text-4xl font-bold mb-10 text-center"
               style={{ background: 'linear-gradient(90deg, #FF9800 40%, #B721FF 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
             >
-              Why We Are Different From Others
+              What sets us apart
             </h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -175,7 +175,7 @@ export function AboutUs() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="text-lg text-foreground/80 mb-12 text-center max-w-3xl mx-auto"
             >
-              Empowering Sales Teams with Data-Driven Efficiency and Intelligent Automation. The traditional sales process is no longer enough in today’s fast-paced, hyper-connected marketplace. To stay competitive, businesses must reinvent how their sales force operates—shifting from manual, intuition-based selling to agile, data-powered strategies. By integrating cutting-edge automation tools, CRM platforms, and AI-driven insights, companies can enhance productivity, personalize customer engagement, and accelerate the entire sales lifecycle.
+              The best tools are the ones your team actually uses. We keep things simple and reliable, so your day flows better—from planning to execution to insights.
             </motion.p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2  lg:grid-cols-4 gap-8">
               {/* 2x2 grid for tablets, 1 column on mobile, 4 columns on desktop */}

@@ -160,7 +160,7 @@ export function DomainChecker() {
       'business', 'company', 'corp', 'inc', 'ltd', 'blog', 'news', 'media', 'app', 'mobile',
       'game', 'games', 'music', 'video', 'photo', 'food', 'travel', 'hotel', 'car', 'auto',
       'health', 'medical', 'doctor', 'fitness', 'sports', 'fashion', 'beauty', 'art', 'design',
-      'marketing', 'seo', 'social', 'network', 'cloud', 'data', 'ai', 'ml', 'crypto', 'nft'
+      'marketing', 'seo', 'social', 'network', 'cloud', 'data'
     ];
 
     // Check if domain contains common words
@@ -385,10 +385,10 @@ export function DomainChecker() {
                 <div
                   key={result.domain}
                   className={`flex items-center justify-between p-4 rounded-lg border transition-all duration-300 ${result.loading
-                      ? "bg-muted/30 border-muted"
-                      : result.available
-                        ? "bg-green-500/10 border-green-500/30 hover:border-green-500/50 hover:shadow-md"
-                        : "bg-red-500/10 border-red-500/30"
+                    ? "bg-muted/30 border-muted"
+                    : result.available
+                      ? "bg-green-500/10 border-green-500/30 hover:border-green-500/50 hover:shadow-md"
+                      : "bg-red-500/10 border-red-500/30"
                     }`}
                 >
                   <div>

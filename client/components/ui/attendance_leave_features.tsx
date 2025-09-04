@@ -121,7 +121,7 @@ const AttendanceLeaveFeatures = () => {
                 transition={{ duration: 0.8, delay: 0.1 }}
                 className="text-lg text-foreground/80 mb-12 text-center max-w-3xl mx-auto"
             >
-                An Attendance and Leave Management Solution for a Sales Team should be tailored to the mobile and field-based nature of sales roles. Here's a comprehensive outline for such a solution, including its features, benefits, and implementation.
+                Built for field teams: quick check‑ins, clear leave requests, and simple reports—no spreadsheets, no guesswork.
             </motion.p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {features.map((feature, idx) => (

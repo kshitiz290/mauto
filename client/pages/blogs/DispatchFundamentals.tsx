@@ -13,7 +13,7 @@ const sections = [
     { id: 'real-time-delivery-tracking', title: 'Real-Time Delivery Tracking for Transparency' },
     { id: 'cost-savings-route-planning', title: 'Cost-Savings Delivery Route Planning' },
     { id: 'centralised-inventory-dispatch', title: 'Centralised Inventory and Dispatch Management' },
-    { id: 'optimised-fleet-courier', title: 'Optimised Fleet and Courier Management' },
+    { id: 'fleet-courier', title: 'Better Fleet and Courier Management' },
     { id: 'dispatch-software-30-cost-reduction', title: 'How Dispatch Management Software Cut Down Logistics Costs by a Margin of 30%!' },
     { id: 'final-thoughts', title: 'Final Thoughts' }
 ];
@@ -204,8 +204,8 @@ const DispatchFundamentals = () => {
                                     deadlines. Over time, businesses can save up to 30% on their running costs just by getting
                                     their routes smarter.</p>
                             </section>
-                            <section id="optimised-fleet-courier">
-                                <h2>Optimised Fleet and Courier Management</h2>
+                            <section id="fleet-courier">
+                                <h2>Better Fleet and Courier Management</h2>
                                 <p>For businesses with a bunch of delivery trucks, having a fleet management system is key to
                                     keeping things running smoothly and efficiently. Courier dispatch software lets managers
                                     keep track of which vehicles are free, watch how much fuel they're using, and check out the
@@ -221,7 +221,7 @@ const DispatchFundamentals = () => {
                                 <ul className="not-prose space-y-2 my-3">
                                     <li className="flex items-start gap-3">
                                         <span className="mt-1.5 inline-block w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-primary/15" />
-                                        <span>Lower fuel consumption due to optimised routes.</span>
+                                        <span>Lower fuel consumption due to smarter routes.</span>
                                     </li>
                                     <li className="flex items-start gap-3">
                                         <span className="mt-1.5 inline-block w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-primary/15" />
@@ -277,7 +277,7 @@ const DispatchFundamentals = () => {
                                 <div className="relative">
                                     <h2 className="text-2xl md:text-3xl font-extrabold mb-4 tracking-tight">Know More About Our Dispatch Management</h2>
                                     <p className="text-foreground/70 max-w-2xl mb-6 leading-relaxed">
-                                        Explore how our Dispatch Management solution optimizes allocation, boosts on‑time performance and gives real‑time operational clarity.
+                                        Explore how our Dispatch Management solution improves allocation, boosts on‑time performance and gives real‑time operational clarity.
                                     </p>
                                     <Link
                                         to="/dispatch-management"

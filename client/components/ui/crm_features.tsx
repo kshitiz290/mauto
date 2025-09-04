@@ -44,7 +44,7 @@ const CRMFeatures = () => (
                 className="text-3xl md:text-4xl font-extrabold text-center mb-2 leading-tight"
             >
                 <span className="bg-gradient-to-r from-orange-500 via-yellow-500 to-pink-500 bg-clip-text text-transparent">
-                    Transform Relationships. Drive Growth. Simplify Sales.
+                    Keep your pipeline clear and customers close.
                 </span>
             </motion.h2>
             <motion.p
@@ -54,7 +54,7 @@ const CRMFeatures = () => (
                 transition={{ duration: 0.7, delay: 0.1 }}
                 className="text-base md:text-lg text-center text-foreground/70 mb-10 max-w-3xl mx-auto leading-relaxed"
             >
-                Our powerful CRM software helps you build stronger relationships, streamline your sales pipeline, and deliver exceptional customer experiences. Whether you’re a small business or an enterprise, our solution adapts to your needs and grows with your business.
+                Keep contacts tidy, track deals, and stay on top of follow‑ups. Works well for small teams and scales as you grow.
             </motion.p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {features.map((feature, idx) => (

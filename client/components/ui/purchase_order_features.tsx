@@ -8,7 +8,7 @@ const features = [
     },
     {
         title: 'Approval Workflow Automation',
-        desc: 'Set up multi-level, role-based approval hierarchies. Ensure complete transparency and faster approvals with automated notifications and tracking.',
+        desc: 'Set up multi‑level approvals with role‑based rules. Get notified, track status, and keep things moving.',
         img: 'solutions/workflow_automation.jpg' // Placeholder, replace with static PNG/SVG if needed
     },
     {
@@ -27,8 +27,8 @@ const features = [
         img: 'solutions/budget.jpg'
     },
     {
-        title: 'Seamless integration with Inventory & Finance',
-        desc: 'Sync POs with inventory levels and accounts for complete procurement visibility. Eliminate double entries and ensure accurate bookkeeping.',
+        title: 'Works with Inventory & Finance',
+        desc: 'Sync POs with stock and accounts to avoid double entry and keep books clean.',
         img: 'solutions/integration.jpg'
     }
 ];
