@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 const features = [
     {
         title: 'Image-Based Merchandising Audits',
-        desc: 'Capture store shelf images and analyze them with AI for planogram compliance, out-of-stock detection, and visibility tracking.',
+        desc: 'Capture store shelf images and run quick checks for planogram match, out-of-stock detection, and visibility tracking.',
         icon: (
             <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Audit" className="w-14 h-14 mx-auto mb-3" />
         )
     },
     {
         title: 'Task Management & Visit Scheduling',
-        desc: 'Plan field visits, assign store-level tasks, and ensure timely retail execution with geofenced attendance and route optimization.',
+        desc: 'Plan field visits, assign store-level tasks, and ensure timely retail execution with geofenced attendance and simple route planning.',
         icon: (
             <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Task" className="w-14 h-14 mx-auto mb-3" />
         )
@@ -83,7 +83,7 @@ const MerchandisingRetailFeatures = () => (
                 transition={{ duration: 0.8, delay: 0.15 }}
                 className="text-center text-base md:text-lg text-foreground/70 mb-10 max-w-3xl mx-auto"
             >
-                Our <b>Merchandising & Retail Execution Solution</b> empowers FMCG, CPG, and retail brands to optimize their in-store presence, improve shelf performance, and ensure perfect execution across retail channels. Designed for modern field teams, this solution streamlines every step from planogram compliance to real-time reporting.
+                Our <b>Merchandising & Retail Execution Solution</b> helps teams keep shelves tidy, products visible, and promos live. It’s built for field teams with photo proof, quick checks, and simple dashboards.
             </motion.p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {features.map((feature, idx) => (

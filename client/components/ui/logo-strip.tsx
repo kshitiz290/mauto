@@ -30,10 +30,10 @@ const LogoStrip = () => {
             // Continuously move left
             currentTranslateX -= speed;
 
-            // Reset seamlessly when we've moved exactly 1/3 of total width (-33.333%)
-            // This ensures we move exactly 2 logo sets before resetting, creating perfect seamless loop
+            // Reset smoothly when we've moved exactly 1/3 of total width (-33.333%)
+            // This ensures we move exactly 2 logo sets before resetting, creating a smooth loop
             if (currentTranslateX <= -33.333333) {
-                currentTranslateX = 0; // Reset to start position for perfect seamless loop
+                currentTranslateX = 0; // Reset to start position for a smooth loop
             }
 
             // Apply the transform directly with hardware acceleration
@@ -100,7 +100,7 @@ const LogoStrip = () => {
                     className="items-center gap-6 md:gap-8 lg:gap-10 lp:gap-12"
                     style={{
                         display: 'flex',
-                        width: '600%', // 6 sets of logos for seamless infinite loop
+                        width: '600%', // 6 sets of logos for a smooth infinite loop
                         transform: 'translate3d(0%, 0, 0)'
                     }}
                 >

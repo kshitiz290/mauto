@@ -20,8 +20,8 @@ const features = [
         desc: "Customers receive real-time order confirmation, estimated delivery times, and invoice details—all on WhatsApp."
     },
     {
-        title: "24/7 Availability",
-        desc: "Enable 24x7 ordering through AI-powered WhatsApp bots, even outside of working hours."
+        title: "Anytime requests",
+        desc: "Let customers place requests outside working hours using guided WhatsApp flows."
     },
     {
         title: "Multi-Language Support",
@@ -67,7 +67,7 @@ const WhatsappOrderingFeatures = () => (
                         transition={{ duration: 0.7, delay: 0.1 }}
                         className="text-base md:text-lg text-foreground/70 mb-6 leading-relaxed"
                     >
-                        Enhance your field sales operations with our integrated WhatsApp Ordering System, seamlessly embedded into your Sales Force Automation (SFA) software. Empower your sales team and distributors to place, track, and manage orders directly through WhatsApp—anytime, anywhere.
+                        Power up field sales with WhatsApp Ordering inside your SFA. Sales and distributors can place, track, and manage orders right from WhatsApp—anytime.
                     </motion.p>
                     <motion.h3
                         initial={{ opacity: 0, y: 20 }}

@@ -5,32 +5,32 @@ const features = [
     {
         icon: <Users className="w-10 h-10 text-primary mx-auto mb-3" />,
         title: "Lead Identification & Qualification",
-        desc: "Target the right buyers with smart segmentation, behavior tracking, and lead scoring systems integrated into your CRM."
+        desc: "Find the right buyers with simple segments and signals—so your team speaks to people who are actually interested."
     },
     {
         icon: <BarChart2 className="w-10 h-10 text-primary mx-auto mb-3" />,
         title: "Marketing & Sales Alignment",
-        desc: "Ensure seamless collaboration between marketing and sales teams with shared dashboards, KPIs, and automated workflows."
+        desc: "Give marketing and sales the same view of goals, handoffs, and follow‑ups—fewer misses, faster wins."
     },
     {
         icon: <MailCheck className="w-10 h-10 text-primary mx-auto mb-3" />,
         title: "Multi-Channel Campaign Automation",
-        desc: "Run targeted campaigns across email, SMS, field activities, and digital platforms to maximize engagement and lead nurturing."
+        desc: "Send the right message on email, SMS, and in‑field—automatically and on schedule."
     },
     {
         icon: <TrendingUp className="w-10 h-10 text-primary mx-auto mb-3" />,
         title: "Sales Funnel Optimization",
-        desc: "Analyze every stage of your funnel—from MQL to SQL—and take action to improve conversion with data-backed insights."
+        desc: "See where leads drop off and fix the gaps—from first touch to closed won."
     },
     {
         icon: <Smartphone className="w-10 h-10 text-primary mx-auto mb-3" />,
         title: "Field-Driven Demand Capture",
-        desc: "Equip your field force with mobile tools to capture in-market demand, conduct surveys, and generate interest in real time."
+        desc: "Let field teams log interest, run quick surveys, and add hot leads on the spot."
     },
     {
         icon: <BarChart2 className="w-10 h-10 text-primary mx-auto mb-3" />,
         title: "Real-Time Analytics & ROI Tracking",
-        desc: "Measure what matters—track campaign performance, lead sources, and ROI with intuitive dashboards and custom reports."
+        desc: "Track what’s working with simple dashboards for sources, cost, and results."
     }
 ];
 

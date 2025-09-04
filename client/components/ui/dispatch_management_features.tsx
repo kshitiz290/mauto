@@ -5,32 +5,32 @@ const features = [
     {
         icon: <ClipboardList className="w-8 h-8 text-primary" />,
         title: "Automated Dispatch Scheduling",
-        desc: "Auto-assign vehicles and delivery agents based on availability, priority, and delivery location."
+        desc: "Assign the right vehicle and person based on availability, priority, and location—no spreadsheets."
     },
     {
         icon: <FileText className="w-8 h-8 text-primary" />,
         title: "Digital Dispatch Slips",
-        desc: "Generate and share digital dispatch slips linked to invoices and packing lists for transparency and verification."
+        desc: "Share dispatch slips that link to invoices and packing lists so everyone sees the same details."
     },
     {
         icon: <Pin className="w-8 h-8 text-primary" />,
         title: "Real-Time Tracking & Alerts",
-        desc: "Monitor dispatch status, vehicle location, and delivery milestones with instant alerts and updates."
+        desc: "See where vehicles are and get alerts at key milestones—pickup, en‑route, delivered."
     },
     {
         icon: <Share2 className="w-8 h-8 text-primary" />,
         title: "Route Optimization",
-        desc: "Ensure faster deliveries and fuel savings with intelligent route suggestions based on traffic and location data."
+        desc: "Pick faster routes based on traffic and distance to save time and fuel."
     },
     {
         icon: <CheckCircle2 className="w-8 h-8 text-primary" />,
         title: "Proof of Delivery (POD)",
-        desc: "Capture digital signatures, photos, and timestamps to validate completed deliveries in real-time."
+        desc: "Collect signatures, photos, and timestamps on delivery—stored safely for quick lookup."
     },
     {
         icon: <MapPin className="w-8 h-8 text-primary" />,
         title: "Multi-Location Dispatch Support",
-        desc: "Manage centralized or decentralized dispatches from multiple warehouses or distribution centers."
+        desc: "Run dispatches from one or many hubs with the same simple workflow."
     }
 ];
 

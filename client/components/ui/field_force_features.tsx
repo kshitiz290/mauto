@@ -52,7 +52,7 @@ const features = [
         image: 'solutions/team.jpg',
         points: [
             'Create collaborative work spaces for your individual sales teams.',
-            "Optimised company's workflow with shared sales activities, insights, alerts, notification, support calls etc."
+            "Smoother team workflow with shared activities, insights, alerts, notifications, and support calls."
         ]
     }
 ];
@@ -82,7 +82,7 @@ const FieldForceFeatures = () => (
                 transition={{ duration: 0.8, delay: 0.1 }}
                 className="text-center text-lg md:text-xl text-foreground/70 mb-10 max-w-3xl mx-auto"
             >
-                We at Field Force Tracking & Activity Software provide a specialized solution to monitor, manage, and optimize the performance of on-field sales or service teams in real-time. It helps businesses streamline operations, improve productivity, and ensure transparency.
+                Track where your team is, plan visits, and capture outcomes in one place. Less chasing on calls, more time with customers.
             </motion.p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
                 {features.map((feature, idx) => (

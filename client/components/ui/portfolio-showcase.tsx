@@ -28,41 +28,41 @@ interface BlogPost {
 // Custom hook for tilt effect
 function useTilt() {
   const ref = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
-    
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!element) return;
-      
+
       const { left, top, width, height } = element.getBoundingClientRect();
       const x = e.clientX - left;
       const y = e.clientY - top;
-      
+
       const middleX = width / 2;
       const middleY = height / 2;
-      
+
       const offsetX = ((x - middleX) / middleX) * 10;
       const offsetY = ((y - middleY) / middleY) * 10;
-      
+
       element.style.transform = `perspective(1000px) rotateX(${-offsetY}deg) rotateY(${offsetX}deg) scale3d(1.02, 1.02, 1.02)`;
     };
-    
+
     const handleMouseLeave = () => {
       if (!element) return;
       element.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
     };
-    
+
     element.addEventListener('mousemove', handleMouseMove);
     element.addEventListener('mouseleave', handleMouseLeave);
-    
+
     return () => {
       element.removeEventListener('mousemove', handleMouseMove);
       element.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
-  
+
   return ref;
 }
 
@@ -117,9 +117,9 @@ const portfolioItems: PortfolioItem[] = [
 const blogPosts: BlogPost[] = [
   {
     id: 1,
-    title: "The Future of Web Development: AI-Powered Frameworks",
+    title: "The Future of Web Development: Helpful Frameworks",
     category: "Tech Innovation",
-    excerpt: "Explore how artificial intelligence is revolutionizing web development frameworks and creating new possibilities for developers.",
+    excerpt: "Explore how new tools are changing web development frameworks and opening practical options for developers.",
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop",
     date: "May 15, 2023",
     readTime: "8 min read",
@@ -157,8 +157,8 @@ const blogCategories = ["All Posts", "Tech Innovation", "Tech Solutions", "Inter
 function PortfolioSection() {
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const filteredItems = activeCategory === "All" 
-    ? portfolioItems 
+  const filteredItems = activeCategory === "All"
+    ? portfolioItems
     : portfolioItems.filter(item => item.category === activeCategory);
 
   const handleCategoryClick = (category) => {
@@ -173,10 +173,10 @@ function PortfolioSection() {
           Our <span className="gradient-text">Portfolio</span>
         </h2>
         <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
-          Discover our latest projects showcasing cutting-edge web development, stunning design, and innovative solutions.
+          Explore recent projects with solid web development, thoughtful design, and practical solutions.
         </p>
       </div>
-      
+
       {/* Category Tabs */}
       <div className="mb-12 text-center">
         <div className="inline-block bg-card/80 p-3 rounded-lg shadow-md border border-glass-border">
@@ -184,11 +184,10 @@ function PortfolioSection() {
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
-              className={`inline-block mx-2 px-6 py-2.5 rounded-md cursor-pointer transition-all duration-300 ${
-                activeCategory === category 
-                  ? "bg-primary text-white font-medium shadow-lg" 
+              className={`inline-block mx-2 px-6 py-2.5 rounded-md cursor-pointer transition-all duration-300 ${activeCategory === category
+                  ? "bg-primary text-white font-medium shadow-lg"
                   : "bg-card/60 hover:bg-card/90 border border-glass-border"
-              }`}
+                }`}
               type="button"
             >
               {category}
@@ -196,19 +195,19 @@ function PortfolioSection() {
           ))}
         </div>
       </div>
-      
+
       {/* Debug Info */}
       <div className="text-center mb-4 text-sm text-gray-600">
         Active: {activeCategory} | Showing: {filteredItems.length} items
       </div>
-      
+
       {/* Portfolio Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredItems.map(item => (
           <PortfolioCard key={item.id} item={item} />
         ))}
       </div>
-      
+
       {/* View All Button */}
       <div className="text-center mt-12">
         <Button className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-500 px-8 py-6 text-lg">
@@ -225,7 +224,7 @@ function PortfolioSection() {
 // Separate Portfolio Card Component
 function PortfolioCard({ item }) {
   const tiltRef = useTilt();
-  
+
   return (
     <div
       ref={tiltRef}
@@ -234,7 +233,7 @@ function PortfolioCard({ item }) {
     >
       {/* Glowing border effect on hover */}
       <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/0 via-primary/0 to-accent/0 opacity-0 group-hover:opacity-100 group-hover:from-primary/50 group-hover:via-accent/30 group-hover:to-primary/50 blur-md transition-all duration-700 -z-10"></div>
-      
+
       {/* Image Container */}
       <div className="relative h-64 overflow-hidden rounded-t-xl">
         <img
@@ -246,7 +245,7 @@ function PortfolioCard({ item }) {
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
           {/* Pulsing circle behind the icon */}
           <div className="absolute w-16 h-16 rounded-full bg-primary/20 animate-pulse-slow"></div>
-          
+
           <a
             href={item.link}
             target="_blank"
@@ -274,13 +273,13 @@ function PortfolioCard({ item }) {
           <p className="text-foreground/70 text-sm mb-4 group-hover:text-foreground transition-colors duration-300">
             {item.description}
           </p>
-          
+
           {/* Tags */}
           {item.tags && (
             <div className="flex flex-wrap gap-2 mb-4">
               {item.tags.map((tag, index) => (
-                <span 
-                  key={index} 
+                <span
+                  key={index}
                   className="text-xs px-2 py-1 bg-card/60 border border-glass-border rounded-full group-hover:bg-primary/10 group-hover:border-primary/30 transition-all duration-300 hover:scale-105 hover:bg-primary/20"
                 >
                   {tag}
@@ -288,7 +287,7 @@ function PortfolioCard({ item }) {
               ))}
             </div>
           )}
-          
+
           <a
             href={item.link}
             target="_blank"
@@ -311,8 +310,8 @@ function PortfolioCard({ item }) {
 function BlogSection() {
   const [activeCategory, setActiveCategory] = useState("All Posts");
 
-  const filteredPosts = activeCategory === "All Posts" 
-    ? blogPosts 
+  const filteredPosts = activeCategory === "All Posts"
+    ? blogPosts
     : blogPosts.filter(post => post.category === activeCategory);
 
   const handleCategoryClick = (category) => {
@@ -338,11 +337,10 @@ function BlogSection() {
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
-              className={`inline-block mx-2 px-6 py-2.5 rounded-md cursor-pointer transition-all duration-300 ${
-                activeCategory === category 
-                  ? "bg-primary text-white font-medium shadow-lg" 
+              className={`inline-block mx-2 px-6 py-2.5 rounded-md cursor-pointer transition-all duration-300 ${activeCategory === category
+                  ? "bg-primary text-white font-medium shadow-lg"
                   : "bg-card/60 hover:bg-card/90 border border-glass-border"
-              }`}
+                }`}
               type="button"
             >
               {category}
@@ -362,7 +360,7 @@ function BlogSection() {
           <BlogCard key={post.id} post={post} />
         ))}
       </div>
-      
+
       {/* View All Button */}
       <div className="text-center mt-12">
         <Button className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-500 px-8 py-6 text-lg">
@@ -379,7 +377,7 @@ function BlogSection() {
 // Separate Blog Card Component
 function BlogCard({ post }) {
   const tiltRef = useTilt();
-  
+
   return (
     <div
       ref={tiltRef}
@@ -388,18 +386,18 @@ function BlogCard({ post }) {
     >
       {/* Glowing border effect on hover */}
       <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/0 via-primary/0 to-accent/0 opacity-0 group-hover:opacity-100 group-hover:from-primary/50 group-hover:via-accent/30 group-hover:to-primary/50 blur-md transition-all duration-700 -z-10"></div>
-      
+
       <div className="relative h-48 overflow-hidden rounded-t-xl">
-        <img 
-          src={post.image} 
-          alt={post.title} 
+        <img
+          src={post.image}
+          alt={post.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
         {/* Overlay with gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
           {/* Pulsing circle behind the icon */}
           <div className="absolute w-16 h-16 rounded-full bg-primary/20 animate-pulse-slow"></div>
-          
+
           <a
             href="#"
             className="bg-primary/90 text-white p-3 rounded-full transform translate-y-10 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 hover:rotate-12 hover:bg-accent/90 hover:scale-110"
@@ -414,29 +412,29 @@ function BlogCard({ post }) {
         {/* Image shine effect */}
         <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0 group-hover:opacity-100 transition-all duration-700 -translate-x-full group-hover:translate-x-full"></div>
       </div>
-      
+
       <div className="p-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center">
-              <img 
-                src={post.authorImage} 
-                alt={post.author} 
+              <img
+                src={post.authorImage}
+                alt={post.author}
                 className="w-6 h-6 rounded-full mr-2"
               />
               <span className="text-xs">{post.author}</span>
             </div>
             <div className="text-xs">{post.date}</div>
           </div>
-          
+
           <h3 className="text-lg font-bold mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-300 transform group-hover:translate-x-1">
             {post.title}
           </h3>
           <p className="text-sm mb-4 line-clamp-3 text-foreground/70 group-hover:text-foreground transition-colors duration-300">
             {post.excerpt}
           </p>
-          
+
           <div className="flex justify-between items-center">
             <span className="text-xs text-foreground/60">{post.readTime}</span>
             <a

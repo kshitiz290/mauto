@@ -6,12 +6,10 @@ const features = [
         title: "Employee Information Management",
         icon: <Users className="w-8 h-8 text-primary" />,
         points: [
-            "Manage all employee profiles.",
-            "Documents and job roles.",
-            "Lifecycle events in one secure, centralized location.",
-            "Job & Compensation Details.",
-            "Performance & Evaluation.",
-            "Compliance and Legal."
+            "A single place for profiles, documents, roles, and changes over time.",
+            "Track job, compensation, and reporting with easy updates.",
+            "Store reviews, goals, and notes so feedback isn’t lost.",
+            "Keep compliance docs and acknowledgements organized."
         ],
         image: "solutions/employee.jpg"
     },
@@ -19,13 +17,11 @@ const features = [
         title: "Attendance & Leave Management",
         icon: <CalendarCheck2 className="w-8 h-8 text-primary" />,
         points: [
-            "Attendance Daily, Weekly & Monthly.",
-            "App-based Leave Requests & Approvals.",
-            "Geo-fenced Attendance Control.",
-            "Integration with Payroll.",
-            "Clock-in/Clock-out Systems.",
-            "Timesheet Management.",
-            "Reporting and Analytics."
+            "Daily, weekly, and monthly attendance at a glance.",
+            "Easy leave requests and approvals on mobile or web.",
+            "Geo‑fenced check‑ins where it matters.",
+            "Works with payroll to reduce manual work.",
+            "Timesheets and simple reporting for teams."
         ],
         image: "https://img.freepik.com/free-vector/people-calendar-time-management-concept_23-2148822826.jpg?t=st=1755719363~exp=1755722963~hmac=30818bf9725b8645c8a103558bc8b3f25bd1e663cff82fbb487f2e40b59474ba&w=740"
     },
@@ -33,13 +29,9 @@ const features = [
         title: "Recruitment & Onboarding",
         icon: <FileText className="w-8 h-8 text-primary" />,
         points: [
-            "Attendance Daily, Weekly & Monthly.",
-            "App-based Leave Requests & Approvals.",
-            "Geo-fenced Attendance Control.",
-            "Integration with Payroll.",
-            "Clock-in/Clock-out Systems.",
-            "Timesheet Management.",
-            "Reporting and Analytics."
+            "Post openings and track candidates in simple stages.",
+            "Offer letters and joining docs handled digitally.",
+            "Checklists for day‑1 — laptop, accounts, and team intros."
         ],
         image: "https://img.freepik.com/free-vector/flat-employment-agency-search-new-employees-hire_88138-802.jpg?t=st=1755719418~exp=1755723018~hmac=aeb543a00d4a55ea2f7a1bb3160f84153617fa0aff8923ddca384b8d3ef4bac8&w=740"
     },
@@ -47,13 +39,9 @@ const features = [
         title: "Payroll Management",
         icon: <BadgePercent className="w-8 h-8 text-primary" />,
         points: [
-            "Employee Information.",
-            "Time Tracking.",
-            "Salary Calculation.",
-            "Deductions & Benefit Keeping Maintain.",
-            "Payroll Processing.",
-            "Tax Filing & Reporting.",
-            "Payroll Disbursement."
+            "Pull attendance and leave data automatically.",
+            "Accurate salary run with deductions and benefits.",
+            "Payslips, compliance, and exports when you need them."
         ],
         image: "https://img.freepik.com/premium-vector/salary-payroll-system-vector-illustration_108061-2093.jpg?w=740"
     },
@@ -61,11 +49,9 @@ const features = [
         title: "Automate Processes for Efficiency",
         icon: <Settings2 className="w-8 h-8 text-primary" />,
         points: [
-            "Streamline Operations with Smart Automation.",
-            "Boost Efficiency by Automating Routine Tasks.",
-            "Automate to Eliminate Manual Errors and Save Time.",
-            "Drive Productivity with Process Automation.",
-            "Transform Workflows with Intelligent Automation."
+            "Reminders for reviews, renewals, and paperwork.",
+            "Auto‑create tasks from approvals to keep work moving.",
+            "Reduce copy‑paste across tools with simple integrations."
         ],
         image: "https://img.freepik.com/free-vector/cartoon-man-robot-sitting-laptops-workplace-together_74855-20052.jpg?t=st=1755719567~exp=1755723167~hmac=26446866b35972528683781864082c2d80e9c24ae885737187a1fc25c664f34f&w=740"
     },
@@ -73,13 +59,9 @@ const features = [
         title: "Training & Development",
         icon: <BookOpenCheck className="w-8 h-8 text-primary" />,
         points: [
-            "Organize training programs.",
-            "Track employee skills.",
-            "Development Initiatives Leadership.",
-            "Learning Methods.",
-            "Training Programs Technical and Soft Skills.",
-            "Development Initiatives Leadership.",
-            "Learning Methods: e-Learning, Workshops."
+            "Share learning plans and track skill progress.",
+            "Record sessions, feedback, and certificates.",
+            "Support e‑learning, workshops, and on‑the‑job coaching."
         ],
         image: "https://img.freepik.com/free-vector/coach-speaking-before-audience-mentor-presenting-charts-reports-employees-meeting-business-training-seminar-conference-vector-illustration-presentation-lecture-education_74855-8294.jpg?t=st=1755719614~exp=1755723214~hmac=a099604e77a6d80d04dfce4f760b62e2395cfb8d9ddb2cba5ebdaee0c55c2be2&w=740"
     }

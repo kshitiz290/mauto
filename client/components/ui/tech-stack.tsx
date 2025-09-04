@@ -82,7 +82,7 @@ export function TechStack() {
           <p className="text-xl text-foreground/90 max-w-3xl mx-auto">
             We leverage{" "}
             <span className="text-primary font-semibold">
-              cutting-edge technologies
+              modern technologies
             </span>{" "}
             to build robust, scalable, and modern digital solutions for your
             business.
@@ -114,10 +114,10 @@ export function TechStack() {
                 <div className="text-center relative z-10">
                   <div className="relative mb-6">
                     <div className="tech-icon-container w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-card/90 to-card/70 backdrop-blur-sm border border-glass-border flex items-center justify-center shadow-lg">
-                      <img 
-                        src={tech.iconPath} 
-                        alt={`${tech.name} icon`} 
-                        className={`${tech.name === "AWS" ? "w-full h-full object-contain p-1" : 
+                      <img
+                        src={tech.iconPath}
+                        alt={`${tech.name} icon`}
+                        className={`${tech.name === "AWS" ? "w-full h-full object-contain p-1" :
                           tech.name === "Node.js" ? "w-full h-full object-cover p-0" : "w-12 h-12 object-contain"}`}
                       />
                     </div>

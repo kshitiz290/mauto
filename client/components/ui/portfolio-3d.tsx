@@ -49,7 +49,7 @@ const portfolioItems: PortfolioItem[] = [
       "Order tracking and management",
       "Admin dashboard with analytics",
       "Mobile-responsive design",
-      "SEO optimized product pages",
+      "SEO-friendly product pages",
     ],
     duration: "4 months",
     teamSize: "5 developers",
@@ -66,7 +66,7 @@ const portfolioItems: PortfolioItem[] = [
     gradient: "from-indigo-500 to-blue-500",
     delay: "0.2s",
     fullDescription:
-      "An innovative SaaS platform that connects tech entrepreneurs with investors and mentors. Built with cutting-edge technologies, it features real-time collaboration tools, video conferencing integration, project management capabilities, and AI-powered matching algorithms to connect the right people at the right time.",
+      "A practical SaaS platform that connects tech entrepreneurs with investors and mentors. Built with reliable technologies, it features real-time collaboration tools, video conferencing integration, project management capabilities, and helpful matching to connect the right people at the right time.",
     technologies: [
       "React",
       "FastAPI",
@@ -77,7 +77,7 @@ const portfolioItems: PortfolioItem[] = [
       "Kubernetes",
     ],
     features: [
-      "AI-powered entrepreneur-investor matching",
+      "Helpful entrepreneur–investor matching",
       "Real-time collaboration tools",
       "Integrated video conferencing",
       "Project portfolio management",
@@ -118,7 +118,7 @@ const portfolioItems: PortfolioItem[] = [
       "Dynamic grid layouts",
       "WebGL particle effects",
       "Touch gesture support",
-      "Optimized loading sequences",
+      "Faster loading sequences",
     ],
     duration: "3 months",
     teamSize: "3 developers",
@@ -186,7 +186,7 @@ export function Portfolio3D() {
             Featured <span className="gradient-text">Projects</span>
           </h2>
           <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
-            Discover our latest projects showcasing cutting-edge web
+            Explore recent projects with solid web
             development, stunning design, and innovative solutions.
           </p>
         </div>
@@ -296,7 +296,7 @@ export function Portfolio3D() {
               Tech
             </h3>
             <p className="text-foreground/70 text-sm mb-4">
-              Leverage cutting-edge technologies like React, Python, and AWS for
+              Use proven technologies like React, Python, and AWS for
               scalable web applications.
             </p>
             <Button

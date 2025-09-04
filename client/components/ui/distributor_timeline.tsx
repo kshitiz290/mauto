@@ -53,7 +53,7 @@ const DistributorTimeline = () => (
                 transition={{ duration: 0.8, delay: 0.1 }}
                 className="text-center text-base md:text-lg text-foreground/70 mb-10 max-w-3xl mx-auto"
             >
-                Our Distributors Management Solution is designed to optimize and simplify every aspect of your distribution process. From inventory handling to order fulfillment, it empowers brands and distributors with real-time visibility, improved communication, and greater operational control.
+                Our Distributor Management Solution helps simplify everyday distribution work. From inventory handling to order fulfilment, it gives brands and distributors real‑time visibility, clearer communication, and better control.
             </motion.p>
             <div className="relative flex flex-col gap-10">
                 {/* Timeline vertical line - now always centered between step and image */}

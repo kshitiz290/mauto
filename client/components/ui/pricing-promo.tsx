@@ -43,7 +43,7 @@ export function PricingPromo() {
                 </div>
                 <div className="text-center p-4 rounded-xl bg-card/50 backdrop-blur-sm border border-glass-border">
                   <Users className="w-8 h-8 text-accent mx-auto mb-3" />
-                  <h3 className="font-bold mb-2">SEO Optimized</h3>
+                  <h3 className="font-bold mb-2">SEO-friendly</h3>
                   <p className="text-sm text-foreground/70">Built for search engines to help customers find your business</p>
                 </div>
                 <div className="text-center p-4 rounded-xl bg-card/50 backdrop-blur-sm border border-glass-border">

@@ -469,7 +469,7 @@ export default function Signup() {
                                     transition={{ delay: 0.5 }}
                                     className="text-xl text-muted-foreground mb-8 leading-relaxed"
                                 >
-                                    Transforming Retail Industry with Integrated Technology Solutions
+                                    Practical software for busy retail teams
                                 </motion.p>
                             </div>
 
@@ -495,7 +495,7 @@ export default function Signup() {
                                         Distributor Management
                                     </h3>
                                     <p className="text-muted-foreground text-sm leading-relaxed">
-                                        Optimize your distribution network and supply chain for maximum efficiency and growth.
+                                        Improve your distribution network and supply chain for steady efficiency and growth.
                                     </p>
                                 </div>
 
@@ -527,7 +527,7 @@ export default function Signup() {
                                 className="text-center lg:text-left pt-6"
                             >
                                 <p className="text-muted-foreground text-sm mb-4">
-                                    Join thousands of businesses already transforming their operations
+                                    Join teams improving their day‑to‑day with Manacle
                                 </p>
                                 <div className="flex items-center justify-center lg:justify-start gap-4 text-xs text-muted-foreground">
                                     <span className="flex items-center gap-1">
@@ -536,7 +536,7 @@ export default function Signup() {
                                     </span>
                                     <span className="flex items-center gap-1">
                                         <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
-                                        99.9% uptime guarantee
+                                        99.9% uptime target
                                     </span>
                                 </div>
                             </motion.div>

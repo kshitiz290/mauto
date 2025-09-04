@@ -595,7 +595,7 @@ export function ContactUs() {
                     {/* Chat Header */}
                     <div className="bg-gradient-to-r from-primary/10 to-accent/10 px-4 py-4 border-b border-slate-200 dark:border-slate-700">
                       <div className="flex items-center justify-center">
-                        <h3 className="text-lg font-black bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent leading-tight">Join these Leaders</h3>
+                        <h3 className="text-lg font-black bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent leading-tight">Join The Manacle Family</h3>
                       </div>
                     </div>
 

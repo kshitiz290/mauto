@@ -1,466 +1,1765 @@
-import { ArrowRight, BarChart2, Cpu, Smartphone, Users, Zap, Globe, TrendingUp, Sparkles, Play } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "./button";
-import { useEffect, useState, Fragment } from "react";
-import { motion } from "framer-motion";
+import { ArrowRight, Play, Globe, CheckCircle } from "lucide-react";
+import { useTheme } from "./theme-provider";
+import { useRef } from "react";
+import { CompactSolutions } from "./compact-solutions";
+import { useNavigate } from "react-router-dom";
+
+// Load Fredoka font (modern Gen Z style)
+if (typeof document !== 'undefined') {
+  const link = document.createElement('link');
+  link.href = 'https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap';
+  link.rel = 'stylesheet';
+  document.head.appendChild(link);
+}
 
 export function Hero() {
-  // Mobile-first optimization: Defer ALL visual effects on mobile
-  const [visualsOn, setVisualsOn] = useState(false);
-  const [currentStats, setCurrentStats] = useState({ clients: 200, years: 15, solutions: 50 });
-  const [isMobile, setIsMobile] = useState(false);
+  const { theme } = useTheme();
+  const navigate = useNavigate();
+  const ref = useRef(null);
+  // Prefer a lighter animation path on small portrait phones for smoothness
+  const isMobilePortrait = typeof window !== 'undefined'
+    ? window.matchMedia('(max-width: 480px) and (orientation: portrait)').matches
+    : false;
+  // On small-and-up (tablets/medium/large), slightly slow background animations for a smoother feel
+  const desktopSlowFactor = typeof window !== 'undefined' && window.matchMedia('(min-width: 640px)').matches ? 1.25 : 1;
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
 
-  useEffect(() => {
-    // Detect mobile
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    // On mobile: delay visuals much longer, on desktop: faster
-    const visualDelay = isMobile ? 2000 : 100;
-    const timer = setTimeout(() => setVisualsOn(true), visualDelay);
-
-    // Skip animations entirely on mobile for faster LCP
-    if (!isMobile) {
-      const animateStats = () => {
-        const targetStats = { clients: 200, years: 15, solutions: 50 };
-        let frame = 0;
-        const animate = () => {
-          frame++;
-          if (frame <= 15) { // Further reduced frames for mobile
-            setCurrentStats({
-              clients: Math.floor((targetStats.clients * frame) / 15),
-              years: Math.floor((targetStats.years * frame) / 15),
-              solutions: Math.floor((targetStats.solutions * frame) / 15)
-            });
-            requestAnimationFrame(animate);
-          }
-        };
-        setTimeout(() => requestAnimationFrame(animate), 1000);
-      };
-      animateStats();
-    } else {
-      // On mobile: set stats immediately, no animation
-      setCurrentStats({ clients: 200, years: 15, solutions: 50 });
-    }
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, [isMobile]);
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <>
-      <style>{`
-        /* Make hero content-height on medium/tablet portraits (and phone desktop-site widths ~980px) */
-        @media (orientation: portrait) and (min-width: 768px) and (max-width: 1100px) {
-          section#home.hero-section {
-            min-height: auto !important;
-            height: auto !important;
-            padding-top: 2.5rem !important;  /* ~py-10 */
-            padding-bottom: 2.5rem !important;
-          }
-        }
-      `}</style>
-      <section
-        id="home"
-        className="hero-section relative overflow-hidden min-h-[80vh] sm:min-h-[85vh] md:min-h-[90vh] lg:min-h-[100vh] flex items-center bg-gradient-to-br from-slate-50 via-white to-orange-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-12 sm:py-10 md:py-12 lg:py-20 xl:py-36"
-      >
-        {/* Dynamic Background Elements - Skip on mobile for LCP */}
-        {visualsOn && !isMobile && (
-          <div className="absolute inset-0 overflow-hidden">
-            <motion.div
-              className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-orange-400/20 to-yellow-400/10 rounded-full blur-3xl"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3],
-                x: [0, 30, 0],
-                y: [0, -20, 0]
-              }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-purple-400/15 to-pink-400/10 rounded-full blur-3xl"
-              animate={{
-                scale: [1.2, 1, 1.2],
-                opacity: [0.2, 0.5, 0.2],
-                x: [0, -40, 0],
-                y: [0, 30, 0]
-              }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            />
-            <motion.div
-              className="absolute bottom-20 left-1/4 w-64 h-64 bg-gradient-to-br from-blue-400/20 to-cyan-400/10 rounded-full blur-3xl"
-              animate={{
-                scale: [1, 1.3, 1],
-                opacity: [0.25, 0.45, 0.25],
-                rotate: [0, 180, 360]
-              }}
-              transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-            />
+    <div ref={ref} className={`relative min-h-[600px] md:min-h-[700px] lg:min-h-screen bg-gradient-to-br from-orange-50/80 via-yellow-50/60 to-blue-50/70 dark:from-slate-900 dark:via-slate-800 dark:to-indigo-900/40 overflow-hidden`}>
+      {/* Enhanced Light Theme Background Layers */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-orange-100/40 via-transparent to-blue-100/30 dark:opacity-0" />
+      <div className="absolute inset-0 bg-gradient-to-bl from-yellow-100/30 via-transparent to-indigo-100/40 dark:opacity-0" />
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-50/50 to-transparent dark:opacity-0" />
 
-            {/* Floating Icons */}
-            <motion.div
-              className="absolute bottom-1/3 right-16 p-2 bg-white/8 dark:bg-black/8 backdrop-blur-xl rounded-lg border border-white/15 hidden xl:block"
-              animate={{
-                y: [0, 6, 0],
-                rotate: [0, -2, 0]
-              }}
-              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            >
-              <Globe className="w-5 h-5 text-blue-500" />
-            </motion.div>
+      {/* Radial gradients for depth */}
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-radial from-orange-200/20 via-transparent to-transparent dark:opacity-0" style={{ background: 'radial-gradient(circle at 20% 30%, rgba(251, 146, 60, 0.15) 0%, transparent 50%)' }} />
+      <div className="absolute top-0 right-0 w-full h-full bg-gradient-radial from-blue-200/20 via-transparent to-transparent dark:opacity-0" style={{ background: 'radial-gradient(circle at 80% 20%, rgba(147, 197, 253, 0.15) 0%, transparent 50%)' }} />
+      <div className="absolute bottom-0 left-1/2 w-full h-full bg-gradient-radial from-yellow-200/15 via-transparent to-transparent dark:opacity-0" style={{ background: 'radial-gradient(circle at 50% 80%, rgba(254, 240, 138, 0.12) 0%, transparent 50%)' }} />
+      {/* Professional Space-Type Orbital Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Central Data Core - Hidden on mobile */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-32 h-32 hidden sm:block"
+          style={{ top: 'calc(50% + 80px)' }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 40 * desktopSlowFactor, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="w-full h-full bg-gradient-to-br from-orange-500/10 to-yellow-400/10 dark:from-orange-400/15 dark:to-yellow-300/15 rounded-full blur-xl" />
+          <div className="absolute inset-4 bg-gradient-to-br from-orange-400/15 to-yellow-500/15 dark:from-orange-300/20 dark:to-yellow-400/20 rounded-full blur-lg" />
+          <div className="absolute inset-8 bg-gradient-to-br from-white/20 to-orange-200/20 dark:from-white/10 dark:to-orange-200/10 rounded-full" />
+        </motion.div>
 
+        {/* Simplified mobile core */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 sm:hidden"
+          style={{ top: 'calc(50% + 40px)' }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="w-full h-full bg-gradient-to-br from-orange-500/15 to-yellow-400/15 rounded-full blur-lg" />
+        </motion.div>
 
+        {/* Orbital Ring 1 - Inner - Hidden on mobile */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-80 h-80 hidden sm:block"
+          style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 20 * desktopSlowFactor, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="relative w-full h-full border border-orange-300/20 dark:border-orange-400/30 rounded-full">
+            {/* Data Nodes on Orbit */}
+            {[0, 60, 120, 180, 240, 300].map((angle, i) => (
+              <motion.div
+                key={`inner-${i}`}
+                className="absolute w-3 h-3 bg-gradient-to-r from-orange-400 to-yellow-400 dark:from-orange-300 dark:to-yellow-300 rounded-full shadow-lg"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-150px) rotate(-${angle}deg)`
+                }}
+                animate={{
+                  scale: [1, 1.3, 1],
+                  opacity: [0.7, 1, 0.7]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3
+                }}
+              />
+            ))}
           </div>
-        )}
+        </motion.div>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 lp:pl-16 relative z-10">
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8 lg:gap-12 xl:gap-16 items-center py-4 sm:py-6 md:py-8 lg:py-4">
+        {/* Orbital Ring 2 - Middle - Hidden on mobile */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-[500px] h-[500px] hidden md:block"
+          style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
+          animate={{ rotate: [360, 0] }}
+          transition={{ duration: 35 * desktopSlowFactor, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="relative w-full h-full border border-yellow-300/15 dark:border-yellow-400/25 rounded-full">
+            {/* Business Icons on Orbit */}
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+              <motion.div
+                key={`middle-${i}`}
+                className="absolute w-4 h-4 rounded-full"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-240px) rotate(-${angle}deg)`
+                }}
+              >
+                <div className={`w-full h-full bg-gradient-to-br ${i % 4 === 0 ? 'from-orange-400 to-yellow-400' :
+                  i % 4 === 1 ? 'from-yellow-400 to-orange-400' :
+                    i % 4 === 2 ? 'from-primary to-accent' :
+                      'from-accent to-primary'
+                  } rounded-full opacity-60 dark:opacity-80`} />
+                {/* Data pulse effect */}
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 border-orange-300/50 dark:border-yellow-300/50"
+                  animate={{
+                    scale: [1, 2, 1],
+                    opacity: [0.8, 0, 0.8]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: i * 0.4
+                  }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
-            {/* Left Content */}
-            <motion.div
-              className="text-center md:text-left lg:text-left space-y-2 md:space-y-3 lg:space-y-4 order-1 md:order-1 lg:order-1 md:pr-4 lg:pr-8 xl:pr-12"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+        {/* Orbital Ring 3 - Outer - Hidden on mobile */}
+        <motion.div
+          className="absolute left-1/2 transform -translate-x-1/2 w-[700px] h-[700px] hidden lg:block"
+          style={{ top: 'calc(50% + 80px)', transform: 'translateX(-50%) translateY(-50%)' }}
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 50 * desktopSlowFactor, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="relative w-full h-full border border-orange-300/10 dark:border-orange-400/20 rounded-full">
+            {/* Satellite Data Points */}
+            {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => (
+              <motion.div
+                key={`outer-${i}`}
+                className="absolute w-2 h-2 bg-gradient-to-r from-orange-400/70 to-yellow-400/70 dark:from-orange-300/80 dark:to-yellow-300/80 rounded-full"
+                style={{
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-340px) rotate(-${angle}deg)`
+                }}
+                animate={{
+                  opacity: [0.3, 0.8, 0.3],
+                  scale: [0.8, 1.2, 0.8]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2
+                }}
+              />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Dynamic Data Streams - Hidden on mobile */}
+        <svg className="absolute inset-0 w-full h-full opacity-30 dark:opacity-30 hidden sm:block" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" style={{ transform: 'translateY(60px)' }}>
+          {/* Reduced curvy lines - covering full screen */}
+          <motion.path
+            d="M 0 340 Q 300 240 600 340 Q 900 440 1200 340"
+            stroke="url(#dataStream1)"
+            strokeWidth="2"
+            fill="none"
+            strokeDasharray="10,5"
+            className="dark:stroke-[url(#dataStream1Dark)]"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{
+              pathLength: [0, 1, 0],
+              opacity: [0, 0.8, 0]
+            }}
+            transition={{
+              duration: 8 * desktopSlowFactor,
+              repeat: Infinity,
+              ease: "easeInOut",
+              times: [0, 0.5, 1]
+            }}
+          />
+
+          <motion.path
+            d="M 0 190 Q 300 140 600 240 Q 900 340 1200 290"
+            stroke="url(#sexyGradient1)"
+            strokeWidth="2.5"
+            fill="none"
+            strokeDasharray="15,8"
+            className="dark:stroke-[url(#sexyGradient1Dark)]"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{
+              pathLength: [0, 1, 0],
+              opacity: [0, 0.7, 0]
+            }}
+            transition={{
+              duration: 12 * desktopSlowFactor,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 3,
+              times: [0, 0.4, 1]
+            }}
+          />
+
+          {/* Data Binary Streams - Full screen coverage */}
+          <motion.g opacity="0.6">
+            {/* Top-left binary stream */}
+            {[0, 1, 0, 1, 1].map((bit, i) => (
+              <motion.text
+                key={`binary-tl-${i}`}
+                x={50 + i * 40}
+                y={120}
+                fill="url(#binaryGradient)"
+                fontSize="12"
+                fontFamily="monospace"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [120, 100, 80]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.3
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+
+            {/* Top-right binary stream - Always visible in large portraits */}
+            {[1, 0, 1, 0, 1].map((bit, i) => (
+              <motion.text
+                key={`binary-tr-${i}`}
+                x={800 + i * 35}
+                y={180}
+                fill="url(#binaryGradient)"
+                fontSize="12"
+                fontFamily="monospace"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [180, 160, 140]
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.4
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+
+            {/* Center binary stream for large portraits */}
+            {[1, 0, 1, 1, 0].map((bit, i) => (
+              <motion.text
+                key={`binary-c-${i}`}
+                x={400 + i * 45}
+                y={300}
+                fill="url(#binaryGradient)"
+                fontSize="11"
+                fontFamily="monospace"
+                className="lp:block"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [300, 280, 260]
+                }}
+                transition={{
+                  duration: 4.2,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.25
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+
+            {/* Bottom binary stream */}
+            {[1, 1, 0, 1, 0].map((bit, i) => (
+              <motion.text
+                key={`binary-b-${i}`}
+                x={300 + i * 50}
+                y={620}
+                fill="url(#binaryGradient)"
+                fontSize="11"
+                fontFamily="monospace"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [620, 600, 580]
+                }}
+                transition={{
+                  duration: 4.5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.35
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+
+            {/* Extended binary streams for large portraits */}
+            {[0, 1, 0, 1].map((bit, i) => (
+              <motion.text
+                key={`binary-ext-${i}`}
+                x={150 + i * 60}
+                y={450}
+                fill="url(#binaryGradient)"
+                fontSize="10"
+                fontFamily="monospace"
+                className="lp:block"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  y: [450, 430, 410]
+                }}
+                transition={{
+                  duration: 5.5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: i * 0.5
+                }}
+              >
+                {bit}
+              </motion.text>
+            ))}
+          </motion.g>
+
+          {/* Database/Server Icons - Full screen distribution */}
+          <motion.g>
+            {/* Top-left server stack */}
+            <motion.rect
+              x="80"
+              y="250"
+              width="25"
+              height="6"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3, repeat: Infinity, delay: 0 }}
+            />
+            <motion.rect
+              x="80"
+              y="259"
+              width="25"
+              height="6"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+            />
+            <motion.rect
+              x="80"
+              y="268"
+              width="25"
+              height="6"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+            />
+
+            {/* Center server stack for large portraits */}
+            <motion.rect
+              x="500"
+              y="350"
+              width="28"
+              height="7"
+              rx="1"
+              fill="url(#serverGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3.2, repeat: Infinity, delay: 0.8 }}
+            />
+            <motion.rect
+              x="500"
+              y="360"
+              width="28"
+              height="7"
+              rx="1"
+              fill="url(#serverGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3.2, repeat: Infinity, delay: 1.3 }}
+            />
+
+            {/* Bottom-right server stack */}
+            <motion.rect
+              x="1000"
+              y="520"
+              width="30"
+              height="7"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3.5, repeat: Infinity, delay: 1.5 }}
+            />
+            <motion.rect
+              x="1000"
+              y="530"
+              width="30"
+              height="7"
+              rx="1"
+              fill="url(#serverGradient)"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.8, 1, 0.8]
+              }}
+              transition={{ duration: 3.5, repeat: Infinity, delay: 2 }}
+            />
+
+            {/* Far right server for wide screens */}
+            <motion.rect
+              x="1100"
+              y="300"
+              width="22"
+              height="5"
+              rx="1"
+              fill="url(#serverGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{
+                opacity: [0.2, 0.6, 0.2],
+                scale: [0.9, 1.1, 0.9]
+              }}
+              transition={{ duration: 4, repeat: Infinity, delay: 2.5 }}
+            />
+          </motion.g>
+
+          {/* Cloud Computing Shapes - Extended coverage */}
+          <motion.g>
+            {/* Top-right cloud */}
+            <motion.path
+              d="M 950 150 Q 965 135 985 150 Q 1005 135 1020 150 Q 1035 165 1020 180 Q 1005 165 985 180 Q 965 165 950 150"
+              fill="url(#cloudGradient)"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+                scale: [0.8, 1.1, 0.8],
+                y: [0, -8, 0]
+              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
+
+            {/* Left-center cloud */}
+            <motion.path
+              d="M 120 350 Q 135 335 155 350 Q 175 335 190 350 Q 205 365 190 380 Q 175 365 155 380 Q 135 365 120 350"
+              fill="url(#cloudGradient)"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.2, 0.5, 0.2],
+                scale: [0.9, 1.2, 0.9],
+                y: [0, -12, 0]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            />
+
+            {/* Center cloud for large portraits */}
+            <motion.path
+              d="M 550 450 Q 565 435 585 450 Q 605 435 620 450 Q 635 465 620 480 Q 605 465 585 480 Q 565 465 550 450"
+              fill="url(#cloudGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.25, 0.55, 0.25],
+                scale: [0.85, 1.15, 0.85],
+                y: [0, -10, 0]
+              }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+            />
+
+            {/* Bottom-center cloud */}
+            <motion.path
+              d="M 350 580 Q 365 565 385 580 Q 405 565 420 580 Q 435 595 420 610 Q 405 595 385 610 Q 365 595 350 580"
+              fill="url(#cloudGradient)"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.25, 0.55, 0.25],
+                scale: [0.85, 1.15, 0.85],
+                y: [0, -10, 0]
+              }}
+              transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut", delay: 3.5 }}
+            />
+
+            {/* Far top cloud */}
+            <motion.path
+              d="M 700 80 Q 715 65 735 80 Q 755 65 770 80 Q 785 95 770 110 Q 755 95 735 110 Q 715 95 700 80"
+              fill="url(#cloudGradient)"
+              className="lp:block"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0.2, 0.4, 0.2],
+                scale: [0.8, 1.0, 0.8],
+                y: [0, -6, 0]
+              }}
+              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+            />
+          </motion.g>
+
+          {/* Network Nodes - Full screen distribution */}
+          <motion.g>
+            {/* Top network cluster */}
+            {[
+              [200, 200], [280, 180], [340, 220]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-top-${i}`}
+                cx={x}
+                cy={y}
+                r="3"
+                fill="url(#nodeGradient)"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.5, 1, 0.5],
+                  scale: [0.8, 1.3, 0.8]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3
+                }}
+              />
+            ))}
+
+            {/* Center network cluster for large portraits */}
+            {[
+              [550, 300], [620, 280], [680, 320]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-center-${i}`}
+                cx={x}
+                cy={y}
+                r="2.5"
+                fill="url(#nodeGradient)"
+                className="lp:block"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.4, 0.8, 0.4],
+                  scale: [0.7, 1.2, 0.7]
+                }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.35 + 1.5
+                }}
+              />
+            ))}
+
+            {/* Bottom-right network cluster */}
+            {[
+              [800, 480], [880, 460], [920, 500]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-br-${i}`}
+                cx={x}
+                cy={y}
+                r="2.5"
+                fill="url(#nodeGradient)"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.4, 0.9, 0.4],
+                  scale: [0.7, 1.2, 0.7]
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.4 + 1
+                }}
+              />
+            ))}
+
+            {/* Far right nodes for wide screens */}
+            {[
+              [1050, 350], [1120, 370]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-far-${i}`}
+                cx={x}
+                cy={y}
+                r="2"
+                fill="url(#nodeGradient)"
+                className="lp:block"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.3, 0.7, 0.3],
+                  scale: [0.6, 1.1, 0.6]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.5 + 2.5
+                }}
+              />
+            ))}
+
+            {/* Network connections - Extended */}
+            <motion.line
+              x1="200" y1="200" x2="280" y2="180"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+            />
+            <motion.line
+              x1="800" y1="480" x2="880" y2="460"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+            />
+            <motion.line
+              x1="550" y1="300" x2="620" y2="280"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              className="lp:block"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, delay: 2.5 }}
+            />
+            <motion.line
+              x1="1050" y1="350" x2="1120" y2="370"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.6"
+              strokeDasharray="1.5,1"
+              className="lp:block"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 5, repeat: Infinity, delay: 3.5 }}
+            />
+          </motion.g>
+
+          {/* Data Chart Bars - Full screen distribution */}
+          <motion.g>
+            {/* Top-right mini chart */}
+            {[15, 25, 12, 28].map((height, i) => (
+              <motion.rect
+                key={`chart-tr-${i}`}
+                x={950 + i * 12}
+                y={250 - height}
+                width="8"
+                height={height}
+                fill="url(#chartGradient)"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.8, 1],
+                  opacity: [0.4, 0.8, 0.6, 0.8]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+
+            {/* Center chart for large portraits */}
+            {[22, 35, 18, 40, 25].map((height, i) => (
+              <motion.rect
+                key={`chart-center-${i}`}
+                x={500 + i * 14}
+                y={500 - height}
+                width="10"
+                height={height}
+                fill="url(#chartGradient)"
+                className="lp:block"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.7, 1],
+                  opacity: [0.3, 0.7, 0.5, 0.7]
+                }}
+                transition={{
+                  duration: 3.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.25 + 1
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+
+            {/* Bottom-left mini chart */}
+            {[18, 30, 20].map((height, i) => (
+              <motion.rect
+                key={`chart-bl-${i}`}
+                x={150 + i * 15}
+                y={550 - height}
+                width="10"
+                height={height}
+                fill="url(#chartGradient)"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.7, 1],
+                  opacity: [0.3, 0.7, 0.5, 0.7]
+                }}
+                transition={{
+                  duration: 3.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3 + 1.5
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+
+            {/* Far right chart */}
+            {[16, 24, 14, 30].map((height, i) => (
+              <motion.rect
+                key={`chart-far-${i}`}
+                x={1080 + i * 10}
+                y={450 - height}
+                width="7"
+                height={height}
+                fill="url(#chartGradient)"
+                className="lp:block"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.8, 1],
+                  opacity: [0.2, 0.6, 0.4, 0.6]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2 + 2
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+          </motion.g>
+
+          {/* CPU/Processor Representation - Extended coverage */}
+          <motion.g>
+            {/* Top-center CPU */}
+            <motion.rect
+              x="450"
+              y="180"
+              width="20"
+              height="20"
+              rx="1"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="0.8"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.9, 1.1, 0.9]
+              }}
+              transition={{ duration: 4, repeat: Infinity }}
+            />
+
+            {/* CPU pins */}
+            {[0, 1, 2].map((i) => (
+              <motion.rect
+                key={`pin-tc-${i}`}
+                x={449 + i * 6}
+                y="204"
+                width="1.5"
+                height="5"
+                fill="url(#pinGradient)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.3, 0.7, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
+              />
+            ))}
+
+            {/* Center CPU for large portraits */}
+            <motion.rect
+              x="600"
+              y="400"
+              width="22"
+              height="22"
+              rx="1"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="0.9"
+              className="lp:block"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.88, 1.08, 0.88]
+              }}
+              transition={{ duration: 4.5, repeat: Infinity, delay: 1.5 }}
+            />
+
+            {/* CPU pins for center */}
+            {[0, 1, 2, 3].map((i) => (
+              <motion.rect
+                key={`pin-center-${i}`}
+                x={599 + i * 5.5}
+                y="426"
+                width="1.5"
+                height="5"
+                fill="url(#pinGradient)"
+                className="lp:block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.2, 0.6, 0.2] }}
+                transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.12 + 1.5 }}
+              />
+            ))}
+
+            {/* Bottom-right CPU */}
+            <motion.rect
+              x="880"
+              y="550"
+              width="25"
+              height="25"
+              rx="1.5"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="1"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.85, 1.05, 0.85]
+              }}
+              transition={{ duration: 5, repeat: Infinity, delay: 2 }}
+            />
+
+            {/* CPU pins for bottom-right */}
+            {[0, 1, 2, 3].map((i) => (
+              <motion.rect
+                key={`pin-br-${i}`}
+                x={879 + i * 6}
+                y="580"
+                width="2"
+                height="6"
+                fill="url(#pinGradient)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.2, 0.6, 0.2] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.15 + 2 }}
+              />
+            ))}
+
+            {/* Far right CPU for wide screens */}
+            <motion.rect
+              x="1050"
+              y="200"
+              width="18"
+              height="18"
+              rx="1"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="0.7"
+              className="lp:block"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.2, 0.5, 0.2],
+                scale: [0.9, 1.1, 0.9]
+              }}
+              transition={{ duration: 6, repeat: Infinity, delay: 3 }}
+            />
+
+            {/* CPU pins for far right */}
+            {[0, 1, 2].map((i) => (
+              <motion.rect
+                key={`pin-far-${i}`}
+                x={1049 + i * 5}
+                y="222"
+                width="1.2"
+                height="4"
+                fill="url(#pinGradient)"
+                className="lp:block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.1, 0.4, 0.1] }}
+                transition={{ duration: 3, repeat: Infinity, delay: i * 0.1 + 3 }}
+              />
+            ))}
+          </motion.g>
+
+          {/* Network Nodes - Dispersed across screen */}
+          <motion.g className="hidden lg:block">
+            {/* Top network cluster */}
+            {[
+              [200, 200], [280, 180], [340, 220]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-top-${i}`}
+                cx={x}
+                cy={y}
+                r="3"
+                fill="url(#nodeGradient)"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.5, 1, 0.5],
+                  scale: [0.8, 1.3, 0.8]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3
+                }}
+              />
+            ))}
+
+            {/* Bottom-right network cluster */}
+            {[
+              [700, 380], [780, 360], [820, 400]
+            ].map(([x, y], i) => (
+              <motion.circle
+                key={`node-br-${i}`}
+                cx={x}
+                cy={y}
+                r="2.5"
+                fill="url(#nodeGradient)"
+                className="hidden xl:block"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{
+                  opacity: [0.4, 0.9, 0.4],
+                  scale: [0.7, 1.2, 0.7]
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.4 + 1
+                }}
+              />
+            ))}
+
+            {/* Network connections */}
+            <motion.line
+              x1="200" y1="200" x2="280" y2="180"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+            />
+            <motion.line
+              x1="700" y1="380" x2="780" y2="360"
+              stroke="url(#connectionGradient)"
+              strokeWidth="0.8"
+              strokeDasharray="2,1"
+              className="hidden xl:block"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: [0, 1, 0] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+            />
+          </motion.g>
+
+          {/* Data Chart Bars - Dispersed */}
+          <motion.g className="hidden md:block">
+            {/* Top-right mini chart */}
+            {[15, 25, 12, 28].map((height, i) => (
+              <motion.rect
+                key={`chart-tr-${i}`}
+                x={850 + i * 12}
+                y={300 - height}
+                width="8"
+                height={height}
+                fill="url(#chartGradient)"
+                className="hidden lg:block"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.8, 1],
+                  opacity: [0.4, 0.8, 0.6, 0.8]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.2
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+
+            {/* Bottom-left mini chart */}
+            {[18, 30, 20].map((height, i) => (
+              <motion.rect
+                key={`chart-bl-${i}`}
+                x={150 + i * 15}
+                y={450 - height}
+                width="10"
+                height={height}
+                fill="url(#chartGradient)"
+                initial={{ scaleY: 0 }}
+                animate={{
+                  scaleY: [0, 1, 0.7, 1],
+                  opacity: [0.3, 0.7, 0.5, 0.7]
+                }}
+                transition={{
+                  duration: 3.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.3 + 1.5
+                }}
+                style={{ transformOrigin: 'bottom' }}
+              />
+            ))}
+          </motion.g>
+
+          {/* CPU/Processor Representation - Dispersed */}
+          <motion.g className="hidden lg:block">
+            {/* Top-center CPU */}
+            <motion.rect
+              x="450"
+              y="180"
+              width="20"
+              height="20"
+              rx="1"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="0.8"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.4, 0.8, 0.4],
+                scale: [0.9, 1.1, 0.9]
+              }}
+              transition={{ duration: 4, repeat: Infinity }}
+            />
+
+            {/* CPU pins */}
+            {[0, 1, 2].map((i) => (
+              <motion.rect
+                key={`pin-tc-${i}`}
+                x={449 + i * 6}
+                y="204"
+                width="1.5"
+                height="5"
+                fill="url(#pinGradient)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.3, 0.7, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity, delay: i * 0.1 }}
+              />
+            ))}
+
+            {/* Bottom-right CPU */}
+            <motion.rect
+              x="780"
+              y="450"
+              width="25"
+              height="25"
+              rx="1.5"
+              fill="url(#cpuGradient)"
+              stroke="url(#cpuBorderGradient)"
+              strokeWidth="1"
+              className="hidden xl:block"
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.85, 1.05, 0.85]
+              }}
+              transition={{ duration: 5, repeat: Infinity, delay: 2 }}
+            />
+
+            {/* CPU pins for bottom-right */}
+            {[0, 1, 2, 3].map((i) => (
+              <motion.rect
+                key={`pin-br-${i}`}
+                x={779 + i * 6}
+                y="480"
+                width="2"
+                height="6"
+                fill="url(#pinGradient)"
+                className="hidden xl:block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0.2, 0.6, 0.2] }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.15 + 2 }}
+              />
+            ))}
+          </motion.g>
+
+          <defs>
+            {/* Light theme gradients */}
+            <linearGradient id="dataStream1" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#64748b" stopOpacity="0.4" />
+              <stop offset="50%" stopColor="#475569" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#334155" stopOpacity="0.4" />
+            </linearGradient>
+            <linearGradient id="sexyGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.3" />
+              <stop offset="30%" stopColor="#eab308" stopOpacity="0.4" />
+              <stop offset="70%" stopColor="#f97316" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#ea580c" stopOpacity="0.25" />
+            </linearGradient>
+            <linearGradient id="binaryGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#64748b" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#94a3b8" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="serverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.4" />
+            </linearGradient>
+            <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#64748b" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#475569" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#eab308" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#f97316" stopOpacity="0.25" />
+            </linearGradient>
+            <linearGradient id="cpuGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.35" />
+            </linearGradient>
+            <linearGradient id="cpuBorderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.3" />
+            </linearGradient>
+            <linearGradient id="pinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#64748b" stopOpacity="0.25" />
+            </linearGradient>
+
+            {/* Dark theme gradients */}
+            <linearGradient id="dataStream1Dark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#06B6D4" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#3B82F6" stopOpacity="1" />
+              <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.8" />
+            </linearGradient>
+            <linearGradient id="sexyGradient1Dark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.9" />
+              <stop offset="30%" stopColor="#eab308" stopOpacity="1" />
+              <stop offset="70%" stopColor="#f97316" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#ea580c" stopOpacity="0.7" />
+            </linearGradient>
+            <linearGradient id="binaryGradientDark" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.4" />
+            </linearGradient>
+            <linearGradient id="serverGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.8" />
+            </linearGradient>
+            <linearGradient id="cloudGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.6" />
+            </linearGradient>
+            <linearGradient id="nodeGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.6" />
+            </linearGradient>
+            <linearGradient id="connectionGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.7" />
+            </linearGradient>
+            <linearGradient id="chartGradientDark" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#eab308" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#f97316" stopOpacity="0.5" />
+            </linearGradient>
+            <linearGradient id="cpuGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity="0.7" />
+            </linearGradient>
+            <linearGradient id="cpuBorderGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#f97316" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#eab308" stopOpacity="0.6" />
+            </linearGradient>
+            <linearGradient id="pinGradientDark" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#64748b" stopOpacity="0.5" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        {/* Enhanced Floating Data Particles - Reduced for mobile */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className={`absolute w-1.5 h-1.5 rounded-full hidden sm:block ${i % 3 === 0 ? 'bg-orange-400/80 dark:bg-orange-300' :
+              i % 3 === 1 ? 'bg-yellow-400/80 dark:bg-yellow-300' :
+                'bg-blue-400/70 dark:bg-yellow-400'
+              }`}
+            style={{
+              left: `${15 + (i * 7) % 70}%`,
+              top: `${20 + (i * 11) % 60}%`
+            }}
+            animate={{
+              y: [0, -20, 0],
+              x: [0, 10, 0],
+              opacity: [0.5, 1, 0.5],
+              scale: [0.6, 1.4, 0.6]
+            }}
+            transition={{
+              duration: 6 + (i % 3),
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5
+            }}
+          />
+        ))}
+
+        {/* Simplified particles for mobile */}
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={`mobile-particle-${i}`}
+            className={`absolute w-1 h-1 rounded-full sm:hidden ${i % 2 === 0 ? 'bg-orange-400/60' : 'bg-blue-400/50'}`}
+            style={{
+              left: `${20 + (i * 20) % 60}%`,
+              top: `${30 + (i * 15) % 40}%`
+            }}
+            animate={{
+              y: [0, -15, 0],
+              opacity: [0.4, 0.8, 0.4]
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 2
+            }}
+          />
+        ))}
+
+        {/* Light Theme Floating Geometric Shapes - Hidden on mobile */}
+        <motion.div
+          className="absolute top-1/4 right-1/4 w-8 h-8 bg-gradient-to-br from-orange-300/40 to-yellow-300/30 dark:opacity-0 rounded-lg rotate-45 hidden sm:block"
+          animate={{
+            rotate: [45, 225, 45],
+            scale: [1, 1.2, 1],
+            opacity: [0.4, 0.8, 0.4]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 left-1/3 w-6 h-6 bg-gradient-to-br from-blue-300/40 to-indigo-300/30 dark:opacity-0 rounded-full hidden sm:block"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.7, 0.3],
+            y: [0, -15, 0]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/5 w-4 h-12 bg-gradient-to-b from-yellow-300/35 to-orange-300/25 dark:opacity-0 rounded-full hidden sm:block"
+          animate={{
+            rotate: [0, 180, 360],
+            opacity: [0.4, 0.6, 0.4]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear", delay: 1 }}
+        />
+
+        {/* Floating Blue and Orange Dots for Light Theme - Reduced for mobile */}
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={`floating-dot-${i}`}
+            className={`absolute rounded-full dark:opacity-0 hidden sm:block ${i % 3 === 0 ? 'w-3 h-3 bg-orange-400/60' :
+              i % 3 === 1 ? 'w-2 h-2 bg-blue-500/50' :
+                'w-4 h-4 bg-orange-300/40'
+              }`}
+            style={{
+              left: `${10 + (i * 13) % 80}%`,
+              top: `${15 + (i * 17) % 70}%`
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 15, 0],
+              opacity: [0.3, 0.8, 0.3],
+              scale: [0.8, 1.2, 0.8]
+            }}
+            transition={{
+              duration: 8 + (i % 4),
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.7
+            }}
+          />
+        ))}
+
+        {/* Simplified dots for mobile */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`mobile-dot-${i}`}
+            className={`absolute rounded-full dark:opacity-0 sm:hidden ${i % 2 === 0 ? 'w-2 h-2 bg-orange-400/50' : 'w-3 h-3 bg-blue-400/40'}`}
+            style={{
+              left: `${15 + (i * 15) % 70}%`,
+              top: `${20 + (i * 20) % 60}%`
+            }}
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.3, 0.7, 0.3]
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 1.5
+            }}
+          />
+        ))}
+
+        {/* Additional Larger Floating Dots - Hidden on mobile */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`large-dot-${i}`}
+            className={`absolute rounded-full dark:opacity-0 hidden sm:block ${i % 2 === 0 ? 'w-6 h-6 bg-blue-400/30' : 'w-5 h-5 bg-orange-400/35'
+              }`}
+            style={{
+              left: `${20 + (i * 11) % 60}%`,
+              top: `${25 + (i * 19) % 50}%`
+            }}
+            animate={{
+              y: [0, -20, 0],
+              x: [0, 10, 0],
+              opacity: [0.2, 0.6, 0.2],
+              scale: [1, 1.3, 1]
+            }}
+            transition={{
+              duration: 12 + (i % 3),
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 1.2
+            }}
+          />
+        ))}
+
+        {/* Enhanced Ambient Glow Effects for Light Theme */}
+        <motion.div
+          className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-orange-300/25 to-yellow-300/20 dark:from-orange-400/20 dark:to-yellow-400/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.4, 0.7, 0.4]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-20 left-20 w-80 h-80 bg-gradient-to-br from-blue-300/20 to-indigo-300/25 dark:from-primary/20 dark:to-accent/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.5, 0.8, 0.5]
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+        />
+
+        {/* Additional Light Theme Glow Elements */}
+        <motion.div
+          className="absolute top-1/3 left-10 w-64 h-64 bg-gradient-to-br from-yellow-200/30 to-orange-200/25 dark:opacity-0 rounded-full blur-2xl"
+          animate={{
+            scale: [0.8, 1.1, 0.8],
+            opacity: [0.3, 0.6, 0.3],
+            x: [0, 20, 0],
+            y: [0, -15, 0]
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        />
+        <motion.div
+          className="absolute bottom-1/3 right-10 w-72 h-72 bg-gradient-to-br from-blue-200/25 to-purple-200/20 dark:opacity-0 rounded-full blur-2xl"
+          animate={{
+            scale: [1.1, 0.9, 1.1],
+            opacity: [0.4, 0.7, 0.4],
+            x: [0, -25, 0],
+            y: [0, 10, 0]
+          }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 7 }}
+        />
+      </div>
+
+      {/* Main Hero Content */}
+      <motion.main
+        className="relative z-10 flex flex-col items-center justify-center min-h-[600px] md:min-h-[700px] lg:min-h-screen px-6 pt-20 pb-8 lg:px-8 lg:pt-32 lg:pb-12"
+        style={{ paddingTop: '120px' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
+        {/* Animated Strip Lines */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Third Strip Line (diagonal) */}
+          <motion.div
+            className="absolute w-px h-full bg-gradient-to-b from-transparent via-purple-400/20 to-transparent dark:via-purple-300/30"
+            style={{
+              left: '15%',
+              transform: 'rotate(15deg)',
+              transformOrigin: 'center',
+            }}
+            animate={{
+              opacity: [0.2, 0.6, 0.2],
+              scaleY: [0.5, 1, 0.5],
+            }}
+            transition={{
+              duration: 12 * desktopSlowFactor,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+
+          {/* Fourth Strip Line (diagonal opposite) */}
+          <motion.div
+            className="absolute w-px h-full bg-gradient-to-b from-transparent via-emerald-400/20 to-transparent dark:via-emerald-300/30"
+            style={{
+              right: '15%',
+              transform: 'rotate(-15deg)',
+              transformOrigin: 'center',
+            }}
+            animate={{
+              opacity: [0.6, 0.2, 0.6],
+              scaleY: [1, 0.5, 1],
+            }}
+            transition={{
+              duration: 10 * desktopSlowFactor,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          />
+        </div>
+
+        {/* Hero Headline */}
+        <motion.h1
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-center text-slate-900 dark:text-slate-100 max-w-6xl leading-tight"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+        >
+          The Connection That Counts
+          <br />
+          <span className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent animate-gradient-x bg-size-200">
+            The Result That Lasts
+          </span>
+        </motion.h1>
+
+        {/* Subheadline */}
+        <motion.p
+          className="mt-6 text-xl sm:text-2xl md:text-2xl text-slate-600 dark:text-slate-300 text-center max-w-4xl leading-relaxed"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
+        >
+          Your one-stop solution for CRM, ERP, HRMS, SFA, and more.
+          <span className="font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"> Transform your business operations</span> with our comprehensive suite of enterprise software.
+        </motion.p>
+
+        {/* CTA Buttons */}
+        <motion.div
+          className="mt-10 flex flex-col sm:flex-row items-center gap-4"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
+        >
+          <motion.div
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 hover:from-orange-600 hover:via-yellow-500 hover:to-orange-600 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              onClick={() => navigate('/contact-us')}
             >
-              {/* Badge */}
-              <motion.div
-                className="inline-flex items-center gap-2 px-4 md:px-4 py-2 md:py-1.5 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-full text-orange-600 dark:text-orange-400 font-medium backdrop-blur-sm text-sm md:text-sm mb-4 md:mb-3 mt-4 md:mt-0"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.8 }}
-              >
-                <Sparkles className="w-4 h-4 md:w-4 md:h-4" />
-                Trusted by 27+ Leading Companies
-              </motion.div>
+              <Play className="w-5 h-5 mr-2" />
+              Request a Demo
+            </Button>
+          </motion.div>
 
-              {/* Main Heading */}
-              <motion.h1
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.1] md:leading-[1.1] lg:leading-[1.1] xl:leading-[1.1] text-center md:text-left lg:text-left tracking-tight mt-2 sm:mt-3 md:mt-4"
-                initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={!isMobile ? { delay: 0.2, duration: 0.8 } : { duration: 0 }}
-              >
-                <span className="bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-500 bg-clip-text text-transparent bg-size-200 animate-gradient-x">
-                  Transform
-                </span>
-                <br />
-                <span className="text-foreground">Your Business</span>
-                <br />
-                <span className="text-foreground/80 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
-                  with Technology
-                </span>
-              </motion.h1>
+          <motion.div
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-2 border-orange-300 dark:border-orange-400 text-orange-600 dark:text-orange-400 hover:border-orange-500 hover:text-orange-700 dark:hover:text-orange-300 hover:bg-orange-50 dark:hover:bg-orange-950/20 px-8 py-4 text-lg font-semibold transition-all duration-300"
+              onClick={() => navigate('/sales-force-automation')}
+            >
+              Explore Solutions
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </motion.div>
+        </motion.div>
 
-              {/* Subtitle */}
-              <motion.p
-                className="text-base sm:text-lg md:text-lg lg:text-xl text-foreground/70 max-w-2xl leading-[1.4] md:leading-[1.5] text-center md:text-left lg:text-left px-2 md:px-0 mt-2 sm:mt-3 md:mt-4"
-                initial={!isMobile ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={!isMobile ? { delay: 0.4, duration: 0.8 } : { duration: 0 }}
-              >
-                Empowering businesses across all industries with cutting-edge
-                <span className="text-orange-500 font-semibold"> SFA, ERP, CRM, HRMS</span> and
-                <span className="text-purple-500 font-semibold"> AI-driven solutions</span>.
-                Scale your operations, boost efficiency, and drive growth.
-              </motion.p>
+        {/* Trust Indicators */}
+        <motion.div
+          className="mt-12 flex flex-wrap items-center justify-center gap-8 text-slate-500 dark:text-slate-400"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.4, ease: "easeOut" }}
+        >
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="w-5 h-5 text-green-500" />
+            <span className="font-medium">Trusted by 100+ companies</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="w-5 h-5 text-green-500" />
+            <span className="font-medium">99.9% uptime target</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <CheckCircle className="w-5 h-5 text-green-500" />
+            <span className="font-medium">24/7 expert support</span>
+          </div>
+        </motion.div>
+      </motion.main>
 
-              {/* Stats */}
-              <motion.div
-                className="flex flex-row sm:flex-row gap-3 sm:gap-4 lg:gap-6 py-1 sm:py-2 md:py-3 justify-center md:justify-start lg:justify-start md:ml-2 lg:ml-4 mt-2 sm:mt-3 md:mt-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
-              >
-                <div className="text-center md:text-left lg:text-left flex-1 sm:flex-none">
-                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-orange-500">{currentStats.clients}+</div>
-                  <div className="text-xs sm:text-sm text-foreground/60">Happy Customers</div>
+      {/* Manacle Success & Trust Section */}
+      <motion.section
+        className="relative z-10 px-6 lg:px-8 py-12 lg:py-20"
+        initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, y: 50 }}
+        whileInView={isMobilePortrait
+          ? { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+          : { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        <div className="max-w-7xl mx-auto">
+          {/* Cursive Header */}
+          <motion.div
+            className="text-center mb-16"
+            initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0 }}
+            whileInView={isMobilePortrait
+              ? { opacity: 1, transition: { duration: 0.4, ease: "easeOut" } }
+              : { opacity: 1, transition: { duration: 0.6, ease: "easeOut", delay: 0.3 } }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl font-medium text-slate-800 dark:text-slate-200 mb-4" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
+              Transforming Business Dreams into Digital Reality
+            </h2>
+            <p className="text-xl sm:text-2xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
+              Where innovation meets execution - we turn your boldest business visions into powerful, scalable solutions that drive extraordinary growth.
+            </p>
+          </motion.div>
+
+          {/* Achievement Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+            {/* Left: Key Achievements */}
+            <motion.div
+              className="space-y-8"
+              initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, x: -50 }}
+              whileInView={isMobilePortrait
+                ? { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                : { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut", delay: 0.3 } }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <div className="bg-gradient-to-br from-white/90 to-blue-50/90 dark:from-slate-800/90 dark:to-slate-700/90 backdrop-blur-lg rounded-3xl p-5 md:p-8 shadow-2xl border border-white/30 dark:border-slate-600/30 text-center mx-auto max-w-md sm:max-w-lg lg:max-w-none">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-6 text-slate-800 dark:text-slate-200" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
+                  The Manacle Advantage
+                </h3>
+
+                <div className="space-y-6">
+                  <motion.div
+                    className="flex items-center justify-center space-x-4 p-4 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl border border-emerald-200 dark:border-emerald-700"
+                    whileHover={isMobilePortrait ? undefined : { scale: 1.02, x: 5 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      ✓
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-semibold text-emerald-800 dark:text-emerald-200">200+ Happy Customers</p>
+                      <p className="text-sm text-emerald-600 dark:text-emerald-400">Businesses successfully transformed</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="flex items-center justify-center space-x-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-700"
+                    whileHover={isMobilePortrait ? undefined : { scale: 1.02, x: 5 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      ⚡
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-semibold text-blue-800 dark:text-blue-200">2000+ Distributors Onboard</p>
+                      <p className="text-sm text-blue-600 dark:text-blue-400">Active distribution network across regions</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="flex items-center justify-center space-x-4 p-4 bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-2xl border border-purple-200 dark:border-purple-700"
+                    whileHover={isMobilePortrait ? undefined : { scale: 1.02, x: 5 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      ★
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-semibold text-purple-800 dark:text-purple-200">10,000+ Active Salespeople</p>
+                      <p className="text-sm text-purple-600 dark:text-purple-400">Empowered by our SFA solutions</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="flex items-center justify-center space-x-4 p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-2xl border border-orange-200 dark:border-orange-700"
+                    whileHover={isMobilePortrait ? undefined : { scale: 1.02, x: 5 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      🏆
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-semibold text-orange-800 dark:text-orange-200">End-to-End Solutions Provider</p>
+                      <p className="text-sm text-orange-600 dark:text-orange-400">CRM, ERP, HRMS, SFA & more</p>
+                    </div>
+                  </motion.div>
                 </div>
-                <div className="text-center md:text-left lg:text-left flex-1 sm:flex-none">
-                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-purple-500">{currentStats.years}+</div>
-                  <div className="text-xs sm:text-sm text-foreground/60">Years Experience</div>
-                </div>
-                <div className="text-center md:text-left lg:text-left flex-1 sm:flex-none">
-                  <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-blue-500">{currentStats.solutions}+</div>
-                  <div className="text-xs sm:text-sm text-foreground/60">Solutions</div>
-                </div>
-              </motion.div>
-
-              {/* CTA Buttons */}
-              <motion.div
-                className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-1 sm:pt-2 md:pt-4 justify-center md:justify-start lg:justify-start items-center md:ml-2 lg:ml-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 0.8 }}
-              >
-
-
-                {/* <div className="group relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
-                <a href="/auto-site">
-                  <button className="relative px-4 sm:px-5 md:px-4 lg:px-8 py-2.5 sm:py-3 md:py-2.5 lg:py-4 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold text-sm sm:text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
-                    Build your free website
-                    <ArrowRight className="w-4 h-4 md:w-4 md:h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                  </button>
-                </a>
-              </div> */}
-
-                <div className="group relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-xl blur-sm group-hover:blur-md transition-all duration-300 opacity-60 group-hover:opacity-90"></div>
-                  <a href="/contact-us">
-                    <button className="relative px-4 sm:px-5 md:px-4 lg:px-8 py-2.5 sm:py-3 md:py-2.5 lg:py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-sm sm:text-base md:text-sm lg:text-lg rounded-lg md:rounded-lg lg:rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-[1.02] group-hover:-translate-y-0.5 active:scale-[0.98] border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-2 md:gap-2 lg:gap-3 w-auto whitespace-nowrap">
-                      <Users className="w-4 h-4 md:w-4 md:h-4 lg:w-5 lg:h-5" />
-                      Talk to Expert
-                    </button>
-                  </a>
-                </div>
-              </motion.div>
+              </div>
             </motion.div>
 
-            {/* Right Visual */}
+            {/* Right: Live Metrics */}
             <motion.div
-              className="flex justify-center md:justify-end lg:justify-end order-2 md:order-2 lg:order-2 mt-4 sm:mt-6 md:mt-0"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 1 }}
+              className="space-y-8"
+              initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, x: 50 }}
+              whileInView={isMobilePortrait
+                ? { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
+                : { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut", delay: 0.4 } }}
+              viewport={{ once: true, margin: "-100px" }}
             >
-              <div className="relative w-full max-w-sm md:max-w-xs lg:max-w-lg">
-                {/* Main Device */}
-                <motion.div
-                  className="relative w-52 h-[320px] sm:w-60 sm:h-[380px] md:w-64 md:h-[400px] lg:w-80 lg:h-[600px] mx-auto bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] shadow-2xl border-3 sm:border-4 md:border-4 lg:border-8 border-slate-300 dark:border-slate-700 overflow-hidden"
-                  animate={{
-                    y: [0, -15, 0],
-                    rotateY: [0, 3, 0, -3, 0],
-                    x: [0, 5, 0, -5, 0]
-                  }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  {/* Screen Content */}
-                  <div className="absolute inset-1.5 md:inset-2 lg:inset-4 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-black rounded-[1.5rem] md:rounded-[1.8rem] lg:rounded-[2rem] overflow-hidden">
-                    {/* Status Bar */}
-                    <div className="flex justify-between items-center p-2.5 md:p-3 lg:p-4 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 md:w-6 md:h-6 bg-orange-500 rounded-lg flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">M</span>
-                        </div>
-                        <div>
-                          <div className="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">Manacle Technologies Pvt Ltd</div>
-                        </div>
-                      </div>
-                      <div className="w-4 h-4 md:w-5 md:h-5 text-slate-600 dark:text-slate-400">
-                        <svg fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                          <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    </div>
+              <div className="rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-8 bg-transparent sm:bg-gradient-to-br sm:from-white/90 sm:to-purple-50/90 dark:sm:from-slate-800/90 dark:sm:to-purple-900/20 sm:backdrop-blur-lg sm:shadow-2xl sm:border sm:border-white/30 dark:sm:border-slate-600/30 overflow-hidden mx-auto max-w-md sm:max-w-none text-center">
+                <div className="relative">
+                  <motion.div
+                    className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-orange-400/20 to-yellow-400/20 rounded-full blur-2xl"
+                    animate={isMobilePortrait ? undefined : { rotate: [0, 360] }}
+                    transition={isMobilePortrait ? undefined : { duration: 15, repeat: Infinity, ease: "linear" }}
+                  />
 
-                    {/* Tab Navigation */}
-                    <div className="flex bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-                      <div className="flex-1 py-2 md:py-3 text-center">
-                        <div className="text-xs md:text-sm font-semibold text-orange-500 border-b-2 border-orange-500 pb-1">Performance</div>
-                      </div>
-                      <div className="flex-1 py-2 md:py-3 text-center">
-                        <div className="text-xs md:text-sm text-slate-500 dark:text-slate-400">Product View</div>
-                      </div>
-                      <div className="flex-1 py-2 md:py-3 text-center">
-                        <div className="text-xs md:text-sm text-slate-500 dark:text-slate-400">Analysis</div>
-                      </div>
-                    </div>
+                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4 sm:mb-6 md:mb-8 text-slate-800 dark:text-slate-200 relative z-10 text-center" style={{ fontFamily: 'Fredoka, sans-serif', fontWeight: '500' }}>
+                    Success by the Numbers
+                  </h3>
 
-                    {/* Main Content */}
-                    <div className="p-1.5 sm:p-2 md:p-3 lg:p-5 space-y-1.5 sm:space-y-2 md:space-y-3 lg:space-y-4 bg-slate-50 dark:bg-slate-900">
-                      {/* Employee Card */}
-                      <motion.div
-                        className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-2 sm:p-3 md:p-4 text-white relative overflow-hidden"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.2, duration: 0.8 }}
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 md:gap-6 relative z-10">
+                    <motion.div
+                      className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10 dark:from-green-400/20 dark:to-emerald-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-green-200/40 sm:border-green-200/50 dark:border-green-600/30"
+                      animate={isMobilePortrait ? undefined : { boxShadow: [
+                        "0 0 20px rgba(34, 197, 94, 0.2)",
+                        "0 0 30px rgba(34, 197, 94, 0.4)",
+                        "0 0 20px rgba(34, 197, 94, 0.2)"
+                      ] }}
+                      transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity }}
+                    >
+                      <motion.p
+                        className="text-xl sm:text-2xl md:text-4xl font-bold text-green-600 dark:text-green-400 mb-0.5 sm:mb-1 md:mb-2"
+                        animate={isMobilePortrait ? undefined : { scale: [1, 1.05, 1] }}
+                        transition={isMobilePortrait ? undefined : { duration: 2, repeat: Infinity }}
                       >
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center">
-                            <svg className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                            </svg>
-                          </div>
-                          <div className="flex-1">
-                            <div className="text-xs sm:text-sm md:text-base font-semibold text-blue-200">Shashank Satyam</div>
-                            <div className="text-[10px] sm:text-xs text-blue-100">Technical Support Engineer</div>
-                          </div>
-                          <div className="text-[10px] sm:text-xs text-blue-100">1:23:21</div>
-                        </div>
-                      </motion.div>
+                        15+
+                      </motion.p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-green-700 dark:text-green-300 font-medium">Years in Industry</p>
+                    </motion.div>
 
-                      {/* MTP Alert */}
-                      <motion.div
-                        className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.4, duration: 0.8 }}
+                    <motion.div
+                      className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-400/20 dark:to-cyan-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-blue-200/40 sm:border-blue-200/50 dark:border-blue-600/30"
+                      animate={isMobilePortrait ? undefined : { boxShadow: [
+                        "0 0 20px rgba(59, 130, 246, 0.2)",
+                        "0 0 30px rgba(59, 130, 246, 0.4)",
+                        "0 0 20px rgba(59, 130, 246, 0.2)"
+                      ] }}
+                      transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 1 }}
+                    >
+                      <motion.p
+                        className="text-xl sm:text-2xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-0.5 sm:mb-1 md:mb-2"
+                        animate={isMobilePortrait ? undefined : { scale: [1, 1.05, 1] }}
+                        transition={isMobilePortrait ? undefined : { duration: 2, repeat: Infinity, delay: 1 }}
                       >
-                        <div className="text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">No MTP Filled!!</div>
-                        <div className="flex justify-between text-xs text-blue-400">
-                          <span>riding two-wheeler</span>
-                          <span>Please wear a ma...</span>
-                        </div>
-                      </motion.div>
+                        200+
+                      </motion.p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-blue-700 dark:text-blue-300 font-medium">Satisfied Clients</p>
+                    </motion.div>
 
-                      {/* Chart Section */}
-                      <motion.div
-                        className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.6, duration: 0.8 }}
+                    <motion.div
+                      className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-purple-500/10 to-violet-500/10 dark:from-purple-400/20 dark:to-violet-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-purple-200/40 sm:border-purple-200/50 dark:border-purple-600/30"
+                      animate={isMobilePortrait ? undefined : { boxShadow: [
+                        "0 0 20px rgba(147, 51, 234, 0.2)",
+                        "0 0 30px rgba(147, 51, 234, 0.4)",
+                        "0 0 20px rgba(147, 51, 234, 0.2)"
+                      ] }}
+                      transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 2 }}
+                    >
+                      <motion.p
+                        className="text-xl sm:text-2xl md:text-4xl font-bold text-purple-600 dark:text-purple-400 mb-0.5 sm:mb-1 md:mb-2"
+                        animate={isMobilePortrait ? undefined : { scale: [1, 1.05, 1] }}
+                        transition={isMobilePortrait ? undefined : { duration: 2, repeat: Infinity, delay: 2 }}
                       >
-                        {/* Chart Grid */}
-                        <div className="space-y-1 md:space-y-2">
-                          {/* Y-axis labels and grid lines */}
-                          {[1.2, 0.8, 0.4, 0.0, -0.4, -0.8, -1.2].map((value, i) => (
-                            <div key={i} className="flex items-center">
-                              <div className="w-6 text-xs text-slate-500 text-right">{value}</div>
-                              <div className="flex-1 ml-2 border-b border-slate-200 dark:border-slate-600 h-4 md:h-5"></div>
-                              <div className="w-6 text-xs text-slate-500 text-left">{value}</div>
-                            </div>
-                          ))}
+                        24/7
+                      </motion.p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-purple-700 dark:text-purple-300 font-medium">Expert Support</p>
+                    </motion.div>
 
-                          {/* X-axis dates */}
-                          <div className="flex justify-between mt-2 px-6">
-                            {['2025-05-01', '2025-05-02', '2025-05-03', '2025-05-04', '2025-05-05'].map((date, i) => (
-                              <div key={i} className="text-xs text-slate-500 transform -rotate-45 origin-left">{date}</div>
-                            ))}
-                          </div>
-
-                          {/* Legend */}
-                          <div className="flex gap-4 mt-2 px-2">
-                            <div className="flex items-center gap-1">
-                              <div className="w-3 h-2 bg-red-500"></div>
-                              <span className="text-xs text-slate-600 dark:text-slate-400">Target</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <div className="w-3 h-2 bg-blue-600"></div>
-                              <span className="text-xs text-slate-600 dark:text-slate-400">Achievements</span>
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-
-                      {/* Sales Metrics */}
-                      <motion.div
-                        className="grid grid-cols-3 gap-2 md:gap-3"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.8, duration: 0.8 }}
+                    <motion.div
+                      className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-orange-500/10 to-red-500/10 dark:from-orange-400/20 dark:to-red-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-orange-200/40 sm:border-orange-200/50 dark:border-orange-600/30"
+                      animate={isMobilePortrait ? undefined : { boxShadow: [
+                        "0 0 20px rgba(249, 115, 22, 0.2)",
+                        "0 0 30px rgba(249, 115, 22, 0.4)",
+                        "0 0 20px rgba(249, 115, 22, 0.2)"
+                      ] }}
+                      transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 0.5 }}
+                    >
+                      <motion.p
+                        className="text-xl sm:text-2xl md:text-4xl font-bold text-orange-600 dark:text-orange-400 mb-0.5 sm:mb-1 md:mb-2"
+                        animate={isMobilePortrait ? undefined : { scale: [1, 1.05, 1] }}
+                        transition={isMobilePortrait ? undefined : { duration: 2, repeat: Infinity, delay: 0.5 }}
                       >
-                        <div className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700 text-center relative">
-                          <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-1 bg-blue-100 rounded-lg flex items-center justify-center relative">
-                            <svg className="w-4 h-4 md:w-5 md:h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-                            </svg>
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
-                              <span className="text-xs text-white font-bold">0</span>
-                            </div>
-                          </div>
-                          <div className="text-sm md:text-base font-bold text-orange-500">0.0</div>
-                          <div className="text-xs text-slate-600 dark:text-slate-400">Pri. Sale</div>
-                        </div>
-
-                        <div className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700 text-center relative">
-                          <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-1 bg-blue-100 rounded-lg flex items-center justify-center relative">
-                            <svg className="w-4 h-4 md:w-5 md:h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                            </svg>
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
-                              <span className="text-xs text-white font-bold">0</span>
-                            </div>
-                          </div>
-                          <div className="text-sm md:text-base font-bold text-orange-500">0.0</div>
-                          <div className="text-xs text-slate-600 dark:text-slate-400">Sec. Sale</div>
-                        </div>
-
-                        <div className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700 text-center relative">
-                          <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-1 bg-blue-100 rounded-lg flex items-center justify-center relative">
-                            <svg className="w-4 h-4 md:w-5 md:h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.75 2.524z" />
-                            </svg>
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full flex items-center justify-center">
-                              <span className="text-xs text-white font-bold">0</span>
-                            </div>
-                          </div>
-                          <div className="text-sm md:text-base font-bold text-orange-500">0</div>
-                          <div className="text-xs text-slate-600 dark:text-slate-400">New Outlet</div>
-                        </div>
-                      </motion.div>
-
-                      {/* Recent Module Access */}
-                      <motion.div
-                        className="bg-white dark:bg-slate-800 rounded-lg p-2 md:p-3 border border-slate-200 dark:border-slate-700"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 2.0, duration: 0.8 }}
-                      >
-                        <div className="text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Recent Module Access</div>
-                        <div className="flex gap-2 md:gap-3">
-                          <div className="flex-1 bg-purple-50 dark:bg-purple-900/20 rounded-lg p-2 flex items-center gap-2">
-                            <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                              </svg>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-medium text-purple-700 dark:text-purple-300 truncate">Employee</div>
-                              <div className="text-xs text-purple-600 dark:text-purple-400">2 min ago</div>
-                            </div>
-                          </div>
-
-                          <div className="flex-1 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 flex items-center gap-2">
-                            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-medium text-blue-700 dark:text-blue-300 truncate">Reports</div>
-                              <div className="text-xs text-blue-600 dark:text-blue-400">5 min ago</div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Quick Actions */}
-                        <div className="mt-2 md:mt-3 flex gap-2">
-                          <button className="flex-1 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs py-1.5 rounded-md font-medium">
-                            Check In
-                          </button>
-                          <button className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs py-1.5 rounded-md font-medium">
-                            View Tasks
-                          </button>
-                        </div>
-                      </motion.div>
-                    </div>
+                        100%
+                      </motion.p>
+                      <p className="text-[10px] sm:text-xs md:text-sm text-orange-700 dark:text-orange-300 font-medium">Custom Solutions</p>
+                    </motion.div>
                   </div>
-                </motion.div>
-
-                {/* Additional Floating Icons */}
-                <motion.div
-                  className="absolute top-10 md:top-12 lg:top-16 -left-6 md:-left-8 lg:-left-12 w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-white/8 dark:bg-black/8 backdrop-blur-xl rounded-lg md:rounded-xl lg:rounded-2xl border border-white/15 items-center justify-center hidden md:flex"
-                  animate={{
-                    y: [0, -15, 0],
-                    rotate: [0, 5, 0]
-                  }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                >
-                  <Smartphone className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-blue-500" />
-                </motion.div>
-
-
+                </div>
               </div>
             </motion.div>
           </div>
-
-
         </div>
-      </section>
-    </>
+      </motion.section>
+
+      {/* Compact Solutions Section */}
+      <div className="relative z-10">
+        <CompactSolutions />
+      </div>
+    </div>
   );
 }

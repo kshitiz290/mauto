@@ -20,9 +20,9 @@ const RetailTransformation = () => {
             href: "/sales-force-automation", // Add navigation link
             features: [
                 "Real-time order management & tracking",
-                "AI-powered sales forecasting",
+                "Sales forecasting",
                 "Mobile-first field force management",
-                "Automated route optimization",
+                "Automated route planning",
                 "Performance analytics & insights"
             ],
             metrics: {
@@ -36,14 +36,14 @@ const RetailTransformation = () => {
             id: 2,
             title: "Distributor Management",
             subtitle: "Supply Chain Excellence",
-            description: "Optimize your entire distribution network with data-driven insights and automation.",
+            description: "Improve your entire distribution network with data-driven insights and automation.",
             icon: <BarChart3 className="w-8 h-8" />,
             gradient: "from-yellow-500 to-orange-500",
             bgGradient: "from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950",
             href: "/distributor-management-solution", // Add navigation link
             features: [
                 "Intelligent inventory management",
-                "Dynamic pricing optimization",
+                "Dynamic pricing updates",
                 "Supply chain visibility",
                 "Automated order processing",
                 "Distributor performance tracking"
@@ -58,7 +58,7 @@ const RetailTransformation = () => {
         {
             id: 3,
             title: "Visual Merchandising",
-            subtitle: "Retail Space Optimization",
+            subtitle: "Retail Space Planning",
             description: "Enhance customer experience and boost sales with intelligent merchandising tools.",
             icon: <Store className="w-8 h-8" />,
             gradient: "from-pink-500 to-purple-500",
@@ -66,7 +66,7 @@ const RetailTransformation = () => {
             href: "/visual-merchandising", // Add navigation link
             features: [
                 "Interactive planogram management",
-                "AI-powered product placement",
+                "Product placement suggestions",
                 "Real-time compliance monitoring",
                 "Customer behavior analytics",
                 "Visual audit automation"
@@ -306,7 +306,7 @@ const RetailTransformation = () => {
                         Why Choose Our <span className="bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent">Integrated Platform?</span>
                     </h3>
                     <p className="text-xl text-foreground/80 mb-12 max-w-3xl mx-auto">
-                        Our solutions work together seamlessly to provide a unified retail technology ecosystem
+                        Our solutions work well together to provide a unified retail technology ecosystem
                     </p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

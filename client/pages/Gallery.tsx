@@ -33,7 +33,7 @@ export default function Gallery() {
       image: "/placeholder.svg",
       features: [
         "Responsive Design",
-        "SEO Optimized",
+        "SEO-friendly",
         "Fast Loading",
         "Mobile-First Approach",
         "Interactive Learning Tools",
@@ -61,7 +61,7 @@ export default function Gallery() {
         "Mobile Responsive",
         "HIPAA Compliant Design",
         "Fast Performance",
-        "SEO Optimized"
+        "SEO-friendly"
       ],
       tags: ["Professional", "Medical", "Trust-Building", "Clean"],
       techStack: ["WordPress", "PHP", "MySQL", "Bootstrap", "JavaScript"],
@@ -102,7 +102,7 @@ export default function Gallery() {
         "Room Gallery Showcase",
         "Amenities Display",
         "Guest Services Portal",
-        "Mobile Optimized",
+        "Mobile-friendly",
         "High-Quality Imagery",
         "Location Integration",
         "Social Proof Display"
@@ -193,8 +193,8 @@ export default function Gallery() {
                       key={industry}
                       onClick={() => setSelectedIndustry(industry)}
                       className={`px-6 py-2 rounded-full border transition-all duration-300 ${selectedIndustry === industry
-                          ? 'bg-primary text-white border-primary'
-                          : 'bg-card/50 border-glass-border hover:border-primary/50'
+                        ? 'bg-primary text-white border-primary'
+                        : 'bg-card/50 border-glass-border hover:border-primary/50'
                         }`}
                     >
                       {industry}
@@ -363,7 +363,7 @@ export default function Gallery() {
                   <div className="bg-card/80 backdrop-blur-xl border border-glass-border rounded-xl p-6">
                     <Zap className="w-8 h-8 text-accent mx-auto mb-3" />
                     <h3 className="font-bold mb-2">Fast Performance</h3>
-                    <p className="text-sm text-foreground/70">Optimized for speed</p>
+                    <p className="text-sm text-foreground/70">Built for speed</p>
                   </div>
                   <div className="bg-card/80 backdrop-blur-xl border border-glass-border rounded-xl p-6">
                     <Search className="w-8 h-8 text-primary mx-auto mb-3" />

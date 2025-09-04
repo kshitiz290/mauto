@@ -238,7 +238,7 @@ export function Header() {
               { name: "Website Development Services", href: "/website-development-services" },
               { name: "CRM Software", href: "/crm-software" },
               { name: "Digital Marketing Services", href: "/digital-marketing-services" },
-              { name: "Whatsapp Ordering System", href: "/whatsapp-ordering-system" }
+              { name: "WhatsApp Ordering System", href: "/whatsapp-ordering-system" }
             ],
           },
         ],

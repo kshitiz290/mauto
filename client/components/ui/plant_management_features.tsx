@@ -4,56 +4,56 @@ import { CalendarCheck2, ClipboardList, Wrench, ShieldCheck, Users, BarChart2, D
 const features = [
     {
         icon: <CalendarCheck2 className="w-8 h-8 text-primary" />,
-        title: "Production Planning & Scheduling",
+        title: "Plan Your Production Like a Pro",
         points: [
-            "Create & manage production orders.",
-            "Optimize machine & labor utilization.",
-            "Real-time scheduling adjustments."
+            "Set up production orders that actually make sense.",
+            "Get the most out of your machines and people.",
+            "Change schedules on the fly when things go sideways."
         ]
     },
     {
         icon: <ClipboardList className="w-8 h-8 text-primary" />,
-        title: "Inventory & Material Management",
+        title: "Never Run Out of Stuff Again",
         points: [
-            "Raw material tracking.",
-            "Finished goods monitoring.",
-            "Automatic stock alerts & reorder levels."
+            "Know exactly what materials you have and where.",
+            "Track finished products from factory to warehouse.",
+            "Get alerts before you run out of anything important."
         ]
     },
     {
         icon: <Wrench className="w-8 h-8 text-primary" />,
-        title: "Maintenance Management (CMMS)",
+        title: "Keep Your Machines Happy",
         points: [
-            "Schedule preventive maintenance.",
-            "Track breakdowns & repairs.",
-            "Equipment performance analysis."
+            "Fix things before they break (saves money, trust us).",
+            "Track what went wrong and when it got fixed.",
+            "See which machines are your stars and which are troublemakers."
         ]
     },
     {
         icon: <ShieldCheck className="w-8 h-8 text-primary" />,
-        title: "Quality Control & Compliance",
+        title: "Make Sure Everything's Perfect",
         points: [
-            "Quality inspection at different stages.",
-            "Defect tracking & root cause analysis.",
-            "Regulatory compliance documentation."
+            "Check quality at every step, not just at the end.",
+            "Find out why things go wrong and fix the root problem.",
+            "Keep all the paperwork auditors love to see."
         ]
     },
     {
         icon: <Users className="w-8 h-8 text-primary" />,
-        title: "Workforce Management",
+        title: "Manage Your Team Better",
         points: [
-            "Shift scheduling.",
-            "Attendance & productivity tracking.",
-            "Role-based access & performance metrics."
+            "Schedule shifts without the headaches.",
+            "See who's showing up and getting things done.",
+            "Give people access to what they need, nothing more."
         ]
     },
     {
         icon: <BarChart2 className="w-8 h-8 text-primary" />,
-        title: "Data Analytics & Reporting",
+        title: "Numbers That Actually Help",
         points: [
-            "Real-time dashboards.",
-            "Production KPIs.",
-            "Customizable reports & analytics."
+            "See what's happening right now, not last week.",
+            "Track the metrics that matter to your business.",
+            "Create reports that make sense to you and your boss."
         ]
     }
 ];
@@ -69,7 +69,7 @@ const PlantManagementFeatures = () => (
                 className="text-3xl md:text-4xl font-extrabold text-center mb-2 leading-tight"
             >
                 <span className="bg-gradient-to-r from-orange-500 via-yellow-500 to-pink-500 bg-clip-text text-transparent">
-                    Core Features of Plant Management Software
+                    Everything You Need to Run Your Plant Smoothly
                 </span>
             </motion.h2>
             <motion.p
@@ -79,7 +79,7 @@ const PlantManagementFeatures = () => (
                 transition={{ duration: 0.7, delay: 0.1 }}
                 className="text-base md:text-lg text-center text-foreground/70 mb-10 max-w-3xl mx-auto leading-relaxed"
             >
-                Plant Management Software is a digital tool used to streamline, monitor, and optimize various operations within a manufacturing plant or industrial facility. It integrates multiple functions — from production scheduling to equipment maintenance and resource allocation — into a centralized system.
+                Running a plant is complicated. You've got machines to maintain, people to schedule, materials to track, and deadlines to meet. Our plant management software brings all of this together in one place, so you can see what's happening, spot problems early, and keep everything running like clockwork.
             </motion.p>
             {/* Visually attractive staggered card layout with color accents and icon backgrounds */}
             <div className="relative w-full flex flex-wrap justify-center gap-8 md:gap-10 py-4 bg-gradient-to-br from-orange-50/60 via-yellow-50/40 to-pink-50/30 dark:from-slate-900/80 dark:via-gray-900/70 dark:to-slate-900/80 rounded-2xl">

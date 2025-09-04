@@ -30,7 +30,7 @@ const features = [
     {
         icon: <Gavel className="w-12 h-12 text-primary mx-auto mb-3" />,
         title: 'Distributor Visit & Beat Planning',
-        desc: 'Plan effective beat routes and optimize field visits. Ensure better market coverage with strategic retailer/distributor engagement scheduling.'
+        desc: 'Plan effective beat routes and make field visits more efficient. Ensure better market coverage with strategic retailer/distributor scheduling.'
     }
 ];
 
@@ -63,7 +63,7 @@ const SalesActivityFeatures = () => (
                 transition={{ duration: 0.8, delay: 0.1 }}
                 className="text-center text-base md:text-lg text-foreground/70 mb-10 max-w-3xl mx-auto"
             >
-                our Sales Activity Management Solution is built to streamline and automate your entire sales process — from planning to execution. It’s an all-in-one platform that helps sales leaders gain visibility, monitor performance, and make data-driven decisions.
+                Our Sales Activity Management Solution helps your team plan the day, track visits, and report outcomes—without extra paperwork. Leaders get clear visibility and faster decisions.
             </motion.p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {features.map((feature, idx) => (

@@ -13,5 +13,5 @@ Allow: /
 User-agent: *
 Allow: /
 
-# Sitemap for search engines
-Sitemap: https://www.manacleindia.com/sitemap.xml
+# Sitemap for search engines (canonical domain)
+Sitemap: https://www.manacletech.com/sitemap.xml
