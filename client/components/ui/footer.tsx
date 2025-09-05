@@ -27,6 +27,7 @@ export default function Footer() {
                             <h5 className="font-bold mb-3 text-base">Connect With Us</h5>
                             <div className="flex space-x-4">
                                 <a
+                                    aria-label="Follow us on X (Twitter)"
                                     href="https://x.com/ManacleTech"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -35,6 +36,7 @@ export default function Footer() {
                                     <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
                                 </a>
                                 <a
+                                    aria-label="Follow us on Facebook"
                                     href="https://www.facebook.com/techmanacle/"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -43,6 +45,7 @@ export default function Footer() {
                                     <Facebook className="w-5 h-5 text-foreground/70 group-hover:text-white" />
                                 </a>
                                 <a
+                                    aria-label="Follow us on Instagram"
                                     href="https://www.instagram.com/getmsell?igsh=OWRlb3B4bTczcTJo"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -51,6 +54,7 @@ export default function Footer() {
                                     <Instagram className="w-5 h-5 text-foreground/70 group-hover:text-white" />
                                 </a>
                                 <a
+                                    aria-label="Follow us on LinkedIn"
                                     href="https://www.linkedin.com/company/manacletechnologies/"
                                     target="_blank"
                                     rel="noopener noreferrer"

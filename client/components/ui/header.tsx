@@ -50,53 +50,51 @@ export function Header() {
     setIsAuthenticated(!!localStorage.getItem('manacle_session'));
   }, []);
 
-  // Auto-hide header on scroll
+  // Auto-hide header on scroll (rAF-throttled to avoid layout thrash)
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Only hide header if user has scrolled down more than 50px
-      if (currentScrollY < 50) {
-        setIsHeaderVisible(true);
-      } else {
-        // Hide header when scrolling down, show when scrolling up
-        if (currentScrollY > lastScrollY) {
-          setIsHeaderVisible(false);
-        } else {
+    let ticking = false;
+    const threshold = 6; // px delta before toggling
+    const onScroll = () => {
+      const schedule = () => {
+        const current = window.scrollY || 0;
+        // Only hide header if user has scrolled down more than 50px
+        if (current < 50) {
           setIsHeaderVisible(true);
+        } else {
+          if (Math.abs(current - lastScrollY) > threshold) {
+            setIsHeaderVisible(current < lastScrollY);
+            setLastScrollY(current);
+          }
         }
+        ticking = false;
+      };
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(schedule);
       }
-
-      setLastScrollY(currentScrollY);
     };
-
-    // Add scroll event listener
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, [lastScrollY]);
 
   // Determine when to force the hamburger menu regardless of Tailwind breakpoints
   useEffect(() => {
+    let rAF = 0;
     const evaluateLayout = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      const isPortrait = h > w; // orientation check
-      /* Heuristics:
-         - Always mobile below 1024px (covers existing lg breakpoint logic)
-         - In portrait, give more room: force mobile if width < 1280 (prevents cramped nav)
-         - Also force mobile if available width is wide but still under a threshold where items start wrapping (~1150)
-      */
-      const shouldForce = w < 1024 || (isPortrait && w < 1280) || (w >= 1024 && w < 1150);
-      setForceMobileNav(shouldForce);
+      cancelAnimationFrame(rAF);
+      rAF = requestAnimationFrame(() => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const isPortrait = h > w; // orientation check
+        const shouldForce = w < 1024 || (isPortrait && w < 1280) || (w >= 1024 && w < 1150);
+        setForceMobileNav(shouldForce);
+      });
     };
     evaluateLayout();
     window.addEventListener('resize', evaluateLayout, { passive: true });
     window.addEventListener('orientationchange', evaluateLayout);
     return () => {
+      cancelAnimationFrame(rAF);
       window.removeEventListener('resize', evaluateLayout);
       window.removeEventListener('orientationchange', evaluateLayout);
     };
@@ -329,7 +327,8 @@ Gallery", description: "View all our projects", href: "/gallery" },
           }
         }
       `}</style>
-      <header className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-3 lg:py-4 xl:py-4 transition-transform duration-300 ease-in-out backdrop-blur-md ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-3 lg:py-4 xl:py-4 transition-transform duration-300 ease-in-out backdrop-blur-md ${isHeaderVisible ? 'translate-y-0' : '-translate-y-full'}`}
+        style={{ willChange: 'transform' }}>
         <div className="container mx-auto px-4 md:px-5 lg:px-6 xl:px-4">
           <div className="flex items-center justify-between">
             {/* Logo & Company Name - Responsive sizing */}
@@ -339,6 +338,10 @@ Gallery", description: "View all our projects", href: "/gallery" },
                 <img
                   src={theme === 'dark' ? "/manacle_logo_dark.png" : "/manacle_logo.png"}
                   alt="Manacle Logo"
+                  width={320}
+                  height={96}
+                  decoding="async"
+                  fetchPriority="low"
                   className="h-16 sm:h-10 md:h-12 lg:h-14 xl:h-24 w-auto object-contain transition-all duration-300 hover:scale-105"
                 />
               </a>
@@ -347,7 +350,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
             {/* Centered Navigation Menu - Responsive & Forced Collapse Logic */}
             {!forceMobileNav && (
               <div className="hidden lg:flex flex-1 justify-center nav-center-viewport">
-                <nav className="inline-flex items-center bg-card/90 backdrop-blur-xl border border-glass-border rounded-full px-4 md:px-5 py-2 shadow-lg">
+                <nav aria-label="Main" className="inline-flex items-center bg-card/90 backdrop-blur-xl border border-glass-border rounded-full px-4 md:px-5 py-2 shadow-lg">
                   <div className="flex items-center space-x-4 md:space-x-5 lg:space-x-6">
                     {navItems.map((item) => (
                       <div
@@ -361,6 +364,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
                       >
                         <div className="flex items-center">
                           <a
+                            id={item.hasDropdown ? `nav-trigger-${item.name.toLowerCase().replace(/\s+/g,'-')}` : undefined}
                             href={item.href}
                             onMouseEnter={() => prefetchRoute(item.href)}
                             className={`${item.highlight
@@ -373,6 +377,12 @@ Gallery", description: "View all our projects", href: "/gallery" },
                           </a>
                           {item.hasDropdown && (
                             <button
+                              type="button"
+                              aria-label={`Toggle ${item.name} menu`}
+                              aria-haspopup="menu"
+                              aria-controls={`nav-dd-${item.name.toLowerCase().replace(/\s+/g,'-')}`}
+                              aria-expanded={isDropdownVisible(item.name)}
+                              title={`${isDropdownVisible(item.name) ? 'Collapse' : 'Expand'} ${item.name}`}
                               onClick={(e) => {
                                 e.preventDefault();
                                 handleDropdownClick(item.name);
@@ -380,8 +390,8 @@ Gallery", description: "View all our projects", href: "/gallery" },
                               className="ml-1 text-foreground hover:text-primary transition-colors duration-300"
                             >
                               <ChevronDown
-                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible(item.name) ? "rotate-180" : ""
-                                  }`}
+                                className={`w-4 h-4 transition-transform duration-300 ${isDropdownVisible(item.name) ? "rotate-180" : ""}`}
+                                aria-hidden="true"
                               />
                             </button>
                           )}
@@ -397,6 +407,9 @@ Gallery", description: "View all our projects", href: "/gallery" },
                               onMouseLeave={handleDropdownMouseLeave}
                             />
                             <div
+                              id={`nav-dd-${item.name.toLowerCase().replace(/\s+/g,'-')}`}
+                              role="menu"
+                              aria-labelledby={`nav-trigger-${item.name.toLowerCase().replace(/\s+/g,'-')}`}
                               className={`absolute top-full left-1/2 -translate-x-1/2 mt-3 ${item.name === 'Resources' ? 'w-[260px]' : 'w-[95vw] sm:w-[600px] md:w-[700px] lg:w-[900px]'} max-w-[98vw] glass-effect border border-glass-border rounded-2xl p-4 md:p-5 shadow-2xl z-50 bg-card/95 backdrop-blur-xl max-h-[75vh] md:max-h-[420px] overflow-y-auto`}
                               onMouseEnter={handleDropdownMouseEnter}
                               onMouseLeave={handleDropdownMouseLeave}
@@ -410,6 +423,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
                                     {category.href ? (
                                       <Link
                                         to={category.href}
+                                        role="menuitem"
                                         className="block group/category"
                                         onMouseEnter={() => prefetchRoute(category.href)}
                                         onClick={() => {
@@ -431,6 +445,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
                                         <li key={subIndex} className={item.name === 'Resources' ? 'w-full' : ''}>
                                           <Link
                                             to={subItem.href || `#${subItem.name.toLowerCase().replace(/\s+/g, "-")}`}
+                                            role="menuitem"
                                             className={`block group/item ${item.name === 'Resources' ? '' : ''}`}
                                             onMouseEnter={() => subItem.href && prefetchRoute(subItem.href)}
                                             onClick={() => {

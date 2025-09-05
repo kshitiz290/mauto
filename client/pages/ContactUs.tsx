@@ -868,6 +868,7 @@ export function ContactUs() {
                 <h3 className="text-3xl font-extrabold mb-8 gradient-text">Connect With Us</h3>
                 <div className="flex flex-wrap justify-center gap-6 mb-8 max-w-xs mx-auto">
                   <a
+                    aria-label="Visit our Facebook page"
                     href="https://www.facebook.com/techmanacle/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -876,6 +877,7 @@ export function ContactUs() {
                     <Facebook className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
                   </a>
                   <a
+                    aria-label="Follow us on X (Twitter)"
                     href="https://x.com/ManacleTech"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -884,6 +886,7 @@ export function ContactUs() {
                     <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
                   </a>
                   <a
+                    aria-label="Follow us on Instagram"
                     href="https://www.instagram.com/getmsell?igsh=OWRlb3B4bTczcTJo"
                     target="_blank"
                     className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#515BD4] hover:border-[#DD2A7B]/50 transition-all duration-300 group"
@@ -891,6 +894,7 @@ export function ContactUs() {
                     <Instagram className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
                   </a>
                   <a
+                    aria-label="Connect with us on LinkedIn"
                     href="https://www.linkedin.com/company/manacletechnologies/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -899,6 +903,7 @@ export function ContactUs() {
                     <Linkedin className="w-6 h-6 group-hover:text-white transition-colors duration-300" />
                   </a>
                   <a
+                    aria-label="Subscribe to our YouTube channel"
                     href="https://youtube.com/@techmanacle?si=lKZw7FngfmlXE49z"
                     target="_blank"
                     rel="noopener noreferrer"
