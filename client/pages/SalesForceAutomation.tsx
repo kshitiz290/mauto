@@ -45,7 +45,7 @@ const SalesForceAutomation = () => {
             icon: <Calendar className="w-8 h-8" />,
             title: "Attendance & Leave Management",
             subtitle: "Smart Workforce Tracking",
-            description: "Automate attendance tracking with GPS-enabled check-ins, real-time monitoring, and comprehensive leave management for your field force.",
+            description: "Help your team log hours and manage time off without the paperwork headaches. GPS check-ins mean fewer missed updates, and leave requests get handled faster so people can plan their lives better.",
             gradient: "from-blue-500 to-cyan-500",
             bgGradient: "from-blue-50 to-cyan-50",
             features: [
@@ -55,14 +55,14 @@ const SalesForceAutomation = () => {
                 "Biometric integration support"
             ],
             href: "/attendance-leave-management",
-            stats: { impact: "~95%", label: "Accuracy (reported)" }
+            stats: { impact: "Up To 95%", label: "Accuracy" }
         },
         {
             id: 2,
             icon: <Package className="w-8 h-8" />,
             title: "Order Management Solution",
             subtitle: "Streamlined Order Processing",
-            description: "End-to-end order management from placement to delivery with real-time tracking and automated workflows.",
+            description: "Turn order chaos into smooth workflows. Capture orders on the phone, keep inventories in sync, and give customers reliable delivery updates—without chasing spreadsheets.",
             gradient: "from-green-500 to-emerald-500",
             bgGradient: "from-green-50 to-emerald-50",
             features: [
@@ -72,14 +72,14 @@ const SalesForceAutomation = () => {
                 "Multi-channel integration"
             ],
             href: "/order-management-solution",
-            stats: { impact: "~60%", label: "Faster Processing (reported)" }
+            stats: { impact: "Up To 60%", label: "Faster Processing" }
         },
         {
             id: 3,
             icon: <MapPin className="w-8 h-8" />,
             title: "Field Force Tracking & Activity",
             subtitle: "Complete Field Visibility",
-            description: "Monitor field activities with real-time tracking, simple route planning, and clear performance views.",
+            description: "See where your team is and what they're working on, in a way that helps the day run smoother. Better routes mean less time in traffic and more time with customers.",
             gradient: "from-purple-500 to-pink-500",
             bgGradient: "from-purple-50 to-pink-50",
             features: [
@@ -89,14 +89,14 @@ const SalesForceAutomation = () => {
                 "Geo-fence management"
             ],
             href: "/field-force-tracking",
-            stats: { impact: "~40%", label: "Route efficiency (reported)" }
+            stats: { impact: "Up To 40%", label: "Route Efficiency" }
         },
         {
             id: 4,
             icon: <Store className="w-8 h-8" />,
             title: "Distributor Management Solution",
             subtitle: "Supply Chain Excellence",
-            description: "Improve distributor relationships with clear processes, performance tracking, and practical insights.",
+            description: "Keep distributor relationships healthy with clear expectations, fair tracking, and feedback that actually helps. When everyone knows the plan, work flows better.",
             gradient: "from-orange-500 to-red-500",
             bgGradient: "from-orange-50 to-red-50",
             features: [
@@ -106,14 +106,14 @@ const SalesForceAutomation = () => {
                 "Credit limit monitoring"
             ],
             href: "/distributor-management-solution",
-            stats: { impact: "~35%", label: "Cost Reduction (reported)" }
+            stats: { impact: "Up To 35%", label: "Cost Reduction" }
         },
         {
             id: 5,
             icon: <Eye className="w-8 h-8" />,
             title: "Merchandising & Retail Execution",
             subtitle: "Perfect Store Standards",
-            description: "Keep product placement and brand visibility on track with practical retail execution tools.",
+            description: "Make sure your products look great on shelves and promotions actually go live. Quick photo check-ins show what's really happening in stores so you can fix issues before they hurt sales.",
             gradient: "from-teal-500 to-blue-500",
             bgGradient: "from-teal-50 to-blue-50",
             features: [
@@ -123,14 +123,14 @@ const SalesForceAutomation = () => {
                 "Promotional execution"
             ],
             href: "/merchandising-retail-execution",
-            stats: { impact: "~85%", label: "Compliance Rate (reported)" }
+            stats: { impact: "Up To 85%", label: "Compliance Rate" }
         },
         {
             id: 6,
             icon: <DollarSign className="w-8 h-8" />,
             title: "Expenses & Claims Management",
             subtitle: "Automated Expense Control",
-            description: "Streamline expense reporting and reimbursement with simple workflows and real-time approvals.",
+            description: "Stop the expense-report shuffle. Snap the receipt, submit the claim, and move on. Finance gets cleaner data, teams get reimbursed faster.",
             gradient: "from-indigo-500 to-purple-500",
             bgGradient: "from-indigo-50 to-purple-50",
             features: [
@@ -140,14 +140,14 @@ const SalesForceAutomation = () => {
                 "Policy compliance checks"
             ],
             href: "/expenses-claims-management",
-            stats: { impact: "~70%", label: "Processing Speed (reported)" }
+            stats: { impact: "Up To 70%", label: "Processing Speed" }
         },
         {
             id: 7,
             icon: <Users className="w-8 h-8" />,
             title: "Retailer Management Solution",
             subtitle: "Customer Relationship Excellence",
-            description: "Build stronger retailer relationships with clear customer management and engagement tools.",
+            description: "Build real relationships with retailers, not just transactions. Track what each customer prefers and what worked last time—personal service that still scales.",
             gradient: "from-rose-500 to-pink-500",
             bgGradient: "from-rose-50 to-pink-50",
             features: [
@@ -157,14 +157,14 @@ const SalesForceAutomation = () => {
                 "Credit management"
             ],
             href: "/retailer-management-solution",
-            stats: { impact: "~50%", label: "Customer Retention (reported)" }
+            stats: { impact: "Up To 50%", label: "Customer Retention" }
         },
         {
             id: 8,
             icon: <TrendingUp className="w-8 h-8" />,
             title: "Sales Activity Management",
             subtitle: "Productive Sales Operations",
-            description: "Make sales activities easier with thoughtful planning, execution tracking, and performance views.",
+            description: "Turn daily sales chaos into organized progress. Plan the week, track what actually moves the needle, and see which activities lead to closed deals.",
             gradient: "from-amber-500 to-orange-500",
             bgGradient: "from-amber-50 to-orange-50",
             features: [
@@ -174,7 +174,7 @@ const SalesForceAutomation = () => {
                 "Sales pipeline management"
             ],
             href: "/sales-activity-management",
-            stats: { impact: "~45%", label: "Sales Growth (reported)" }
+            stats: { impact: "Up To 45%", label: "Sales Growth" }
         }
     ];
 
@@ -391,6 +391,68 @@ const SalesForceAutomation = () => {
         );
     };
 
+    // Mobile/Tablet static card (always visible, no accordion)
+    const MobileStaticCard = ({ solution, index }: { solution: any; index: number }) => {
+        return (
+            <motion.div
+                className="mb-5 overflow-hidden border border-border rounded-2xl bg-card relative"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-10%' }}
+                transition={{ duration: 0.45, delay: index * 0.05, ease: 'easeOut' }}
+                whileHover={{ y: -3 }}
+            >
+                {/* Soft gradient veil */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${solution.bgGradient} opacity-30 pointer-events-none`} />
+                <div className="relative p-5">
+                    {/* Header */}
+                    <div className="flex items-start justify-between gap-3 mb-5">
+                        <div className="flex items-center gap-3">
+                            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl text-white shadow-md bg-gradient-to-r ${solution.gradient} shrink-0 aspect-square`}>
+                                {React.isValidElement(solution.icon)
+                                    ? React.cloneElement(solution.icon, {
+                                        className: `${solution.icon.props?.className ?? ''} w-7 h-7 sm:w-8 sm:h-8`,
+                                    })
+                                    : solution.icon}
+                            </div>
+                            <div>
+                                <div className="text-base font-semibold text-foreground leading-tight">{solution.title}</div>
+                                <div className="text-xs text-muted-foreground">{solution.subtitle}</div>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className={`text-xl font-bold bg-gradient-to-r ${solution.gradient} bg-clip-text text-transparent`}>{solution.stats.impact}</div>
+                            <div className="text-[11px] text-muted-foreground">{solution.stats.label}</div>
+                        </div>
+                    </div>
+                    {/* Description */}
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                        {solution.description}
+                    </p>
+                    {/* Features */}
+                    <div className="mt-5 pt-4 border-t border-border/60">
+                        <div className="text-xs font-semibold text-foreground mb-2">What you get</div>
+                        <ul className="space-y-2">
+                            {solution.features.map((f: string, i: number) => (
+                                <li key={i} className="flex items-start text-[13px] text-muted-foreground">
+                                    <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                                    <span>{f}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    {/* CTA */}
+                    <div className="mt-4">
+                        <Link to={solution.href} className={`inline-flex items-center text-sm font-medium bg-gradient-to-r ${solution.gradient} bg-clip-text text-transparent group`}>
+                            Explore Solution
+                            <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                    </div>
+                </div>
+            </motion.div>
+        );
+    };
+
     return (
         <ThemeProvider defaultTheme="light" storageKey="manacle_theme">
             <div className="min-h-screen bg-background">
@@ -484,7 +546,7 @@ const SalesForceAutomation = () => {
                     </div>
                 </section>
 
-                {/* Stacking Cards Section */}
+                {/* Solutions Section */}
                 <section id="solutions-section" className="pt-20 pb-20 lp:pb-48 bg-background">
                     <div className="container mx-auto px-4">
                         <motion.div
@@ -501,33 +563,41 @@ const SalesForceAutomation = () => {
                                 Discover our complete suite of Sales Force Automation solutions designed to streamline operations,
                                 increase productivity, and drive growth across your entire sales organization.
                             </p>
+                            {(isMobile || isTabletPortrait) && (
+                                <p className="mt-3 text-base text-muted-foreground/90 max-w-2xl mx-auto">
+                                    Built with your field team in mind—scroll to explore. Everything you need is visible at a glance.
+                                </p>
+                            )}
                         </motion.div>
 
-                        {/* Stacking Cards Container */}
-                        <div className="relative pt-14 md:pt-0">
-                            {/* Create scroll space for all cards with responsive per-card height + bottom buffer */}
-                            {(() => {
-                                const perCardVH = isMobile ? 95 : (isTabletPortrait ? 82 : 60);
-                                const bottomBufferVH = isMobile
-                                    ? 10
-                                    : isTabletPortrait
-                                        ? 20
-                                        : (isLargePortrait ? 36 : 16);
-                                const stackHeightVH = sfaSolutions.length * perCardVH + bottomBufferVH;
-                                return (
-                                    <div style={{ height: `${stackHeightVH}vh` }} className="relative">
-                                        {sfaSolutions.map((solution, index) => (
-                                            <StackingCard
-                                                key={solution.id}
-                                                solution={solution}
-                                                index={index}
-                                                total={sfaSolutions.length}
-                                            />
-                                        ))}
-                                    </div>
-                                );
-                            })()}
-                        </div>
+                        {/* Conditional: Mobile/Tablet (Accordion) vs Desktop (Stacking) */}
+                        {(isMobile || isTabletPortrait) ? (
+                            <div className="mt-2">
+                                {sfaSolutions.map((solution, index) => (
+                                    <MobileStaticCard key={solution.id} solution={solution} index={index} />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="relative pt-14 md:pt-0">
+                                {(() => {
+                                    const perCardVH = isLargePortrait ? 60 : 60;
+                                    const bottomBufferVH = isLargePortrait ? 36 : 16;
+                                    const stackHeightVH = sfaSolutions.length * perCardVH + bottomBufferVH;
+                                    return (
+                                        <div style={{ height: `${stackHeightVH}vh` }} className="relative">
+                                            {sfaSolutions.map((solution, index) => (
+                                                <StackingCard
+                                                    key={solution.id}
+                                                    solution={solution}
+                                                    index={index}
+                                                    total={sfaSolutions.length}
+                                                />
+                                            ))}
+                                        </div>
+                                    );
+                                })()}
+                            </div>
+                        )}
                     </div>
                 </section>
 

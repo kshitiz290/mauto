@@ -179,11 +179,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                         ))}
                     </nav>
 
-                    {/* Theme Toggle */}
-                    <div className="mt-5 pt-5 border-t border-glass-border flex items-center justify-between">
-                        <span className="text-xs font-medium text-foreground/60">Theme</span>
-                        <ThemeToggle />
-                    </div>
+
 
                     {/* Auth Buttons */}
                     {/* <div className="mt-5 pt-5 border-t border-glass-border flex flex-col space-y-2">

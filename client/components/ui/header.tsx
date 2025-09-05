@@ -532,14 +532,17 @@ Gallery", description: "View all our projects", href: "/gallery" },
               </div> */}
             </div>
 
-            {/* Mobile Menu Button - Consistent with responsive design */}
-            <button
-              aria-label="Toggle navigation menu"
-              className={`${forceMobileNav ? 'block' : 'lg:hidden'} text-foreground focus:outline-none focus:ring-2 focus:ring-primary rounded-md p-1`}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile Theme Toggle and Menu Button */}
+            <div className={`${forceMobileNav ? 'flex' : 'lg:hidden flex'} items-center gap-3`}>
+              <ThemeToggle />
+              <button
+                aria-label="Toggle navigation menu"
+                className="text-foreground focus:outline-none focus:ring-2 focus:ring-primary rounded-md p-1"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
 
           {/* Mobile Navigation */}
