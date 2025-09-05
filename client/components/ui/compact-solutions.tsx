@@ -136,7 +136,7 @@ export function CompactSolutions() {
     };
 
     return (
-        <section className="relative py-8 lg:py-12 overflow-hidden">
+        <section className={`relative ${isMobilePortrait ? 'pt-4 pb-8' : 'py-8 lg:py-12'} overflow-hidden`}>
 
 
 
@@ -147,7 +147,7 @@ export function CompactSolutions() {
                     whileInView={isMobilePortrait ? { opacity: 1 } : { opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={isMobilePortrait ? { duration: 0.4, ease: "easeOut" } : { type: "spring", stiffness: 120, damping: 25 }}
-                    className="text-center mb-8 lg:mb-10"
+                    className={`text-center ${isMobilePortrait ? 'mb-4' : 'mb-8 lg:mb-10'}`}
                 >
                     <motion.div
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border border-primary/20 mb-6"
@@ -178,7 +178,7 @@ export function CompactSolutions() {
                     initial={isMobilePortrait ? { opacity: 0 } : "hidden"}
                     whileInView={isMobilePortrait ? { opacity: 1, transition: { duration: 0.4 } } : "visible"}
                     viewport={{ once: true, margin: "-30px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 items-stretch"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 items-stretch"
                 >
                     {solutions.map((solution) => (
                         <motion.div
@@ -248,7 +248,7 @@ export function CompactSolutions() {
                     whileInView={isMobilePortrait ? { opacity: 1 } : { opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={isMobilePortrait ? { duration: 0.4 } : { delay: 0.4 }}
-                    className="text-center mt-8 lg:mt-10"
+                    className={`text-center ${isMobilePortrait ? 'mt-6' : 'mt-8 lg:mt-10'}`}
                 >
                     <div className="inline-flex flex-col sm:flex-row gap-3">
                         <Link to="/contact-us">

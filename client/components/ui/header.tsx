@@ -23,7 +23,15 @@ export function Header() {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   // Force mobile (hamburger) view when horizontal space is tight or in portrait orientation at certain widths
-  const [forceMobileNav, setForceMobileNav] = useState(false);
+  // Initialize from current viewport to avoid first-frame desktop flash on mobile
+  const computeShouldForceMobile = () => {
+    if (typeof window === 'undefined') return false;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const isPortrait = h > w;
+    return w < 1024 || (isPortrait && w < 1280) || (w >= 1024 && w < 1150);
+  };
+  const [forceMobileNav, setForceMobileNav] = useState<boolean>(computeShouldForceMobile);
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -338,7 +346,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
 
             {/* Centered Navigation Menu - Responsive & Forced Collapse Logic */}
             {!forceMobileNav && (
-              <div className="flex flex-1 justify-center nav-center-viewport">
+              <div className="hidden lg:flex flex-1 justify-center nav-center-viewport">
                 <nav className="inline-flex items-center bg-card/90 backdrop-blur-xl border border-glass-border rounded-full px-4 md:px-5 py-2 shadow-lg">
                   <div className="flex items-center space-x-4 md:space-x-5 lg:space-x-6">
                     {navItems.map((item) => (

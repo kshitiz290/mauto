@@ -1554,7 +1554,7 @@ export function Hero() {
 
       {/* Manacle Success & Trust Section */}
       <motion.section
-        className="relative z-10 px-6 lg:px-8 py-12 lg:py-20"
+        className={`relative z-10 px-6 lg:px-8 ${isMobilePortrait ? 'pt-6 pb-8' : 'py-12 lg:py-20'}`}
         initial={isMobilePortrait ? { opacity: 0 } : { opacity: 0, y: 50 }}
         whileInView={isMobilePortrait
           ? { opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
@@ -1580,7 +1580,7 @@ export function Hero() {
           </motion.div>
 
           {/* Achievement Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 mb-8 md:mb-20">
             {/* Left: Key Achievements */}
             <motion.div
               className="space-y-8"
