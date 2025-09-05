@@ -22,13 +22,22 @@ const DispatchFundamentals = () => {
     const [activeId, setActiveId] = useState<string>('intro');
     const [progress, setProgress] = useState(0);
 
-    // Reading progress only
+    // Reading progress - throttled to reduce reflows
     useEffect(() => {
+        let ticking = false;
+        
         const onScroll = () => {
-            const doc = document.documentElement;
-            const scrolled = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
-            setProgress(scrolled);
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const doc = document.documentElement;
+                    const scrolled = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+                    setProgress(scrolled);
+                    ticking = false;
+                });
+                ticking = true;
+            }
         };
+        
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
         return () => window.removeEventListener('scroll', onScroll);

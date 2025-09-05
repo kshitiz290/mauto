@@ -1440,7 +1440,15 @@ export default function AutoSite() {
                     />
                     {bannerError && <div className="text-red-500 text-xs mt-1">{bannerError}</div>}
                     {bannerPreview && bannerPreview !== "" && (
-                      <img src={bannerPreview} alt="Banner Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
+                      <img 
+                        src={bannerPreview} 
+                        alt="Banner Preview" 
+                        className="mt-2 rounded shadow w-full max-w-xs mx-auto"
+                        loading="lazy"
+                        decoding="async"
+                        width="320"
+                        height="200"
+                      />
                     )}
                   </div>
                   {/* <div>
@@ -1452,7 +1460,15 @@ export default function AutoSite() {
                       className="mt-2"
                     />
                     {photoPreviews[0] && photoPreviews[0] !== "" && (
-                      <img src={photoPreviews[0]} alt="Photo 1 Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
+                      <img 
+                        src={photoPreviews[0]} 
+                        alt="Photo 1 Preview" 
+                        className="mt-2 rounded shadow w-full max-w-xs mx-auto"
+                        loading="lazy"
+                        decoding="async"
+                        width="320"
+                        height="200"
+                      />
                     )}
                   </div>
                   <div>
@@ -1464,7 +1480,15 @@ export default function AutoSite() {
                       className="mt-2"
                     />
                     {photoPreviews[1] && photoPreviews[1] !== "" && (
-                      <img src={photoPreviews[1]} alt="Photo 2 Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
+                      <img 
+                        src={photoPreviews[1]} 
+                        alt="Photo 2 Preview" 
+                        className="mt-2 rounded shadow w-full max-w-xs mx-auto"
+                        loading="lazy"
+                        decoding="async"
+                        width="320"
+                        height="200"
+                      />
                     )}
                   </div>
                   <div>
@@ -1476,7 +1500,15 @@ export default function AutoSite() {
                       className="mt-2"
                     />
                     {photoPreviews[2] && photoPreviews[2] !== "" && (
-                      <img src={photoPreviews[2]} alt="Photo 3 Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
+                      <img 
+                        src={photoPreviews[2]} 
+                        alt="Photo 3 Preview" 
+                        className="mt-2 rounded shadow w-full max-w-xs mx-auto"
+                        loading="lazy"
+                        decoding="async"
+                        width="320"
+                        height="200"
+                      />
                     )}
                   </div>
                   <div>
@@ -1488,7 +1520,15 @@ export default function AutoSite() {
                       className="mt-2"
                     />
                     {photoPreviews[3] && photoPreviews[3] !== "" && (
-                      <img src={photoPreviews[3]} alt="Photo 4 Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
+                      <img 
+                        src={photoPreviews[3]} 
+                        alt="Photo 4 Preview" 
+                        className="mt-2 rounded shadow w-full max-w-xs mx-auto"
+                        loading="lazy"
+                        decoding="async"
+                        width="320"
+                        height="200"
+                      />
                     )}
                   </div> */}
                 </div>
@@ -1806,7 +1846,15 @@ export default function AutoSite() {
                           required
                         />
                         {productPreviews[idx] && productPreviews[idx] !== "" && (
-                          <img src={productPreviews[idx]} alt="Preview" className="mt-2 rounded shadow w-full max-w-xs mx-auto" />
+                          <img 
+                            src={productPreviews[idx]} 
+                            alt="Preview" 
+                            className="mt-2 rounded shadow w-full max-w-xs mx-auto"
+                            loading="lazy"
+                            decoding="async"
+                            width="320"
+                            height="200"
+                          />
                         )}
                       </div>
                       {isProductBased && (

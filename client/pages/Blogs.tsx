@@ -145,7 +145,16 @@ export default function Blogs() {
                                         aria-label={`Read article: ${b.title}`}
                                     >
                                         <div className="relative aspect-[20/10] overflow-hidden">
-                                            <img src={b.thumbnail} alt={b.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                                            <img 
+                                                src={b.thumbnail} 
+                                                alt={b.title} 
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                                loading="lazy"
+                                                decoding="async"
+                                                fetchPriority="low"
+                                                width="400"
+                                                height="200"
+                                            />
                                             {/* <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-black/60 backdrop-blur text-white">{b.category}</span> */}
                                         </div>
                                         <div className="flex flex-col flex-1 p-6">

@@ -10,10 +10,22 @@
 
   <!-- Critical Resource Preloading -->
   <link rel="preload" href="/client/main.tsx" as="script" crossorigin>
+  
+  <!-- Preload critical fonts for better font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Preload critical images -->
+  <link rel="preload" href="/manacle_logo.png" as="image" type="image/png">
+  
+  <!-- Preload critical CSS for faster loading -->
+  <link rel="preload" href="/assets/index-BnqHLYGM.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/index-BnqHLYGM.css"></noscript>
 
   <!-- DNS Prefetch for external resources -->
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://cdn-icons-png.flaticon.com">
 
   <!-- Canonical and SEO -->
   <link rel="canonical" href="https://www.manacletech.com/">
@@ -54,7 +66,7 @@
 
   <!-- Prevent FOUC (Flash of Unstyled Content) -->
   <style>
-    /* Critical CSS to prevent white flash */
+    /* Critical CSS to prevent white flash and layout shifts */
     * {
       margin: 0;
       padding: 0;
@@ -65,15 +77,35 @@
       color-scheme: light dark;
       /* Default to light to avoid dark-first flash for new users */
       background-color: #ffffff;
+      scroll-behavior: smooth;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       background-color: #ffffff;
       color: #0f172a;
       overflow-x: hidden;
       transition: none;
       /* Remove transition during initial load */
+      font-display: swap;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Critical layout styles */
+    #root {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Prevent layout shift from images */
+    img {
+      content-visibility: auto;
+      contain-intrinsic-size: 200px;
+      height: auto;
+      max-width: 100%;
     }
 
     /* Dark theme override (if user/system prefers) */
@@ -88,7 +120,16 @@
       }
     }
 
-
+    /* Critical mobile styles */
+    @media (max-width: 768px) {
+      body {
+        font-size: 14px;
+      }
+      
+      * {
+        scroll-behavior: smooth;
+      }
+    }
 
     /* Explicit theme class overrides (final authority) */
     html.light,
@@ -101,6 +142,31 @@
     .dark body {
       background-color: #0f0f23;
       color: #f1f5f9;
+    }
+
+    /* Loading skeleton styles to prevent layout shift */
+    .loading-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Critical header layout */
+    .header-container {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .dark .header-container {
+      background-color: rgba(15, 15, 35, 0.95);
     }
   </style>
 </head>
@@ -122,6 +188,115 @@
       } catch (e) { /* ignore */ }
     })();
   </script>
+  
+  <!-- CSS loading optimization script -->
+  <script>
+    // Async CSS loading function to prevent render blocking
+    function loadCSS(href, before, media, callback) {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      
+      ready(function () {
+        ref.parentNode.insertBefore(ss, (before ? ref : ref.nextSibling));
+      });
+      
+      function onloadcssdefined(cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      }
+      
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+        if (callback) callback();
+      }
+      
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    }
+    
+    // Optimize for mobile performance
+    var isMobile = window.innerWidth <= 768;
+    var isSlowConnection = navigator.connection && 
+      (navigator.connection.effectiveType === 'slow-2g' || 
+       navigator.connection.effectiveType === '2g' ||
+       navigator.connection.effectiveType === '3g');
+    
+    // Load non-critical CSS after critical content renders
+    if (isMobile || isSlowConnection) {
+      // Delay non-critical CSS on mobile/slow connections
+      setTimeout(function() {
+        // Load any additional CSS files here if needed
+        console.log('Loading non-critical CSS after delay for mobile optimization');
+      }, 100);
+    }
+    
+    // Progressive loading based on interaction
+    var hasInteracted = false;
+    function loadNonCriticalResources() {
+      if (!hasInteracted) {
+        hasInteracted = true;
+        // Load additional resources after user interaction
+        console.log('Loading additional resources after user interaction');
+      }
+    }
+    
+    // Load resources after user interaction (scroll, click, touch)
+    ['scroll', 'click', 'touchstart'].forEach(function(event) {
+      window.addEventListener(event, loadNonCriticalResources, { once: true, passive: true });
+    });
+    
+    // Fallback: load after 2 seconds if no interaction
+    setTimeout(loadNonCriticalResources, 2000);
+    
+    // Register service worker for caching
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('SW: Service Worker registered successfully');
+          })
+          .catch(function(error) {
+            console.log('SW: Service Worker registration failed');
+          });
+      });
+    }
+  </script>
+  
   <script type="module" src="/client/main.tsx" fetchpriority="high"></script>
 
 

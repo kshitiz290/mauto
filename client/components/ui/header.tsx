@@ -341,7 +341,8 @@ Gallery", description: "View all our projects", href: "/gallery" },
                   width={320}
                   height={96}
                   decoding="async"
-                  fetchPriority="low"
+                  fetchPriority="high"
+                  loading="eager"
                   className="h-16 sm:h-10 md:h-12 lg:h-14 xl:h-24 w-auto object-contain transition-all duration-300 hover:scale-105"
                 />
               </a>
@@ -364,7 +365,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
                       >
                         <div className="flex items-center">
                           <a
-                            id={item.hasDropdown ? `nav-trigger-${item.name.toLowerCase().replace(/\s+/g,'-')}` : undefined}
+                            id={item.hasDropdown ? `nav-trigger-${item.name.toLowerCase().replace(/\s+/g, '-')}` : undefined}
                             href={item.href}
                             onMouseEnter={() => prefetchRoute(item.href)}
                             className={`${item.highlight
@@ -380,7 +381,7 @@ Gallery", description: "View all our projects", href: "/gallery" },
                               type="button"
                               aria-label={`Toggle ${item.name} menu`}
                               aria-haspopup="menu"
-                              aria-controls={`nav-dd-${item.name.toLowerCase().replace(/\s+/g,'-')}`}
+                              aria-controls={`nav-dd-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                               aria-expanded={isDropdownVisible(item.name)}
                               title={`${isDropdownVisible(item.name) ? 'Collapse' : 'Expand'} ${item.name}`}
                               onClick={(e) => {
@@ -407,9 +408,9 @@ Gallery", description: "View all our projects", href: "/gallery" },
                               onMouseLeave={handleDropdownMouseLeave}
                             />
                             <div
-                              id={`nav-dd-${item.name.toLowerCase().replace(/\s+/g,'-')}`}
+                              id={`nav-dd-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                               role="menu"
-                              aria-labelledby={`nav-trigger-${item.name.toLowerCase().replace(/\s+/g,'-')}`}
+                              aria-labelledby={`nav-trigger-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                               className={`absolute top-full left-1/2 -translate-x-1/2 mt-3 ${item.name === 'Resources' ? 'w-[260px]' : 'w-[95vw] sm:w-[600px] md:w-[700px] lg:w-[900px]'} max-w-[98vw] glass-effect border border-glass-border rounded-2xl p-4 md:p-5 shadow-2xl z-50 bg-card/95 backdrop-blur-xl max-h-[75vh] md:max-h-[420px] overflow-y-auto`}
                               onMouseEnter={handleDropdownMouseEnter}
                               onMouseLeave={handleDropdownMouseLeave}

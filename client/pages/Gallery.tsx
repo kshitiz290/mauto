@@ -421,6 +421,11 @@ export default function Gallery() {
                     src="/manacle_logo.png"
                     alt="Manacle Logo"
                     className="w-14 h-14 mr-3 group-hover:scale-110 transition-transform duration-300"
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
+                    width="56"
+                    height="56"
                   />
                   <div className="flex flex-col">
                     <h3 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -485,7 +490,16 @@ export default function Gallery() {
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300 group"
                     >
-                      <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
+                      <img 
+                        src="/x.svg" 
+                        alt="X" 
+                        className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300"
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                        width="20"
+                        height="20"
+                      />
                     </a>
                     <a
                       href="https://www.facebook.com/profile.php?id=61574541927345"
@@ -513,6 +527,11 @@ export default function Gallery() {
                   src="/manacle_logo.png"
                   alt="Manacle Logo"
                   className="w-7 h-7 mr-2 opacity-70"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  width="28"
+                  height="28"
                 />
                 <span className="text-base font-medium bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                   MANACLE

@@ -16,6 +16,7 @@
     "dev:full": "concurrently \"npm run dev\" \"npm run dev:server\"",
     "build": "npm run clean && npm run build:production",
     "build:production": "vite build --mode production",
+    "build:mobile": "npm run clean && npm run build:production",
     "build:client": "vite build && copy public\\.htaccess build\\",
     "build:server": "vite build --config vite.config.server.ts",
     "clean": "rimraf build dist",

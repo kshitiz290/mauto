@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 
 interface ClientLogo {
@@ -124,10 +124,28 @@ export function TrustedByCompanies() {
         { src: "/clients/3p_logo.png", name: "3P", size: "small" }
     ];
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
         if (!containerRef.current) return;
 
-        const rect = containerRef.current.getBoundingClientRect();
+        // Throttle getBoundingClientRect calls to reduce forced reflows
+        if (!containerRef.current.dataset.rect) {
+            const rect = containerRef.current.getBoundingClientRect();
+            containerRef.current.dataset.rect = JSON.stringify({
+                left: rect.left,
+                top: rect.top,
+                width: rect.width,
+                height: rect.height
+            });
+            
+            // Clear cache after 100ms to handle resize
+            setTimeout(() => {
+                if (containerRef.current) {
+                    delete containerRef.current.dataset.rect;
+                }
+            }, 100);
+        }
+
+        const rect = JSON.parse(containerRef.current.dataset.rect);
 
         // Handle both mouse and touch events
         const clientX = 'touches' in e ? e.touches[0]?.clientX : e.clientX;
@@ -139,15 +157,15 @@ export function TrustedByCompanies() {
         const y = ((clientY - rect.top) / rect.height) * 100;
 
         setMousePosition({ x, y });
-    };
+    }, []);
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = useCallback(() => {
         setIsHovered(true);
-    };
+    }, []);
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = useCallback(() => {
         setIsHovered(false);
-    };
+    }, []);
 
     const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
         setTouchStart(e.targetTouches[0].clientX);
@@ -435,6 +453,8 @@ export function TrustedByCompanies() {
                                                             loading="lazy"
                                                             decoding="async"
                                                             fetchPriority="low"
+                                                            width="112"
+                                                            height="112"
                                                         />
                                                     </div>
                                                 </div>
@@ -487,6 +507,9 @@ export function TrustedByCompanies() {
                                                                     }`}
                                                                 loading="lazy"
                                                                 decoding="async"
+                                                                fetchPriority="low"
+                                                                width="128"
+                                                                height="128"
                                                             />
                                                         </div>
                                                     </div>

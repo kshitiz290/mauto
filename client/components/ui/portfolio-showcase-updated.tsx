@@ -33,20 +33,36 @@ function useTilt() {
     const element = ref.current;
     if (!element) return;
 
+    let elementRect: DOMRect | null = null;
+    let ticking = false;
+
+    const updateRect = () => {
+      if (element) {
+        elementRect = element.getBoundingClientRect();
+      }
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (!element) return;
+      if (!element || !elementRect) return;
 
-      const { left, top, width, height } = element.getBoundingClientRect();
-      const x = e.clientX - left;
-      const y = e.clientY - top;
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (!elementRect) return;
+          
+          const x = e.clientX - elementRect.left;
+          const y = e.clientY - elementRect.top;
 
-      const middleX = width / 2;
-      const middleY = height / 2;
+          const middleX = elementRect.width / 2;
+          const middleY = elementRect.height / 2;
 
-      const offsetX = ((x - middleX) / middleX) * 10;
-      const offsetY = ((y - middleY) / middleY) * 10;
+          const offsetX = ((x - middleX) / middleX) * 10;
+          const offsetY = ((y - middleY) / middleY) * 10;
 
-      element.style.transform = `perspective(1000px) rotateX(${-offsetY}deg) rotateY(${offsetX}deg) scale3d(1.02, 1.02, 1.02)`;
+          element.style.transform = `perspective(1000px) rotateX(${-offsetY}deg) rotateY(${offsetX}deg) scale3d(1.02, 1.02, 1.02)`;
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     const handleMouseLeave = () => {
@@ -54,12 +70,28 @@ function useTilt() {
       element.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
     };
 
+    const handleMouseEnter = () => {
+      updateRect();
+    };
+
+    // Update rect on window resize
+    const handleResize = () => {
+      updateRect();
+    };
+
+    // Initial rect calculation
+    updateRect();
+
+    element.addEventListener('mouseenter', handleMouseEnter);
     element.addEventListener('mousemove', handleMouseMove);
     element.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
+      element.removeEventListener('mouseenter', handleMouseEnter);
       element.removeEventListener('mousemove', handleMouseMove);
       element.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -245,6 +277,11 @@ function PortfolioSection() {
                   src={item.image}
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  width="400"
+                  height="256"
                 />
                 {/* Overlay with gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
@@ -386,6 +423,11 @@ function BlogSection() {
                   src={post.image}
                   alt={post.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  width="400"
+                  height="192"
                 />
                 {/* Overlay with gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
@@ -416,6 +458,11 @@ function BlogSection() {
                         src={post.authorImage}
                         alt={post.author}
                         className="w-6 h-6 rounded-full mr-2"
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                        width="24"
+                        height="24"
                       />
                       <span className="text-xs">{post.author}</span>
                     </div>

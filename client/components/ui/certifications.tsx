@@ -80,6 +80,10 @@ export function Certifications() {
                                         (item.invertDark ? "dark:invert" : "")
                                     }
                                     loading="lazy"
+                                    decoding="async"
+                                    fetchPriority="low"
+                                    width="64"
+                                    height="64"
                                 />
                             </div>
 

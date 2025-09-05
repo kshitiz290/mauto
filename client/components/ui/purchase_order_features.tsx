@@ -80,6 +80,10 @@ const PurchaseOrderFeatures = () => (
                             alt={feature.title}
                             className="w-24 h-24 object-contain rounded-xl bg-white/80 dark:bg-black/70 border border-glass-border flex-shrink-0"
                             loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
+                            width="96"
+                            height="96"
                         />
                         <div className="flex-1 w-full">
                             <h3 className="text-lg md:text-xl font-bold mb-1 text-primary leading-snug group-hover:text-orange-500 transition-colors duration-300">{feature.title}</h3>

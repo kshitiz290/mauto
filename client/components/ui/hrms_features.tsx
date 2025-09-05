@@ -107,6 +107,10 @@ const HRMSFeatures = () => (
                                 alt={feature.title}
                                 className="rounded-2xl shadow-lg w-full max-w-xs object-cover aspect-[4/3] border border-orange-100 dark:border-orange-900 bg-white/80 dark:bg-black/60"
                                 loading="lazy"
+                                decoding="async"
+                                fetchPriority="low"
+                                width="320"
+                                height="240"
                             />
                         </div>
                         <div className="w-full md:w-2/3 flex flex-col items-start">

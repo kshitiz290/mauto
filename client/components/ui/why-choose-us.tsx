@@ -1,6 +1,6 @@
 // client component (directive removed to avoid sourcemap warning)
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 interface CounterProps {
   end: number;
@@ -107,24 +107,60 @@ function FeatureCard({ card, index: _i }: { card: CardItem; index: number }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  
+  // Cache rect to prevent frequent reflows
+  const rectRef = useRef<DOMRect | null>(null);
+  const rafRef = useRef<number>();
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
 
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    // Use cached rect or get new one with timeout
+    if (!rectRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+      // Clear cache after movement to get fresh measurements
+      setTimeout(() => {
+        rectRef.current = null;
+      }, 100);
+    }
 
-    setMousePosition({ x, y });
-  };
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
 
-  const handleMouseEnter = () => {
+    rafRef.current = requestAnimationFrame(() => {
+      const rect = rectRef.current;
+      if (!rect) return;
+      
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+      setMousePosition({ x, y });
+    });
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
-  };
+  }, []);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
-  };
+    // Cancel any pending animation frame
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+    }
+    // Clear rect cache
+    rectRef.current = null;
+  }, []);
+
+  // Cleanup animation frame on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div

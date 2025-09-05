@@ -128,6 +128,11 @@ export function OurServices() {
                       src={service.iconPath}
                       alt={service.iconAlt}
                       className="w-16 h-16 object-contain transform group-hover:rotate-12 transition-all duration-500"
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
+                      width="64"
+                      height="64"
                     />
                   </div>
 

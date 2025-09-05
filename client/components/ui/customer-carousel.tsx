@@ -75,6 +75,10 @@ export default function CustomerCarousel() {
                   alt={reviews[index].name}
                   className="w-16 h-16 rounded-full object-cover border-2 border-orange-300 dark:border-orange-500 shadow"
                   loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  width="64"
+                  height="64"
                 />
                 <div className="font-semibold text-base sm:text-lg text-primary dark:text-yellow-200">
                   {reviews[index].name}

@@ -24,6 +24,11 @@ export default defineConfig(({ mode }) => ({
       drop: ["console", "debugger"],
       legalComments: "none",
       treeShaking: true,
+      // Mobile-specific optimizations
+      platform: "browser",
+      minifyIdentifiers: true,
+      minifySyntax: true,
+      minifyWhitespace: true,
     },
     rollupOptions: {
       onwarn(warning, warn) {
@@ -34,24 +39,49 @@ export default defineConfig(({ mode }) => ({
       },
       output: {
         manualChunks: {
+          // Core libraries - mobile-optimized chunking
           react: ["react", "react-dom"],
           router: ["react-router-dom"],
+          
+          // Critical UI - smaller chunks for mobile
+          'ui-core': ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu"],
+          'ui-icons': ["lucide-react"],
+          
+          // Animation libraries - defer for mobile
           motion: ["framer-motion"],
-          radix: ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu"],
+          
+          // Data libraries
           query: ["@tanstack/react-query"],
-          icons: ["lucide-react"],
+          
+          // Heavy third-party libraries
+          'third-party': ["emailjs-com"],
         },
-        // Optimize chunk names for caching
-        chunkFileNames: 'assets/[name]-[hash].js',
+        // Optimize chunk names for mobile caching
+        chunkFileNames: (chunkInfo) => {
+          // Prioritize smaller chunks for mobile
+          if (chunkInfo.name && chunkInfo.name.includes('motion')) {
+            return 'assets/deferred/[name]-[hash].js'; // Defer heavy animation
+          }
+          return 'assets/[name]-[hash].js';
+        },
         entryFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]',
+        assetFileNames: (assetInfo) => {
+          // Critical CSS should be inlined or loaded with high priority
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'assets/[name]-[hash].css';
+          }
+          return 'assets/[name]-[hash].[ext]';
+        },
       },
     },
-    chunkSizeWarningLimit: 300, // Even smaller chunks for mobile
+    chunkSizeWarningLimit: 200, // Smaller chunks for mobile performance
     assetsDir: "assets",
     copyPublicDir: true,
-    // Enable compression and optimization
+    // Mobile-optimized settings
     assetsInlineLimit: 2048, // Smaller inline limit for mobile
+    cssCodeSplit: true, // Enable CSS code splitting
+    // Add mobile-specific optimizations
+    reportCompressedSize: false, // Skip for faster builds on mobile CI/CD
   },
   plugins: [react(), ...(mode === "development" ? [expressPlugin()] : [])],
   resolve: {

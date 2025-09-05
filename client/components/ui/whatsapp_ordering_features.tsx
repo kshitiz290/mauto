@@ -56,6 +56,10 @@ const WhatsappOrderingFeatures = () => (
                         alt="WhatsApp Ordering System Banner"
                         className="rounded-2xl shadow-xl w-full max-w-lg object-cover border border-orange-100 dark:border-orange-900 bg-white/80 dark:bg-black/60"
                         loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                        width="500"
+                        height="300"
                     />
                 </div>
                 {/* Description and Features */}

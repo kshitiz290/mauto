@@ -635,6 +635,10 @@ export function ContactUs() {
                               alt={testimonials[testimonialIndex].name}
                               className="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
                               loading="lazy"
+                              decoding="async"
+                              fetchPriority="low"
+                              width="40"
+                              height="40"
                             />
                             <div>
                               <div className="text-sm font-semibold text-foreground">
@@ -883,7 +887,16 @@ export function ContactUs() {
                     rel="noopener noreferrer"
                     className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#000000] hover:to-[#1DA1F2] hover:border-[#1DA1F2]/50 transition-all duration-300 group"
                   >
-                    <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
+                    <img 
+                      src="/x.svg" 
+                      alt="X" 
+                      className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300"
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
+                      width="20"
+                      height="20"
+                    />
                   </a>
                   <a
                     aria-label="Follow us on Instagram"

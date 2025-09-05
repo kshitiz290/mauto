@@ -33,7 +33,16 @@ export default function Footer() {
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300 group"
                                 >
-                                    <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
+                                    <img 
+                                        src="/x.svg" 
+                                        alt="X" 
+                                        className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300"
+                                        loading="lazy"
+                                        decoding="async"
+                                        fetchPriority="low"
+                                        width="20"
+                                        height="20"
+                                    />
                                 </a>
                                 <a
                                     aria-label="Follow us on Facebook"
@@ -154,11 +163,21 @@ export default function Footer() {
                                     src="/certifications/iso.png"
                                     alt="ISO Certification"
                                     className="w-20 h-20 object-contain"
+                                    loading="lazy"
+                                    decoding="async"
+                                    fetchPriority="low"
+                                    width="80"
+                                    height="80"
                                 />
                                 <img
                                     src="/certifications/cmmi3.png"
                                     alt="CMMI Level 3 Certification"
                                     className="w-20 h-20 object-contain dark:invert"
+                                    loading="lazy"
+                                    decoding="async"
+                                    fetchPriority="low"
+                                    width="80"
+                                    height="80"
                                 />
                             </div>
                         </div>

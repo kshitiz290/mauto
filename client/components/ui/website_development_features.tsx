@@ -73,6 +73,10 @@ const WebsiteDevelopmentFeatures = () => (
                                 alt={feature.title}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 loading="lazy"
+                                decoding="async"
+                                fetchPriority="low"
+                                width="400"
+                                height="176"
                             />
                         </div>
                         <div className="flex flex-col gap-2 p-6">

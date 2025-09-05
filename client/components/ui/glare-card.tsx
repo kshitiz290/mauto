@@ -25,16 +25,26 @@ export function GlareCard({
     y: 0,
   });
   const [opacity, setOpacity] = useState<number>(0);
+  const rectRef = useRef<DOMRect | null>(null);
+
+  const updateRect = () => {
+    if (cardRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+    }
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || !rectRef.current) return;
 
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = e.clientX - rectRef.current.left;
+    const y = e.clientY - rectRef.current.top;
 
     setPosition({ x, y });
     setOpacity(glareOpacity);
+  };
+
+  const handleMouseEnter = () => {
+    updateRect();
   };
 
   const handleMouseLeave = () => {
@@ -48,6 +58,7 @@ export function GlareCard({
         "relative overflow-hidden rounded-xl",
         className
       )}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       {...props}

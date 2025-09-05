@@ -55,6 +55,11 @@ export const Loading = ({
                             src="/manacle_logo.png"
                             alt="Manacle Technologies"
                             className={`${logoSizes[size]} object-contain drop-shadow-lg`}
+                            loading="eager"
+                            decoding="async"
+                            fetchPriority="high"
+                            width="200"
+                            height="60"
                         />
                     </motion.div>
                 )}

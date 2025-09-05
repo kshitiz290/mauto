@@ -111,7 +111,11 @@ const LogoStrip = () => {
                             src={logo.src}
                             alt={logo.alt}
                             className={getLogoClasses(logo)}
-                            loading="lazy"
+                            loading={index < 3 ? "eager" : "lazy"}
+                            decoding="async"
+                            fetchPriority={index < 3 ? "high" : "low"}
+                            width="120"
+                            height="60"
                         />
                     ))}
 
@@ -123,6 +127,10 @@ const LogoStrip = () => {
                             alt=""
                             className={getLogoClasses(logo)}
                             loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
+                            width="120"
+                            height="60"
                             aria-hidden="true"
                         />
                     ))}
@@ -135,6 +143,10 @@ const LogoStrip = () => {
                             alt=""
                             className={getLogoClasses(logo)}
                             loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
+                            width="120"
+                            height="60"
                             aria-hidden="true"
                         />
                     ))}
@@ -147,6 +159,10 @@ const LogoStrip = () => {
                             alt=""
                             className={getLogoClasses(logo)}
                             loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
+                            width="120"
+                            height="60"
                             aria-hidden="true"
                         />
                     ))}
@@ -159,6 +175,10 @@ const LogoStrip = () => {
                             alt=""
                             className={getLogoClasses(logo)}
                             loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
+                            width="120"
+                            height="60"
                             aria-hidden="true"
                         />
                     ))}
@@ -171,6 +191,10 @@ const LogoStrip = () => {
                             alt=""
                             className={getLogoClasses(logo)}
                             loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
+                            width="120"
+                            height="60"
                             aria-hidden="true"
                         />
                     ))}

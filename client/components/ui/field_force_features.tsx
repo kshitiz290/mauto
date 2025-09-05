@@ -99,6 +99,10 @@ const FieldForceFeatures = () => (
                             alt={feature.title}
                             className="w-20 h-20 object-contain mb-4 rounded-xl drop-shadow-md bg-gradient-to-br from-primary/10 to-accent/10"
                             loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
+                            width="80"
+                            height="80"
                         />
                         <h3 className="text-xl font-bold text-primary leading-snug mb-3">{feature.title}</h3>
                         <ul className="flex flex-col gap-2 items-start mx-auto max-w-xs">

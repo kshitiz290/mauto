@@ -15,11 +15,14 @@ import { prefetchRoute } from './lib/prefetchRoutes';
 import { useLocation } from 'react-router-dom';
 import { applySeo, routeSeo } from './lib/seo';
 import { RouteLoading } from './components/ui/loading';
-// Route-level code splitting: each page lazily loaded so initial bundle shrinks.
+
+// Critical routes - load immediately to reduce chain length
 const Index = lazy(() => import('./pages/Index'));
-const NotFound = lazy(() => import('./pages/NotFound'));
+const ContactUs = lazy(() => import('./pages/ContactUs.lite'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
-const ContactUs = lazy(() => import('./pages/ContactUs'));
+
+// Secondary routes - can be loaded later
+const NotFound = lazy(() => import('./pages/NotFound'));
 // const Gallery = lazy(() => import('./pages/Gallery'));
 const AutoSite = lazy(() => import('./pages/AutoSite'));
 const Login = lazy(() => import('./pages/Login'));
@@ -66,6 +69,34 @@ const queryClient = new QueryClient();
 // Beautiful loading fallback for route transitions
 const LoadingFallback = () => <RouteLoading />;
 
+// Critical Route Preloader - reduces chain length for mobile
+function CriticalRoutePreloader() {
+  useEffect(() => {
+    // Preload critical routes immediately on app start
+    const preloadCritical = async () => {
+      try {
+        // Preload ContactUs (biggest bottleneck from PageSpeed)
+        await import('./pages/ContactUs');
+        // Preload AboutUs (also in critical path)
+        await import('./pages/AboutUs');
+      } catch (error) {
+        // Silent fail - routes will load normally if preload fails
+        console.warn('Critical route preload failed:', error);
+      }
+    };
+
+    // Use requestIdleCallback for non-blocking preload
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => preloadCritical(), { timeout: 2000 });
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      setTimeout(preloadCritical, 100);
+    }
+  }, []);
+
+  return null;
+}
+
 function RouteSeoUpdater() {
   const location = useLocation();
   useEffect(() => {
@@ -83,6 +114,8 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <CriticalRoutePreloader />
+        <RouteSeoUpdater />
         {/* Idle prefetch a few likely next routes */}
         {(() => {
           const idle = (cb: () => void) => {
@@ -95,7 +128,6 @@ const App = () => (
           });
           return null;
         })()}
-        <RouteSeoUpdater />
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />
