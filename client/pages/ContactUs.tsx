@@ -34,7 +34,10 @@ export function ContactUs() {
     }
 
     // Preload EmailJS if not already loaded
-    if (typeof window !== 'undefined' && !window.emailjs) {
+    if (
+      typeof window !== 'undefined' &&
+      !(window as any).emailjs
+    ) {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.href = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';

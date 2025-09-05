@@ -8,8 +8,7 @@
   <meta name="theme-color" content="#0b0d12" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
 
-  <!-- Critical Resource Preloading -->
-  <link rel="preload" href="/client/main.tsx" as="script" crossorigin>
+  <!-- Critical Resource Preloading: rely on Vite injected module script to avoid MIME mismatch -->
 
   <!-- Preload critical fonts for better font loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>

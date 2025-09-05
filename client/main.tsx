@@ -18,7 +18,7 @@ import { RouteLoading } from './components/ui/loading';
 
 // Critical routes - load immediately to reduce chain length
 const Index = lazy(() => import('./pages/Index'));
-const ContactUs = lazy(() => import('./pages/ContactUs.lite'));
+const ContactUs = lazy(() => import('./pages/ContactUs'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 
 // Secondary routes - can be loaded later

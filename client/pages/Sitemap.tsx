@@ -45,7 +45,7 @@ export default function Sitemap() {
             title: 'Resources',
             links: [
                 { href: '/blogs', label: 'Blogs' },
-                { href: '/blogs/crm-software-fundamentals', label: 'Blog: CRM Software Fundamentals' },
+                // { href: '/blogs/crm-software-fundamentals', label: 'Blog: CRM Software Fundamentals' },
                 { href: '/blogs/dispatch-automation-fundamentals', label: 'Blog: Dispatch Automation Fundamentals' },
                 { href: '/podcasts', label: 'Podcasts' },
                 { href: '/seminars-webinars', label: 'Seminars & Webinars' },

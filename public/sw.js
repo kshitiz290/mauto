@@ -1,7 +1,7 @@
 // Service Worker for Manacle Technologies - Mobile Performance Optimization
-const CACHE_NAME = 'manacle-v1.0.0';
-const STATIC_CACHE = 'manacle-static-v1';
-const DYNAMIC_CACHE = 'manacle-dynamic-v1';
+const CACHE_NAME = 'manacle-v1.0.1';
+const STATIC_CACHE = 'manacle-static-v2';
+const DYNAMIC_CACHE = 'manacle-dynamic-v2';
 
 // Critical resources to cache immediately
 const CRITICAL_RESOURCES = [
@@ -52,7 +52,7 @@ self.addEventListener('activate', function (event) {
     );
 });
 
-// Fetch event - cache strategy
+// Fetch event - cache strategy (conservative to avoid HTML-as-JS issues)
 self.addEventListener('fetch', function (event) {
     const requestUrl = new URL(event.request.url);
 
@@ -67,28 +67,38 @@ self.addEventListener('fetch', function (event) {
     }
 
     event.respondWith(
-        caches.match(event.request)
-            .then(function (cachedResponse) {
-                // Return cached version if available
-                if (cachedResponse) {
-                    return cachedResponse;
-                }
+        (async function() {
+            const req = event.request;
+            const url = new URL(req.url);
 
-                // For CSS/JS assets, use cache-first strategy
-                if (requestUrl.pathname.startsWith('/assets/')) {
-                    return fetch(event.request)
-                        .then(function (response) {
-                            // Cache the response for future requests
-                            if (response.status === 200) {
-                                const responseToCache = response.clone();
-                                caches.open(STATIC_CACHE)
-                                    .then(function (cache) {
-                                        cache.put(event.request, responseToCache);
-                                    });
-                            }
-                            return response;
-                        });
+            // Never serve cached HTML for JS module requests
+            if (req.destination === 'script' || req.headers.get('accept')?.includes('text/javascript')) {
+                try {
+                    const netRes = await fetch(req);
+                    // Only cache JS if content-type is JS and status 200
+                    const ct = netRes.headers.get('content-type') || '';
+                    if (netRes.status === 200 && ct.includes('javascript')) {
+                        const clone = netRes.clone();
+                        caches.open(STATIC_CACHE).then((cache) => cache.put(req, clone));
+                    }
+                    return netRes;
+                } catch (e) {
+                    const cached = await caches.match(req);
+                    if (cached) return cached;
+                    throw e;
                 }
+            }
+
+            // For CSS assets, use stale-while-revalidate
+            if (req.destination === 'style' || url.pathname.endsWith('.css')) {
+                const cache = await caches.open(STATIC_CACHE);
+                const cached = await cache.match(req);
+                const fetchPromise = fetch(req).then((res) => {
+                    if (res.status === 200) cache.put(req, res.clone());
+                    return res;
+                });
+                return cached || fetchPromise;
+            }
 
                 // For images, use cache-first strategy
                 if (requestUrl.pathname.match(/\.(png|jpg|jpeg|svg|webp|gif)$/)) {
@@ -109,24 +119,30 @@ self.addEventListener('fetch', function (event) {
                         });
                 }
 
-                // For other requests, use network-first strategy
-                return fetch(event.request)
-                    .then(function (response) {
-                        // Cache successful responses
-                        if (response.status === 200) {
-                            const responseToCache = response.clone();
-                            caches.open(DYNAMIC_CACHE)
-                                .then(function (cache) {
-                                    cache.put(event.request, responseToCache);
-                                });
-                        }
-                        return response;
-                    })
-                    .catch(function () {
-                        // Try to return from cache if network fails
-                        return caches.match(event.request);
-                    });
-            })
+            // For images, use cache-first strategy
+            if (url.pathname.match(/\.(png|jpg|jpeg|svg|webp|gif)$/)) {
+                const cache = await caches.open(STATIC_CACHE);
+                const cached = await cache.match(req);
+                if (cached) return cached;
+                const res = await fetch(req);
+                if (res.status === 200) cache.put(req, res.clone());
+                return res;
+            }
+
+            // For other requests, use network-first strategy
+            try {
+                const res = await fetch(req);
+                if (res.status === 200) {
+                    const clone = res.clone();
+                    caches.open(DYNAMIC_CACHE).then((cache) => cache.put(req, clone));
+                }
+                return res;
+            } catch (e) {
+                const cached = await caches.match(req);
+                if (cached) return cached;
+                throw e;
+            }
+        })()
     );
 });
 
