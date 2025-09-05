@@ -239,6 +239,9 @@ export function AboutUs() {
   );
 }
 function StaticOfficeGrid() {
+  const isMobilePortrait = typeof window !== 'undefined'
+    ? window.matchMedia('(max-width: 480px) and (orientation: portrait)').matches
+    : false;
   return (
     <div className="flex-1 w-full grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
       <div className="col-span-2 rounded-2xl overflow-hidden shadow-lg bg-card/70 backdrop-blur-xl border border-glass-border group relative">
@@ -246,6 +249,11 @@ function StaticOfficeGrid() {
           src="about/office-workspace.jpg"
           alt="Office Workspace"
           className="w-full h-40 md:h-56 object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-90"
+          loading={isMobilePortrait ? "eager" : "lazy"}
+          decoding="async"
+          fetchPriority={isMobilePortrait ? "high" : "auto"}
+          width={800}
+          height={224}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
@@ -254,9 +262,9 @@ function StaticOfficeGrid() {
           src="/about/team-collaboration.jpg"
           alt="Team Collaboration"
           className="w-full h-32 md:h-40 object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-90"
-          loading="lazy"
+          loading={isMobilePortrait ? "eager" : "lazy"}
           decoding="async"
-          fetchPriority="low"
+          fetchPriority={isMobilePortrait ? "high" : "low"}
           width="400"
           height="160"
         />
@@ -267,9 +275,9 @@ function StaticOfficeGrid() {
           src="/about/working-together.jpg"
           alt="Working Together"
           className="w-full h-32 md:h-40 object-cover transition-transform duration-300 group-hover:scale-105 group-hover:brightness-90"
-          loading="lazy"
+          loading={isMobilePortrait ? "eager" : "lazy"}
           decoding="async"
-          fetchPriority="low"
+          fetchPriority={isMobilePortrait ? "high" : "low"}
           width="400"
           height="160"
         />

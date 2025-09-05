@@ -1675,11 +1675,13 @@ export function Hero() {
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 md:gap-6 relative z-10">
                     <motion.div
                       className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10 dark:from-green-400/20 dark:to-emerald-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-green-200/40 sm:border-green-200/50 dark:border-green-600/30"
-                      animate={isMobilePortrait ? undefined : { boxShadow: [
-                        "0 0 20px rgba(34, 197, 94, 0.2)",
-                        "0 0 30px rgba(34, 197, 94, 0.4)",
-                        "0 0 20px rgba(34, 197, 94, 0.2)"
-                      ] }}
+                      animate={isMobilePortrait ? undefined : {
+                        boxShadow: [
+                          "0 0 20px rgba(34, 197, 94, 0.2)",
+                          "0 0 30px rgba(34, 197, 94, 0.4)",
+                          "0 0 20px rgba(34, 197, 94, 0.2)"
+                        ]
+                      }}
                       transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity }}
                     >
                       <motion.p
@@ -1694,11 +1696,13 @@ export function Hero() {
 
                     <motion.div
                       className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-400/20 dark:to-cyan-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-blue-200/40 sm:border-blue-200/50 dark:border-blue-600/30"
-                      animate={isMobilePortrait ? undefined : { boxShadow: [
-                        "0 0 20px rgba(59, 130, 246, 0.2)",
-                        "0 0 30px rgba(59, 130, 246, 0.4)",
-                        "0 0 20px rgba(59, 130, 246, 0.2)"
-                      ] }}
+                      animate={isMobilePortrait ? undefined : {
+                        boxShadow: [
+                          "0 0 20px rgba(59, 130, 246, 0.2)",
+                          "0 0 30px rgba(59, 130, 246, 0.4)",
+                          "0 0 20px rgba(59, 130, 246, 0.2)"
+                        ]
+                      }}
                       transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 1 }}
                     >
                       <motion.p
@@ -1713,11 +1717,13 @@ export function Hero() {
 
                     <motion.div
                       className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-purple-500/10 to-violet-500/10 dark:from-purple-400/20 dark:to-violet-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-purple-200/40 sm:border-purple-200/50 dark:border-purple-600/30"
-                      animate={isMobilePortrait ? undefined : { boxShadow: [
-                        "0 0 20px rgba(147, 51, 234, 0.2)",
-                        "0 0 30px rgba(147, 51, 234, 0.4)",
-                        "0 0 20px rgba(147, 51, 234, 0.2)"
-                      ] }}
+                      animate={isMobilePortrait ? undefined : {
+                        boxShadow: [
+                          "0 0 20px rgba(147, 51, 234, 0.2)",
+                          "0 0 30px rgba(147, 51, 234, 0.4)",
+                          "0 0 20px rgba(147, 51, 234, 0.2)"
+                        ]
+                      }}
                       transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 2 }}
                     >
                       <motion.p
@@ -1732,11 +1738,13 @@ export function Hero() {
 
                     <motion.div
                       className="text-center p-2 sm:p-3 md:p-6 bg-gradient-to-br from-orange-500/10 to-red-500/10 dark:from-orange-400/20 dark:to-red-400/20 rounded-lg sm:rounded-xl md:rounded-2xl border border-orange-200/40 sm:border-orange-200/50 dark:border-orange-600/30"
-                      animate={isMobilePortrait ? undefined : { boxShadow: [
-                        "0 0 20px rgba(249, 115, 22, 0.2)",
-                        "0 0 30px rgba(249, 115, 22, 0.4)",
-                        "0 0 20px rgba(249, 115, 22, 0.2)"
-                      ] }}
+                      animate={isMobilePortrait ? undefined : {
+                        boxShadow: [
+                          "0 0 20px rgba(249, 115, 22, 0.2)",
+                          "0 0 30px rgba(249, 115, 22, 0.4)",
+                          "0 0 20px rgba(249, 115, 22, 0.2)"
+                        ]
+                      }}
                       transition={isMobilePortrait ? undefined : { duration: 3, repeat: Infinity, delay: 0.5 }}
                     >
                       <motion.p
