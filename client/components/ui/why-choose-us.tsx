@@ -107,7 +107,7 @@ function FeatureCard({ card, index: _i }: { card: CardItem; index: number }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  
+
   // Cache rect to prevent frequent reflows
   const rectRef = useRef<DOMRect | null>(null);
   const rafRef = useRef<number>();
@@ -131,7 +131,7 @@ function FeatureCard({ card, index: _i }: { card: CardItem; index: number }) {
     rafRef.current = requestAnimationFrame(() => {
       const rect = rectRef.current;
       if (!rect) return;
-      
+
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
 

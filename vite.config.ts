@@ -42,17 +42,17 @@ export default defineConfig(({ mode }) => ({
           // Core libraries - mobile-optimized chunking
           react: ["react", "react-dom"],
           router: ["react-router-dom"],
-          
+
           // Critical UI - smaller chunks for mobile
           'ui-core': ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu"],
           'ui-icons': ["lucide-react"],
-          
+
           // Animation libraries - defer for mobile
           motion: ["framer-motion"],
-          
+
           // Data libraries
           query: ["@tanstack/react-query"],
-          
+
           // Heavy third-party libraries
           'third-party': ["emailjs-com"],
         },

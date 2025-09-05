@@ -25,7 +25,7 @@ const DispatchFundamentals = () => {
     // Reading progress - throttled to reduce reflows
     useEffect(() => {
         let ticking = false;
-        
+
         const onScroll = () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
@@ -37,7 +37,7 @@ const DispatchFundamentals = () => {
                 ticking = true;
             }
         };
-        
+
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
         return () => window.removeEventListener('scroll', onScroll);

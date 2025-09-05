@@ -1440,9 +1440,9 @@ export default function AutoSite() {
                     />
                     {bannerError && <div className="text-red-500 text-xs mt-1">{bannerError}</div>}
                     {bannerPreview && bannerPreview !== "" && (
-                      <img 
-                        src={bannerPreview} 
-                        alt="Banner Preview" 
+                      <img
+                        src={bannerPreview}
+                        alt="Banner Preview"
                         className="mt-2 rounded shadow w-full max-w-xs mx-auto"
                         loading="lazy"
                         decoding="async"
@@ -1846,9 +1846,9 @@ export default function AutoSite() {
                           required
                         />
                         {productPreviews[idx] && productPreviews[idx] !== "" && (
-                          <img 
-                            src={productPreviews[idx]} 
-                            alt="Preview" 
+                          <img
+                            src={productPreviews[idx]}
+                            alt="Preview"
                             className="mt-2 rounded shadow w-full max-w-xs mx-auto"
                             loading="lazy"
                             decoding="async"

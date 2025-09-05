@@ -5,9 +5,9 @@ const features = [
         title: 'Image-Based Merchandising Audits',
         desc: 'Capture store shelf images and run quick checks for planogram match, out-of-stock detection, and visibility tracking.',
         icon: (
-            <img 
-                src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
-                alt="Audit" 
+            <img
+                src="https://cdn-icons-png.flaticon.com/512/845/845646.png"
+                alt="Audit"
                 className="w-14 h-14 mx-auto mb-3"
                 loading="lazy"
                 decoding="async"
@@ -21,9 +21,9 @@ const features = [
         title: 'Task Management & Visit Scheduling',
         desc: 'Plan field visits, assign store-level tasks, and ensure timely retail execution with geofenced attendance and simple route planning.',
         icon: (
-            <img 
-                src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
-                alt="Task" 
+            <img
+                src="https://cdn-icons-png.flaticon.com/512/845/845646.png"
+                alt="Task"
                 className="w-14 h-14 mx-auto mb-3"
                 loading="lazy"
                 decoding="async"
@@ -37,9 +37,9 @@ const features = [
         title: 'Real-Time Data Collection',
         desc: 'Enable field reps to collect key retail KPIs like shelf share, pricing, promotions, competitor activity, and stock availability directly from stores.',
         icon: (
-            <img 
-                src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
-                alt="Data" 
+            <img
+                src="https://cdn-icons-png.flaticon.com/512/845/845646.png"
+                alt="Data"
                 className="w-14 h-14 mx-auto mb-3"
                 loading="lazy"
                 decoding="async"
@@ -53,9 +53,9 @@ const features = [
         title: 'Digital Planogram Validation',
         desc: 'Compare actual shelf layouts against approved planograms for fast validation and corrective action.',
         icon: (
-            <img 
-                src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
-                alt="Planogram" 
+            <img
+                src="https://cdn-icons-png.flaticon.com/512/845/845646.png"
+                alt="Planogram"
                 className="w-14 h-14 mx-auto mb-3"
                 loading="lazy"
                 decoding="async"
@@ -69,9 +69,9 @@ const features = [
         title: 'Performance Insights & Dashboards',
         desc: 'Access intuitive dashboards to monitor field activity, measure execution compliance, and gain insights at brand, SKU, and outlet level.',
         icon: (
-            <img 
-                src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
-                alt="Dashboard" 
+            <img
+                src="https://cdn-icons-png.flaticon.com/512/845/845646.png"
+                alt="Dashboard"
                 className="w-14 h-14 mx-auto mb-3"
                 loading="lazy"
                 decoding="async"
@@ -85,9 +85,9 @@ const features = [
         title: 'Retail Promotion Execution Tracking',
         desc: 'Ensure promotional campaigns are implemented as planned, with live visibility into activation quality and duration.',
         icon: (
-            <img 
-                src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
-                alt="Promotion" 
+            <img
+                src="https://cdn-icons-png.flaticon.com/512/845/845646.png"
+                alt="Promotion"
                 className="w-14 h-14 mx-auto mb-3"
                 loading="lazy"
                 decoding="async"

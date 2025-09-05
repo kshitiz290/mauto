@@ -490,9 +490,9 @@ export default function Gallery() {
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300 group"
                     >
-                      <img 
-                        src="/x.svg" 
-                        alt="X" 
+                      <img
+                        src="/x.svg"
+                        alt="X"
                         className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300"
                         loading="lazy"
                         decoding="async"

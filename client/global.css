@@ -4,6 +4,7 @@
 
 /* Performance-first CSS optimizations for mobile */
 @layer base {
+
   /* Optimized image loading with containment */
   img {
     content-visibility: auto;
@@ -25,12 +26,13 @@
       /* Reduce paint complexity */
       will-change: auto;
     }
-    
+
     /* Optimize scroll performance */
     html {
-      scroll-behavior: auto; /* Disable smooth scrolling on mobile */
+      scroll-behavior: auto;
+      /* Disable smooth scrolling on mobile */
     }
-    
+
     /* Contain layout changes */
     body {
       contain: layout style;

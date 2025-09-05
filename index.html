@@ -10,17 +10,19 @@
 
   <!-- Critical Resource Preloading -->
   <link rel="preload" href="/client/main.tsx" as="script" crossorigin>
-  
+
   <!-- Preload critical fonts for better font loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
+
   <!-- Preload critical images -->
   <link rel="preload" href="/manacle_logo.png" as="image" type="image/png">
-  
+
   <!-- Preload critical CSS for faster loading -->
   <link rel="preload" href="/assets/index-BnqHLYGM.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="/assets/index-BnqHLYGM.css"></noscript>
+  <noscript>
+    <link rel="stylesheet" href="/assets/index-BnqHLYGM.css">
+  </noscript>
 
   <!-- DNS Prefetch for external resources -->
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -125,7 +127,7 @@
       body {
         font-size: 14px;
       }
-      
+
       * {
         scroll-behavior: smooth;
       }
@@ -152,8 +154,13 @@
     }
 
     @keyframes loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
     }
 
     /* Critical header layout */
@@ -188,7 +195,7 @@
       } catch (e) { /* ignore */ }
     })();
   </script>
-  
+
   <!-- CSS loading optimization script -->
   <script>
     // Async CSS loading function to prevent render blocking
@@ -206,7 +213,7 @@
       ss.rel = "stylesheet";
       ss.href = href;
       ss.media = "only x";
-      
+
       function ready(cb) {
         if (doc.body) {
           return cb();
@@ -215,11 +222,11 @@
           ready(cb);
         });
       }
-      
+
       ready(function () {
         ref.parentNode.insertBefore(ss, (before ? ref : ref.nextSibling));
       });
-      
+
       function onloadcssdefined(cb) {
         var resolvedHref = ss.href;
         var i = sheets.length;
@@ -232,7 +239,7 @@
           onloadcssdefined(cb);
         });
       }
-      
+
       function loadCB() {
         if (ss.addEventListener) {
           ss.removeEventListener("load", loadCB);
@@ -240,7 +247,7 @@
         ss.media = media || "all";
         if (callback) callback();
       }
-      
+
       if (ss.addEventListener) {
         ss.addEventListener("load", loadCB);
       }
@@ -248,23 +255,23 @@
       onloadcssdefined(loadCB);
       return ss;
     }
-    
+
     // Optimize for mobile performance
     var isMobile = window.innerWidth <= 768;
-    var isSlowConnection = navigator.connection && 
-      (navigator.connection.effectiveType === 'slow-2g' || 
-       navigator.connection.effectiveType === '2g' ||
-       navigator.connection.effectiveType === '3g');
-    
+    var isSlowConnection = navigator.connection &&
+      (navigator.connection.effectiveType === 'slow-2g' ||
+        navigator.connection.effectiveType === '2g' ||
+        navigator.connection.effectiveType === '3g');
+
     // Load non-critical CSS after critical content renders
     if (isMobile || isSlowConnection) {
       // Delay non-critical CSS on mobile/slow connections
-      setTimeout(function() {
+      setTimeout(function () {
         // Load any additional CSS files here if needed
         console.log('Loading non-critical CSS after delay for mobile optimization');
       }, 100);
     }
-    
+
     // Progressive loading based on interaction
     var hasInteracted = false;
     function loadNonCriticalResources() {
@@ -274,29 +281,29 @@
         console.log('Loading additional resources after user interaction');
       }
     }
-    
+
     // Load resources after user interaction (scroll, click, touch)
-    ['scroll', 'click', 'touchstart'].forEach(function(event) {
+    ['scroll', 'click', 'touchstart'].forEach(function (event) {
       window.addEventListener(event, loadNonCriticalResources, { once: true, passive: true });
     });
-    
+
     // Fallback: load after 2 seconds if no interaction
     setTimeout(loadNonCriticalResources, 2000);
-    
+
     // Register service worker for caching
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
+      window.addEventListener('load', function () {
         navigator.serviceWorker.register('/sw.js')
-          .then(function(registration) {
+          .then(function (registration) {
             console.log('SW: Service Worker registered successfully');
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log('SW: Service Worker registration failed');
           });
       });
     }
   </script>
-  
+
   <script type="module" src="/client/main.tsx" fetchpriority="high"></script>
 
 

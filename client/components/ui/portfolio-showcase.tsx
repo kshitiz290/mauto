@@ -48,7 +48,7 @@ function useTilt() {
       if (!ticking) {
         requestAnimationFrame(() => {
           if (!elementRect) return;
-          
+
           const x = e.clientX - elementRect.left;
           const y = e.clientY - elementRect.top;
 
@@ -217,8 +217,8 @@ function PortfolioSection() {
               key={category}
               onClick={() => handleCategoryClick(category)}
               className={`inline-block mx-2 px-6 py-2.5 rounded-md cursor-pointer transition-all duration-300 ${activeCategory === category
-                  ? "bg-primary text-white font-medium shadow-lg"
-                  : "bg-card/60 hover:bg-card/90 border border-glass-border"
+                ? "bg-primary text-white font-medium shadow-lg"
+                : "bg-card/60 hover:bg-card/90 border border-glass-border"
                 }`}
               type="button"
             >
@@ -375,8 +375,8 @@ function BlogSection() {
               key={category}
               onClick={() => handleCategoryClick(category)}
               className={`inline-block mx-2 px-6 py-2.5 rounded-md cursor-pointer transition-all duration-300 ${activeCategory === category
-                  ? "bg-primary text-white font-medium shadow-lg"
-                  : "bg-card/60 hover:bg-card/90 border border-glass-border"
+                ? "bg-primary text-white font-medium shadow-lg"
+                : "bg-card/60 hover:bg-card/90 border border-glass-border"
                 }`}
               type="button"
             >

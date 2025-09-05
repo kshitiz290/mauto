@@ -48,7 +48,7 @@ function useTilt() {
       if (!ticking) {
         requestAnimationFrame(() => {
           if (!elementRect) return;
-          
+
           const x = e.clientX - elementRect.left;
           const y = e.clientY - elementRect.top;
 
@@ -246,8 +246,8 @@ function PortfolioSection() {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={`inline-block mx-2 px-6 py-2.5 rounded-md cursor-pointer ${activeCategory === cat
-                  ? "bg-primary text-white font-medium shadow-lg"
-                  : "bg-card/60 hover:bg-card/90 border border-glass-border"
+                ? "bg-primary text-white font-medium shadow-lg"
+                : "bg-card/60 hover:bg-card/90 border border-glass-border"
                 }`}
             >
               {cat}
@@ -390,8 +390,8 @@ function BlogSection() {
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={`inline-block mx-2 px-6 py-2.5 rounded-md cursor-pointer ${activeCategory === cat
-                  ? "bg-primary text-white font-medium shadow-lg"
-                  : "bg-card/60 hover:bg-card/90 border border-glass-border"
+                ? "bg-primary text-white font-medium shadow-lg"
+                : "bg-card/60 hover:bg-card/90 border border-glass-border"
                 }`}
             >
               {cat === "Tech Innovation" && <Cpu className="inline-block mr-1.5 w-4 h-4" />}

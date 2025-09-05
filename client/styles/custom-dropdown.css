@@ -1,11 +1,7 @@
-/* Custom Dropdown Styling */
+/* Minimal Custom Dropdown Styling - Only essential styles */
 .custom-dropdown {
     position: relative;
 }
-
-/* Remove custom trigger styles since we're using Tailwind classes directly */
-
-/* Trigger styles now handled by Tailwind classes in React component */
 
 .custom-dropdown-content {
     position: absolute;
@@ -15,14 +11,14 @@
     z-index: 50;
     margin-top: 4px;
     background: hsl(var(--card));
-    border: 1px solid hsl(var(--glass-border, var(--border)));
+    border: 1px solid hsl(var(--border));
     border-radius: 0.5rem;
-    /* matches rounded-lg */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    animation: dropdown-appear 0.2s ease-out;
-    max-height: 300px;
+    animation: dropdown-appear 0.15s ease-out;
+    max-height: 240px;
     overflow-y: auto;
+    will-change: transform, opacity;
 }
 
 .dark .custom-dropdown-content {
@@ -32,12 +28,12 @@
 @keyframes dropdown-appear {
     from {
         opacity: 0;
-        transform: translateY(-8px) scale(0.95);
+        transform: translateY(-4px);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
     }
 }
 
@@ -45,15 +41,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px;
+    padding: 12px 16px;
     font-size: 16px;
-    font-weight: 500;
     color: hsl(var(--foreground));
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease;
     border-bottom: 1px solid hsl(var(--border));
     background: hsl(var(--card));
-    min-height: 56px;
 }
 
 .custom-dropdown-option:last-child {
@@ -61,19 +55,18 @@
 }
 
 .custom-dropdown-option:hover {
-    background: linear-gradient(90deg, rgba(255, 152, 0, 0.1) 0%, rgba(183, 33, 255, 0.1) 100%);
-    color: hsl(var(--primary));
-    transform: translateX(4px);
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
 }
 
 .custom-dropdown-option.selected {
-    background: linear-gradient(90deg, rgba(255, 152, 0, 0.15) 0%, rgba(183, 33, 255, 0.15) 100%);
-    color: hsl(var(--primary));
-    font-weight: 600;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    font-weight: 500;
 }
 
 .custom-dropdown-chevron {
-    transition: transform 0.2s ease;
+    transition: transform 0.15s ease;
     flex-shrink: 0;
 }
 
@@ -85,22 +78,14 @@
     color: hsl(var(--muted-foreground));
 }
 
-/* Scrollbar styling for dropdown */
+/* Minimal scrollbar styling */
 .custom-dropdown-content::-webkit-scrollbar {
-    width: 6px;
-}
-
-.custom-dropdown-content::-webkit-scrollbar-track {
-    background: hsl(var(--muted));
+    width: 4px;
 }
 
 .custom-dropdown-content::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground));
-    border-radius: 3px;
-}
-
-.custom-dropdown-content::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary));
+    background: hsl(var(--border));
+    border-radius: 2px;
 }
 
 /* Ensure trigger matches input sizing */

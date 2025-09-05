@@ -4,24 +4,21 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { motion, useInView, AnimatePresence } from "framer-motion";
+// Only import icons that are actually used to reduce bundle size
 import {
-  Instagram,
-  Youtube,
   Mail,
   Phone,
   MapPin,
   ArrowRight,
   MessageCircle,
   Clock,
-  Headphones,
-  FileText,
-  Globe,
-  Zap,
-  Facebook,
-  Linkedin,
   Star,
   ChevronDown,
-  Check
+  Check,
+  Facebook,
+  Linkedin,
+  Instagram,
+  Youtube
 } from "lucide-react";
 import { Header } from "../components/ui/header";
 import { ThemeProvider } from "../components/ui/theme-provider";
@@ -29,6 +26,22 @@ import Footer from "@/components/ui/footer";
 import "../styles/custom-dropdown.css";
 
 export function ContactUs() {
+  // Performance optimization
+  React.useEffect(() => {
+    // Mark component as loaded for performance monitoring
+    if (typeof window !== 'undefined' && window.performance) {
+      window.performance.mark('contact-us-loaded');
+    }
+
+    // Preload EmailJS if not already loaded
+    if (typeof window !== 'undefined' && !window.emailjs) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.href = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+      link.as = 'script';
+      document.head.appendChild(link);
+    }
+  }, []);
   // Shared ref for synchronizing animations (must be inside component)
   const contactGridRef = useRef(null);
   const isContactGridInView = useInView(contactGridRef, { once: true, amount: 0.3 });
@@ -88,12 +101,19 @@ export function ContactUs() {
     },
   ];
 
-  // Auto-slide effect for testimonials
+  // Auto-slide effect for testimonials - optimized for performance
   React.useEffect(() => {
+    // Use requestAnimationFrame for better performance
+    let animationId: number;
     const timer = setTimeout(() => {
-      nextTestimonial();
+      animationId = requestAnimationFrame(() => {
+        nextTestimonial();
+      });
     }, 5000);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (animationId) cancelAnimationFrame(animationId);
+    };
   }, [testimonialIndex]);
 
   // Close dropdown when clicking outside
@@ -126,7 +146,7 @@ export function ContactUs() {
   // const [isMeetingSubmitting, setIsMeetingSubmitting] = useState(false);
   // const [isMeetingSubmitted, setIsMeetingSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData((prev) => ({
       ...prev,
@@ -136,16 +156,16 @@ export function ContactUs() {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-  };
+  }, [errors]);
 
-  const handleSolutionSelect = (value: string) => {
+  const handleSolutionSelect = React.useCallback((value: string) => {
     setFormData((prev) => ({ ...prev, solutionType: value }));
     setIsDropdownOpen(false);
     // Clear error when user selects
     if (errors.solutionType) {
       setErrors((prev) => ({ ...prev, solutionType: "" }));
     }
-  };
+  }, [errors.solutionType]);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -187,7 +207,7 @@ export function ContactUs() {
   //   setMeetingFormData((prev) => ({ ...prev, [name]: value }));
   // };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = React.useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -242,7 +262,7 @@ export function ContactUs() {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [formData, errors, validateForm]);
 
   // const handleMeetingSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
@@ -278,15 +298,34 @@ export function ContactUs() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="manacle_theme">
       <style>{`
+        /* Critical CSS for above-the-fold content */
         html, body, #root { overflow-x: hidden !important; }
         body { position: relative; }
-      * { box-sizing: border-box; }
-      /* Removed the overly broad max-width rule that forced all descendants to full width
-        (was collapsing the header dropdown & stretching desktop layout). */
-  /* Allow images to scale responsively, but exclude header logo */
-  .contact-us-page-wrapper main img { max-width: 100%; height: auto; }
-  /* Ensure embedded iframes (Google Maps) fill their container height */
-  .contact-us-page-wrapper iframe { width: 100%; height: 100%; display: block; }
+        * { box-sizing: border-box; }
+        
+        /* Preload critical fonts */
+        .contact-us-page-wrapper { font-display: swap; }
+        
+        /* Critical layout styles */
+        .contact-us-page-wrapper main img { max-width: 100%; height: auto; }
+        .contact-us-page-wrapper iframe { width: 100%; height: 100%; display: block; }
+        
+        /* Optimize animations for mobile */
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+        
+        /* Critical form styles to prevent layout shift */
+        .custom-dropdown { position: relative; }
+        .custom-dropdown-content { 
+          position: absolute; 
+          z-index: 50; 
+          will-change: transform, opacity;
+        }
       `}</style>
       <div className="contact-us-page-wrapper min-h-screen bg-background text-foreground transition-colors duration-500 overflow-x-hidden w-full">
         <Header />
@@ -320,17 +359,17 @@ export function ContactUs() {
             <div className="container mx-auto px-4 max-w-full">
               {/* Header with Framer Motion Animation */}
               <motion.div
-                initial={{ opacity: 0, y: 48 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
                 className="text-center mb-20"
               >
                 <motion.h1
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.7 }}
-                  transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
                   className="text-5xl md:text-6xl font-bold mb-8"
                 >
                   Ready to start with our{' '}
@@ -887,9 +926,9 @@ export function ContactUs() {
                     rel="noopener noreferrer"
                     className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#000000] hover:to-[#1DA1F2] hover:border-[#1DA1F2]/50 transition-all duration-300 group"
                   >
-                    <img 
-                      src="/x.svg" 
-                      alt="X" 
+                    <img
+                      src="/x.svg"
+                      alt="X"
                       className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300"
                       loading="lazy"
                       decoding="async"

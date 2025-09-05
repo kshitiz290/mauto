@@ -136,7 +136,7 @@ export function TrustedByCompanies() {
                 width: rect.width,
                 height: rect.height
             });
-            
+
             // Clear cache after 100ms to handle resize
             setTimeout(() => {
                 if (containerRef.current) {
@@ -526,8 +526,8 @@ export function TrustedByCompanies() {
                                             key={index}
                                             onClick={() => setCurrentSlideTP(index)}
                                             className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlideTP
-                                                    ? 'bg-orange-500 scale-110'
-                                                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-orange-300'
+                                                ? 'bg-orange-500 scale-110'
+                                                : 'bg-gray-300 dark:bg-gray-600 hover:bg-orange-300'
                                                 }`}
                                             aria-label={`Go to slide ${index + 1}`}
                                         />

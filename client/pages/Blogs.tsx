@@ -145,10 +145,10 @@ export default function Blogs() {
                                         aria-label={`Read article: ${b.title}`}
                                     >
                                         <div className="relative aspect-[20/10] overflow-hidden">
-                                            <img 
-                                                src={b.thumbnail} 
-                                                alt={b.title} 
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                                            <img
+                                                src={b.thumbnail}
+                                                alt={b.title}
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                 loading="lazy"
                                                 decoding="async"
                                                 fetchPriority="low"
