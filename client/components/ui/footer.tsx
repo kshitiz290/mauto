@@ -43,7 +43,7 @@ export default function Footer() {
                                     <Facebook className="w-5 h-5 text-foreground/70 group-hover:text-white" />
                                 </a>
                                 <a
-                                    href="https://www.instagram.com/techmanacle/"
+                                    href="https://www.instagram.com/getmsell?igsh=OWRlb3B4bTczcTJo"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="w-10 h-10 rounded-full bg-card/80 border border-glass-border flex items-center justify-center hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:scale-110 transition-all duration-300 group"

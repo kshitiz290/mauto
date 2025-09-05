@@ -55,7 +55,7 @@ const SalesForceAutomation = () => {
                 "Biometric integration support"
             ],
             href: "/attendance-leave-management",
-            stats: { impact: "Up To 95%", label: "Accuracy" }
+            stats: { impact: "99.9%", label: "Accuracy" }
         },
         {
             id: 2,

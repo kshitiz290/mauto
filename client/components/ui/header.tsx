@@ -262,8 +262,8 @@ export function Header() {
             title: "Our Resources",
             items: [
               { name: "Blogs", href: "/blogs" },
-              { name: "Podcasts", href: "/podcasts" },
-              { name: "Seminars & Webinars", href: "/seminars-webinars" },
+              // { name: "Podcasts", href: "/podcasts" },
+              // { name: "Seminars & Webinars", href: "/seminars-webinars" },
               { name: "FAQs", href: "/faqs" },
             ]
           }

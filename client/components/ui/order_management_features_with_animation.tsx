@@ -38,13 +38,20 @@ const features = [
 ];
 
 export default function OrderManagementFeaturesWithAnimation() {
-    const [isMobilePortrait, setIsMobilePortrait] = useState<boolean>(false);
+    // Treat small and medium portrait screens as "eager" (animate on mount, not on scroll)
+    const [isPortraitEager, setIsPortraitEager] = useState<boolean>(() => {
+        if (typeof window === 'undefined') return false;
+        const w = window.innerWidth; const h = window.innerHeight;
+        return h > w && w <= 1024;
+    });
 
     useEffect(() => {
         const detect = () => {
             const w = window.innerWidth;
             const h = window.innerHeight;
-            setIsMobilePortrait(h > w && w <= 768);
+            const isPortrait = h > w;
+            // Eagerly animate for portrait up to 1024px wide (covers mobile + medium portrait devices)
+            setIsPortraitEager(isPortrait && w <= 1024);
         };
         detect();
         window.addEventListener('resize', detect, { passive: true } as any);
@@ -58,10 +65,11 @@ export default function OrderManagementFeaturesWithAnimation() {
         <section className="w-full max-w-7xl mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center gap-12 md:gap-20">
             {/* Left: Features List */}
             <motion.div
+                key={isPortraitEager ? 'features-eager' : 'features-inview'}
                 initial={{ opacity: 0, x: -48 }}
-                {...(isMobilePortrait
+                {...(isPortraitEager
                     ? { animate: { opacity: 1, x: 0 } }
-                    : { whileInView: { opacity: 1, x: 0 }, viewport: { once: true, amount: 0.5 } }
+                    : { whileInView: { opacity: 1, x: 0 }, viewport: { once: true, amount: 0.2 } }
                 )}
                 transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
                 className="flex-1 w-full"
@@ -77,9 +85,9 @@ export default function OrderManagementFeaturesWithAnimation() {
                         <motion.li
                             key={f.title}
                             initial={{ opacity: 0, x: -32 }}
-                            {...(isMobilePortrait
+                            {...(isPortraitEager
                                 ? { animate: { opacity: 1, x: 0 } }
-                                : { whileInView: { opacity: 1, x: 0 }, viewport: { once: true } }
+                                : { whileInView: { opacity: 1, x: 0 }, viewport: { once: true, amount: 0.2 } }
                             )}
                             transition={{ delay: i * 0.07, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                             className="flex items-start gap-3 group hover:bg-orange-50/60 dark:hover:bg-orange-900/20 rounded-xl px-3 py-2 transition-all duration-300 select-none"
@@ -90,7 +98,7 @@ export default function OrderManagementFeaturesWithAnimation() {
                                     {f.title}
                                 </span>
                                 <div className="text-foreground/70 dark:text-gray-400 text-sm sm:text-base mt-1">
-                                    {f.desc}
+                                    {f.desc}             
                                 </div>
                             </div>
                         </motion.li>
@@ -99,11 +107,12 @@ export default function OrderManagementFeaturesWithAnimation() {
             </motion.div>
             {/* Right: Animated Illustration (from HowHelpingCompanies) */}
             <motion.div
+                key={isPortraitEager ? 'illustration-eager' : 'illustration-inview'}
                 className="flex-1 flex justify-center items-center w-full max-w-md"
                 initial={{ y: 60, opacity: 0 }}
-                {...(isMobilePortrait
+                {...(isPortraitEager
                     ? { animate: { y: 0, opacity: 1 } }
-                    : { whileInView: { y: 0, opacity: 1 }, viewport: { once: true } }
+                    : { whileInView: { y: 0, opacity: 1 }, viewport: { once: true, amount: 0.2 } }
                 )}
                 transition={{ duration: 0.8, type: "spring" }}
             >

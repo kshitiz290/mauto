@@ -884,7 +884,7 @@ export function ContactUs() {
                     <img src="/x.svg" alt="X" className="w-5 h-5 filter brightness-75 group-hover:brightness-0 group-hover:invert transition-all duration-300" />
                   </a>
                   <a
-                    href="https://www.instagram.com/techmanacle/"
+                    href="https://www.instagram.com/getmsell?igsh=OWRlb3B4bTczcTJo"
                     target="_blank"
                     className="social-link-sticky p-4 rounded-full bg-card border border-glass-border hover:bg-gradient-to-r hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#515BD4] hover:border-[#DD2A7B]/50 transition-all duration-300 group"
                   >

@@ -26,10 +26,10 @@ const RetailTransformation = () => {
                 "Performance analytics & insights"
             ],
             metrics: {
-                primary: "Up to 40%",
+                primary: "Up To 40%",
                 primaryLabel: "Sales Increase",
-                secondary: "60%",
-                secondaryLabel: "Time Saved"
+                secondary: "Up To 60%",
+                secondaryLabel: "Faster Processes"
             }
         },
         {
@@ -49,9 +49,9 @@ const RetailTransformation = () => {
                 "Distributor performance tracking"
             ],
             metrics: {
-                primary: "35%",
+                primary: "Up To 35%",
                 primaryLabel: "Cost Reduction",
-                secondary: "50%",
+                secondary: "Up To 50%",
                 secondaryLabel: "Faster Delivery"
             }
         },
@@ -74,7 +74,7 @@ const RetailTransformation = () => {
             metrics: {
                 primary: "Up to 25%",
                 primaryLabel: "Sales Uplift",
-                secondary: "80%",
+                secondary: "Up To 80%",
                 secondaryLabel: "Compliance Rate"
             }
         },
@@ -97,7 +97,7 @@ const RetailTransformation = () => {
             metrics: {
                 primary: "99.9%",
                 primaryLabel: "Accuracy",
-                secondary: "70%",
+                secondary: "Up To 70%",
                 secondaryLabel: "Admin Time Saved"
             }
         }
@@ -258,6 +258,11 @@ const RetailTransformation = () => {
                                                 </motion.div>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    {/* Footnote */}
+                                    <div className="mt-6 text-xs text-gray-500 dark:text-gray-400 italic">
+                                        Source: Based on client studies.
                                     </div>
                                 </div>
                             </>
